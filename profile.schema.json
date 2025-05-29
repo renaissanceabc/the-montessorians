@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Polymath Profile",
   "type": "object",
-  "required": ["name", "slug", "bio", "education", "tags"],
+  "required": ["name", "slug"],
   "properties": {
     "name": { "type": "string" },
     "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
