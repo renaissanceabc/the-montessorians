@@ -6,11 +6,11 @@
   "properties": {
     "name": { "type": "string" },
     "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "bio": { "type": "string" },
     "tags": {
       "type": "array",
       "items": { "type": "string" }
     },
-    "bio": { "type": "string" },
     "education": {
       "type": "array",
       "items": {
@@ -19,7 +19,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["homeschool", "montessori", "unschool", "other"]
+            "enum": ["montessori", "homeschool"]
           },
           "notes": { "type": "string" }
         }
@@ -34,7 +34,7 @@
       "properties": {
         "wikipedia": { "type": "string", "format": "uri" },
         "website": { "type": "string", "format": "uri" },
-        "interview": { "type": "string", "format": "uri" }
+        "linkedin": { "type": "string", "format": "uri" }
       },
       "additionalProperties": false
     },
