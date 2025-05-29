@@ -1,0 +1,11 @@
+name: Stephen Curry
+slug: stephen-curry
+bio: >-
+  NBA player. Attended a Montessori school; mother was a Montessori teacher. Family credits Montessori with shaping them.
+tags:
+- basketball
+- athlete
+- montessori
+education:
+- type: montessori
+  notes: Attended Montessori school

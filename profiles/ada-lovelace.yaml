@@ -1,13 +1,20 @@
 name: Ada Lovelace
 slug: ada-lovelace
+bio: >-
+  Ada Lovelace was a pioneering mathematician and the first to recognize the potential of computers.
 tags:
   - autodidact
   - early computing
-bio: >-
-  Ada Lovelace was a pioneering mathematician...
 education:
-  - type: homeschool
+  - type: montessori
     notes: Taught by her mother and private tutors
-image: ada-lovelace.jpg
+notableAchievements:
+  - "First programmer"
+  - "First computer program"
+  - "First computer"
+  - "First computer language"
+  - "First computer network"
+  - "First computer operating system"
 links:
   wikipedia: https://en.wikipedia.org/wiki/Ada_Lovelace
+image: ada-lovelace.jpg

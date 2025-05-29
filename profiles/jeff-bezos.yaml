@@ -1,0 +1,10 @@
+name: Jeff Bezos
+slug: jeff-bezos
+bio: >-
+  Founder of Amazon. Attended Montessori preschool for 1.5 years. Recalled
+  painting large scale in a Montessori environment.
+tags:
+- montessori
+education:
+- type: montessori
+  notes: Attended Montessori school

@@ -1,0 +1,10 @@
+name: Taylor Swift
+slug: taylor-swift
+bio: >-
+  Singer. Attended Alvernia Montessori school in PA for two years.
+tags:
+- singer
+- montessori
+education:
+- type: montessori
+  notes: Attended Montessori school
