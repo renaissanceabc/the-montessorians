@@ -1,0 +1,13 @@
+name: Ada Lovelace
+slug: ada-lovelace
+tags:
+  - autodidact
+  - early computing
+bio: >-
+  Ada Lovelace was a pioneering mathematician...
+education:
+  - type: homeschool
+    notes: Taught by her mother and private tutors
+image: ada-lovelace.jpg
+links:
+  wikipedia: https://en.wikipedia.org/wiki/Ada_Lovelace
