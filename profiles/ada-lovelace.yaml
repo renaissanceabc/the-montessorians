@@ -7,9 +7,8 @@ tags:
   - autodidact
   - early computing
 education:
-  - type: montessori
-    notes: Taught by her mother and private tutors
-notableAchievements:
+  - montessori
+notable_achievements:
   - "First programmer"
   - "First computer program"
   - "First computer"
@@ -17,4 +16,5 @@ notableAchievements:
   - "First computer network"
   - "First computer operating system"
 links:
-  wikipedia: https://en.wikipedia.org/wiki/Ada_Lovelace
+  - url: https://en.wikipedia.org/wiki/Ada_Lovelace
+    type: wikipedia
