@@ -15,17 +15,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.x'
+          node-version: '20'
 
-      - name: Install YAML schema validator
-        run: pip install yamale
+      - name: Install AJV CLI
+        run: npm install -g ajv-cli
 
-      - name: Validate profile files
+      - name: Validate YAML against JSON Schema
         run: |
           for file in profiles/*.yaml; do
             echo "Validating $file"
-            yamale -s profile.schema.json "$file"
+            ajv validate -s profile.schema.json -d "$file" --yaml --strict=false
           done
