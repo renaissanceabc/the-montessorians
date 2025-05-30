@@ -5,8 +5,13 @@
   "required": ["name", "slug"],
   "properties": {
     "name": { "type": "string" },
-    "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "tagline": { "type": "string" },
     "bio": { "type": "string" },
+    "education_notes": { "type": "string" },
     "tags": {
       "type": "array",
       "items": { "type": "string" }
@@ -14,29 +19,31 @@
     "education": {
       "type": "array",
       "items": {
-        "type": "object",
-        "required": ["type"],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": ["montessori", "homeschool"]
-          },
-          "notes": { "type": "string" }
-        }
+        "type": "string",
+        "enum": ["montessori", "homeschool", "other"]
       }
     },
-    "notableAchievements": {
+    "notable_achievements": {
       "type": "array",
       "items": { "type": "string" }
     },
+    "image_url": { "type": "string", "format": "uri" },
+    "featured_at": { "type": "string", "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" },
     "links": {
-      "type": "object",
-      "properties": {
-        "wikipedia": { "type": "string", "format": "uri" },
-        "website": { "type": "string", "format": "uri" },
-        "linkedin": { "type": "string", "format": "uri" }
-      },
-      "additionalProperties": false
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "type"],
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "type": {
+            "type": "string",
+            "enum": ["wikipedia", "website", "linkedin"]
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false
