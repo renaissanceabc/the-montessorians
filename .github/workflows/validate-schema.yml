@@ -1,4 +1,4 @@
-name: Validate YAML Schema
+name: Validate Profiles
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   validate:
-    name: Validate profile schemas
+    name: Validate schema + image existence
     runs-on: ubuntu-latest
 
     steps:
@@ -20,12 +20,33 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install AJV CLI
-        run: npm install -g ajv-cli
+      - name: Install dependencies
+        run: npm install -g ajv-cli js-yaml
 
       - name: Validate YAML against JSON Schema
         run: |
           for file in profiles/*.yaml; do
-            echo "Validating $file"
+            echo "Validating schema for $file"
             ajv validate -s profile.schema.json -d "$file" --yaml --strict=false
+          done
+
+      - name: Check for missing or invalid image formats
+        run: |
+          for file in profiles/*.yaml; do
+            slug=$(basename "$file" .yaml)
+            valid_image="images/${slug}.jpg"
+            jpeg_image="images/${slug}.jpeg"
+            png_image="images/${slug}.png"
+
+            if [ -f "$jpeg_image" ] || [ -f "$png_image" ]; then
+              echo "❌ Invalid image format for $slug. Use .jpg instead of .jpeg or .png"
+              exit 1
+            fi
+
+            if [ ! -f "$valid_image" ]; then
+              echo "❌ Missing required image: $valid_image"
+              exit 1
+            else
+              echo "✅ Valid .jpg image found for $slug"  
+            fi
           done
