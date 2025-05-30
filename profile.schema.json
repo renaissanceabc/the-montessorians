@@ -37,8 +37,7 @@
         "linkedin": { "type": "string", "format": "uri" }
       },
       "additionalProperties": false
-    },
-    "image": { "type": "string" }
+    }
   },
   "additionalProperties": false
 }
