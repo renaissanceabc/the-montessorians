@@ -1,10 +1,11 @@
+---
 name: Julia Child
 slug: julia-child
 bio: >-
   Chef and TV personality. Attributed Montessori to her lifelong love of learning and mastery.
 tags:
-- chef
-- tv-personality
+  - chef
+  - tv-personality
 education:
-- type: montessori
-  notes: Attended Montessori school
+  - type: montessori
+    notes: Attended Montessori school

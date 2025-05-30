@@ -1,10 +1,11 @@
+---
 name: Prince Harry
 slug: prince-harry
 bio: >-
   Attended Montessori nursery school. His mother, Diana, was a Montessori assistant.
 tags:
-- politics
-- royal
+  - politics
+  - royal
 education:
-- type: montessori
-  notes: Attended Montessori school
+  - type: montessori
+    notes: Attended Montessori school

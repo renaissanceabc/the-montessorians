@@ -1,10 +1,11 @@
+---
 name: Prince George
 slug: prince-george
 bio: >-
   Attended Westacres Montessori school. Caused spike in Montessori interest in the UK.
 tags:
-- politics
-- royal
+  - politics
+  - royal
 education:
-- type: montessori
-  notes: Attended Montessori school
+  - type: montessori
+    notes: Attended Montessori school

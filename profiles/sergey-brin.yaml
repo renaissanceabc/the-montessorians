@@ -1,10 +1,11 @@
+---
 name: Sergey Brin
 slug: sergey-brin
 bio: >-
   Co-founder of Google. Attributes his willingness to follow interests to Montessori education.
 tags:
-- tech
-- founder
+  - tech
+  - founder
 education:
-- type: montessori
-  notes: Attended Montessori school
+  - type: montessori
+    notes: Attended Montessori school

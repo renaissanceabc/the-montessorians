@@ -1,9 +1,10 @@
+---
 name: Anthony Doerr
 slug: anthony-doerr
 bio: >-
   Author. Attended Montessori for 9 years. Credits it with giving him critical thinking and long-term perspective.
 tags:
-- montessori
+  - montessori
 education:
-- type: montessori
-  notes: Attended Montessori school
+  - type: montessori
+    notes: Attended Montessori school
