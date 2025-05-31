@@ -1,7 +1,9 @@
 ---
 name: Larry Page
 slug: larry-page
-bio: Co-founder of Google. Credits Montessori with fostering self-motivation and questioning.
+bio: Co-founder of Google.
+education_notes: >-
+  Larry Page credits Montessori with fostering self-motivation and questioning.
 tags:
   - tech
   - founder

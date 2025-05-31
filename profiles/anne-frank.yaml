@@ -2,7 +2,9 @@
 name: Anne Frank
 slug: anne-frank
 bio: >-
-  Diarist. Attended Montessori school in Amsterdam from age 3 to 11, then Montessori Lyceum.
+  Diarist.
+education_notes: >-
+  Anne Frank attended Montessori school in Amsterdam from age 3 to 11, then Montessori Lyceum.
 tags:
   - diarist
 education:
