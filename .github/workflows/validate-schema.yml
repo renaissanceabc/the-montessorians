@@ -21,16 +21,16 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install -g ajv-cli js-yaml
-
+        run: npm install ajv-cli js-yaml
+        
       - name: Validate YAML against JSON Schema
         run: |
-          for file in profiles/*.yaml; do
-            echo "Validating schema for $file"
-            json=$(node -e "console.log(JSON.stringify(require('js-yaml').load(require('fs').readFileSync('$file', 'utf8'))))")
-            echo "$json" > temp.json
-            ajv validate -s profile.schema.json -d temp.json --strict=false
-          done
+            for file in profiles/*.yaml; do
+              echo "Validating schema for $file"
+              json=$(npx -y js-yaml "$file")
+              echo "$json" > temp.json
+              npx ajv-cli validate -s profile.schema.json -d temp.json --strict=false
+            done
 
       - name: Check for missing or invalid image formats
         run: |
