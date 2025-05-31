@@ -1,7 +1,9 @@
+---
 name: Ann Sullivan
 slug: ann-sullivan
-bio: Helen's Keller's teacher, used Montessori ideas to teacher her famous student.
-education:
-  - montessori
+bio: >-
+  Helen's Keller's teacher, used Montessori ideas to teacher her famous student.
 tags:
   - teacher
+education:
+  - montessori

@@ -5,9 +5,11 @@
   "description": "This is the **open-source dataset** of remarkable individuals who were educated through alternative pathways — including homeschool, Montessori, unschooling, self-directed learning, and other non-traditional models.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "git clean -xdf node_modules",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint:precommit": "npm run format:check && node scripts/validate-yaml.js",
+    "format:check": "prettier --check \"data/**/*.yaml\"",
+    "validate": "node scripts/validate-yaml.js"
   },
   "repository": {
     "type": "git",
@@ -24,8 +26,10 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1",
     "husky": "^9.1.7",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "prettier": "^3.5.3"
   },
   "packageManager": "pnpm@10.10.0"
 }

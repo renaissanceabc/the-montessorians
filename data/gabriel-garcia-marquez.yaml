@@ -3,11 +3,11 @@ name: Gabriel García Marquez
 slug: gabriel-garcia-marquez
 bio: >-
   Author, Nobel Prize in Literature recipient.
-education_notes: >-
-  Gabriel García Marquez attended a Montessori school in Colombia.
 tags:
   - author
   - nobel-prize-winner
   - literature
 education:
   - montessori
+education_notes: >-
+  Gabriel García Marquez attended a Montessori school in Colombia.

@@ -1,8 +1,12 @@
+---
 name: Katharine Graham
 slug: katharine-graham
-bio: Pulitzer prize-winning author and Former owner & editor of the Washington Post
-education:
-  - montessori
+bio: >-
+  Pulitzer prize-winning author and Former owner & editor of the Washington Post.
 tags:
   - journalist
   - author
+  - editor
+  - pulitzer-prize-winner
+education:
+  - montessori

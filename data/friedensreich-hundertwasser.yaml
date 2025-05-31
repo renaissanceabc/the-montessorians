@@ -1,8 +1,10 @@
+---
 name: Friedensreich Hundertwasser
 slug: friedensreich-hundertwasser
-bio: Viennese artist & architect
-education:
-  - montessori
+bio: >-
+  Viennese artist & architect.
 tags:
   - artist
   - architect
+education:
+  - montessori

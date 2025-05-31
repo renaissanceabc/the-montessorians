@@ -1,4 +1,4 @@
-name: Validate Profiles
+name: Lint & Validate Profiles
 
 on:
   pull_request:
@@ -7,6 +7,25 @@ on:
       - main
 
 jobs:
+  lint:
+    name: Run yamllint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Run yamllint on data
+        run: yamllint data
+
   validate:
     name: Validate schema + image existence
     runs-on: ubuntu-latest
@@ -21,16 +40,10 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm install ajv-cli js-yaml
+        run: npm install
 
       - name: Validate YAML against JSON Schema
-        run: |
-          for file in data/*.yaml; do
-            echo "Validating schema for $file"
-            json=$(npx -y js-yaml "$file")
-            echo "$json" > temp.json
-            npx ajv-cli validate -s profile.schema.json -d temp.json --strict=false
-          done
+        run: node scripts/validate-yaml.js
 
       - name: Check for missing or invalid image formats
         run: |

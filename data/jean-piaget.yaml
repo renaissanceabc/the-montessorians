@@ -1,7 +1,9 @@
+---
 name: Jean Piaget
 slug: jean-piaget
-bio: was once the President of the Swiss Montessori Society
-education:
-  - montessori
+bio: >-
+  Swiss psychologist, once the President of the Swiss Montessori Society.
 tags:
+  - psychologist
+education:
   - montessori

@@ -1,6 +1,8 @@
+---
 name: George Clooney
 slug: george-clooney
-bio: actor
+bio: >-
+  Actor.
 education:
   - montessori
 tags:

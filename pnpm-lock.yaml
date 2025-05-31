@@ -17,12 +17,18 @@ importers:
       ajv-cli:
         specifier: ^5.0.0
         version: 5.0.0
+      ajv-formats:
+        specifier: ^3.0.1
+        version: 3.0.1(ajv@8.17.1)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
 
 packages:
 
@@ -120,6 +126,14 @@ packages:
       ts-node: '>=9.0.0'
     peerDependenciesMeta:
       ts-node:
+        optional: true
+
+  ajv-formats@3.0.1:
+    resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
         optional: true
 
   ajv@8.17.1:
@@ -412,6 +426,11 @@ packages:
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
+  prettier@3.5.3:
+    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
@@ -635,6 +654,10 @@ snapshots:
       json-schema-migrate: 2.0.0
       json5: 2.2.3
       minimist: 1.2.8
+
+  ajv-formats@3.0.1(ajv@8.17.1):
+    optionalDependencies:
+      ajv: 8.17.1
 
   ajv@8.17.1:
     dependencies:
@@ -888,6 +911,8 @@ snapshots:
   path-is-absolute@1.0.1: {}
 
   picocolors@1.1.1: {}
+
+  prettier@3.5.3: {}
 
   require-directory@2.1.1: {}
 
