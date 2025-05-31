@@ -1,0 +1,7 @@
+npx --no -- commitlint --edit "$1" || {
+  echo "❌ Commit message failed lint rules. Use Conventional Commits!"
+  echo "Examples:"
+  echo "  feat: add new component"
+  echo "  fix: correct button hover state"
+  exit 1
+}

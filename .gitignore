@@ -1,6 +1,10 @@
-.DS_Store
+# Dependencies
+node_modules
 
+# Local env files
 .env
 .env*.local
 
-node_modules
+# Misc
+.DS_Store
+*.pem
