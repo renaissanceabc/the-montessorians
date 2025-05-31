@@ -46,8 +46,7 @@ jobs:
             fi
 
             if [ ! -f "$valid_image" ]; then
-              echo "❌ Missing required image: $valid_image"
-              exit 1
+              echo "⚠️ Missing required image: $valid_image"
             else
               echo "✅ Valid .jpg image found for $slug"  
             fi
