@@ -8,11 +8,12 @@ It powers [The Polymaths](https://example.com), a public showcase of extraordina
 
 ## ✨ What’s in this repo?
 
-- Structured data files in YAML format under `/profiles`
+- Structured data files in YAML format under `/data`
 - Public images used in profile pages
 - Contribution history and curation by the community
 
 Each profile contains:
+
 - Name, slug, and image
 - Bio and summary
 - Type of education (e.g., Montessori, homeschool)
@@ -22,8 +23,9 @@ Each profile contains:
 ---
 
 ## 📁 Project Structure
+
 ```
-/profiles/
+/data/
 ada-lovelace.yaml
 elon-musk.yaml
 /images/
@@ -40,7 +42,7 @@ CONTRIBUTING.md
 We welcome contributions from the community! You can:
 
 1. **Fork this repo**
-2. Add a new `.yaml` file in `/profiles/` (see the [example below](#example-profile))
+2. Add a new `.yaml` file in `/data/` (see the [example below](#example-profile))
 3. Add a square-ish image (JPG/PNG) to `/images/`, named as `slug.jpg`
 4. Open a Pull Request
 

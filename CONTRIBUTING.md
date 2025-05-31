@@ -7,7 +7,7 @@ Thanks for your interest in contributing to the Polymaths project! This repo ser
 ## ✍️ How to Contribute
 
 1. **Fork this repo** and create a new branch.
-2. Add or update a profile YAML file in the `/profiles/` directory.
+2. Add or update a profile YAML file in the `/data/` directory.
 3. If adding a new person, upload a headshot image to `/images/`, named using the person's slug (e.g. `ada-lovelace.jpg`).
 4. Open a Pull Request with a clear title and description of your change.
 

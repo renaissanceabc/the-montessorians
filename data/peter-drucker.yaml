@@ -1,0 +1,18 @@
+name: Peter Drucker
+slug: peter-drucker
+tagline: The man who invented modern management.
+bio: >-
+  Peter F. Drucker (born November 19, 1909, Vienna, Austria—died November 11,
+  2005, Claremont, California, U.S.) was an Austrian-born American management
+  consultant, educator, and author, whose writings contributed to the
+  philosophical and practical foundations of the modern business corporation.
+tags:
+  - entrepreneur
+  - author
+  - educator
+  - management-consultant
+education:
+  - montessori
+links:
+  - url: https://en.wikipedia.org/wiki/Peter_Drucker
+    type: wikipedia

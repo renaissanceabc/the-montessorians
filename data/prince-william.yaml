@@ -3,10 +3,10 @@ name: Prince William
 slug: prince-william
 bio: >-
   Prince of Wales.
-education_notes: >-
-  Prince William attended Montessori nursery school. His mother, Diana, was a Montessori assistant.
 tags:
   - politics
   - royal
 education:
   - montessori
+education_notes: >-
+  Prince William attended Montessori nursery school. His mother, Diana, was a Montessori assistant.

@@ -18,23 +18,23 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm install ajv-cli js-yaml
-        
+
       - name: Validate YAML against JSON Schema
         run: |
-            for file in profiles/*.yaml; do
-              echo "Validating schema for $file"
-              json=$(npx -y js-yaml "$file")
-              echo "$json" > temp.json
-              npx ajv-cli validate -s profile.schema.json -d temp.json --strict=false
-            done
+          for file in data/*.yaml; do
+            echo "Validating schema for $file"
+            json=$(npx -y js-yaml "$file")
+            echo "$json" > temp.json
+            npx ajv-cli validate -s profile.schema.json -d temp.json --strict=false
+          done
 
       - name: Check for missing or invalid image formats
         run: |
-          for file in profiles/*.yaml; do
+          for file in data/*.yaml; do
             slug=$(basename "$file" .yaml)
             valid_image="images/${slug}.jpg"
             jpeg_image="images/${slug}.jpeg"
