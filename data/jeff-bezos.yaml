@@ -1,12 +1,25 @@
 ---
 name: Jeff Bezos
 slug: jeff-bezos
+tagline: Tech visionary and founder of Amazon
 bio: >-
-  Founder of Amazon.
-education_notes: >-
-  Jeff Bezos attended Montessori preschool for 1.5 years. Recalled painting large scale in a Montessori environment.
+  Jeff Bezos is the founder of Amazon and one of the most influential entrepreneurs of the digital era. Under his
+  leadership, Amazon transformed global commerce, cloud computing, and logistics, becoming one of the world's most
+  valuable companies.
 tags:
   - founder
+  - entrepreneur
   - tech
+  - innovator
 education:
   - montessori
+education_notes: >-
+  Jeff Bezos attended a Montessori preschool for 1.5 years. He recalled painting large-scale and exploring freely in the
+  Montessori environment—experiences that fueled his early creativity and independence.
+notable_achievements:
+  - Founder of Amazon and Blue Origin
+  - Former CEO of Amazon
+  - Pioneered global e-commerce and cloud infrastructure
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jeff_Bezos

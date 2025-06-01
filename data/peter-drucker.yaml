@@ -1,18 +1,26 @@
 ---
 name: Peter Drucker
 slug: peter-drucker
-tagline: The man who invented modern management.
+tagline: Visionary thinker who laid the foundation for modern management
 bio: >-
-  Peter F. Drucker (born November 19, 1909, Vienna, Austria—died November 11, 2005, Claremont, California, U.S.) was an
-  Austrian-born American management consultant, educator, and author, whose writings contributed to the philosophical
-  and practical foundations of the modern business corporation.
+  Peter F. Drucker was an Austrian-born American management consultant, educator, and author whose work shaped the
+  principles of modern business and organizational leadership. Known as the "father of modern management," his writings
+  introduced ideas like decentralization, knowledge work, and management by objectives, influencing generations of
+  business leaders and institutions.
 tags:
-  - entrepreneur
   - author
   - educator
   - management-consultant
+  - theorist
 education:
   - montessori
+education_notes: >-
+  Peter Drucker attended a Montessori school during his early education in Vienna, which instilled in him a lasting
+  appreciation for self-direction and independent thinking.
+notable_achievements:
+  - Author of "The Practice of Management" and over 30 influential books
+  - Pioneer of modern business and organizational theory
+  - Influenced the rise of the knowledge worker
 links:
-  - url: https://en.wikipedia.org/wiki/Peter_Drucker
-    type: wikipedia
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Peter_Drucker

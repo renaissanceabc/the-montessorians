@@ -1,0 +1,26 @@
+---
+name: Jeremy Allaire
+slug: jeremy-allaire
+tagline: Tech entrepreneur and founder of Brightcove and Circle
+bio: >-
+  Jeremy Allaire is an American technologist and entrepreneur known for founding Brightcove, a leading online video
+  platform, and Circle, a global financial technology firm. He has been a prominent advocate for the adoption of digital
+  currencies and blockchain technology.
+tags:
+  - tech
+  - entrepreneur
+  - investor
+education:
+  - montessori
+education_notes: >-
+  Jeremy Allaire attended a Montessori school during his early education, which he credits for fostering his creativity
+  and independent thinking.
+notable_achievements:
+  - Founder of Brightcove
+  - Co-founder and CEO of Circle
+  - Advocate for digital currency adoption
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jeremy_Allaire
+  - type: website
+    url: https://www.circle.com/en/about

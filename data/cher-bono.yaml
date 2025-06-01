@@ -1,0 +1,34 @@
+name: Cher Bono
+slug: cher-bono
+tagline: Groundbreaking pop icon and Academy Award-winning performer
+bio: >-
+  Cher is an American singer, actress, and television personality whose groundbreaking six-decade career has made her a
+  cultural icon. Rising to fame with the folk rock duo Sonny & Cher, she later reinvented herself as a solo superstar
+  with chart-topping hits across multiple genres, including the global smash Believe, which pioneered Auto-Tune as a
+  vocal effect. On screen, she earned critical acclaim with films like Moonstruck, for which she won the Academy Award
+  for Best Actress. Cher is the only artist with Billboard number-one hits in seven consecutive decades, and her impact
+  spans music, film, fashion, and activism. A Rock and Roll Hall of Fame inductee, she is also known for her outspoken
+  advocacy on issues like LGBTQ rights and HIV/AIDS awareness.
+tags:
+  - singer
+  - actress
+  - tv-host
+  - activist
+  - icon
+  - fashion-influencer
+education:
+  - montessori
+education_notes: >-
+  Cher attended a Montessori school during her early education, which influenced her creative confidence and
+  independence.
+notable_achievements:
+  - Winner of an Academy Award, Grammy, Emmy, and three Golden Globes
+  - Star of *Moonstruck*, *Silkwood*, *Mask*, and *Burlesque*
+  - Released *Believe*, featuring the pioneering "Cher effect" with Auto-Tune
+  - Only artist with #1 Billboard hits in seven consecutive decades
+  - Sold over 100 million records worldwide
+  - Rock and Roll Hall of Fame inductee and Kennedy Center Honoree
+  - Advocate for LGBTQ rights and HIV/AIDS awareness
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Cher

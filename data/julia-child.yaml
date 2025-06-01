@@ -1,12 +1,24 @@
 ---
 name: Julia Child
 slug: julia-child
+tagline: Beloved chef who brought French cuisine to American kitchens
 bio: >-
-  Chef and TV personality.
-education_notes: >-
-  Julia Child attributed Montessori to her lifelong love of learning and mastery.
-education:
-  - montessori
+  Julia Child was an American chef, author, and television personality best known for making French cooking accessible
+  to American audiences. Her groundbreaking cookbook "Mastering the Art of French Cooking" and her television show "The
+  French Chef" turned her into a culinary icon.
 tags:
   - chef
+  - author
   - tv-personality
+  - culinary-icon
+education:
+  - montessori
+education_notes: >-
+  Julia Child credited her Montessori education with nurturing her love of learning and lifelong curiosity.
+notable_achievements:
+  - Author of "Mastering the Art of French Cooking"
+  - Host of "The French Chef"
+  - James Beard Foundation Lifetime Achievement Award recipient
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Julia_Child

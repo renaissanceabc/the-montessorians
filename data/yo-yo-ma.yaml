@@ -1,10 +1,25 @@
 ---
-name: Yo Yo Ma
+name: Yo-Yo Ma
 slug: yo-yo-ma
+tagline: World-renowned cellist, United Nations Peace Ambassador, and winner of 19 Grammy Awards
 bio: >-
-  Cellist.
+  Yo-Yo Ma is an acclaimed American cellist known for his extraordinary technique and deep musicality. A cultural
+  ambassador and humanitarian, he has performed around the world and founded the Silk Road Ensemble to foster
+  cross-cultural collaboration through music.
 tags:
   - musician
   - cellist
+  - performer
+  - cultural-ambassador
 education:
   - montessori
+education_notes: >-
+  Yo-Yo Ma attended a Montessori school as a young child, where his artistic sensibilities and self-motivation were
+  nurtured through exploration.
+notable_achievements:
+  - 19-time Grammy Award winner
+  - Founder of the Silk Road Ensemble
+  - Presidential Medal of Freedom recipient
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Yo-Yo_Ma

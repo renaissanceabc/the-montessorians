@@ -1,12 +1,14 @@
 # 🧠 Polymaths Data
 
-This is the **open-source dataset** of remarkable individuals who were educated through alternative pathways — including homeschool, Montessori, unschooling, self-directed learning, and other non-traditional models.
+This is the **open-source dataset** of remarkable individuals who were educated through alternative pathways — including
+homeschool, Montessori, unschooling, self-directed learning, and other non-traditional models.
 
-It powers [The Polymaths](https://example.com), a public showcase of extraordinary alternative-educated people, maintained by [Renaissance](https://renaissance.education).
+It powers [The Polymaths](https://example.com), a public showcase of extraordinary alternative-educated people,
+maintained by [Renaissance](https://renaissance.education).
 
 ---
 
-## ✨ What’s in this repo?
+## ✨ What's in this repo?
 
 - Structured data files in YAML format under `/data`
 - Public images used in profile pages
@@ -75,13 +77,15 @@ links:
 
 ## 📬 Submit a Suggestion
 
-Know someone who should be featured? Open an issue or fill out the submission form at renaissance.education/polymaths-submit (coming soon).
+Know someone who should be featured? Open an issue or fill out the submission form at
+renaissance.education/polymaths-submit (coming soon).
 
 ---
 
 ## 💡 License
 
-Data in this repository is open under CC BY 4.0. Images must be properly attributed and are subject to their own usage rights.
+Data in this repository is open under CC BY 4.0. Images must be properly attributed and are subject to their own usage
+rights.
 
 ---
 

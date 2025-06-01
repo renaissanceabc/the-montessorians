@@ -1,12 +1,25 @@
 ---
 name: Will Wright
 slug: will-wright
+tagline: Visionary game designer and creator of The Sims
 bio: >-
-  Creator of The Sims. Game Designer and Co-Founder of the video game development company Maxis.
+  Will Wright is a pioneering video game designer and co-founder of Maxis, best known for creating the iconic simulation
+  games SimCity, The Sims, and Spore. His work redefined the possibilities of interactive storytelling and player-driven
+  design.
 tags:
   - tech
   - gaming
+  - game-designer
+  - innovator
 education:
   - montessori
 education_notes: >-
-  Will Wright attended a Montessori school in the UK.
+  Will Wright attended a Montessori school in the UK, where his early freedom to explore and tinker laid the foundation
+  for his creative design philosophy.
+notable_achievements:
+  - Creator of The Sims, SimCity, and Spore
+  - Co-founder of Maxis
+  - Game Developers Choice Lifetime Achievement Award winner
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Will_Wright

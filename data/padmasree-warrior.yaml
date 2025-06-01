@@ -1,0 +1,36 @@
+---
+name: Padmasree Warrior
+slug: padmasree-warrior
+tagline: Tech executive and former CTO of Cisco; champion of innovation and leadership
+bio: >-
+  Padmasree Warrior is a prominent technology executive and entrepreneur who has held leadership roles at major
+  companies including Cisco Systems and Motorola. As CTO of Cisco, she was responsible for driving the company's
+  technology strategy and innovation agenda. She later served as CEO of NIO U.S. and founded Fable, a curated reading
+  platform.
+tags:
+  - tech
+  - executive
+  - entrepreneur
+education:
+  - montessori
+education_notes: >-
+  Padmasree Warrior attended a Montessori school in Vijayawada, India, from kindergarten through high school. She
+  credits Montessori education for shaping her leadership skills, self-confidence, and ability to navigate ambiguity.
+  “Not being afraid of problems; looking at every problem as an opportunity to solve it versus being stumped by it,” she
+  said. This mindset has been instrumental in her success as a technology leader.
+notable_achievements:
+  - Founder and CEO of Fable
+  - CTO of Cisco Systems
+  - CTO of Motorola
+  - CEO of NIO U.S.
+quotes:
+  - "Walking into ambiguous situations and being comfortable with that is hugely helpful with my job,” she said. “Most
+    executives want everything laid out clearly with all the i's dotted and t's crossed. But the real world is not like
+    that. In my job, setting the technology direction for a massive technology company, you only get so much
+    information, and at some point you have to make decisions and be comfortable with that. That's something I learned
+    early on."
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Padmasree_Warrior
+  - type: website
+    url: https://fable.co/

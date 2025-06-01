@@ -1,12 +1,27 @@
 ---
 name: Anthony Doerr
 slug: anthony-doerr
+tagline: Pulitzer Prize-winning author known for luminous, layered storytelling
 bio: >-
-  Author.
-education_notes: >-
-  Anthony Doerr attended Montessori for 9 years. Credits it with giving him critical thinking and long-term perspective.
+  Anthony Doerr is an acclaimed American author best known for his novel "All the Light We Cannot See," which won the
+  Pulitzer Prize for Fiction in 2015. His writing is celebrated for its lyrical prose, sweeping scope, and emotional
+  depth, often weaving history, science, and humanity into intricate, unforgettable narratives.
 tags:
   - author
   - writer
+  - pulitzer-prize-winner
+  - historical-fiction
 education:
   - montessori
+education_notes: >-
+  Anthony Doerr attended Montessori school for 9 years and credits it with fostering his critical thinking, patience,
+  and ability to approach problems from multiple perspectives—skills he sees as foundational to his writing process.
+notable_achievements:
+  - Pulitzer Prize for "All the Light We Cannot See"
+  - National Book Award Finalist
+  - Author of "Cloud Cuckoo Land" and "The Shell Collector"
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Anthony_Doerr
+  - type: website
+    url: https://www.anthonydoerr.com/

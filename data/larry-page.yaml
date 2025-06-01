@@ -1,15 +1,24 @@
 ---
 name: Larry Page
 slug: larry-page
+tagline: Co-founder of Google and pioneer of the modern web
 bio: >-
-  Co-founder of Google.
+  Larry Page is a computer scientist and entrepreneur best known as the co-founder of Google. Alongside Sergey Brin, he
+  developed the PageRank algorithm that revolutionized internet search and helped shape the digital information era.
 tags:
   - tech
   - founder
+  - entrepreneur
+  - innovator
 education:
   - montessori
 education_notes: >-
-  Larry Page credits Montessori with fostering self-motivation and questioning.
+  Larry Page attended a Montessori school and often credits it with inspiring his creativity, curiosity, and
+  self-direction as a learner.
+notable_achievements:
+  - Co-founder of Google and Alphabet Inc.
+  - Creator of the PageRank algorithm
+  - One of the most influential tech leaders of the 21st century
 links:
-  - url: https://en.wikipedia.org/wiki/Larry_Page
-    type: wikipedia
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Larry_Page

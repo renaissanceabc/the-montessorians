@@ -1,12 +1,23 @@
 ---
 name: Sergey Brin
 slug: sergey-brin
+tagline: Co-founder of Google and pioneer of internet search
 bio: >-
-  Co-founder of Google.
+  Sergey Brin is a computer scientist and entrepreneur who co-founded Google alongside Larry Page. A key figure in
+  shaping the modern web, Brin helped develop Google's search engine and led innovation at Alphabet across a range of
+  technologies including AI and wearable computing.
 tags:
   - tech
   - founder
+  - innovator
 education:
   - montessori
 education_notes: >-
-  Sergey Brin attributes his willingness to follow interests to Montessori education.
+  Sergey Brin attributes his willingness to follow his interests and think independently to his Montessori education.
+notable_achievements:
+  - Co-founder of Google and Alphabet Inc.
+  - Developer of foundational search technology
+  - Advocate for innovation in AI and future tech
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Sergey_Brin

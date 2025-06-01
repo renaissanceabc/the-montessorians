@@ -1,0 +1,22 @@
+---
+name: John Cusack
+slug: john-cusack
+tagline: Actor and screenwriter known for iconic roles in cult classics
+bio: >-
+  John Cusack is an American actor and screenwriter known for his roles in films like "Say Anything," "High Fidelity,"
+  and "Being John Malkovich." He has built a reputation for offbeat, thoughtful characters and politically engaged
+  commentary.
+tags:
+  - actor
+  - screenwriter
+  - filmmaker
+education:
+  - montessori
+education_notes: >-
+  John Cusack attended a Montessori school in the United States, where creative independence was encouraged.
+notable_achievements:
+  - Star of "Say Anything" and "High Fidelity"
+  - Acclaimed for his roles in both mainstream and indie cinema
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/John_Cusack

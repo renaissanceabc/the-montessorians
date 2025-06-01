@@ -1,0 +1,23 @@
+---
+name: Bill Gates
+slug: bill-gates
+tagline: Co-founder of Microsoft and philanthropist
+bio: >-
+  Bill Gates is a technology pioneer and co-founder of Microsoft Corporation. He has significantly influenced the
+  personal computing revolution and, through the Bill & Melinda Gates Foundation, has become a leading philanthropist in
+  global health and education.
+tags:
+  - tech
+  - philanthropist
+  - entrepreneur
+education:
+  - montessori
+education_notes: >-
+  Bill Gates attended a Montessori school during his early childhood in Seattle, Washington.
+notable_achievements:
+  - Co-founder of Microsoft Corporation
+  - Co-chair of the Bill & Melinda Gates Foundation
+  - Influential figure in global health and education philanthropy
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Bill_Gates

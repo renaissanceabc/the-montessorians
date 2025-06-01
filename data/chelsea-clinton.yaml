@@ -1,0 +1,23 @@
+---
+name: Chelsea Clinton
+slug: chelsea-clinton
+tagline: Advocate for public health and education
+bio: >-
+  Chelsea Clinton is an American author and global health advocate. As vice chair of the Clinton Foundation, she focuses
+  on initiatives related to health, education, and women's rights. She has also authored several books aimed at
+  empowering young readers.
+tags:
+  - author
+  - health-advocate
+  - public-figure
+education:
+  - montessori
+education_notes: >-
+  Chelsea Clinton attended a Montessori school during her early education.
+notable_achievements:
+  - Vice Chair of the Clinton Foundation
+  - Author of children's books promoting civic engagement
+  - Advocate for global health and education initiatives
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Chelsea_Clinton

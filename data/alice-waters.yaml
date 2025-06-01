@@ -1,0 +1,27 @@
+---
+name: Alice Waters
+slug: alice-waters
+tagline: Chef and food activist; founder of Chez Panisse and the Edible Schoolyard Project
+bio: >-
+  Alice Waters is an American chef, restaurateur, and advocate for sustainable agriculture. She founded Chez Panisse in
+  Berkeley, California, pioneering the farm-to-table movement. Waters also established the Edible Schoolyard Project,
+  integrating organic gardening into school curricula to teach children about healthy eating and the environment.
+tags:
+  - chef
+  - food-activist
+  - educator
+education:
+  - montessori
+education_notes: >-
+  After graduating from UC Berkeley, Alice Waters trained at the International Montessori School in London and taught at
+  a Montessori school in Berkeley. She credits Montessori principles with influencing her approach to education and
+  restaurant management.
+notable_achievements:
+  - Founder of Chez Panisse restaurant
+  - Founder of the Edible Schoolyard Project
+  - Recipient of the National Humanities Medal
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Alice_Waters
+  - type: website
+    url: https://edibleschoolyard.org

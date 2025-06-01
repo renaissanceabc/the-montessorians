@@ -1,12 +1,24 @@
 ---
 name: Prince William
 slug: prince-william
+tagline: Heir apparent to the British throne and advocate for conservation and mental health
 bio: >-
-  Prince of Wales.
+  Prince William, Prince of Wales, is the eldest son of King Charles III and the late Princess Diana. As the heir
+  apparent to the British throne, he is known for his public service, advocacy for mental health, and leadership in
+  environmental conservation.
 tags:
-  - politics
   - royal
+  - environmentalist
+  - advocate
 education:
   - montessori
 education_notes: >-
-  Prince William attended Montessori nursery school. His mother, Diana, was a Montessori assistant.
+  Prince William attended a Montessori nursery school in London. His mother, Princess Diana, was a Montessori assistant
+  and proponent of the method's emphasis on independent exploration and emotional development.
+notable_achievements:
+  - Founder of the Earthshot Prize for climate innovation
+  - Senior royal and first in line to the throne
+  - Advocate for mental health and youth wellbeing
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/William,_Prince_of_Wales

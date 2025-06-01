@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Polymath Profile",
   "type": "object",
-  "required": ["name", "slug"],
+  "required": ["name", "slug", "tagline", "tags"],
   "properties": {
     "name": { "type": "string", "description": "The full name of the person" },
     "slug": {
@@ -40,6 +40,11 @@
     "notable_achievements": {
       "type": "array",
       "description": "Notable achievements or accomplishments of the person",
+      "items": { "type": "string" }
+    },
+    "quotes": {
+      "type": "array",
+      "description": "Quotes from the person regarding their education",
       "items": { "type": "string" }
     },
     "links": {

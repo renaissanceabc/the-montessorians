@@ -1,12 +1,21 @@
 ---
 name: Prince George
 slug: prince-george
+tagline: Heir to the British throne and son of Prince William and Princess Catherine
 bio: >-
-  Prince of Wales.
+  Prince George of Wales is the eldest child of Prince William and Catherine, Princess of Wales. As second in line to
+  the British throne, his education and upbringing have received global attention, including his early years in a
+  Montessori environment.
 tags:
-  - politics
   - royal
+  - heir
 education:
   - montessori
 education_notes: >-
-  Prince George attended Westacres Montessori school. Caused spike in Montessori interest in the UK.
+  Prince George attended Westacre Montessori School Nursery in Norfolk. His enrollment sparked renewed interest in
+  Montessori education across the UK.
+notable_achievements:
+  - Second in line to the British throne
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Prince_George_of_Wales

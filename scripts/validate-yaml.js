@@ -15,14 +15,12 @@ const __dirname = path.dirname(__filename);
 const ajv = new Ajv({
   allErrors: true,
   strict: false,
-  validateFormats: "fast",
+  validateFormats: "fast"
 });
 addFormats(ajv);
 
 // Load schema
-const schema = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../profile.schema.json"), "utf8")
-);
+const schema = JSON.parse(fs.readFileSync(path.join(__dirname, "../profile.schema.json"), "utf8"));
 const validate = ajv.compile(schema);
 
 // Validate YAML files

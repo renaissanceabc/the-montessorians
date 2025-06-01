@@ -1,11 +1,23 @@
 ---
 name: Morgan Saylor
 slug: morgan-saylor
+tagline: Actress best known for her breakout role in "Homeland"
 bio: >-
-  Actress.
+  Morgan Saylor is an American actress best known for playing Dana Brody in the Showtime series "Homeland." She has
+  since appeared in a number of independent films and stage productions, earning acclaim for her nuanced performances.
 tags:
-  - actress
+  - actor
+  - television
+  - indie-film
 education:
   - montessori
 education_notes: >-
-  Morgan Saylor attended a Montessori school in the US.
+  Morgan Saylor attended a Montessori school in the United States, which she credits with sparking her early interest in
+  performance and storytelling.
+notable_achievements:
+  - Starred in Showtime's "Homeland"
+  - Independent Spirit Award nominee
+  - Stage performer in acclaimed off-Broadway productions
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Morgan_Saylor

@@ -1,12 +1,26 @@
 ---
 name: Joshua Bell
 slug: joshua-bell
+tagline: World-renowned violinist with a career spanning concert halls and film scores
 bio: >-
-  Violinist.
-education_notes: >-
-  Joshua Bell attended a Montessori school in the UK.
+  Joshua Bell is an internationally acclaimed violinist celebrated for his technical brilliance and emotional depth. He
+  has performed with the world's leading orchestras, recorded best-selling classical albums, and contributed to major
+  film scores including "The Red Violin."
 tags:
   - violinist
   - musician
+  - classical
+  - performer
 education:
   - montessori
+education_notes: >-
+  Joshua Bell attended a Montessori school in the UK, where his early musical curiosity was nurtured through an
+  exploratory learning environment.
+notable_achievements:
+  - Grammy Award-winning violinist
+  - Artistic Director of the Academy of St Martin in the Fields
+  - Owner of the 1713 Gibson ex-Huberman Stradivarius violin
+  - Featured performer in "The Red Violin" soundtrack
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Joshua_Bell

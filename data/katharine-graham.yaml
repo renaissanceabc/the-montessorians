@@ -1,12 +1,25 @@
 ---
 name: Katharine Graham
 slug: katharine-graham
+tagline: Pioneering journalist and Pulitzer-winning publisher of The Washington Post
 bio: >-
-  Pulitzer prize-winning author and Former owner & editor of the Washington Post.
+  Katharine Graham was the publisher of The Washington Post during the Watergate scandal and the Pentagon Papers,
+  becoming the first female CEO of a Fortune 500 company. Her memoir won the Pulitzer Prize for Biography and cemented
+  her legacy as a trailblazer in journalism and leadership.
 tags:
   - journalist
   - author
   - editor
   - pulitzer-prize-winner
+  - publisher
 education:
   - montessori
+education_notes: >-
+  Katharine Graham attended a Montessori school, where she developed confidence and intellectual independence early on.
+notable_achievements:
+  - Publisher during the Watergate investigation
+  - Pulitzer Prize-winning author of "Personal History"
+  - First female CEO of a Fortune 500 company
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Katharine_Graham

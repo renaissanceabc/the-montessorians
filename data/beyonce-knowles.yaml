@@ -1,14 +1,28 @@
 ---
-name: Beyonce Knowles
+name: Beyoncé Knowles
 slug: beyonce-knowles
+tagline: Global music icon and business mogul redefining modern pop culture
 bio: >-
-  Grammy-winning singer, actress, and entrepreneur; one of the best-selling music artists of all time and a defining
-  force in global pop culture.
+  Beyoncé Knowles is a Grammy-winning singer, actress, and entrepreneur, widely recognized as one of the most
+  influential performers of her generation. As a solo artist and member of Destiny's Child, she has sold over 200
+  million records worldwide. Beyond music, she has shaped fashion, film, and business through her ventures and
+  philanthropy, becoming a defining force in global pop culture.
 tags:
   - singer
-  - actress
+  - actor
   - entrepreneur
+  - performer
+  - cultural-icon
 education:
   - montessori
 education_notes: >-
-  Beyonce attended Montessori school in Houston, Texas.
+  Beyoncé attended St. Mary of the Purification Montessori School in Houston, Texas, during her early childhood.
+notable_achievements:
+  - 32-time Grammy Award winner
+  - Over 200 million records sold worldwide
+  - Founder of Parkwood Entertainment and Ivy Park
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Beyonc%C3%A9
+  - type: website
+    url: https://www.beyonce.com/

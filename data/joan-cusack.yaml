@@ -1,0 +1,24 @@
+---
+name: Joan Cusack
+slug: joan-cusack
+tagline: Academy Award-nominated actress known for wit and range
+bio: >-
+  Joan Cusack is an American actress known for her quirky, heartfelt performances in both comedic and dramatic roles.
+  She has received two Academy Award nominations and is widely recognized for her work in "Working Girl," "In & Out,"
+  and the "Toy Story" series as the voice of Jessie.
+tags:
+  - actor
+  - comedian
+  - voice-actor
+education:
+  - montessori
+education_notes: >-
+  Joan Cusack attended a Montessori school in the United States, where she and her brother John explored acting from an
+  early age in a creative, open environment.
+notable_achievements:
+  - Two-time Academy Award nominee
+  - Voice of Jessie in the "Toy Story" films
+  - Emmy winner for "Shameless"
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Joan_Cusack
