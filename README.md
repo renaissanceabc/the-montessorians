@@ -1,10 +1,9 @@
-# 🧠 Polymaths Data
+# 🧠 The Montessorians
 
-This is the **open-source dataset** of remarkable individuals who were educated through alternative pathways — including
-homeschool, Montessori, unschooling, self-directed learning, and other non-traditional models.
+This is the **open-source dataset** of remarkable individuals who were educated through the Montessori method, an alternative pathway to education.
 
-It powers [The Polymaths](https://example.com), a public showcase of extraordinary alternative-educated people,
-maintained by [Renaissance](https://renaissance.education).
+It powers [The Montessorians](https://themontessorians.xyz), a public showcase of extraordinary alternative-educated people,
+created and maintained by [Renaissance](https://renaissance.education).
 
 ---
 
