@@ -7,8 +7,8 @@
   "scripts": {
     "clean": "git clean -xdf node_modules",
     "prepare": "husky",
-    "lint:precommit": "npm run format:check && node scripts/validate-yaml.js",
-    "format:check": "prettier --check \"data/**/*.yaml\"",
+    "lint": "npm run format && node scripts/validate-yaml.js",
+    "format": "prettier --check \"data/**/*.yaml\"",
     "validate": "node scripts/validate-yaml.js"
   },
   "repository": {
