@@ -33,10 +33,11 @@ CONTRIBUTING.md
 
 We welcome contributions from the community! To add or update a profile:
 
-1. **Fork this repo**
+1. Fork this repo
 2. Add a new `.yaml` file to `/data/` (see the [example below](#example-profile))
 3. Add a profile image (`.jpg` or `.png`) to `/images/`, using the same `slug` as the filename
-4. Open a Pull Request
+4. Run `pnpm lint` and `pnpm validate` and confirm that the commands are successful prior to opening up a pull request
+5. Submit a pull request with your updates
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for more guidelines.
 
