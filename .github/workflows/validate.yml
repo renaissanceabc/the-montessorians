@@ -47,6 +47,8 @@ jobs:
 
       - name: Check for missing or invalid image formats
         run: |
+          errors=""
+
           for file in data/*.yaml; do
             slug=$(basename "$file" .yaml)
             valid_image="images/${slug}.jpg"
@@ -54,13 +56,17 @@ jobs:
             png_image="images/${slug}.png"
 
             if [ -f "$jpeg_image" ] || [ -f "$png_image" ]; then
-              echo "❌ Invalid image format for $slug. Use .jpg instead of .jpeg or .png"
-              exit 1
+              errors+="❌ Invalid image format for $slug. Use .jpg instead of .jpeg or .png\n"
             fi
 
             if [ ! -f "$valid_image" ]; then
-              echo "⚠️ Missing required image: $valid_image"
-            else
-              echo "✅ Valid .jpg image found for $slug"  
+              errors+="❌ Missing required image: $valid_image\n"
             fi
           done
+
+          if [ -n "$errors" ]; then
+            echo -e "$errors"
+            exit 1
+          else
+            echo "✅ All image files are valid."
+          fi
