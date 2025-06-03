@@ -9,7 +9,9 @@
     "prepare": "husky",
     "lint": "npm run format && node scripts/validate-yaml.js",
     "format": "prettier --check \"data/**/*.yaml\"",
-    "validate": "node scripts/validate-yaml.js"
+    "validate": "node scripts/validate-yaml.js",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
   },
   "repository": {
     "type": "git",

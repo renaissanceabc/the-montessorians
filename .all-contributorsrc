@@ -26,10 +26,10 @@
   "contributorsPerLine": 8,
   "types": {
     "data": {
-      "symbol": "📊",
-      "description": "Data contributions (e.g. YAML profiles, images)"
+      "symbol": "📝",
+      "description": "Profile contributions"
     },
-    "ideas": {
+    "idea": {
       "symbol": "💡",
       "description": "Ideas, suggestions, and feedback"
     },
@@ -40,4 +40,3 @@
   },
   "commitConvention": "angular"
 }
-
