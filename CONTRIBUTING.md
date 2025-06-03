@@ -31,7 +31,7 @@ tags:
 education:
   - montessori
 education_notes: >-
-  Optional extra detail about how they were educated
+  Add brief notes about the person's Montessori experience and background
 notableAchievements:
   - One-line achievement 1
   - One-line achievement 2
