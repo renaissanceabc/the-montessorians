@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea or new feature
+about: Have an idea for a new feature or improvement? Let us know
 title: ""
 labels: improvement
 assignees: "karelvuong"

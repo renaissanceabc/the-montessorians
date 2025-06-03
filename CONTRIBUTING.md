@@ -1,6 +1,7 @@
-# 🙌 Contributing to Polymaths Data
+# 🙌 Contributing to The Montessorians
 
-Thanks for your interest in contributing to the Polymaths project! This repo serves as the open data source for [The Polymaths](https://example.com), a curated showcase of extraordinary people who pursued alternative education paths like homeschooling, Montessori, and self-directed learning.
+Thanks for your interest in contributing to The Montessorians! This repository serves as the open source dataset for
+[The Montessorians](https://themontessorians.xyz), a community-driven compilation of extraordinary Montessori alumni.
 
 ---
 
@@ -8,33 +9,35 @@ Thanks for your interest in contributing to the Polymaths project! This repo ser
 
 1. **Fork this repo** and create a new branch.
 2. Add or update a profile YAML file in the `/data/` directory.
-3. If adding a new person, upload a headshot image to `/images/`, named using the person's slug (e.g. `ada-lovelace.jpg`).
+3. If adding a new person, upload a headshot image to `/images/`, named using the person's slug (e.g. `yo-yo-ma.jpg`).
 4. Open a Pull Request with a clear title and description of your change.
 
 ---
 
-## 🧾 YAML Profile Format
+## 🧾 Profile Format
 
 Each profile should follow this format:
 
 ```yaml
 name: Full Name
 slug: lowercase-hyphenated-name
-tags:
-  - homeschool
-  - entrepreneur
+tagline: A short description of the individual. (max 100 characters)
 bio: >-
-  A short paragraph describing the individual and their background.
+  A short paragraph describing the individual and their background. (max 1000 characters)
+tags:
+  - tech
+  - founder
+  - entrepreneur
 education:
-  - type: homeschool | montessori | unschool | other
-    notes: Optional extra detail about how they were educated
+  - montessori
+education_notes: >-
+  Optional extra detail about how they were educated
 notableAchievements:
   - One-line achievement 1
   - One-line achievement 2
 links:
-  wikipedia: https://...
-  website: https://... (optional)
-image: slug.jpg
+  - type: wikipedia | website | linkedin | x | instagram | tiktok
+    url: https:// ...
 ```
 
 ---
@@ -43,14 +46,13 @@ image: slug.jpg
 
 - Keep bios concise and factual.
 - Use respectful and inclusive language.
-- If citing notable achievements, link to credible sources when possible.
-- Please avoid speculative or unverifiable claims.
 
 ---
 
 ## 🖼 Image Guidelines
 
-- Images should be square or nearly square (e.g., 600x600).
+- Images should be square and ideally 800x800 in size.
+- Images must use the `.jpg` format.
 - Use publicly available portraits when possible.
 - Only upload images you have permission to use or that are in the public domain.
 - File name should match the `slug` and be placed in `/images/`.
@@ -59,8 +61,9 @@ image: slug.jpg
 
 ## 📄 License
 
-By contributing, you agree that your additions will be released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You retain attribution for your contributions.
+By contributing, you agree that your additions will be released under
+[CC0](https://github.com/renaissanceabc/the-montessorians?tab=CC0-1.0-1-ov-file#readme).
 
 ---
 
-Thank you for helping us build a world-class directory of alternative-educated changemakers! 🚀
+Thank you for helping us grow the largest open source dataset of Montessori alumni! 🚀
