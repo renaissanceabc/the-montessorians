@@ -95,8 +95,8 @@ By contributing, you agree that your additions will be released under
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="12.5%"><a href="https://github.com/karelvuong"><img src="https://avatars.githubusercontent.com/u/95452264?v=4?s=100" width="100px;" alt="Karel Vuong"/><br /><sub><b>Karel Vuong</b></sub></a><br /><a href="#data-karelvuong" title="Data contributions (e.g. YAML profiles, images)">📊</a></td>
-      <td align="center" valign="top" width="12.5%"><a href="https://github.com/samjvuong"><img src="https://avatars.githubusercontent.com/u/89951683?v=4?s=100" width="100px;" alt="Sam Vuong"/><br /><sub><b>Sam Vuong</b></sub></a><br /><a href="#data-samjvuong" title="Data contributions (e.g. YAML profiles, images)">📊</a></td>
+      <td align="center" valign="top" width="12.5%"><a href="https://github.com/karelvuong"><img src="https://avatars.githubusercontent.com/u/95452264?v=4?s=100" width="100px;" alt="Karel Vuong"/><br /><sub><b>Karel Vuong</b></sub></a><br /><a href="#data-karelvuong" title="Profile contributions">📝</a></td>
+      <td align="center" valign="top" width="12.5%"><a href="https://github.com/samjvuong"><img src="https://avatars.githubusercontent.com/u/89951683?v=4?s=100" width="100px;" alt="Sam Vuong"/><br /><sub><b>Sam Vuong</b></sub></a><br /><a href="#data-samjvuong" title="Profile contributions">📝</a></td>
     </tr>
   </tbody>
 </table>
