@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/all-contributors/all-contributors/main/schemas/config.json",
+  "projectName": "the-montessorians",
+  "projectOwner": "renaissanceabc",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": ["README.md"],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "karelvuong",
+      "name": "Karel Vuong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/95452264?v=4",
+      "profile": "https://github.com/karelvuong",
+      "contributions": ["data"]
+    }
+  ],
+  "contributorsPerLine": 8,
+  "types": {
+    "data": {
+      "symbol": "📊",
+      "description": "Data contributions (e.g. YAML profiles, images)"
+    },
+    "ideas": {
+      "symbol": "💡",
+      "description": "Ideas, suggestions, and feedback"
+    },
+    "bug": {
+      "symbol": "🐛",
+      "description": "Bug reports"
+    }
+  },
+  "commitConvention": "angular"
+}
+
