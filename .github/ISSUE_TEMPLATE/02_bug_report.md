@@ -4,7 +4,6 @@ about: Found a bug? Create a report so we can squash it
 title: ""
 labels: bug
 assignees: "karelvuong"
-order: 2
 ---
 
 **Describe the bug** A clear and concise description of what the bug is.
