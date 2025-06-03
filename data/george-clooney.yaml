@@ -1,0 +1,27 @@
+---
+name: George Clooney
+slug: george-clooney
+tagline: Oscar-winning actor and humanitarian with global impact
+bio: >-
+  George Clooney is an acclaimed American actor, director, producer, and humanitarian. Rising to fame through his role
+  on the television series "ER," he went on to become a major Hollywood figure, winning Academy Awards for both acting
+  and producing. Beyond film, Clooney is known for his advocacy work on global issues such as human rights, press
+  freedom, and disaster relief.
+tags:
+  - actor
+  - director
+  - producer
+  - humanitarian
+  - activist
+education:
+  - montessori
+education_notes: >-
+  George Clooney attended a Montessori school in Kentucky, which his family credited with helping nurture his
+  independence and confidence as a child.
+notable_achievements:
+  - Academy Award for Best Supporting Actor ("Syriana")
+  - Academy Award for Best Picture ("Argo")
+  - Co-founder of the Clooney Foundation for Justice
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/George_Clooney

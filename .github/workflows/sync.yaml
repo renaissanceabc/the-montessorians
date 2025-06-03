@@ -1,0 +1,39 @@
+name: Sync Data After Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  sync-data:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log event info
+        run: |
+          echo "🔁 Pull request #${{ github.event.pull_request.number }} was merged into main."
+          echo "📦 Commit SHA: ${{ github.event.pull_request.merge_commit_sha }}"
+          echo "👤 Merged by: ${{ github.event.pull_request.merged_by.login }}"
+
+      - name: Send POST request to sync data endpoint
+        run: |
+          echo "🚀 Sending POST request to sync endpoint..."
+          response=$(curl -s -w "\nHTTP_STATUS_CODE:%{http_code}" -X POST https://themontessorians.xyz/api/cron/sync-data \
+            -H "Authorization: Bearer ${{ secrets.SYNC_TOKEN }}" \
+            -H "Content-Type: application/json")
+
+          body=$(echo "$response" | sed '$d')
+          status=$(echo "$response" | tail -n1 | cut -d':' -f2)
+
+          echo "📨 Response Body:"
+          echo "$body"
+          echo "✅ Status Code: $status"
+
+          if [ "$status" -ne 200 ]; then
+            echo "❌ Sync failed with status $status"
+            exit 1
+          fi

@@ -1,0 +1,72 @@
+name: Lint & Validate Profiles
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Run yamllint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Run yamllint on data
+        run: yamllint data
+
+  validate:
+    name: Validate schema + image existence
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate YAML against JSON Schema
+        run: node scripts/validate-yaml.js
+
+      - name: Check for missing or invalid image formats
+        run: |
+          errors=""
+
+          for file in data/*.yaml; do
+            slug=$(basename "$file" .yaml)
+            valid_image="images/${slug}.jpg"
+            jpeg_image="images/${slug}.jpeg"
+            png_image="images/${slug}.png"
+
+            if [ -f "$jpeg_image" ] || [ -f "$png_image" ]; then
+              errors+="❌ Invalid image format for $slug. Use .jpg instead of .jpeg or .png\n"
+            fi
+
+            if [ ! -f "$valid_image" ]; then
+              errors+="❌ Missing required image: $valid_image\n"
+            fi
+          done
+
+          if [ -n "$errors" ]; then
+            echo -e "$errors"
+            exit 1
+          else
+            echo "✅ All image files are valid."
+          fi

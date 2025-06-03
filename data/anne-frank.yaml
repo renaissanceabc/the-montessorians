@@ -1,0 +1,26 @@
+---
+name: Anne Frank
+slug: anne-frank
+tagline: Teenage diarist of the Holocaust whose words outlived war
+bio: >-
+  Anne Frank was a Jewish teenager whose diary chronicled her life in hiding during the Nazi occupation of the
+  Netherlands. Her writing has become one of the world's most widely read accounts of the Holocaust and a powerful
+  symbol of resilience and hope.
+tags:
+  - diarist
+  - writer
+  - holocaust-survivor
+  - historical-figure
+education:
+  - montessori
+education_notes: >-
+  Anne Frank attended a Montessori school in Amsterdam from the age of 3 until the Nazi regime barred Jewish children
+  from attending in 1941. She later enrolled at the Jewish Lyceum.
+notable_achievements:
+  - Author of "The Diary of a Young Girl"
+  - International symbol of courage and resilience
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Anne_Frank
+  - type: website
+    url: https://www.annefrank.org/en/anne-frank/

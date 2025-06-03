@@ -1,0 +1,24 @@
+---
+name: Stephen Curry
+slug: stephen-curry
+tagline: NBA superstar known for transforming the modern game
+bio: >-
+  Stephen Curry is a professional basketball player for the Golden State Warriors and widely regarded as the greatest
+  shooter in NBA history. A two-time MVP and multiple-time NBA champion, Curry revolutionized the game with his
+  three-point shooting and dynamic playmaking.
+tags:
+  - basketball
+  - athlete
+  - nba
+education:
+  - montessori
+education_notes: >-
+  Stephen Curry attended a Montessori school, and his mother was a Montessori teacher. His family credits the method
+  with shaping his focus and creativity.
+notable_achievements:
+  - Four-time NBA Champion
+  - Two-time NBA MVP
+  - All-time leader in 3-point field goals
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Stephen_Curry

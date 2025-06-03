@@ -1,0 +1,28 @@
+---
+name: David Blaine
+slug: david-blaine
+tagline: Magician and endurance artist redefining the limits of the human body
+bio: >-
+  David Blaine is a magician, illusionist, and endurance artist known for his high-profile feats of physical and mental
+  stamina, including being buried alive, encased in ice, and holding his breath underwater for over 17 minutes. His
+  minimalist street magic and record-breaking stunts have redefined modern illusion and captivated audiences worldwide.
+tags:
+  - magician
+  - illusionist
+  - endurance
+  - performer
+  - stunt-artist
+education:
+  - montessori
+education_notes: >-
+  David Blaine attended a Montessori school in Brooklyn during his early childhood, which nurtured his curiosity and
+  early interest in sleight of hand.
+notable_achievements:
+  - Held breath underwater for 17 minutes on live television
+  - Performed endurance stunts including "Buried Alive" and "Frozen in Time"
+  - Revolutionized street magic with his debut TV special
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/David_Blaine
+  - type: website
+    url: https://davidblaine.com/

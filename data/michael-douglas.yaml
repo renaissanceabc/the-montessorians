@@ -1,0 +1,31 @@
+name: Michael Douglas
+slug: michael-douglas
+tagline: Award-winning actor and producer known for iconic roles in film and television
+bio: >-
+  Michael Douglas is an acclaimed American actor and producer whose career spans decades of critically acclaimed and
+  commercially successful roles in film and television. He has received two Academy Awards—one for producing One Flew
+  Over the Cuckoo's Nest and another for his performance as Gordon Gekko in Wall Street—as well as five Golden Globes, a
+  Primetime Emmy, and lifetime achievement honors from AFI and the Golden Globes. His diverse credits include
+  blockbusters like Fatal Attraction, Basic Instinct, Romancing the Stone, and Traffic, as well as acclaimed
+  performances in Behind the Candelabra, The Kominsky Method, and the Marvel Cinematic Universe. A committed
+  humanitarian, Douglas has served as a United Nations Messenger of Peace and advocates for nuclear disarmament and
+  global security.
+tags:
+  - actor
+  - producer
+  - activist
+  - humanitarian
+education:
+  - montessori
+education_notes: >-
+  Michael Douglas attended a Montessori school in his youth, which contributed to his creativity and self-discipline.
+notable_achievements:
+  - Academy Award winner for Best Actor (Wall Street) and Best Picture (One Flew Over the Cuckoo’s Nest)
+  - Star of acclaimed films including Fatal Attraction, Basic Instinct, Traffic, and The American President
+  - Emmy and Golden Globe winner for his television roles in Behind the Candelabra and The Kominsky Method
+  - Portrayed Hank Pym in the Marvel Cinematic Universe
+  - Recipient of the AFI Life Achievement Award and the Cecil B. DeMille Award
+  - United Nations Messenger of Peace and advocate for nuclear disarmament
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Michael_Douglas

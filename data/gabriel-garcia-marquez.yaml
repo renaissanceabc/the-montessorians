@@ -1,0 +1,29 @@
+---
+name: Gabriel García Márquez
+slug: gabriel-garcia-marquez
+tagline: Nobel Prize-winning author who pioneered magical realism
+bio: >-
+  Gabriel García Márquez was a Colombian novelist, journalist, and screenwriter, best known for popularizing the
+  literary style of magical realism. His most celebrated novel, "One Hundred Years of Solitude," is considered a
+  masterpiece of world literature. In 1982, he was awarded the Nobel Prize in Literature for his rich and imaginative
+  storytelling that wove the fantastic with the political and personal.
+tags:
+  - author
+  - novelist
+  - nobel-prize-winner
+  - journalist
+education:
+  - montessori
+education_notes: >-
+  Gabriel García Márquez attended a Montessori school in Colombia, where he credited the freedom to explore and observe
+  with sparking his early love of storytelling and imagination.
+notable_achievements:
+  - Nobel Prize in Literature (1982)
+  - Author of "One Hundred Years of Solitude"
+  - Leading voice in Latin American literature and magical realism
+quotes:
+  - "I do not believe there is a method better than Montessori for making children sensitive to the beauties of the
+    world and awakening their curiosity regarding the secrets of life"
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez

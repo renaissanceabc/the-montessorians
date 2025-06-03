@@ -1,0 +1,23 @@
+---
+name: Helen Keller
+slug: helen-keller
+tagline: Advocate and author who overcame deaf-blindness
+bio: >-
+  Helen Keller was an American author, political activist, and lecturer. Despite losing her sight and hearing at a young
+  age, she became the first deaf-blind person to earn a Bachelor of Arts degree and was a prominent advocate for people
+  with disabilities.
+tags:
+  - author
+  - activist
+  - lecturer
+education:
+  - montessori
+education_notes: >-
+  Helen Keller's education incorporated Montessori methods, which emphasized independence and self-directed learning.
+notable_achievements:
+  - First deaf-blind person to earn a Bachelor of Arts degree
+  - Advocate for people with disabilities
+  - Recipient of the Presidential Medal of Freedom
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Helen_Keller

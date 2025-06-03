@@ -1,0 +1,22 @@
+---
+name: Peter Bergmann
+slug: peter-bergmann
+tagline: Theoretical physicist and assistant to Albert Einstein
+bio: >-
+  Peter Bergmann was a German-American theoretical physicist who collaborated with Albert Einstein on the general theory
+  of relativity. He made significant contributions to the field of quantum gravity and was a professor at Syracuse
+  University.
+tags:
+  - physicist
+  - academic
+education:
+  - montessori
+education_notes: >-
+  Peter Bergmann attended one of the earliest Montessori schools, which was run by his mother.
+notable_achievements:
+  - Collaborated with Albert Einstein
+  - Contributions to quantum gravity
+  - Professor at Syracuse University
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Peter_Bergmann

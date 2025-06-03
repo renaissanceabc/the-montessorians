@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Polymath Profile",
+  "type": "object",
+  "required": ["name", "slug", "tagline", "tags"],
+  "properties": {
+    "name": { "type": "string", "description": "The full name of the person" },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "The slug of the person, used to identify the person in the URL"
+    },
+    "tagline": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "A concise tagline or description of the person (max 100 characters)"
+    },
+    "bio": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "A detailed biography of the person (max 1000 characters)"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "education": {
+      "type": "array",
+      "description": "The types of education that the person received",
+      "items": {
+        "type": "string",
+        "enum": ["montessori"]
+      }
+    },
+    "education_notes": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Additional notes about the person's education"
+    },
+    "notable_achievements": {
+      "type": "array",
+      "description": "Notable achievements or accomplishments of the person",
+      "items": { "type": "string" }
+    },
+    "quotes": {
+      "type": "array",
+      "description": "Quotes from the person regarding their education",
+      "items": { "type": "string" }
+    },
+    "links": {
+      "type": "array",
+      "description": "Links to the person's social media profiles and/or other relevant websites",
+      "items": {
+        "type": "object",
+        "required": ["url", "type"],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The URL of the link"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["wikipedia", "website", "linkedin", "x", "instagram", "tiktok"],
+            "description": "The type of link"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

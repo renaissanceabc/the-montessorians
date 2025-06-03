@@ -1,0 +1,26 @@
+---
+name: Helen Hunt
+slug: helen-hunt
+tagline: Emmy and Oscar-winning actress known for range and emotional depth
+bio: >-
+  Helen Hunt is an acclaimed American actress, director, and screenwriter best known for her roles in "Mad About You"
+  and "As Good as It Gets." She has received numerous accolades, including four Emmy Awards and an Academy Award for
+  Best Actress. Hunt is recognized for her emotional range, subtle performances, and long-standing presence in both
+  television and film.
+tags:
+  - actor
+  - director
+  - screenwriter
+  - award-winner
+education:
+  - montessori
+education_notes: >-
+  Helen Hunt attended a Montessori school in the United Kingdom, where the emphasis on independence and exploration
+  supported her early interest in the performing arts.
+notable_achievements:
+  - Academy Award for Best Actress ("As Good as It Gets")
+  - Four-time Primetime Emmy Award winner ("Mad About You")
+  - Golden Globe-winning performer in film and television
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Helen_Hunt

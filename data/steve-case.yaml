@@ -1,0 +1,26 @@
+---
+name: Steve Case
+slug: steve-case
+tagline: Co-founder of AOL and internet pioneer
+bio: >-
+  Steve Case is an American entrepreneur best known as the co-founder and former CEO of America Online (AOL). He played
+  a pivotal role in making the internet accessible to the masses and later founded Revolution LLC, an investment firm
+  focused on startups outside of Silicon Valley.
+tags:
+  - tech
+  - entrepreneur
+  - investor
+education:
+  - montessori
+education_notes: >-
+  Steve Case attended a Montessori school during his early education, which fostered his entrepreneurial spirit and
+  innovative thinking.
+notable_achievements:
+  - Co-founder and CEO of AOL
+  - Founder of Revolution LLC
+  - Advocate for entrepreneurship across the United States
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Steve_Case
+  - type: website
+    url: https://revolution.com/team-member/steve-case/

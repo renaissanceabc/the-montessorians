@@ -1,0 +1,24 @@
+---
+name: Jacqueline Kennedy Onassis
+slug: jacqueline-kennedy-onassis
+tagline: Former First Lady and literary editor
+bio: >-
+  Jacqueline Kennedy Onassis was the First Lady of the United States from 1961 to 1963, known for her style, elegance,
+  and dedication to the arts and historic preservation. After her time in the White House, she had a successful career
+  as a book editor.
+tags:
+  - first-lady
+  - political-figure
+  - editor
+  - cultural-icon
+education:
+  - montessori
+education_notes: >-
+  Jacqueline Kennedy Onassis attended a Montessori school during her early childhood.
+notable_achievements:
+  - First Lady of the United States (1961-1963)
+  - Advocate for historic preservation and the arts
+  - Accomplished book editor at Viking Press and Doubleday
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jacqueline_Kennedy_Onassis

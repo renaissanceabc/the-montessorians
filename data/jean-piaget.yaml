@@ -1,0 +1,23 @@
+---
+name: Jean Piaget
+slug: jean-piaget
+tagline: Groundbreaking psychologist who helped shape modern child development theory
+bio: >-
+  Jean Piaget was a Swiss psychologist best known for his pioneering work in child development and cognitive theory. He
+  served as President of the Swiss Montessori Society and shared deep philosophical alignment with Maria Montessori's
+  emphasis on self-directed learning and developmental stages.
+tags:
+  - psychologist
+  - child-development
+  - theorist
+education:
+  - montessori
+education_notes: >-
+  Jean Piaget served as President of the Swiss Montessori Society and was a vocal supporter of Montessori pedagogy.
+notable_achievements:
+  - Founder of the theory of cognitive development
+  - President of the Swiss Montessori Society
+  - Author of "The Origins of Intelligence in Children"
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jean_Piaget

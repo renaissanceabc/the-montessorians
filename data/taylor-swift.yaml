@@ -1,0 +1,24 @@
+---
+name: Taylor Swift
+slug: taylor-swift
+tagline: Global pop icon and award-winning singer-songwriter
+bio: >-
+  Taylor Swift is a globally celebrated singer-songwriter known for her storytelling, genre-spanning artistry, and
+  cultural impact. With over a dozen Grammy Awards and multiple record-breaking albums, Swift is one of the most
+  influential artists of her generation.
+tags:
+  - singer
+  - songwriter
+  - musician
+  - performer
+education:
+  - montessori
+education_notes: >-
+  Taylor Swift attended Alvernia Montessori School in Pennsylvania for two years during her early childhood.
+notable_achievements:
+  - 14-time Grammy Award winner
+  - First artist to win Album of the Year three times as a solo performer
+  - Billboard's Woman of the Decade (2010s)
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Taylor_Swift

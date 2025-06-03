@@ -1,0 +1,23 @@
+---
+name: Lea Salonga
+slug: lea-salonga
+tagline: Tony Award-winning Filipina singer and actress
+bio: >-
+  Lea Salonga is a Filipina singer and actress renowned for her roles in musical theater, notably as Kim in "Miss
+  Saigon," for which she won a Tony Award. She is also known for providing the singing voices of Disney princesses
+  Jasmine and Mulan.
+tags:
+  - singer
+  - actor
+  - broadway
+education:
+  - montessori
+education_notes: >-
+  Lea Salonga completed her primary and secondary education at the OB Montessori Center in the Philippines.
+notable_achievements:
+  - Tony Award for Best Actress in a Musical
+  - Singing voice of Disney's Jasmine and Mulan
+  - Numerous international concert performances
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Lea_Salonga

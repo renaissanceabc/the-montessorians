@@ -1,0 +1,10 @@
+# Dependencies
+node_modules
+
+# Local env files
+.env
+.env*.local
+
+# Misc
+.DS_Store
+*.pem

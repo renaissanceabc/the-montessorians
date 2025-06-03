@@ -1,0 +1,26 @@
+---
+name: Berry Brazelton
+slug: berry-brazelton
+tagline: Renowned pediatrician who revolutionized early childhood care
+bio: >-
+  Dr. T. Berry Brazelton was an influential American pediatrician, author, and researcher best known for creating the
+  Neonatal Behavioral Assessment Scale (NBAS), a tool that reshaped how the medical field understands infant behavior
+  and parent-child bonding. His books and television programs helped generations of parents navigate early childhood
+  development with empathy and insight.
+tags:
+  - pediatrician
+  - author
+  - child-development
+  - educator
+education:
+  - montessori
+education_notes: >-
+  Berry Brazelton attended a Montessori school in the United States. He later credited the experience with shaping his
+  appreciation for child-centered learning and development.
+notable_achievements:
+  - Developer of the Neonatal Behavioral Assessment Scale (NBAS)
+  - Host of "What Every Baby Knows" on PBS
+  - Author of over 30 books on parenting and child development
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/T._Berry_Brazelton

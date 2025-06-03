@@ -1,0 +1,24 @@
+---
+name: Prince Harry
+slug: prince-harry
+tagline: British royal, veteran, and advocate for mental health and veterans' issues
+bio: >-
+  Prince Harry, Duke of Sussex, is a member of the British royal family and the younger son of King Charles III and
+  Princess Diana. He served in the British Army and co-founded the Invictus Games. In recent years, he has become a
+  vocal advocate for mental health and veterans' affairs.
+tags:
+  - royal
+  - veteran
+  - advocate
+education:
+  - montessori
+education_notes: >-
+  Prince Harry attended a Montessori nursery school during his early childhood. His mother, Princess Diana, worked as a
+  Montessori assistant and was a strong supporter of the method.
+notable_achievements:
+  - Co-founder of the Invictus Games
+  - Advocate for mental health through the Archewell Foundation
+  - Former Captain in the British Army
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Prince_Harry,_Duke_of_Sussex
