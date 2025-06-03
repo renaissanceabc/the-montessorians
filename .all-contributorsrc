@@ -14,6 +14,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/95452264?v=4",
       "profile": "https://github.com/karelvuong",
       "contributions": ["data"]
+    },
+    {
+      "login": "samjvuong",
+      "name": "Sam Vuong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/89951683?v=4",
+      "profile": "https://github.com/samjvuong",
+      "contributions": ["data"]
     }
   ],
   "contributorsPerLine": 8,
