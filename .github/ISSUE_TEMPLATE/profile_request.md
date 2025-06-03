@@ -4,10 +4,10 @@ about: Have a profile you think should be added? Share it here
 title: ""
 labels: improvement
 assignees: "karelvuong"
+order: 1
 ---
 
-**Is your feature request related to a problem? Please describe.** A clear and concise description of what the problem
-is. Ex. I'm always frustrated when [...]
+I would like to add a new profile to The Montessorians.
 
 ```yaml
 name:
