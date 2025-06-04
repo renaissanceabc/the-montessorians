@@ -27,6 +27,6 @@ notable_achievements:
   - b
   - c
 links:
-  - type: wikipedia | website | linkedin | x | instagram | tiktok
+  - type: wikipedia | website | linkedin | x | instagram | tiktok | article | youtube | imdb
     url:
 ```

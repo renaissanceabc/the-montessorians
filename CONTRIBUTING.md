@@ -36,7 +36,7 @@ notableAchievements:
   - One-line achievement 1
   - One-line achievement 2
 links:
-  - type: wikipedia | website | linkedin | x | instagram | tiktok
+  - type: wikipedia | website | linkedin | x | instagram | tiktok | article | youtube | imdb
     url: https:// ...
 ```
 

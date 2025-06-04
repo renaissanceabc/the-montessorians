@@ -1,5 +1,5 @@
 {
-  "name": "polymaths-data",
+  "name": "the-montessorians",
   "type": "module",
   "version": "1.0.0",
   "description": "This is the **open-source dataset** of remarkable individuals who were educated through alternative pathways — including homeschool, Montessori, unschooling, self-directed learning, and other non-traditional models.",
@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/renaissanceabc/polymaths-data.git"
+    "url": "git+https://github.com/renaissanceabc/the-montessorians.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/renaissanceabc/polymaths-data/issues"
+    "url": "https://github.com/renaissanceabc/the-montessorians/issues"
   },
-  "homepage": "https://github.com/renaissanceabc/polymaths-data#readme",
+  "homepage": "https://github.com/renaissanceabc/the-montessorians#readme",
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",

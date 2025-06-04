@@ -61,7 +61,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["wikipedia", "website", "linkedin", "x", "instagram", "tiktok"],
+            "enum": ["wikipedia", "website", "linkedin", "x", "instagram", "tiktok", "article", "youtube", "imdb"],
             "description": "The type of link"
           }
         },
