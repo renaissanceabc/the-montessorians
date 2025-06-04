@@ -1,13 +1,12 @@
 ---
 name: Sam Vuong
 slug: sam-vuong
-tagline: Entrepreneur and rising force in alternative education
+tagline: Founder of Renaissance and writer in alternative education
 bio: >-
-  Sam Vuong is the co-founder of Renaissance, a startup studio focused on reshaping education through innovation,
-  storytelling, and technology. A former CMO at Treasure, she now leads initiatives like Atrium and Renaissance Educator
-  to spotlight and scale alternative learning pathways for families around the world.
+  Sam Vuong is the co-founder of Renaissance, an education-focused startup studio working to bring greater education
+  choice to families everywhere. Formerly the CMO at Treasure, she is now building initiatives like Atrium and
+  Renaissance Educator to spotlight and scale alternative learning pathways for families around the world.
 tags:
-  - entrepreneur
   - education
   - founder
   - creator
@@ -19,7 +18,7 @@ education_notes: >-
 notable_achievements:
   - Co-founder of Renaissance, a startup studio for education
   - Former Chief Marketing Officer at Treasure
-  - Creator of Renaissance Educator and co-lead of Atrium
+  - Creator of Renaissance Educator
 links:
   - type: website
     url: https://renaissance.education
