@@ -7,9 +7,9 @@
   "scripts": {
     "clean": "git clean -xdf node_modules",
     "prepare": "husky",
-    "lint": "npm run format && node scripts/validate-yaml.js",
-    "format": "prettier --check \"data/**/*.yaml\"",
     "validate": "node scripts/validate-yaml.js",
+    "lint": "npm run format && npm run validate",
+    "format": "prettier --check \"data/**/*.yaml\"",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
