@@ -1,0 +1,30 @@
+---
+name: Savannah Forgy
+slug: savannah-forgy
+tagline: Writer, filmmaker, and advocate for alternative education.
+bio: >-
+  Savannah Forgy is an 18-year-old writer, filmmaker, and a current Writing Fellow at the Foundation for Economic
+  Education (FEE). She is a student at The Socratic Experience and is producing a film about the late unschooling
+  prodigy, Cole Summers.
+tags:
+  - writer
+  - filmmaker
+  - education-advocate
+  - student
+education:
+  - montessori
+education_notes: >-
+  Savannah Forgy is currently a student at The Socratic Experience, an online Socratic school. Her diverse educational
+  background, which also includes Montessori and public school, heavily influences her writing and advocacy for
+  alternative learning methods.
+notable_achievements:
+  - Writing Fellow at Foundation for Economic Education (FEE)
+  - Producing a film about Cole Summers
+  - Creator of the "Savannah's Substack" newsletter
+links:
+  - type: website
+    url: https://savannahforgy.substack.com/
+  - type: x
+    url: https://x.com/savannahforgy
+  - type: article
+    url: https://fee.org/articles/the-birth-of-the-cole-summers-fellowship/
