@@ -31,7 +31,7 @@ jobs:
           while [ $count -le $max_retries ]; do
             echo "🔁 Attempt $count..."
 
-            response=$(curl -s -w "\nHTTP_STATUS_CODE:%{http_code}" -X POST https://themontessorians.xyz/api/cron/sync-data \
+            response=$(curl -s -w "\nHTTP_STATUS_CODE:%{http_code}" -X GET https://themontessorians.xyz/api/cron/sync-data \
               -H "Authorization: Bearer ${{ secrets.SYNC_TOKEN }}" \
               -H "Content-Type: application/json")
 
