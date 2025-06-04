@@ -1,0 +1,32 @@
+name: John McWhorter
+slug: john-mcwhorter
+tagline: American linguist, professor at Columbia University, author, and social commentator.
+bio: >-
+  John McWhorter is an influential American academic and one of the foremost public intellectuals on topics of language
+  and race. He is an Associate Professor of Linguistics in the Department of Slavic Languages at Columbia University,
+  where he also teaches American Studies and music history. His academic research specializes in creole languages and
+  how they are formed. Beyond academia, McWhorter is a prolific author and commentator, known for his weekly opinion
+  column in The New York Times and his Substack newsletter. He engages a broad audience on issues ranging from language
+  evolution and Black English to critiques of modern antiracism, most notably in his bestselling book "Woke Racism."
+tags:
+  - linguist
+  - author
+  - professor
+  - social-commentator
+  - columnist
+education:
+  - montessori
+education_notes: >-
+  Attended Montessori school in Philadelphia.
+notable_achievements:
+  - Author of over twenty books, including "Woke Racism," "Nine Nasty Words," and "The Power of Babel"
+  - Weekly opinion columnist for The New York Times
+  - Host of the "Lexicon Valley" language podcast from Booksmart Studios
+  - Associate Professor of Linguistics at Columbia University
+  - Delivered two highly-viewed TED Talks on language
+  - Recorded multiple popular lecture series with The Great Courses
+links:
+  - type: website
+    url: https://johnmcwhorter.substack.com/
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/John_McWhorter
