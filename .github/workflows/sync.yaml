@@ -11,6 +11,7 @@ jobs:
   sync-data:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Log event info
@@ -19,21 +20,40 @@ jobs:
           echo "📦 Commit SHA: ${{ github.event.pull_request.merge_commit_sha }}"
           echo "👤 Merged by: ${{ github.event.pull_request.merged_by.login }}"
 
-      - name: Send POST request to sync data endpoint
+      - name: Send POST request to sync data endpoint (with retry)
         run: |
-          echo "🚀 Sending POST request to sync endpoint..."
-          response=$(curl -s -w "\nHTTP_STATUS_CODE:%{http_code}" -X POST https://themontessorians.xyz/api/cron/sync-data \
-            -H "Authorization: Bearer ${{ secrets.SYNC_TOKEN }}" \
-            -H "Content-Type: application/json")
+          echo "🚀 Attempting sync..."
 
-          body=$(echo "$response" | sed '$d')
-          status=$(echo "$response" | tail -n1 | cut -d':' -f2)
+          max_retries=3
+          count=1
+          success=0
 
-          echo "📨 Response Body:"
-          echo "$body"
-          echo "✅ Status Code: $status"
+          while [ $count -le $max_retries ]; do
+            echo "🔁 Attempt $count..."
 
-          if [ "$status" -ne 200 ]; then
-            echo "❌ Sync failed with status $status"
+            response=$(curl -s -w "\nHTTP_STATUS_CODE:%{http_code}" -X POST https://themontessorians.xyz/api/cron/sync-data \
+              -H "Authorization: Bearer ${{ secrets.SYNC_TOKEN }}" \
+              -H "Content-Type: application/json")
+
+            body=$(echo "$response" | sed '$d')
+            status=$(echo "$response" | tail -n1 | cut -d':' -f2)
+
+            echo "📨 Response Body:"
+            echo "$body"
+            echo "✅ Status Code: $status"
+
+            if [ "$status" -eq 200 ]; then
+              echo "✅ Sync succeeded on attempt $count"
+              success=1
+              break
+            else
+              echo "⚠️ Sync failed with status $status"
+              count=$((count + 1))
+              sleep 5
+            fi
+          done
+
+          if [ "$success" -ne 1 ]; then
+            echo "❌ All $max_retries sync attempts failed."
             exit 1
           fi
