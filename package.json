@@ -2,14 +2,14 @@
   "name": "the-montessorians",
   "type": "module",
   "version": "1.0.0",
-  "description": "This is the **open-source dataset** of remarkable individuals who were educated through alternative pathways — including homeschool, Montessori, unschooling, self-directed learning, and other non-traditional models.",
+  "description": "The largest open source dataset of Montessori alumni",
   "main": "index.js",
   "scripts": {
     "clean": "git clean -xdf node_modules",
     "prepare": "husky",
     "validate": "node scripts/validate-yaml.js",
-    "lint": "npm run format && npm run validate",
-    "format": "prettier --check \"data/**/*.yaml\"",
+    "lint": "prettier --check \"data/**/*.yaml\" && npm run validate",
+    "format": "prettier --write \"data/**/*.yaml\"",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
