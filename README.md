@@ -3,41 +3,44 @@
 [The Montessorians](https://themontessorians.xyz) is the world's largest open source dataset of Montessori alumni who've
 gone on to do great things.
 
-Created and maintained by [Renaissance](https://renaissance.education), an education startup studio, Montessorians is
-fully community-driven and open for contributions under a Creative Commons CC0 license.
+The Montessorians is fully community-driven and open for contributions under a Creative Commons CC0 license.
+
+Created and maintained by [Renaissance](https://renaissance.education), an education startup studio.
 
 ---
 
-## Repo Structure
+## Structure
 
 - Structured YAML files under `/data` — one for each person
 - Associated profile images under `/images`
-- Transparent contribution history, curated by the community
 
 ```
 /data/
-  - bill-gates.yaml
   - yo-yo-ma.yaml
   - ...
 /images/
   - yo-yo-ma.jpg
-  - bill-gates.jpg
   - ...
-README.md
-CONTRIBUTING.md
 ```
 
 ---
 
-## Contributing Data
+## Contributing
 
-We welcome contributions from the community! To add or update a profile:
+We welcome contributions from the community! To add or update a profile, you have two options:
+
+1. [Submit a new profile request](https://github.com/renaissanceabc/the-montessorians/issues/new?template=01_profile_request.md)
+2. [Submit a pull request by forking this repo](https://github.com/renaissanceabc/the-montessorians/fork) (slightly more
+   advanced)
+
+### Via Code (Advanced)
 
 1. Fork this repo
-2. Add a new `.yaml` file to `/data/` (see the [example below](#example-profile))
-3. Add a profile image (`.jpg` or `.png`) to `/images/`, using the same `slug` as the filename
-4. Run `pnpm lint` and `pnpm validate` and confirm that the commands are successful prior to opening up a pull request
-5. Submit a pull request with your updates
+2. Run `pnpm i` and install dependencies
+3. Add a new `.yaml` file to the `/data` folder (see the [example below](#example-profile))
+4. Add a profile image (`.jpg`) to `/images`, using the same `slug` as the filename from step #3
+5. Run `pnpm lint` and confirm that the commands are successful prior to opening up a pull request
+6. Submit a pull request with your updates
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for more guidelines.
 
@@ -103,5 +106,4 @@ By contributing, you agree that your additions will be released under
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
