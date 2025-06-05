@@ -1,0 +1,28 @@
+---
+name: Jimmy Wales
+slug: jimmy-wales
+tagline: Founder of Wikipedia and free knowledge advocate
+bio: >-
+  Jimmy Wales is the founder of Wikipedia, one of the most important knowledge-sharing platforms in history. A champion
+  of free and open access to information, he has dedicated his career to democratizing knowledge through technology and
+  collaborative editing.
+tags:
+  - founder
+  - wikipedia
+  - knowledge
+  - internet
+education:
+  - montessori
+education_notes: >-
+  Jimmy Wales attended a Montessori preschool and has spoken positively about the method's influence. He credited
+  Montessori's child-led learning philosophy as a foundation for his intellectual curiosity and love of self-directed
+  study. As a child, he spent hours poring over encyclopedias—a habit he links to his later creation of Wikipedia.
+notable_achievements:
+  - Founder of Wikipedia
+  - Co-founder of Wikimedia Foundation
+  - Advocate for free and open access to knowledge
+quotes:
+  - "I really like Montessori and all my children have (or will, in the case of the baby) gone to Montessori preschools."
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jimmy_Wales
