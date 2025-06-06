@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Run yamllint
@@ -27,7 +30,7 @@ jobs:
         run: yamllint data
 
   validate:
-    name: Validate schema + image existence
+    name: Validate schema + image rules
     runs-on: ubuntu-latest
 
     steps:
@@ -42,31 +45,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Validate YAML against JSON Schema
-        run: node scripts/validate-yaml.js
-
-      - name: Check for missing or invalid image formats
-        run: |
-          errors=""
-
-          for file in data/*.yaml; do
-            slug=$(basename "$file" .yaml)
-            valid_image="images/${slug}.jpg"
-            jpeg_image="images/${slug}.jpeg"
-            png_image="images/${slug}.png"
-
-            if [ -f "$jpeg_image" ] || [ -f "$png_image" ]; then
-              errors+="❌ Invalid image format for $slug. Use .jpg instead of .jpeg or .png\n"
-            fi
-
-            if [ ! -f "$valid_image" ]; then
-              errors+="❌ Missing required image: $valid_image\n"
-            fi
-          done
-
-          if [ -n "$errors" ]; then
-            echo -e "$errors"
-            exit 1
-          else
-            echo "✅ All image files are valid."
-          fi
+      - name: Validate YAML against JSON Schema and image rules
+        run: node scripts/validate.js
