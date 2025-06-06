@@ -77,6 +77,13 @@ for (const file of files) {
     }
   }
 
+  // Tagline checks
+  if (typeof doc.tagline === "string") {
+    const tagline = doc.tagline.trim();
+    if (tagline.endsWith(".")) {
+      errors.push(`- /tagline: Tagline should not end with a period`);
+    }
+  }
   // Image checks
   const hasCorrectImage = fs.existsSync(expectedImagePath);
   const allImageFormats = [".jpeg", ".png", ".webp", ".gif", ".tiff", ".heic", ".heif", ".avif"];
@@ -101,7 +108,10 @@ for (const file of files) {
 }
 
 // Save updated checksums (even if no errors)
-fs.writeFileSync(checksumPath, JSON.stringify(checksumCache, null, 2));
+fs.writeFileSync(
+  checksumPath,
+  JSON.stringify(Object.fromEntries(Object.entries(checksumCache).sort(([a], [b]) => a.localeCompare(b))), null, 2)
+);
 
 // Summary output
 console.log(`${totalChecked} profiles found`);
