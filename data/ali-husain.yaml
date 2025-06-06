@@ -1,0 +1,28 @@
+---
+name: Ali Husain
+slug: ali-husain
+tagline: Co-Founder and CEO of Navigate, data marketplace for AI agents and apps
+bio: >-
+  Ali Husain is a versatile technology leader and computer scientist with expertise spanning artificial intelligence,
+  Web3, and urban air mobility. He is the Co-Founder and CEO of Navigate, a crypto-powered data marketplace for AI
+  agents and applications. Previously, he served as Chief Product Officer at SkyGrid, a joint venture between
+  SparkCognition and Boeing, where he led innovation in UAV systems using AI and blockchain. Over his career, Ali has
+  held key technical and product roles at SparkCognition and Microsoft, and has been named on over 30 patent
+  applications in drone technologies, AR/VR, and predictive systems. He holds dual degrees in Computer Science and
+  Economics from The University of Texas at Austin.
+tags:
+  - founder
+  - ai
+  - web3
+  - crypto
+  - patent-holder
+education:
+  - montessori
+notable_achievements:
+  - Raised $7.6M seed round from Distributed Global, Kraken Ventures, and others
+  - Named inventor on 30+ patent applications in UAV and AI systems
+links:
+  - type: linkedin
+    url: https://www.linkedin.com/in/ali-husain1/
+  - type: x
+    url: https://x.com/forgotmachine
