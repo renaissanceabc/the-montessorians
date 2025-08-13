@@ -1,0 +1,30 @@
+---
+name: Bobby George
+slug: bobby-george
+tagline: Design-driven creative leader, co-founder and CEO of Lightning
+bio: >-
+  Bobby George is the Co-Founder and CEO of Lightning. He was previously a co-founder and CEO at Montessorium, and
+  co-founder of Baan Dek. He holds a PhD in philosophy, is the author of eight books for children, one book of
+  philosophy, and was also the Design and Product lead at Microsoft Flip.
+tags:
+  - founder
+  - education
+  - academic
+  - author
+  - tech
+  - entrepreneur
+education:
+  - montessori
+education_notes: >-
+  Bobby is a Montessori alumni who went on to build the first Montessori in South Dakota, and later built the first and
+  only online Montessori school, scaling to 10M users. He even got a cold outreach from Steve Jobs, who said, "I love
+  what you're doing!"
+notable_achievements:
+  - Built the first online Montessori school, scaling to 10M users and recognized by Steve Jobs
+  - Ran FlipGrid and scaled to 100M users, later acquired by Microsoft
+  - PhD in Philosophy
+links:
+  - type: linkedin
+    url: https://www.linkedin.com/in/bobbyjgeorge
+  - type: x
+    url: https://x.com/bobbyjgeorge
