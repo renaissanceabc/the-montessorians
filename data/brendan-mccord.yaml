@@ -1,0 +1,38 @@
+name: Brendan McCord
+slug: brendan-mccord
+tagline: Founder and Chair of Cosmos Institute, AI entrepreneur, and philosopher-builder
+bio: >-
+  Brendan McCord is founder and Chair of the Cosmos Institute, an academy developing philosopher-builders to guide AI
+  toward human flourishing. He was founding CEO of two AI startups acquired for $400 million and founded the first
+  applied AI organization for the U.S. Department of Defense, authoring its first AI strategy. His career spans from 610
+  days underwater as a submarine officer to the Pentagon, where he developed AI ethical principles and authored the
+  first prototype for the CHIPS and Science Act. McCord teaches AI and philosophy at Oxford, holds degrees from MIT and
+  Harvard Business School, and serves on boards including the Mercatus Center and Harvard Data Science Review.
+tags:
+  - entrepreneur
+  - philosopher
+  - tech
+  - defense-technology
+  - ai
+  - military
+education:
+  - montessori
+education_notes: >-
+  Brendan McCord holds degrees from MIT and Harvard Business School, and was a Visiting Fellow at St Catherine's College
+  at the University of Oxford.
+notable_achievements:
+  - "Founding CEO of two AI startups acquired for $400 million"
+  - "Founded the first applied AI organization for the U.S. Department of Defense"
+  - "Authored the U.S. Department of Defense's first AI strategy"
+  - "Established the Human-Centered AI Lab at the University of Oxford"
+  - "Visiting Fellow at St Catherine's College, University of Oxford"
+  - "Board member of the Mercatus Center"
+  - "Advisory Board member of the Harvard Data Science Review"
+  - "Authored the first prototype for the CHIPS and Science Act"
+links:
+  - type: website
+    url: https://www.brendanmccord.com/
+  - type: x
+    url: https://x.com/mbrendan1
+  - type: linkedin
+    url: https://www.linkedin.com/in/brendan-mccord/
