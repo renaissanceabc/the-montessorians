@@ -10,6 +10,7 @@
     "validate": "node scripts/validate.js",
     "lint": "prettier --check \"data/**/*.yaml\" && npm run validate",
     "format": "prettier --write \"data/**/*.yaml\"",
+    "bump-deps": "bunx npm-check-updates --deep -u && bun install",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
@@ -25,14 +26,13 @@
   },
   "homepage": "https://github.com/renaissanceabc/the-montessorians#readme",
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "ajv": "^8.17.1",
     "ajv-cli": "^5.0.0",
     "ajv-formats": "^3.0.1",
     "husky": "^9.1.7",
     "js-yaml": "^4.1.0",
     "prettier": "^3.6.2"
-  },
-  "packageManager": "pnpm@10.10.0"
+  }
 }
