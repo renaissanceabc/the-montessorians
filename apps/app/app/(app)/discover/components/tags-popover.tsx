@@ -1,23 +1,18 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { useTRPC } from "@/trpc/client";
-import type { Tag } from "@/trpc/types";
+import type { Tag } from "@/lib/content/types";
 import { TagsPopoverContent } from "./tags-popover-content";
 
 export function TagsPopover({
   initialTags,
   onApplyTags,
+  availableTags,
 }: {
   initialTags: string;
   onApplyTags: (tagSlugs: string) => void;
+  availableTags: Tag[];
 }) {
-  const trpc = useTRPC();
-  const { data } = useQuery(
-    trpc.tags.list.queryOptions({ orderBy: "alphabetical", sortBy: "asc" })
-  );
-
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [appliedTags, setAppliedTags] = useState<Tag[]>([]);
   const [open, setOpen] = useState(false);
@@ -25,19 +20,18 @@ export function TagsPopover({
   const tagSlugs = useMemo(() => initialTags.split(",").filter(Boolean), [initialTags]);
 
   useEffect(() => {
-    if (!data) return;
-    const tagMap = new Map(data.data.map((tag) => [tag.slug, tag]));
+    const tagMap = new Map(availableTags.map((tag) => [tag.slug, tag]));
     const matchingTags = tagSlugs
       .map((slug) => tagMap.get(slug))
       .filter((tag): tag is Tag => !!tag);
     setSelectedTags(matchingTags);
     setAppliedTags(matchingTags);
-  }, [data, tagSlugs]);
+  }, [availableTags, tagSlugs]);
 
   return (
     <TagsPopoverContent
       appliedTags={appliedTags}
-      availableTags={data?.data ?? []}
+      availableTags={availableTags}
       open={open}
       selectedTags={selectedTags}
       setAppliedTags={setAppliedTags}

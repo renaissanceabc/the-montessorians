@@ -56,14 +56,3 @@ export function convertKeysToCamelCase(obj: Record<string, any>): any {
   }
   return obj;
 }
-
-// biome-ignore lint/suspicious/noExplicitAny: Complex shapes
-export const proxyLoader = ({ src, width, quality }: any) => {
-  const encodedUrl = encodeURIComponent(src);
-  return `/api/proxy-image?url=${encodedUrl}&w=${width}&q=${quality || 75}`;
-};
-
-export const proxyImage = (url: string) => {
-  const encodedUrl = encodeURIComponent(url);
-  return `/api/proxy-image?url=${encodedUrl}`;
-};

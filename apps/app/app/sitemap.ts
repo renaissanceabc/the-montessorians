@@ -1,21 +1,14 @@
-import { db } from "@repo/database";
-import { profiles, tags } from "@repo/database/schema";
 import type { MetadataRoute } from "next";
-import { cacheLife, cacheTag } from "next/cache";
+import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
 import { siteUrl } from "@/lib/utils";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  "use cache";
-  cacheTag("profiles", "tags", "sitemap");
-  cacheLife("days");
-  const [allProfiles, allTags] = await Promise.all([
-    db.select({ slug: profiles.slug, createdAt: profiles.createdAt }).from(profiles),
-    db.select({ slug: tags.slug }).from(tags),
-  ]);
+export default function sitemap(): MetadataRoute.Sitemap {
+  const allProfiles = getAllProfiles();
+  const allTags = getAllTags().data;
 
   const profileUrls = allProfiles.map((profile) => ({
     url: `${siteUrl}/${profile.slug}`,
-    lastModified: new Date(profile.createdAt ?? Date.now()),
+    lastModified: new Date(profile.addedAt),
     changeFrequency: "weekly" as const,
     priority: 0.6,
     images: [`${siteUrl}/api/og/${profile.slug}.png`],

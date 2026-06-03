@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Sentry
 .sentryclirc
+
+# generated content (built from /data by scripts/generate-content.mjs)
+/lib/content/profiles.generated.json

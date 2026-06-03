@@ -1,21 +1,22 @@
 import { ArrowLeftIcon } from "lucide-react";
-import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import { getAllSlugs, getProfileWithAdjacent } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
-import { getQueryClient, trpc } from "@/trpc/server";
 import ProfileActions from "./components/profile-actions";
 import ProfileDetails from "./components/profile-details";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  "use cache";
-  cacheTag("profiles");
-  cacheLife("days");
+export function generateStaticParams() {
+  return getAllSlugs().map((slug) => ({ slug }));
+}
 
+export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const data = await getQueryClient().fetchQuery(trpc.profiles.bySlug.queryOptions({ slug }));
+  const data = getProfileWithAdjacent(slug);
 
   if (!data) {
     notFound();
@@ -32,12 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ProfilePage(props: { params: Promise<{ slug: string }> }) {
-  "use cache";
-  cacheTag("profiles");
-  cacheLife("days");
-
   const { slug } = await props.params;
-  const data = await getQueryClient().fetchQuery(trpc.profiles.bySlug.queryOptions({ slug }));
+  const data = getProfileWithAdjacent(slug);
 
   if (!data) {
     notFound();

@@ -1,9 +1,10 @@
-import { cacheLife, cacheTag } from "next/cache";
-import { Suspense } from "react";
+import { getEasternDate, getPastFeatures } from "@/lib/content/daily";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
-import { getQueryClient, HydrateClient, trpc } from "@/trpc/server";
 import { PastProfilesPageWrapper } from "./components/profiles-page-wrapper";
+
+// Regenerate daily so the archive gains a new day's spotlight without a redeploy.
+export const revalidate = 86_400;
 
 export const generateMetadata = () => {
   return createMetadata({
@@ -15,28 +16,8 @@ export const generateMetadata = () => {
   });
 };
 
-export default async function Archive() {
-  "use cache";
-  cacheTag("profiles", "past-profiles");
-  cacheLife("days");
+export default function Archive() {
+  const profiles = getPastFeatures(getEasternDate(), 30);
 
-  const qc = getQueryClient();
-  await qc.prefetchInfiniteQuery(
-    trpc.profiles.past.infiniteQueryOptions(
-      {},
-      {
-        initialCursor: 1,
-        getNextPageParam: (lastPage) =>
-          lastPage.pagination.hasMore ? lastPage.pagination.page + 1 : undefined,
-      }
-    )
-  );
-
-  return (
-    <HydrateClient>
-      <Suspense>
-        <PastProfilesPageWrapper />
-      </Suspense>
-    </HydrateClient>
-  );
+  return <PastProfilesPageWrapper profiles={profiles} />;
 }

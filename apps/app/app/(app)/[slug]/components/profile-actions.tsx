@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
-import type { ProfilePage } from "@/trpc/types";
+import type { ProfilePage } from "@/lib/content/types";
 
 export default function ProfileActions({
   previous,

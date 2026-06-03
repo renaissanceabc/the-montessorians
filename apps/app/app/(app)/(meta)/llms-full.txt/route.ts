@@ -1,48 +1,27 @@
-import { asc, db } from "@repo/database";
-import { links, profiles, profileTags, tags } from "@repo/database/schema";
-import { cacheLife, cacheTag } from "next/cache";
 import { NextResponse } from "next/server";
+import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
 import { toTitleCase } from "@/lib/utils";
 
-async function getLlmsFullData() {
-  "use cache";
-  cacheTag("profiles", "tags", "llms");
-  cacheLife("days");
-  return Promise.all([
-    db.select().from(profiles).orderBy(asc(profiles.name)),
-    db.select().from(tags),
-    db.select().from(links),
-    db.select().from(profileTags),
-  ]);
-}
+export const dynamic = "force-static";
 
-export async function GET() {
-  const [allProfiles, allTags, allLinks, allProfileTags] = await getLlmsFullData();
+export function GET() {
+  const allProfiles = getAllProfiles();
+  const allTags = getAllTags({ sortBy: "asc" }).data;
 
   const profileSection = allProfiles
     .map((p) => {
-      const tagIds = allProfileTags
-        .filter((pt) => pt.profileSlug === p.slug)
-        .map((pt) => pt.tagSlug);
-
-      const tagLabels = allTags
-        .filter((t) => tagIds.includes(t.slug))
-        .map((t) => toTitleCase(t.label));
-
-      const profileLinks = allLinks.filter((l) => l.profileSlug === p.slug);
+      const tagLabels = p.tags.map((t) => t.label);
 
       const achievements = p.notableAchievements?.length
-        ? `**Notable Achievements**:\n${p.notableAchievements.map((a: string) => `- ${a}`).join("\n")}`
+        ? `**Notable Achievements**:\n${p.notableAchievements.map((a) => `- ${a}`).join("\n")}`
         : "";
 
       const quotes = p.quotes?.length
-        ? `**Quotes**:\n${p.quotes.map((q: string) => `- ${q}`).join("\n")}`
+        ? `**Quotes**:\n${p.quotes.map((q) => `- ${q}`).join("\n")}`
         : "";
 
-      const linksSection = profileLinks.length
-        ? `**Links**:\n${profileLinks
-            .map((l) => `- [${toTitleCase(l.type)}](${l.url})`)
-            .join("\n")}`
+      const linksSection = p.links.length
+        ? `**Links**:\n${p.links.map((l) => `- [${toTitleCase(l.type)}](${l.url})`).join("\n")}`
         : "";
 
       return `### ${p.name}

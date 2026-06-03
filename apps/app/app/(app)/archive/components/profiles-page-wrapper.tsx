@@ -1,9 +1,8 @@
-"use client";
-
 import Contribute from "@/components/contribute";
-import PastProfilesPaginatedList from "./past-profiles-list";
+import type { PastProfile } from "@/lib/content/types";
+import PastProfilesList from "./past-profiles-list";
 
-export function PastProfilesPageWrapper() {
+export function PastProfilesPageWrapper({ profiles }: { profiles: PastProfile[] }) {
   return (
     <>
       <div className="container mx-auto max-w-screen-md items-center justify-between gap-10 px-4 py-12 sm:px-6 lg:px-8">
@@ -12,7 +11,7 @@ export function PastProfilesPageWrapper() {
             Spotlight Archive
           </h1>
 
-          <PastProfilesPaginatedList />
+          <PastProfilesList profiles={profiles} />
         </div>
       </div>
 

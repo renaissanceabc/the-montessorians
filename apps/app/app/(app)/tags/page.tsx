@@ -1,10 +1,9 @@
-import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { getTagsWithCounts } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { DEFAULT_TAGS_FILTERS } from "@/lib/types";
 import { siteUrl } from "@/lib/utils";
-import { getQueryClient, trpc } from "@/trpc/server";
 
 export const generateMetadata = () => {
   return createMetadata({
@@ -17,14 +16,8 @@ export const generateMetadata = () => {
   });
 };
 
-export default async function TagsPage() {
-  "use cache";
-  cacheTag("tags", "profiles");
-  cacheLife("days");
-
-  const { data: tags } = await getQueryClient().fetchQuery(
-    trpc.tags.listWithCounts.queryOptions(DEFAULT_TAGS_FILTERS)
-  );
+export default function TagsPage() {
+  const { data: tags } = getTagsWithCounts(DEFAULT_TAGS_FILTERS);
 
   return (
     <div className="container mx-auto max-w-screen-md items-center justify-between gap-10 px-4 py-12 sm:px-6 lg:px-8">

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { proxyImage } from "@/lib/utils";
-import type { Profile } from "@/trpc/types";
+import type { Profile } from "@/lib/content/types";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 
@@ -12,7 +11,7 @@ export default function ProfileListItem({ profile }: { profile: Profile }) {
       key={profile.slug}
     >
       <Avatar className="h-16 w-16 sm:h-24 sm:w-24">
-        <AvatarImage alt={profile.name} src={proxyImage(profile.imageUrl ?? "")} />
+        <AvatarImage alt={profile.name} src={profile.imageUrl ?? ""} />
         <AvatarFallback>{profile.name.charAt(0)}</AvatarFallback>
       </Avatar>
 

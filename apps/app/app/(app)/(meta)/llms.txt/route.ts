@@ -1,23 +1,11 @@
-import { asc, db } from "@repo/database";
-import { profiles, tags } from "@repo/database/schema";
-import { cacheLife, cacheTag } from "next/cache";
 import { NextResponse } from "next/server";
+import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
 
-async function getLlmsData() {
-  "use cache";
-  cacheTag("profiles", "tags", "llms");
-  cacheLife("days");
-  return Promise.all([
-    db
-      .select({ name: profiles.name, slug: profiles.slug })
-      .from(profiles)
-      .orderBy(asc(profiles.name)),
-    db.select({ label: tags.label }).from(tags).orderBy(asc(tags.label)),
-  ]);
-}
+export const dynamic = "force-static";
 
-export async function GET() {
-  const [allProfiles, allTags] = await getLlmsData();
+export function GET() {
+  const allProfiles = getAllProfiles();
+  const allTags = getAllTags({ sortBy: "asc" }).data;
 
   const profileSection = allProfiles
     .map((p) => `- [${p.name}](https://www.themontessorians.xyz/${p.slug})`)

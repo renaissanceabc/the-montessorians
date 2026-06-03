@@ -1,8 +1,8 @@
 "use client";
 
 import { ArrowDownWideNarrowIcon, ArrowUpWideNarrowIcon, SearchIcon, XIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,8 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { filterAndSortProfiles } from "@/lib/content/filter";
+import type { Profile, Tag } from "@/lib/content/types";
 import { DEFAULT_PROFILES_FILTERS, type getProfilesOptions } from "@/lib/types";
-import ProfilesPaginatedList from "./profiles-list";
+import ProfilesList from "./profiles-list";
 import { TagsPopover } from "./tags-popover";
 
 const ORDER_BY_LABELS = {
@@ -23,27 +25,40 @@ const ORDER_BY_LABELS = {
   trending: "Trending",
 } as const;
 
+type OrderBy = NonNullable<getProfilesOptions["orderBy"]>;
+type SortBy = NonNullable<getProfilesOptions["sortBy"]>;
+
 export function ProfilesPageWrapper({
-  initialFilters,
+  profiles,
+  tags: availableTags,
 }: {
-  initialFilters: Omit<getProfilesOptions, "page">;
+  profiles: Profile[];
+  tags: Tag[];
 }) {
   const router = useRouter();
-  const [search, setSearch] = useState(initialFilters.search ?? "");
-  const [orderBy, setOrderBy] = useState(
-    initialFilters.orderBy ?? DEFAULT_PROFILES_FILTERS.orderBy
+  const searchParams = useSearchParams();
+
+  // Initial filter state comes from the URL so deep links work on a static page.
+  const [search, setSearch] = useState(searchParams.get("q") ?? "");
+  const [orderBy, setOrderBy] = useState<OrderBy>(
+    (searchParams.get("orderBy") as OrderBy) || (DEFAULT_PROFILES_FILTERS.orderBy as OrderBy)
   );
-  const [sortBy, setSortBy] = useState(initialFilters.sortBy ?? DEFAULT_PROFILES_FILTERS.sortBy);
-  const [tags, setTags] = useState(initialFilters.tags ?? "");
+  const [sortBy, setSortBy] = useState<SortBy>(
+    (searchParams.get("sortBy") as SortBy) || (DEFAULT_PROFILES_FILTERS.sortBy as SortBy)
+  );
+  const [tags, setTags] = useState(searchParams.get("tags") ?? "");
   const [debouncedSearch] = useDebounce(search, 400);
 
-  const filters = {
-    ...initialFilters,
-    orderBy,
-    sortBy,
-    search: debouncedSearch || undefined,
-    tags: tags || undefined,
-  };
+  const filtered = useMemo(
+    () =>
+      filterAndSortProfiles(profiles, {
+        orderBy,
+        sortBy,
+        search: debouncedSearch || undefined,
+        tags: tags || undefined,
+      }),
+    [profiles, orderBy, sortBy, debouncedSearch, tags]
+  );
 
   // Sync filter state to URL without triggering a server re-render
   useEffect(() => {
@@ -82,16 +97,12 @@ export function ProfilesPageWrapper({
 
           <div className="flex flex-row items-center gap-1">
             <TagsPopover
-              initialTags={initialFilters.tags ?? ""}
+              availableTags={availableTags}
+              initialTags={tags}
               onApplyTags={(tagSlugs) => setTags(tagSlugs)}
             />
 
-            <Select
-              onValueChange={(value) =>
-                setOrderBy(value as typeof DEFAULT_PROFILES_FILTERS.orderBy)
-              }
-              value={orderBy}
-            >
+            <Select onValueChange={(value) => setOrderBy(value as OrderBy)} value={orderBy}>
               <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-[state=open]:bg-white">
                 <SelectValue>
                   {ORDER_BY_LABELS[orderBy as keyof typeof ORDER_BY_LABELS] ?? "Sort by"}
@@ -118,7 +129,7 @@ export function ProfilesPageWrapper({
           </div>
         </div>
 
-        <ProfilesPaginatedList filters={filters} />
+        <ProfilesList hasSearch={Boolean(debouncedSearch)} profiles={filtered} />
       </div>
     </div>
   );

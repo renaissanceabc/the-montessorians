@@ -20,10 +20,10 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import type { ProfilePage } from "@/lib/content/types";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
 import { addUtmParamsToUrl, getShareUrl, type SHARE_CONFIG } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
-import type { ProfilePage } from "@/trpc/types";
 
 export function ShareDialog({
   open,

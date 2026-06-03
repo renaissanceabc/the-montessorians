@@ -1,13 +1,18 @@
 import { notFound } from "next/navigation";
+import { getAllTags, getProfilesByTag, getTagBySlug } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
-import { DEFAULT_PROFILES_FILTERS } from "@/lib/types";
 import { siteUrl } from "@/lib/utils";
-import { getQueryClient, HydrateClient, trpc } from "@/trpc/server";
 import { TagProfilesPageWrapper } from "./components/tag-profiles-page-wrapper";
+
+export function generateStaticParams() {
+  return getAllTags().data.map((tag) => ({ slug: tag.slug }));
+}
+
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const tag = await getQueryClient().fetchQuery(trpc.tags.bySlug.queryOptions({ slug }));
+  const tag = getTagBySlug(slug);
 
   if (!tag) {
     return {};
@@ -22,41 +27,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
-type TagPageProps = {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export default async function TagPage(props: TagPageProps) {
+export default async function TagPage(props: { params: Promise<{ slug: string }> }) {
   const { slug } = await props.params;
-  const qc = getQueryClient();
-  const tag = await qc.fetchQuery(trpc.tags.bySlug.queryOptions({ slug }));
+  const tag = getTagBySlug(slug);
 
   if (!tag) {
     notFound();
   }
 
-  const { orderBy, sortBy } = await props.searchParams;
+  const profiles = getProfilesByTag(slug);
 
-  const filters = {
-    ...DEFAULT_PROFILES_FILTERS,
-    orderBy:
-      (orderBy as typeof DEFAULT_PROFILES_FILTERS.orderBy) || DEFAULT_PROFILES_FILTERS.orderBy,
-    sortBy: (sortBy as typeof DEFAULT_PROFILES_FILTERS.sortBy) || DEFAULT_PROFILES_FILTERS.sortBy,
-    tags: slug,
-  };
-
-  await qc.prefetchInfiniteQuery(
-    trpc.profiles.list.infiniteQueryOptions(filters, {
-      initialCursor: 1,
-      getNextPageParam: (lastPage) =>
-        lastPage.pagination.hasMore ? lastPage.pagination.page + 1 : undefined,
-    })
-  );
-
-  return (
-    <HydrateClient>
-      <TagProfilesPageWrapper initialFilters={filters} tag={tag} />
-    </HydrateClient>
-  );
+  return <TagProfilesPageWrapper profiles={profiles} tag={tag} />;
 }

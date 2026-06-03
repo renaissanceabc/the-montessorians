@@ -18,7 +18,6 @@ const devOrigins = [
 ].filter((host): host is string => Boolean(host));
 
 export const config: NextConfig = {
-  cacheComponents: true,
   allowedDevOrigins: devOrigins,
 
   // biome-ignore lint/suspicious/useAwait: rewrites is async

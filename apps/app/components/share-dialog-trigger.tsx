@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useState } from "react";
-import type { ProfilePage } from "@/trpc/types";
+import type { ProfilePage } from "@/lib/content/types";
 import { ShareDialog } from "./share-dialog";
 
 export function ShareDialogTrigger({

@@ -2,7 +2,7 @@ import { LayoutGridIcon } from "lucide-react";
 import Link from "next/link";
 import { GitHubIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import type { Profile } from "@/trpc/types";
+import type { Profile } from "@/lib/content/types";
 import FeaturedProfile from "./featured-profile";
 
 export default function Hero({ dailyProfile }: { dailyProfile: Profile | null }) {

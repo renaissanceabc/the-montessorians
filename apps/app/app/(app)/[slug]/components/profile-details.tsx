@@ -16,8 +16,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { prettyUrl, proxyImage, toTitleCase } from "@/lib/utils";
-import type { ProfilePage } from "@/trpc/types";
+import { prettyUrl } from "@/lib/utils";
+import type { ProfilePage } from "@/lib/content/types";
 
 export default function ProfileDetails({ profile }: { profile: ProfilePage["profile"] }) {
   if (!profile) {
@@ -39,7 +39,7 @@ export default function ProfileDetails({ profile }: { profile: ProfilePage["prof
   return (
     <div className="flex w-full flex-col items-center gap-10">
       <Avatar className="h-48 w-48 rounded-full border border-gray-200">
-        <AvatarImage alt={profile.name} src={proxyImage(profile.imageUrl ?? "")} />
+        <AvatarImage alt={profile.name} src={profile.imageUrl ?? ""} />
         <AvatarFallback>{profile.name.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
 

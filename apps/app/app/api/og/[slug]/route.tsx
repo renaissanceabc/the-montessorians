@@ -1,46 +1,50 @@
-// app/api/og/[slug]/route.ts
+// app/api/og/[slug]/route.tsx
 
-import { db, eq } from "@repo/database";
-import { profiles } from "@repo/database/schema";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { parseError } from "@repo/observability/error";
 import { log } from "@repo/observability/log";
 import { ImageResponse } from "next/og";
-import type { NextRequest } from "next/server";
+import { getAllSlugs, getProfileBySlug } from "@/lib/content/profiles";
+
+// Pre-render every profile's OG image at build time (no runtime function).
+export function generateStaticParams() {
+  return getAllSlugs().map((slug) => ({ slug }));
+}
+
+export const dynamic = "force-static";
+
+const PUBLIC_DIR = path.join(process.cwd(), "public");
+
+/** Read an image from the app's public/ dir and inline it as a data URL. */
+async function imageFileToDataUrl(publicRelPath: string): Promise<string> {
+  const filePath = path.join(PUBLIC_DIR, publicRelPath);
+  const buffer = await readFile(filePath);
+  const ext = path.extname(filePath).toLowerCase();
+  const contentType = ext === ".png" ? "image/png" : "image/jpeg";
+  return `data:${contentType};base64,${buffer.toString("base64")}`;
+}
 
 /**
  * @route GET /api/og/[slug]
- * @description Generate an Open Graph image for a profile
- * @param request
- * @param params
- * @returns
- * - 200: The Open Graph image
- * - 404: The profile was not found
- * - 500: An error occurred
+ * @description Generate an Open Graph image for a profile (statically, at build)
  */
-export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const origin = request.nextUrl.origin;
 
   try {
-    // Fetch profile from database
-    const profile = await fetchProfile(slug);
+    const profile = getProfileBySlug(slug);
+    if (!profile?.imageUrl) {
+      throw new Error(`Profile or image not found for "${slug}"`);
+    }
 
-    // Fetch images
-    const backgroundUrl = `${origin}/images/og-dynamic.jpg`;
-    const backgroundImageUrl = await fetchImageAsDataUrl(backgroundUrl, {
-      timeout: 10000,
-      slug,
-    });
+    const [backgroundImageUrl, profileImageUrl] = await Promise.all([
+      imageFileToDataUrl("og-dynamic.jpg"),
+      imageFileToDataUrl(profile.imageUrl.replace(/^\//, "")),
+    ]);
 
-    // Type assertion: fetchProfile already verified imageUrl exists
-    const profileImageUrl = await fetchProfileImage(profile.imageUrl!, origin, slug);
-
-    // Generate response
     return generateProfileImageResponse({
-      profile: {
-        name: profile.name,
-        imageUrl: profile.imageUrl!,
-      },
+      profile: { name: profile.name, imageUrl: profile.imageUrl },
       backgroundImageUrl,
       profileImageUrl,
       slug,
@@ -52,7 +56,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     });
 
     // Fallback to simple background image
-    return generateFallbackResponse(origin, slug);
+    return generateFallbackResponse(slug);
   }
 }
 
@@ -76,147 +80,6 @@ function getFontSize(lineLength: number, baseSize: number): number {
     return Math.floor(baseSize * ratio);
   }
   return baseSize;
-}
-
-// Fetch image and convert to data URL
-async function fetchImageAsDataUrl(
-  url: string,
-  options?: { timeout?: number; slug?: string }
-): Promise<string> {
-  const timeout = options?.timeout ?? 10000;
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-  try {
-    const res = await fetch(url, {
-      method: "GET",
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (res.ok) {
-      const arrayBuffer = await res.arrayBuffer();
-      const contentType = res.headers.get("content-type") || "image/jpeg";
-      const base64 = Buffer.from(arrayBuffer).toString("base64");
-      const dataUrl = `data:${contentType};base64,${base64}`;
-
-      log.info("OG image: Successfully converted image to data URL", {
-        slug: options?.slug,
-        contentType,
-      });
-
-      return dataUrl;
-    } else {
-      log.warn("OG image: Image fetch returned non-ok status", {
-        slug: options?.slug,
-        status: res.status,
-      });
-    }
-  } catch (error) {
-    clearTimeout(timeoutId);
-    log.warn("OG image: Error fetching image, using original URL", {
-      slug: options?.slug,
-      error: parseError(error),
-    });
-  }
-
-  return url;
-}
-
-// Fetch profile image with proxy fallback
-async function fetchProfileImage(imageUrl: string, origin: string, slug: string): Promise<string> {
-  try {
-    const imageRes = await fetch(imageUrl, { method: "HEAD" });
-
-    if (!imageRes.ok) {
-      throw new Error("Image not accessible");
-    }
-
-    // If direct fetch works, try to convert to data URL
-    return await fetchImageAsDataUrl(imageUrl, {
-      timeout: 10000,
-      slug,
-    });
-  } catch (error) {
-    log.error("OG image: Error fetching image, trying proxy route", {
-      slug,
-      error: parseError(error),
-      errorName: error instanceof Error ? error.name : "unknown",
-    });
-
-    // Try proxy route as fallback
-    try {
-      const proxyUrl = `${origin}/api/proxy-image?url=${encodeURIComponent(imageUrl)}`;
-      const dataUrl = await fetchImageAsDataUrl(proxyUrl, {
-        timeout: 10000,
-        slug,
-      });
-
-      if (dataUrl.startsWith("data:")) {
-        return dataUrl;
-      }
-
-      // If proxy didn't return data URL, infer content type from URL
-      const urlLower = imageUrl.toLowerCase();
-      const contentType =
-        urlLower.endsWith(".jpg") || urlLower.endsWith(".jpeg")
-          ? "image/jpeg"
-          : urlLower.endsWith(".png")
-            ? "image/png"
-            : "image/jpeg";
-
-      // Fetch via proxy and convert
-      const proxyController = new AbortController();
-      const proxyTimeout = setTimeout(() => proxyController.abort(), 10000);
-      const proxyRes = await fetch(proxyUrl, {
-        signal: proxyController.signal,
-      });
-      clearTimeout(proxyTimeout);
-
-      if (proxyRes.ok) {
-        const arrayBuffer = await proxyRes.arrayBuffer();
-        const base64 = Buffer.from(arrayBuffer).toString("base64");
-        const dataUrl = `data:${contentType};base64,${base64}`;
-        log.info("OG image: Successfully converted image via proxy to data URL (fallback)", {
-          slug,
-          contentType,
-        });
-        return dataUrl;
-      }
-    } catch (proxyError) {
-      log.error("OG image: Proxy route also failed", {
-        slug,
-        error: parseError(proxyError),
-      });
-    }
-  }
-
-  return imageUrl;
-}
-
-// Fetch profile from database
-async function fetchProfile(slug: string) {
-  const [profile] = await db
-    .select({
-      name: profiles.name,
-      imageUrl: profiles.imageUrl,
-    })
-    .from(profiles)
-    .where(eq(profiles.slug, slug))
-    .limit(1);
-
-  if (!profile) {
-    log.error("OG image: Profile not found", { slug });
-    throw new Error("Profile not found");
-  }
-
-  if (!profile.imageUrl) {
-    log.error("OG image: Image URL missing", { slug });
-    throw new Error("Image missing");
-  }
-
-  return profile;
 }
 
 // Generate profile image response
@@ -416,12 +279,8 @@ function generateProfileImageResponse(params: {
 }
 
 // Generate fallback response
-async function generateFallbackResponse(origin: string, slug?: string): Promise<Response> {
-  const fallbackBackgroundUrl = `${origin}/og.png`;
-  const backgroundImageUrl = await fetchImageAsDataUrl(fallbackBackgroundUrl, {
-    timeout: 10000,
-    slug,
-  });
+async function generateFallbackResponse(slug?: string): Promise<Response> {
+  const backgroundImageUrl = await imageFileToDataUrl("og.png");
 
   try {
     const response = new ImageResponse(

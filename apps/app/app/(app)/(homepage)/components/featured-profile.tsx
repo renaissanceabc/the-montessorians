@@ -2,8 +2,7 @@ import { ArrowRightIcon, StarsIcon } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { proxyImage } from "@/lib/utils";
-import type { Profile } from "@/trpc/types";
+import type { Profile } from "@/lib/content/types";
 
 export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profile | null }) {
   if (!dailyProfile) {
@@ -44,7 +43,7 @@ export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profil
         href={`/${dailyProfile.slug}`}
       >
         <Avatar className="h-24 w-24 rounded-full lg:h-32 lg:w-32">
-          <AvatarImage alt={dailyProfile.name} src={proxyImage(dailyProfile.imageUrl ?? "")} />
+          <AvatarImage alt={dailyProfile.name} src={dailyProfile.imageUrl ?? ""} />
           <AvatarFallback>{dailyProfile.name.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
 

@@ -1,9 +1,8 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import ProfileListItem from "@/components/profile-list-item";
-import Subscribe from "@/components/subscribe";
 import { Button } from "@/components/ui/button";
-import type { Profile } from "@/trpc/types";
+import type { Profile } from "@/lib/content/types";
 
 export default function ProfilesHomepageList({ profiles }: { profiles: Profile[] }) {
   if (!profiles.length) {
@@ -16,13 +15,7 @@ export default function ProfilesHomepageList({ profiles }: { profiles: Profile[]
 
   return (
     <div className="flex w-full flex-col gap-1 sm:gap-2">
-      {profiles.slice(0, 5).map((profile) => (
-        <ProfileListItem key={profile.slug} profile={profile} />
-      ))}
-
-      <Subscribe />
-
-      {profiles.slice(5, 10).map((profile) => (
+      {profiles.slice(0, 10).map((profile) => (
         <ProfileListItem key={profile.slug} profile={profile} />
       ))}
       <div className="flex justify-center pt-4">
