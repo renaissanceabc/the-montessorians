@@ -1,10 +1,9 @@
 "use client";
 
-import { ArrowDownWideNarrowIcon, ArrowUpWideNarrowIcon, SearchIcon, XIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -19,14 +18,23 @@ import { DEFAULT_PROFILES_FILTERS, type getProfilesOptions } from "@/lib/types";
 import ProfilesList from "./profiles-list";
 import { TagsPopover } from "./tags-popover";
 
-const ORDER_BY_LABELS = {
-  alphabetical: "Name",
-  latest: "Recently added",
-  trending: "Trending",
-} as const;
-
 type OrderBy = NonNullable<getProfilesOptions["orderBy"]>;
 type SortBy = NonNullable<getProfilesOptions["sortBy"]>;
+
+// Single combined sort control: field + direction in one menu.
+const SORT_OPTIONS = [
+  { value: "latest-desc", label: "Recently added", orderBy: "latest", sortBy: "desc" },
+  { value: "latest-asc", label: "Oldest first", orderBy: "latest", sortBy: "asc" },
+  { value: "alphabetical-asc", label: "A–Z", orderBy: "alphabetical", sortBy: "asc" },
+  { value: "alphabetical-desc", label: "Z–A", orderBy: "alphabetical", sortBy: "desc" },
+] as const satisfies readonly {
+  value: string;
+  label: string;
+  orderBy: OrderBy;
+  sortBy: SortBy;
+}[];
+
+type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
 export function ProfilesPageWrapper({
   profiles,
@@ -48,6 +56,18 @@ export function ProfilesPageWrapper({
   );
   const [tags, setTags] = useState(searchParams.get("tags") ?? "");
   const [debouncedSearch] = useDebounce(search, 400);
+
+  const sortValue: SortValue =
+    SORT_OPTIONS.find((o) => o.orderBy === orderBy && o.sortBy === sortBy)?.value ??
+    SORT_OPTIONS[0].value;
+
+  const handleSortChange = (value: string) => {
+    const option = SORT_OPTIONS.find((o) => o.value === value);
+    if (option) {
+      setOrderBy(option.orderBy);
+      setSortBy(option.sortBy);
+    }
+  };
 
   const filtered = useMemo(
     () =>
@@ -102,30 +122,19 @@ export function ProfilesPageWrapper({
               onApplyTags={(tagSlugs) => setTags(tagSlugs)}
             />
 
-            <Select onValueChange={(value) => setOrderBy(value as OrderBy)} value={orderBy}>
+            <Select onValueChange={handleSortChange} value={sortValue}>
               <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-[state=open]:bg-white">
-                <SelectValue>
-                  {ORDER_BY_LABELS[orderBy as keyof typeof ORDER_BY_LABELS] ?? "Sort by"}
-                </SelectValue>
+                <SelectValue placeholder="Sort by" />
               </SelectTrigger>
 
               <SelectContent>
-                <SelectItem value="latest">Recently added</SelectItem>
-                <SelectItem value="alphabetical">Name</SelectItem>
+                {SORT_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-
-            <Button
-              className="cursor-pointer border-black/10 shadow-none hover:bg-white/50 active:bg-white"
-              onClick={() => setSortBy(sortBy === "asc" ? "desc" : "asc")}
-              variant="ghost"
-            >
-              {sortBy === "asc" ? (
-                <ArrowUpWideNarrowIcon className="h-4 w-4" />
-              ) : (
-                <ArrowDownWideNarrowIcon className="h-4 w-4" />
-              )}
-            </Button>
           </div>
         </div>
 
