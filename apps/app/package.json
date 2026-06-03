@@ -18,7 +18,7 @@
     "@types/bun": "catalog:",
     "@types/js-yaml": "catalog:",
     "@types/node": "catalog:",
-    "portless": "^0.10.2",
+    "portless": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
     "typescript": "catalog:"
@@ -36,7 +36,6 @@
     "next": "catalog:",
     "next-themes": "catalog:",
     "nuqs": "catalog:",
-    "prettier": "catalog:",
     "radix-ui": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
