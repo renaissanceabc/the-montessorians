@@ -72,8 +72,8 @@ export default async function ProfilePage(props: { params: Promise<{ slug: strin
       </div>
 
       <script
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD payload is sanitized
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD payload, with `<` escaped to prevent breaking out of the script tag
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         type="application/ld+json"
       />
     </>
