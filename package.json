@@ -7,6 +7,7 @@
     "node": ">=22"
   },
   "description": "The largest open source dataset of Montessori alumni, and the website that renders it",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/renaissanceabc/the-montessorians.git"
