@@ -3,7 +3,9 @@
 [The Montessorians](https://themontessorians.xyz) is the world's largest open source dataset of Montessori alumni who've
 gone on to do great things.
 
-The Montessorians is fully community-driven and open for contributions under a Creative Commons CC0 license.
+This is the public, open source home of both the **dataset** and the **website** that renders it. The dataset is
+fully community-driven and dedicated to the public domain under [CC0](./LICENSE.md), and the website's source code is
+open source under the [MIT license](./LICENSE-CODE.md). Contributions to both are welcome.
 
 Created and maintained by [Renaissance](https://renaissance.education), an education startup studio.
 
@@ -13,9 +15,9 @@ Created and maintained by [Renaissance](https://renaissance.education), an educa
 
 This repository holds both the **dataset** and the **website** that renders it ([themontessorians.xyz](https://themontessorians.xyz)).
 
-- `data/` — structured YAML files, one per person (the dataset; **CC0**)
-- `images/` — associated profile images (the dataset; **CC0**)
-- `apps/` and `packages/` — the Next.js website and its supporting packages (the application code; see [`LICENSE.md`](./LICENSE.md))
+- `data/` — structured YAML files, one per person (the dataset; **CC0**, see [`LICENSE.md`](./LICENSE.md))
+- `images/` — associated profile images (the dataset; **CC0**, see [`LICENSE.md`](./LICENSE.md))
+- `apps/` and `packages/` — the Next.js website and its supporting packages (the application code; **MIT**, see [`LICENSE-CODE.md`](./LICENSE-CODE.md))
 
 ```
 /data/                 # CC0 dataset
@@ -99,10 +101,20 @@ Know someone who should be featured? Submit a pull request or open an issue.
 
 ---
 
-### License
+### Contribution License
 
-By contributing, you agree that your additions will be released under
-[CC0](https://github.com/renaissanceabc/the-montessorians?tab=CC0-1.0-1-ov-file#readme).
+By contributing, you agree that dataset additions (`data/` and `images/`) are released under
+[CC0](./LICENSE.md), and that code contributions (`apps/` and `packages/`) are released under the
+[MIT license](./LICENSE-CODE.md).
+
+---
+
+## License
+
+This repository is open source and dual-licensed:
+
+- **Dataset** (`data/`, `images/`) — [CC0 1.0 Universal](./LICENSE.md) (public domain dedication)
+- **Application code** (`apps/`, `packages/`) — [MIT](./LICENSE-CODE.md)
 
 ---
 

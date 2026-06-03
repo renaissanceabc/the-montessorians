@@ -72,5 +72,6 @@ links:
 
 ## 📄 License
 
-By contributing, you agree that your additions will be released under
-[CC0](https://github.com/renaissanceabc/the-montessorians?tab=CC0-1.0-1-ov-file#readme).
+By contributing, you agree that dataset additions (`data/` and `images/`) are released under
+[CC0](./LICENSE.md), and that code contributions (`apps/` and `packages/`) are released under the
+[MIT license](./LICENSE-CODE.md).
