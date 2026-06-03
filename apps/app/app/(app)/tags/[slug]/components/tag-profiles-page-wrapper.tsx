@@ -1,10 +1,8 @@
 "use client";
 
-import { ArrowDownWideNarrowIcon, ArrowUpWideNarrowIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -17,13 +15,23 @@ import type { Profile, Tag } from "@/lib/content/types";
 import { DEFAULT_PROFILES_FILTERS } from "@/lib/types";
 import ProfilesList from "../../../discover/components/profiles-list";
 
-const ORDER_BY_LABELS = {
-  alphabetical: "Name",
-  latest: "Recently added",
-} as const;
-
 type OrderBy = NonNullable<(typeof DEFAULT_PROFILES_FILTERS)["orderBy"]>;
 type SortBy = NonNullable<(typeof DEFAULT_PROFILES_FILTERS)["sortBy"]>;
+
+// Single combined sort control: field + direction in one menu.
+const SORT_OPTIONS = [
+  { value: "latest-desc", label: "Recently added", orderBy: "latest", sortBy: "desc" },
+  { value: "latest-asc", label: "Oldest first", orderBy: "latest", sortBy: "asc" },
+  { value: "alphabetical-asc", label: "A–Z", orderBy: "alphabetical", sortBy: "asc" },
+  { value: "alphabetical-desc", label: "Z–A", orderBy: "alphabetical", sortBy: "desc" },
+] as const satisfies readonly {
+  value: string;
+  label: string;
+  orderBy: OrderBy;
+  sortBy: SortBy;
+}[];
+
+type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
 export function TagProfilesPageWrapper({ tag, profiles }: { tag: Tag; profiles: Profile[] }) {
   const router = useRouter();
@@ -35,6 +43,18 @@ export function TagProfilesPageWrapper({ tag, profiles }: { tag: Tag; profiles: 
   const [sortBy, setSortBy] = useState<SortBy>(
     (searchParams.get("sortBy") as SortBy) || (DEFAULT_PROFILES_FILTERS.sortBy as SortBy)
   );
+
+  const sortValue: SortValue =
+    SORT_OPTIONS.find((o) => o.orderBy === orderBy && o.sortBy === sortBy)?.value ??
+    SORT_OPTIONS[0].value;
+
+  const handleSortChange = (value: string) => {
+    const option = SORT_OPTIONS.find((o) => o.value === value);
+    if (option) {
+      setOrderBy(option.orderBy);
+      setSortBy(option.sortBy);
+    }
+  };
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -63,31 +83,19 @@ export function TagProfilesPageWrapper({ tag, profiles }: { tag: Tag; profiles: 
         </div>
 
         <div className="flex w-full items-center justify-end gap-1">
-          <Select onValueChange={(value) => setOrderBy(value as OrderBy)} value={orderBy}>
+          <Select onValueChange={handleSortChange} value={sortValue}>
             <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-[state=open]:bg-white">
-              <SelectValue>
-                {ORDER_BY_LABELS[orderBy as keyof typeof ORDER_BY_LABELS] ?? "Sort by"}
-              </SelectValue>
+              <SelectValue placeholder="Sort by" />
             </SelectTrigger>
 
             <SelectContent>
-              <SelectItem value="latest">Recently added</SelectItem>
-              <SelectItem value="alphabetical">Name</SelectItem>
+              {SORT_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
-
-          <Button
-            aria-label={sortBy === "asc" ? "Sort descending" : "Sort ascending"}
-            className="cursor-pointer border-black/10 shadow-none hover:bg-white/50 active:bg-white"
-            onClick={() => setSortBy(sortBy === "asc" ? "desc" : "asc")}
-            variant="ghost"
-          >
-            {sortBy === "asc" ? (
-              <ArrowUpWideNarrowIcon className="h-4 w-4" />
-            ) : (
-              <ArrowDownWideNarrowIcon className="h-4 w-4" />
-            )}
-          </Button>
         </div>
 
         <ProfilesList hasSearch={false} profiles={filtered} />
