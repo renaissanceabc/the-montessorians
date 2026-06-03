@@ -1,0 +1,22 @@
+{
+  "name": "@repo/observability",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@logtail/next": "catalog:",
+    "@sentry/nextjs": "catalog:",
+    "@t3-oss/env-nextjs": "catalog:",
+    "react": "catalog:",
+    "server-only": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

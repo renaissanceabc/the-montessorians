@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/update-daily-features",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/cron/post-daily-x",
+      "schedule": "0 14 * * *"
+    }
+  ]
+}

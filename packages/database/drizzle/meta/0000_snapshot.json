@@ -1,0 +1,429 @@
+{
+  "id": "de90ecea-222e-416f-813a-0092dc4224ee",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.daily_feature": {
+      "name": "daily_feature",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profile_slug": {
+          "name": "profile_slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "daily_feature_date_idx": {
+          "name": "daily_feature_date_idx",
+          "columns": [
+            {
+              "expression": "date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "date_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "daily_feature_profile_slug_fkey": {
+          "name": "daily_feature_profile_slug_fkey",
+          "tableFrom": "daily_feature",
+          "tableTo": "profiles",
+          "columnsFrom": ["profile_slug"],
+          "columnsTo": ["slug"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "daily_feature_date_key": {
+          "name": "daily_feature_date_key",
+          "nullsNotDistinct": false,
+          "columns": ["date"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.links": {
+      "name": "links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "profile_slug": {
+          "name": "profile_slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "link_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "links_profile_slug_idx": {
+          "name": "links_profile_slug_idx",
+          "columns": [
+            {
+              "expression": "profile_slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "links_profile_slug_type_idx": {
+          "name": "links_profile_slug_type_idx",
+          "columns": [
+            {
+              "expression": "profile_slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops"
+            },
+            {
+              "expression": "type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "links_profile_slug_fkey": {
+          "name": "links_profile_slug_fkey",
+          "tableFrom": "links",
+          "tableTo": "profiles",
+          "columnsFrom": ["profile_slug"],
+          "columnsTo": ["slug"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.profile_tags": {
+      "name": "profile_tags",
+      "schema": "",
+      "columns": {
+        "profile_slug": {
+          "name": "profile_slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag_slug": {
+          "name": "tag_slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "profile_tags_profile_slug_idx": {
+          "name": "profile_tags_profile_slug_idx",
+          "columns": [
+            {
+              "expression": "profile_slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "profile_tags_tag_slug_idx": {
+          "name": "profile_tags_tag_slug_idx",
+          "columns": [
+            {
+              "expression": "tag_slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "profile_tags_profile_slug_fkey": {
+          "name": "profile_tags_profile_slug_fkey",
+          "tableFrom": "profile_tags",
+          "tableTo": "profiles",
+          "columnsFrom": ["profile_slug"],
+          "columnsTo": ["slug"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "profile_tags_tag_slug_fkey": {
+          "name": "profile_tags_tag_slug_fkey",
+          "tableFrom": "profile_tags",
+          "tableTo": "tags",
+          "columnsFrom": ["tag_slug"],
+          "columnsTo": ["slug"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "profile_tags_pkey": {
+          "name": "profile_tags_pkey",
+          "columns": ["profile_slug", "tag_slug"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.profiles": {
+      "name": "profiles",
+      "schema": "",
+      "columns": {
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tagline": {
+          "name": "tagline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bio": {
+          "name": "bio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "education_notes": {
+          "name": "education_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "education": {
+          "name": "education",
+          "type": "education_type[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notable_achievements": {
+          "name": "notable_achievements",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "featured_at": {
+          "name": "featured_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "quotes": {
+          "name": "quotes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "profiles_slug_idx": {
+          "name": "profiles_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "slug_format_check": {
+          "name": "slug_format_check",
+          "value": "slug ~ '^[a-z0-9-]+$'::text"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.tags": {
+      "name": "tags",
+      "schema": "",
+      "columns": {
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "tag_slug_format_check": {
+          "name": "tag_slug_format_check",
+          "value": "slug ~ '^[a-z0-9-]+$'::text"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.education_type": {
+      "name": "education_type",
+      "schema": "public",
+      "values": ["montessori", "homeschool", "other"]
+    },
+    "public.link_type": {
+      "name": "link_type",
+      "schema": "public",
+      "values": [
+        "wikipedia",
+        "website",
+        "linkedin",
+        "x",
+        "tiktok",
+        "instagram",
+        "article",
+        "youtube",
+        "imdb"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

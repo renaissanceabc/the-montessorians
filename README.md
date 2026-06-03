@@ -11,16 +11,32 @@ Created and maintained by [Renaissance](https://renaissance.education), an educa
 
 ## Structure
 
-- Structured YAML files under `/data` — one for each person
-- Associated profile images under `/images`
+This repository holds both the **dataset** and the **website** that renders it ([themontessorians.xyz](https://themontessorians.xyz)).
+
+- `data/` — structured YAML files, one per person (the dataset; **CC0**)
+- `images/` — associated profile images (the dataset; **CC0**)
+- `apps/` and `packages/` — the Next.js website and its supporting packages (the application code; see [`LICENSE.md`](./LICENSE.md))
 
 ```
-/data/
+/data/                 # CC0 dataset
   - yo-yo-ma.yaml
-  - ...
-/images/
+/images/               # CC0 dataset
   - yo-yo-ma.jpg
-  - ...
+/apps/app/             # the website
+/packages/             # shared app packages
+```
+
+The site is fully static: it reads the YAML in `data/` at build time, so adding or editing a profile and merging it is all that's needed to update the live site.
+
+---
+
+## Development
+
+```bash
+bun install
+bun dev          # run the website locally
+bun run build    # production build (statically renders every profile)
+bun run validate # validate the dataset against profile.schema.json
 ```
 
 ---
@@ -36,10 +52,10 @@ We welcome contributions from the community! To add or update a profile, you hav
 ### Via Code (Advanced)
 
 1. Fork this repo
-2. Run `pnpm i` and install dependencies
+2. Run `bun install` to install dependencies
 3. Add a new `.yaml` file to the `/data` folder (see the [example below](#example-profile))
 4. Add a profile image (`.jpg`) to `/images`, using the same `slug` as the filename from step #3
-5. Run `pnpm lint` and confirm that the commands are successful prior to opening up a pull request
+5. Run `bun run data:lint` and confirm that it succeeds prior to opening up a pull request
 6. Submit a pull request with your updates
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for more guidelines.

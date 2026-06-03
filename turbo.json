@@ -1,0 +1,39 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "ui": "tui",
+  "envMode": "loose",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        ".react-email/**",
+        "**/generated/**",
+        "**/dist/**",
+        "**/drizzle/**"
+      ]
+    },
+    "//apps/email#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "apps/email/package.json",
+        "apps/email/tsconfig.json",
+        "packages/email/templates/**",
+        "packages/email/package.json"
+      ],
+      "outputs": ["apps/email/.react-email/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
+      "cache": false
+    }
+  }
+}

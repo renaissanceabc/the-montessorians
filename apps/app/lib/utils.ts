@@ -1,0 +1,69 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+const WWW_REGEX = /^www\./;
+const TRAILING_SLASH_REGEX = /\/$/;
+const URL_CLEANUP_REGEX = /^(https?:\/\/)?/;
+const URL_SPLIT_REGEX = /[/?#]/;
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`) ??
+  "http://localhost:3010";
+
+// For API calls, always use relative URLs to avoid cross-domain issues
+export const baseUrl = "";
+
+const ACRONYMS = ["TV", "AI", "NASA", "NBA", "NHL", "NCAA", "NFL", "MLB", "MIT", "STEM"];
+
+export function toTitleCase(str: string) {
+  const titled = str.replace(/[_-]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
+  return ACRONYMS.reduce((result, acronym) => {
+    const regex = new RegExp(`\\b${acronym[0]}${acronym.slice(1).toLowerCase()}\\b`, "g");
+    return result.replace(regex, acronym);
+  }, titled);
+}
+
+export function prettyUrl(rawUrl: string): string {
+  try {
+    const url = new URL(rawUrl);
+    const hostname = url.hostname.replace(WWW_REGEX, "");
+    const pathname = url.pathname.replace(TRAILING_SLASH_REGEX, "");
+    return `${hostname}${pathname}`;
+  } catch {
+    return rawUrl.replace(URL_CLEANUP_REGEX, "").replace(WWW_REGEX, "").split(URL_SPLIT_REGEX)[0];
+  }
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: Complex shapes
+export function convertKeysToCamelCase(obj: Record<string, any>): any {
+  if (Array.isArray(obj)) {
+    return obj.map(convertKeysToCamelCase);
+  }
+
+  if (obj && typeof obj === "object") {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [
+        key.replace(/_([a-z])/g, (_, c) => c.toUpperCase()),
+        convertKeysToCamelCase(value),
+      ])
+    );
+  }
+  return obj;
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: Complex shapes
+export const proxyLoader = ({ src, width, quality }: any) => {
+  const encodedUrl = encodeURIComponent(src);
+  return `/api/proxy-image?url=${encodedUrl}&w=${width}&q=${quality || 75}`;
+};
+
+export const proxyImage = (url: string) => {
+  const encodedUrl = encodeURIComponent(url);
+  return `/api/proxy-image?url=${encodedUrl}`;
+};
