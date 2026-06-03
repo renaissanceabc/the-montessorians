@@ -1,1 +1,10 @@
-npm run lint
+#!/bin/bash
+echo "Running lint-staged..."
+
+if ! bunx --no -- lint-staged --quiet; then
+  echo "❌ lint-staged failed. Fix issues and restage changes."
+  exit 1
+fi
+
+echo "Pre-commit checks passed."
+exit 0

@@ -1,0 +1,49 @@
+{
+  "name": "app",
+  "private": true,
+  "scripts": {
+    "content": "node scripts/generate-content.mjs",
+    "dev": "node scripts/generate-content.mjs && PORTLESS_TLD=ca portless --name montessorians.karel -- next dev --turbopack",
+    "dev:port": "node scripts/generate-content.mjs && next dev -p 3010 --turbopack",
+    "build": "node scripts/generate-content.mjs && next build --turbopack",
+    "start": "next start",
+    "analyze": "ANALYZE=true bun build",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "node scripts/generate-content.mjs && tsc --noEmit --emitDeclarationOnly false"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "catalog:",
+    "@tailwindcss/typography": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/js-yaml": "catalog:",
+    "@types/node": "catalog:",
+    "portless": "catalog:",
+    "tailwindcss": "catalog:",
+    "tw-animate-css": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@repo/next-config": "workspace:*",
+    "@repo/observability": "workspace:*",
+    "@t3-oss/env-nextjs": "catalog:",
+    "class-variance-authority": "catalog:",
+    "clsx": "catalog:",
+    "date-fns": "catalog:",
+    "import-in-the-middle": "catalog:",
+    "js-yaml": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "next-themes": "catalog:",
+    "nuqs": "catalog:",
+    "radix-ui": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "require-in-the-middle": "catalog:",
+    "sonner": "catalog:",
+    "tailwind-merge": "catalog:",
+    "use-debounce": "catalog:",
+    "vaul": "catalog:",
+    "zod": "catalog:"
+  }
+}
