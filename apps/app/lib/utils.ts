@@ -39,20 +39,3 @@ export function prettyUrl(rawUrl: string): string {
     return rawUrl.replace(URL_CLEANUP_REGEX, "").replace(WWW_REGEX, "").split(URL_SPLIT_REGEX)[0];
   }
 }
-
-// biome-ignore lint/suspicious/noExplicitAny: Complex shapes
-export function convertKeysToCamelCase(obj: Record<string, any>): any {
-  if (Array.isArray(obj)) {
-    return obj.map(convertKeysToCamelCase);
-  }
-
-  if (obj && typeof obj === "object") {
-    return Object.fromEntries(
-      Object.entries(obj).map(([key, value]) => [
-        key.replace(/_([a-z])/g, (_, c) => c.toUpperCase()),
-        convertKeysToCamelCase(value),
-      ])
-    );
-  }
-  return obj;
-}
