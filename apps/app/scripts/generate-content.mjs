@@ -26,6 +26,36 @@ const DATA_DIR = path.join(REPO_ROOT, "data");
 const IMAGES_DIR = path.join(REPO_ROOT, "images");
 const SCHEMA_PATH = path.join(REPO_ROOT, "profile.schema.json");
 const OUT_PATH = path.join(APP_DIR, "lib", "content", "profiles.generated.json");
+// The CC0 image dataset lives at the repo root; copy it into the app's public
+// dir at build time so Next.js can serve it at /images/*. (A symlink here breaks
+// `vercel build`'s output collection — it resolves to a copy onto itself.)
+const PUBLIC_IMAGES_DIR = path.join(APP_DIR, "public", "images");
+
+/**
+ * Mirror the dataset images into `public/images` for the given slugs: copy each
+ * (only when changed) and prune any files no longer in the dataset.
+ */
+function syncPublicImages(slugs) {
+  fs.mkdirSync(PUBLIC_IMAGES_DIR, { recursive: true });
+
+  const wanted = new Set(slugs.map((slug) => `${slug}.jpg`));
+  for (const existing of fs.readdirSync(PUBLIC_IMAGES_DIR)) {
+    if (!wanted.has(existing)) {
+      fs.rmSync(path.join(PUBLIC_IMAGES_DIR, existing), { force: true });
+    }
+  }
+
+  for (const slug of slugs) {
+    const src = path.join(IMAGES_DIR, `${slug}.jpg`);
+    const dest = path.join(PUBLIC_IMAGES_DIR, `${slug}.jpg`);
+    const srcStat = fs.statSync(src);
+    const destStat = fs.existsSync(dest) ? fs.statSync(dest) : null;
+    // Skip the copy when size + mtime already match (avoids needless churn).
+    if (!destStat || destStat.size !== srcStat.size || destStat.mtimeMs < srcStat.mtimeMs) {
+      fs.copyFileSync(src, dest);
+    }
+  }
+}
 
 /**
  * When a profile was first added, used for the "recently added" sort and
@@ -119,6 +149,9 @@ function main() {
 
   // Stable order: alphabetical by name (the default list order).
   profiles.sort((a, b) => a.name.localeCompare(b.name));
+
+  // Materialize the dataset images into public/ so Next.js can serve them.
+  syncPublicImages(profiles.map((p) => p.slug));
 
   fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
   const json = `${JSON.stringify(profiles, null, 2)}\n`;

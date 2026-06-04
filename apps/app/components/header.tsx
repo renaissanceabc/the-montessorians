@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import { useScroll } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GitHubIcon } from "@/components/icons";
@@ -12,14 +11,14 @@ const links = [
 ];
 
 export default function Header() {
-  const { scrollY } = useScroll();
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
-    return scrollY.onChange((y) => {
-      setIsSticky(y > 24);
-    });
-  }, [scrollY]);
+    const onScroll = () => setIsSticky(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <header className="sticky top-2 z-100 w-full px-3 sm:top-4 sm:my-4 sm:px-4 lg:top-8 lg:my-8 lg:px-8">
