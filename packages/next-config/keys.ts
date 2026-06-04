@@ -19,11 +19,6 @@ export const keys = () => {
     extends: [vercel()],
     server: {
       ANALYZE: z.string().optional(),
-      BLOB_PUBLIC_BASE_URL: z.string(),
-      BLOB_READ_WRITE_TOKEN: z.string(),
-      API_SECRET: z.string(),
-      GITHUB_TOKEN: z.string().min(1),
-      GITHUB_DATA_URL: z.string().min(1).url(),
       VERCEL_URL: z.string().optional(),
       VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),
       // Added by Vercel
@@ -32,15 +27,10 @@ export const keys = () => {
     client: {
       NEXT_PUBLIC_POSTHOG_HOST: z.string().min(1).url(),
       NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
-      NEXT_PUBLIC_SENTRY_DSN: z.string().min(1).url(),
+      NEXT_PUBLIC_SENTRY_DSN: z.string().min(1).url().optional(),
     },
     runtimeEnv: {
       ANALYZE: process.env.ANALYZE,
-      BLOB_PUBLIC_BASE_URL: process.env.BLOB_PUBLIC_BASE_URL,
-      BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
-      API_SECRET: process.env.API_SECRET,
-      GITHUB_TOKEN: process.env.GITHUB_TOKEN,
-      GITHUB_DATA_URL: process.env.GITHUB_DATA_URL,
       VERCEL_URL: process.env.VERCEL_URL,
       VERCEL_ENV: process.env.VERCEL_ENV as "production" | "preview" | "development" | undefined,
       NEXT_RUNTIME: process.env.NEXT_RUNTIME,

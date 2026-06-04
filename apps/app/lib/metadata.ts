@@ -1,6 +1,26 @@
-import merge from "lodash.merge";
 import type { Metadata } from "next";
 import { siteUrl } from "./utils";
+
+type PlainObject = Record<string, unknown>;
+
+const isPlainObject = (value: unknown): value is PlainObject =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+/** Recursively merge `source` into `target` (plain objects deep-merged, everything else overwritten). */
+function deepMerge(target: PlainObject, source: PlainObject): PlainObject {
+  const output: PlainObject = { ...target };
+  for (const [key, sourceValue] of Object.entries(source)) {
+    if (sourceValue === undefined) {
+      continue;
+    }
+    const targetValue = output[key];
+    output[key] =
+      isPlainObject(targetValue) && isPlainObject(sourceValue)
+        ? deepMerge(targetValue, sourceValue)
+        : sourceValue;
+  }
+  return output;
+}
 
 type MetadataGenerator = Omit<Metadata, "description" | "title"> & {
   title: string;
@@ -107,7 +127,7 @@ export const createMetadata = ({
     },
   };
 
-  const metadata: Metadata = merge({}, defaultMetadata, properties);
+  const metadata = deepMerge(defaultMetadata as PlainObject, properties as PlainObject) as Metadata;
 
   return metadata;
 };
