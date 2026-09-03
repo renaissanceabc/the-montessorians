@@ -6,13 +6,17 @@ import { parseError } from "@repo/observability/error";
 import { log } from "@repo/observability/log";
 import { ImageResponse } from "next/og";
 import { getAllSlugs, getProfileBySlug } from "@/lib/content/profiles";
+import { normalizeOgSlug } from "@/lib/og-slug";
 
 // Pre-render every profile's OG image at build time (no runtime function).
+// Include `.png` variants — metadata/sitemap use `/api/og/{slug}.png`, and the
+// [slug] route matches that before the `/api/og/:slug.png` rewrite can run.
 export function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  return getAllSlugs().flatMap((slug) => [{ slug }, { slug: `${slug}.png` }]);
 }
 
 export const dynamic = "force-static";
+export const dynamicParams = false;
 
 const PUBLIC_DIR = path.join(process.cwd(), "public");
 
@@ -30,12 +34,13 @@ async function imageFileToDataUrl(publicRelPath: string): Promise<string> {
  * @description Generate an Open Graph image for a profile (statically, at build)
  */
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = normalizeOgSlug(rawSlug);
 
   try {
     const profile = getProfileBySlug(slug);
     if (!profile?.imageUrl) {
-      throw new Error(`Profile or image not found for "${slug}"`);
+      return new Response(null, { status: 404 });
     }
 
     const [backgroundImageUrl, profileImageUrl] = await Promise.all([
