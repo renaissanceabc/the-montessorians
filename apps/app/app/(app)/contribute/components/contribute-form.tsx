@@ -9,7 +9,7 @@ import {
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import type { FieldErrors, Resolver } from "react-hook-form";
@@ -527,6 +527,8 @@ export const ContributeForm = ({
   const values = useWatch({ control }) as FormValues;
 
   const [mode, setMode] = useState<Mode>("form");
+  // The YAML generated from the form, to tell whether it was edited.
+  const generatedYaml = useRef("");
   const [yamlText, setYamlText] = useState("");
   const [yamlErrors, setYamlErrors] = useState<string[]>([]);
   const [problem, setProblem] = useState<ServerProblem | null>(null);
@@ -590,24 +592,21 @@ export const ContributeForm = ({
     if (next === "yaml") {
       const draft = toDraft(getValues());
       const parsed = submissionSchema.safeParse(draft);
-      // SAFETY: an invalid draft is only turned into YAML text for editing; the required
-      // fields are filled with placeholders and nothing is submitted from it.
-      setYamlText(
-        submissionToYaml(
-          parsed.success
-            ? parsed.data
-            : ({
-                ...draft,
-                kinds: draft.kinds.length ? draft.kinds : ["alum"],
-                name: draft.name || "Full Name",
-                tagline: draft.tagline || "A short tagline",
-                tags: draft.tags.length ? draft.tags : ["Tag"],
-              } as Submission)
-        )
-      );
+      // SAFETY: an incomplete draft is only turned into YAML text to edit, with the
+      // required fields left blank; nothing is submitted from it.
+      const text = parsed.success
+        ? submissionToYaml(parsed.data)
+        : submissionToYaml(draft as Submission, { draft: true });
+      generatedYaml.current = text;
+      setYamlText(text);
       setYamlErrors([]);
     } else {
-      // Carry YAML edits back into the form when they parse.
+      // Carry YAML edits back into the form when they parse. Untouched YAML
+      // leaves the form as it was.
+      if (yamlText === generatedYaml.current) {
+        setMode(next);
+        return;
+      }
       try {
         // SAFETY: toValues only reads fields with defaults, so a partial or loosely typed
         // parse still produces complete form values.

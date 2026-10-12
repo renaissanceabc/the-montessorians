@@ -147,7 +147,14 @@ type ProfileYamlValue =
   | string[];
 
 /** The profile YAML a maintainer would commit, minus the id. */
-export const submissionToYaml = (s: Submission): string => {
+// Shown even when empty in a draft, so the YAML editor lists what's required.
+const DRAFT_REQUIRED_KEYS = new Set(["name", "tagline", "tags"]);
+
+/**
+ * The profile YAML for a submission. With `draft`, it accepts an incomplete
+ * submission: required fields stay as blank keys instead of being dropped.
+ */
+export const submissionToYaml = (s: Submission, { draft = false } = {}): string => {
   const isAlum = s.kinds.includes("alum");
   const isContributor = s.kinds.includes("contributor");
   // Entries, not an object literal: the YAML keeps the profile files' field order.
@@ -181,13 +188,19 @@ export const submissionToYaml = (s: Submission): string => {
     ["links", s.links]
   );
   const clean = Object.fromEntries(
-    entries.filter(([, v]) => v !== undefined && !(Array.isArray(v) && v.length === 0))
+    entries.filter(
+      ([key, v]) =>
+        (draft && DRAFT_REQUIRED_KEYS.has(key)) ||
+        (v !== undefined && !(Array.isArray(v) && v.length === 0))
+    )
   );
   const added = newOrganizations(s);
   const note = added.length
     ? `# New organizations for maintainers to add: ${added.join(", ")}\n`
     : "";
-  return `id: # assigned by maintainers (bun run id:next)\n${dump(clean, { lineWidth: 120 })}${note}`;
+  // Blank strings read better as empty keys (`name:`) than as `name: ''`.
+  const body = dump(clean, { lineWidth: 120 }).replaceAll(/^(?<key>\w+): ''$/gmu, "$<key>:");
+  return `id: # assigned by maintainers (bun run id:next)\n${body}${note}`;
 };
 
 /** A node of a parsed YAML document (js-yaml's default schema). */
