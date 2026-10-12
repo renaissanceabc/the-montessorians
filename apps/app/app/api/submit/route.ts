@@ -1,4 +1,4 @@
-import { log } from "@repo/observability/log";
+import { log } from "@montessorians/observability/log";
 import { checkBotId } from "botid/server";
 import { NextResponse } from "next/server";
 

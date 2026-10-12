@@ -115,5 +115,5 @@ Target home = the existing public `the-montessorians` repo (clean/flat: only `da
 2. `bun run dev` and spot-check: homepage daily profile, `/discover` search + tag filter + sort (client-side), a profile page with prev/next nav and image, `/archive`, `/tags`, `/tags/<slug>`, OG image at `/api/og/<slug>.png`, `/sitemap.xml`, `/llms.txt`.
 3. Temporarily corrupt one `data/*.yaml` → build should fail with a schema error (validates step 6).
 4. Change the system date (or unit-test `getDailyProfile`) to confirm the featured profile rotates deterministically and the archive matches.
-5. Grep for residual `@repo/database`, `@vercel/blob`, `trpc`, `resend`, `upstash` imports → none remain in `apps/app`.
+5. Grep for residual `@montessorians/database`, `@vercel/blob`, `trpc`, `resend`, `upstash` imports → none remain in `apps/app`.
 6. Lighthouse/`bun run analyze` for a before/after on bundle + SEO.

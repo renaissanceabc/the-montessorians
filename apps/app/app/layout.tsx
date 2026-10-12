@@ -1,5 +1,5 @@
 import "./globals.css";
-import { AnalyticsProvider } from "@repo/analytics/provider";
+import { AnalyticsProvider } from "@montessorians/analytics/provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 import { Suspense } from "react";

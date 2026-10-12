@@ -17,7 +17,7 @@ export const keys = () => {
 
   return createEnv({
     client: {
-      // Required on Vercel, optional locally (see @repo/analytics/keys).
+      // Required on Vercel, optional locally (see @montessorians/analytics/keys).
       NEXT_PUBLIC_POSTHOG_HOST: process.env.VERCEL
         ? z.string().min(1).url()
         : z.string().min(1).url().optional(),

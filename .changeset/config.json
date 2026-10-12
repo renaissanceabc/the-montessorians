@@ -7,7 +7,7 @@
     }
   ],
   "commit": false,
-  "fixed": [["app", "@repo/*"]],
+  "fixed": [["app", "@montessorians/*"]],
   "linked": [],
   "access": "restricted",
   "baseBranch": "develop",

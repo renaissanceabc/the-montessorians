@@ -9,7 +9,7 @@
         "@changesets/cli": "^2.31.1",
         "@commitlint/cli": "catalog:",
         "@commitlint/config-conventional": "catalog:",
-        "@repo/typescript-config": "workspace:*",
+        "@montessorians/typescript-config": "workspace:*",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "ajv": "catalog:",
@@ -32,8 +32,8 @@
       "dependencies": {
         "@base-ui/react": "^1.9.0",
         "@hookform/resolvers": "^5.9.1",
-        "@repo/next-config": "workspace:*",
-        "@repo/observability": "workspace:*",
+        "@montessorians/next-config": "workspace:*",
+        "@montessorians/observability": "workspace:*",
         "@t3-oss/env-nextjs": "catalog:",
         "botid": "^1.5.11",
         "class-variance-authority": "catalog:",
@@ -54,7 +54,7 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@montessorians/typescript-config": "workspace:*",
         "@tailwindcss/postcss": "catalog:",
         "@tailwindcss/typography": "catalog:",
         "@types/bun": "catalog:",
@@ -68,7 +68,7 @@
       },
     },
     "packages/analytics": {
-      "name": "@repo/analytics",
+      "name": "@montessorians/analytics",
       "version": "0.2.0",
       "dependencies": {
         "@next/third-parties": "catalog:",
@@ -81,12 +81,12 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@montessorians/typescript-config": "workspace:*",
         "@types/node": "catalog:",
       },
     },
     "packages/next-config": {
-      "name": "@repo/next-config",
+      "name": "@montessorians/next-config",
       "version": "0.2.0",
       "dependencies": {
         "@next/bundle-analyzer": "catalog:",
@@ -96,11 +96,11 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@montessorians/typescript-config": "workspace:*",
       },
     },
     "packages/observability": {
-      "name": "@repo/observability",
+      "name": "@montessorians/observability",
       "version": "0.2.0",
       "dependencies": {
         "@logtail/next": "catalog:",
@@ -111,13 +111,13 @@
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@montessorians/typescript-config": "workspace:*",
         "@types/node": "catalog:",
         "typescript": "catalog:",
       },
     },
     "packages/typescript-config": {
-      "name": "@repo/typescript-config",
+      "name": "@montessorians/typescript-config",
       "version": "0.2.0",
     },
   },
@@ -454,6 +454,14 @@
 
     "@mapbox/node-pre-gyp": ["@mapbox/node-pre-gyp@2.0.3", "", { "dependencies": { "consola": "^3.2.3", "detect-libc": "^2.0.0", "https-proxy-agent": "^7.0.5", "node-fetch": "^2.6.7", "nopt": "^8.0.0", "semver": "^7.5.3", "tar": "^7.4.0" }, "bin": { "node-pre-gyp": "bin/node-pre-gyp" } }, "sha512-uwPAhccfFJlsfCxMYTwOdVfOz3xqyj8xYL3zJj8f0pb30tLohnnFPhLuqp4/qoEz8sNxe4SESZedcBojRefIzg=="],
 
+    "@montessorians/analytics": ["@montessorians/analytics@workspace:packages/analytics"],
+
+    "@montessorians/next-config": ["@montessorians/next-config@workspace:packages/next-config"],
+
+    "@montessorians/observability": ["@montessorians/observability@workspace:packages/observability"],
+
+    "@montessorians/typescript-config": ["@montessorians/typescript-config@workspace:packages/typescript-config"],
+
     "@napi-rs/keyring": ["@napi-rs/keyring@1.2.0", "", { "optionalDependencies": { "@napi-rs/keyring-darwin-arm64": "1.2.0", "@napi-rs/keyring-darwin-x64": "1.2.0", "@napi-rs/keyring-freebsd-x64": "1.2.0", "@napi-rs/keyring-linux-arm-gnueabihf": "1.2.0", "@napi-rs/keyring-linux-arm64-gnu": "1.2.0", "@napi-rs/keyring-linux-arm64-musl": "1.2.0", "@napi-rs/keyring-linux-riscv64-gnu": "1.2.0", "@napi-rs/keyring-linux-x64-gnu": "1.2.0", "@napi-rs/keyring-linux-x64-musl": "1.2.0", "@napi-rs/keyring-win32-arm64-msvc": "1.2.0", "@napi-rs/keyring-win32-ia32-msvc": "1.2.0", "@napi-rs/keyring-win32-x64-msvc": "1.2.0" } }, "sha512-d0d4Oyxm+v980PEq1ZH2PmS6cvpMIRc17eYpiU47KgW+lzxklMu6+HOEOPmxrpnF/XQZ0+Q78I2mgMhbIIo/dg=="],
 
     "@napi-rs/keyring-darwin-arm64": ["@napi-rs/keyring-darwin-arm64@1.2.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-CA83rDeyONDADO25JLZsh3eHY8yTEtm/RS6ecPsY+1v+dSawzT9GywBMu2r6uOp1IEhQs/xAfxgybGAFr17lSA=="],
@@ -767,14 +775,6 @@
     "@protobufjs/utf8": ["@protobufjs/utf8@1.1.0", "", {}, "sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw=="],
 
     "@renovatebot/pep440": ["@renovatebot/pep440@4.2.1", "", {}, "sha512-2FK1hF93Fuf1laSdfiEmJvSJPVIDHEUTz68D3Fi9s0IZrrpaEcj6pTFBTbYvsgC5du4ogrtf5re7yMMvrKNgkw=="],
-
-    "@repo/analytics": ["@repo/analytics@workspace:packages/analytics"],
-
-    "@repo/next-config": ["@repo/next-config@workspace:packages/next-config"],
-
-    "@repo/observability": ["@repo/observability@workspace:packages/observability"],
-
-    "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
 
     "@rolldown/binding-android-arm64": ["@rolldown/binding-android-arm64@1.0.0-rc.1", "", { "os": "android", "cpu": "arm64" }, "sha512-He6ZoCfv5D7dlRbrhNBkuMVIHd0GDnjJwbICE1OWpG7G3S2gmJ+eXkcNLJjzjNDpeI2aRy56ou39AJM9AD8YFA=="],
 

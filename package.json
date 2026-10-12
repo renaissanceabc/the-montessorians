@@ -93,7 +93,7 @@
     "@changesets/cli": "^2.31.1",
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
-    "@repo/typescript-config": "workspace:*",
+    "@montessorians/typescript-config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "ajv": "catalog:",

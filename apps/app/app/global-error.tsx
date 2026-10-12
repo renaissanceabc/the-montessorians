@@ -1,6 +1,6 @@
 "use client";
 
-import { parseError } from "@repo/observability/error";
+import { parseError } from "@montessorians/observability/error";
 import { AlertTriangle, Home, RotateCcw } from "lucide-react";
 import type NextError from "next/error";
 import { useEffect } from "react";

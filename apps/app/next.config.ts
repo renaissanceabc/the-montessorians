@@ -1,5 +1,5 @@
-import { config, withAnalyzer } from "@repo/next-config";
-import { sentryEnabled, withLogging, withSentry } from "@repo/observability/next-config";
+import { config, withAnalyzer } from "@montessorians/next-config";
+import { sentryEnabled, withLogging, withSentry } from "@montessorians/observability/next-config";
 import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
 

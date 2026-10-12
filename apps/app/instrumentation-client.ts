@@ -1,5 +1,5 @@
-import { initializeAnalytics } from "@repo/analytics/instrumentation-client";
-import { initializeSentry } from "@repo/observability/client";
+import { initializeAnalytics } from "@montessorians/analytics/instrumentation-client";
+import { initializeSentry } from "@montessorians/observability/client";
 import { initBotId } from "botid/client/core";
 
 // Off unless a DSN is configured (e.g. local dev).

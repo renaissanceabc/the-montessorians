@@ -3,8 +3,8 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { parseError } from "@repo/observability/error";
-import { log } from "@repo/observability/log";
+import { parseError } from "@montessorians/observability/error";
+import { log } from "@montessorians/observability/log";
 import { ImageResponse } from "next/og";
 
 import { getAllSlugs, getProfileBySlug } from "@/lib/content/profiles";

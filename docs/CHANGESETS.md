@@ -16,7 +16,7 @@ or create `.changeset/<name>.md` by hand. Skip it for `chore:`, `docs:`, `refact
 Contributors now have their own section of the directory.
 ```
 
-The app and `packages/*` (`@repo/*`) are versioned together (a `fixed` group), so naming `app` is enough.
+The app and `packages/*` (`@montessorians/*`) are versioned together (a `fixed` group), so naming `app` is enough.
 
 ## Bump types
 
