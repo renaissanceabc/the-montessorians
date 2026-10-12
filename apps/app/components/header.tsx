@@ -21,10 +21,10 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="sticky top-2 z-100 w-full px-3 sm:top-4 sm:my-4 sm:px-4 lg:top-8 lg:my-8 lg:px-8">
+    <header className="sticky top-2 z-100 my-2 w-full px-3 sm:top-4 sm:my-4 sm:px-4 lg:top-8 lg:my-8 lg:px-8">
       <div
         className={cn(
-          "container mx-auto flex max-w-screen-md flex-row items-center justify-between gap-3 rounded-full border border-transparent px-6 py-3 backdrop-blur-lg transition-colors duration-300 sm:gap-4 sm:py-4 lg:px-8 lg:py-6",
+          "container mx-auto flex max-w-screen-md flex-row items-center justify-between gap-3 rounded-full border border-transparent px-4 py-3 backdrop-blur-lg transition-colors duration-300 sm:gap-4 sm:px-6 sm:py-4 lg:px-8 lg:py-6",
           {
             "bg-black/7": isSticky,
             "bg-transparent": !isSticky,
@@ -32,13 +32,13 @@ const Header = () => {
         )}
       >
         <Link
-          className="hover:text-primary font-serif text-2xl font-semibold transition-colors md:text-3xl lg:text-4xl"
+          className="hover:text-primary min-w-0 font-serif text-[clamp(1rem,5.8vw,1.5rem)] font-semibold whitespace-nowrap transition-colors md:text-3xl lg:text-4xl"
           href="/"
         >
           the montessorians
         </Link>
 
-        <div className="flex h-5 items-center gap-3 sm:gap-4 lg:gap-6">
+        <div className="flex h-5 shrink-0 items-center gap-3 sm:gap-4 lg:gap-6">
           {links.map((link) => (
             <Link
               className="flex flex-row items-center gap-2 text-sm font-semibold transition-colors hover:underline sm:text-base"
