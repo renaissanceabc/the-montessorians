@@ -156,8 +156,12 @@ export function getProfileWithAdjacent(slug: string): ProfilePage | null {
 
   return {
     profile,
-    previous: prev ? { slug: prev.slug, name: prev.name } : { slug: null, name: null },
-    next: next ? { slug: next.slug, name: next.name } : { slug: null, name: null },
+    previous: prev
+      ? { slug: prev.slug, name: prev.name, imageUrl: prev.imageUrl }
+      : { slug: null, name: null, imageUrl: null },
+    next: next
+      ? { slug: next.slug, name: next.name, imageUrl: next.imageUrl }
+      : { slug: null, name: null, imageUrl: null },
   };
 }
 

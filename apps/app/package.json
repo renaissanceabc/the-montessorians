@@ -10,7 +10,8 @@
     "start": "next start",
     "analyze": "ANALYZE=true bun build",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "typecheck": "node scripts/generate-content.mjs && tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "node scripts/generate-content.mjs && tsc --noEmit --emitDeclarationOnly false",
+    "test": "node scripts/generate-content.mjs && bun test lib"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
@@ -25,12 +26,14 @@
     "typescript": "catalog:"
   },
   "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "@hookform/resolvers": "^5.9.1",
     "@repo/next-config": "workspace:*",
     "@repo/observability": "workspace:*",
     "@t3-oss/env-nextjs": "catalog:",
     "botid": "^1.5.11",
     "class-variance-authority": "catalog:",
-    "clsx": "catalog:",
+    "cn": "^0.4.0",
     "date-fns": "catalog:",
     "import-in-the-middle": "catalog:",
     "js-yaml": "catalog:",
@@ -38,14 +41,12 @@
     "next": "catalog:",
     "next-themes": "catalog:",
     "nuqs": "catalog:",
-    "radix-ui": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-hook-form": "^7.90.0",
     "require-in-the-middle": "catalog:",
     "sonner": "catalog:",
-    "tailwind-merge": "catalog:",
     "use-debounce": "catalog:",
-    "vaul": "catalog:",
     "zod": "catalog:"
   }
 }

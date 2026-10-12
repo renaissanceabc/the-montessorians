@@ -1,10 +1,15 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import yaml from "js-yaml";
-import { submissionSchema, submissionToYaml, yamlToSubmission } from "./submission";
+import {
+  newOrganizations,
+  submissionSchema,
+  submissionToYaml,
+  yamlToSubmission,
+} from "./submission";
 
 const alum = {
-  kind: "alum",
+  kinds: ["alum"],
   name: "Jane Doe",
   tagline: "Engineer and author",
   tags: ["Engineer", "author"],
@@ -28,9 +33,9 @@ describe("submission", () => {
   });
 
   test("contributors need a role", () => {
-    assert.equal(submissionSchema.safeParse({ ...alum, kind: "contributor" }).success, false);
+    assert.equal(submissionSchema.safeParse({ ...alum, kinds: ["contributor"] }).success, false);
     assert.equal(
-      submissionSchema.safeParse({ ...alum, kind: "contributor", roles: ["author"] }).success,
+      submissionSchema.safeParse({ ...alum, kinds: ["contributor"], roles: ["author"] }).success,
       true
     );
   });
@@ -43,5 +48,30 @@ describe("submission", () => {
     assert.deepEqual(doc.tags, ["engineer", "author"]);
     assert.equal(doc.id, null);
     assert.equal(submissionSchema.safeParse(yamlToSubmission(text)).success, true);
+  });
+
+  test("someone who is both gets a kind list, and new organizations are flagged", () => {
+    const parsed = submissionSchema.parse({
+      ...alum,
+      kinds: ["alum", "contributor"],
+      roles: ["trainer"],
+      affiliations: [
+        { name: "Example Training Center" },
+        { organization: "association-montessori-internationale", name: "AMI" },
+      ],
+    });
+    const doc = yaml.load(submissionToYaml(parsed)) as Record<string, unknown>;
+    assert.deepEqual(doc.kind, ["alum", "contributor"]);
+    assert.deepEqual(doc.affiliations, [
+      { organization: "example-training-center" },
+      { organization: "association-montessori-internationale" },
+    ]);
+    assert.deepEqual(newOrganizations(parsed), ["Example Training Center"]);
+
+    // YAML mode round-trips: known slugs stay linked, unknown ones become new organizations.
+    const known = new Map([["association-montessori-internationale", "AMI"]]);
+    const again = submissionSchema.parse(yamlToSubmission(submissionToYaml(parsed), known));
+    assert.deepEqual(newOrganizations(again), ["Example Training Center"]);
+    assert.equal(again.affiliations?.[1].organization, "association-montessori-internationale");
   });
 });

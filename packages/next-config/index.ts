@@ -12,13 +12,32 @@ function hostnameFromUrl(url: string | undefined) {
   }
 }
 
-const devOrigins = [
-  hostnameFromUrl(process.env.NEXT_PUBLIC_SITE_URL),
-  hostnameFromUrl(process.env.PORTLESS_URL),
-].filter((host): host is string => Boolean(host));
+/**
+ * The site's public origin: the Vercel production domain when set, then the
+ * deployment URL (previews), then portless (montessorians.localhost), then
+ * localhost. Permanent identifiers are built from it.
+ */
+export function resolveSiteUrl() {
+  const host = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  if (host) {
+    return `https://${host}`;
+  }
+  return (
+    process.env.PORTLESS_URL?.replace(/\/$/, "") ?? `http://localhost:${process.env.PORT ?? 3000}`
+  );
+}
+
+const devOrigins = [hostnameFromUrl(process.env.PORTLESS_URL)].filter((host): host is string =>
+  Boolean(host)
+);
 
 export const config: NextConfig = {
   allowedDevOrigins: devOrigins,
+
+  // Inlined for server and client code alike (read via `siteUrl` in the app).
+  env: {
+    SITE_URL: resolveSiteUrl(),
+  },
 
   // biome-ignore lint/suspicious/useAwait: rewrites is async
   async rewrites() {

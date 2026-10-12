@@ -32,11 +32,9 @@ export default function NotFoundPage({}) {
             </p>
           </div>
 
-          <Button asChild className="shadow-none" size="lg">
-            <Link href="/">
-              <HomeIcon className="h-4 w-4" />
-              Back to home
-            </Link>
+          <Button className="shadow-none" nativeButton={false} render={<Link href="/" />} size="lg">
+            <HomeIcon className="h-4 w-4" />
+            Back to home
           </Button>
         </div>
       </div>

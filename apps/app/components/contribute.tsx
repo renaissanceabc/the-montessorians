@@ -17,12 +17,13 @@ export default function Contribute() {
 
         <div className="flex flex-col gap-2 md:flex-row">
           <Button
-            asChild
             className="border-black/10 bg-white/75 shadow-none"
+            nativeButton={false}
+            render={<Link href="/contribute" />}
             size="lg"
             variant="outline"
           >
-            <Link href="/contribute">Add a Montessorian</Link>
+            Add a Montessorian
           </Button>
         </div>
       </div>

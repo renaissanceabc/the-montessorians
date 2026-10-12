@@ -67,6 +67,28 @@ function syncPublicImages(slugs) {
   }
 }
 
+const LOGOS_DIR = path.join(IMAGES_DIR, "organizations");
+const PUBLIC_LOGOS_DIR = path.join(APP_DIR, "public", "logos");
+
+/** The organization's logo file name (svg preferred), if the dataset has one. */
+function logoFileFor(slug) {
+  return [`${slug}.svg`, `${slug}.png`].find((name) => fs.existsSync(path.join(LOGOS_DIR, name)));
+}
+
+/** Mirror organization logos into `public/logos`, pruning removed ones. */
+function syncPublicLogos(names) {
+  fs.mkdirSync(PUBLIC_LOGOS_DIR, { recursive: true });
+  const wanted = new Set(names);
+  for (const existing of fs.readdirSync(PUBLIC_LOGOS_DIR)) {
+    if (!wanted.has(existing)) {
+      fs.rmSync(path.join(PUBLIC_LOGOS_DIR, existing), { force: true });
+    }
+  }
+  for (const name of names) {
+    fs.copyFileSync(path.join(LOGOS_DIR, name), path.join(PUBLIC_LOGOS_DIR, name));
+  }
+}
+
 /**
  * When a profile was first added, used for the "recently added" sort and
  * sitemap lastModified. Prefers the git commit that introduced the file (stable
@@ -87,7 +109,10 @@ function addedAtFor(file, previousSlugs = []) {
     const dates = [
       ...git(`data/people/${file}`),
       // Earlier layouts and earlier slugs.
-      ...previousSlugs.flatMap((slug) => [...git(`data/people/${slug}.yaml`), ...git(`data/${slug}.yaml`)]),
+      ...previousSlugs.flatMap((slug) => [
+        ...git(`data/people/${slug}.yaml`),
+        ...git(`data/${slug}.yaml`),
+      ]),
     ].sort();
     if (dates.length > 0) {
       return dates[0];
@@ -261,6 +286,15 @@ function main() {
   syncPublicImages(profiles.filter((p) => p.imageUrl).map((p) => p.slug));
 
   const organizations = loadOrganizations();
+  const logoFiles = [];
+  for (const org of organizations) {
+    const logo = logoFileFor(org.slug);
+    org.logoUrl = logo ? `/logos/${logo}` : null;
+    if (logo) {
+      logoFiles.push(logo);
+    }
+  }
+  syncPublicLogos(logoFiles);
 
   // Denormalize organization names onto references so lists can show them
   // without loading the organization index on the client.
@@ -271,6 +305,9 @@ function main() {
       ref.organizationName = org?.name ?? ref.organization;
       if (org?.shortName) {
         ref.organizationShortName = org.shortName;
+      }
+      if (org?.logoUrl) {
+        ref.organizationLogoUrl = org.logoUrl;
       }
     }
   }

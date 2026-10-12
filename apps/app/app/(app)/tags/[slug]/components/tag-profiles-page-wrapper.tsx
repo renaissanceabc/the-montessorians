@@ -48,7 +48,7 @@ export function TagProfilesPageWrapper({ tag, profiles }: { tag: Tag; profiles: 
     SORT_OPTIONS.find((o) => o.orderBy === orderBy && o.sortBy === sortBy)?.value ??
     SORT_OPTIONS[0].value;
 
-  const handleSortChange = (value: string) => {
+  const handleSortChange = (value: string | null) => {
     const option = SORT_OPTIONS.find((o) => o.value === value);
     if (option) {
       setOrderBy(option.orderBy);
@@ -83,8 +83,8 @@ export function TagProfilesPageWrapper({ tag, profiles }: { tag: Tag; profiles: 
         </div>
 
         <div className="flex w-full items-center justify-end gap-1">
-          <Select onValueChange={handleSortChange} value={sortValue}>
-            <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-[state=open]:bg-white">
+          <Select items={SORT_OPTIONS} onValueChange={handleSortChange} value={sortValue}>
+            <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-popup-open:bg-white">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
 

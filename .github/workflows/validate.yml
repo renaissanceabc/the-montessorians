@@ -6,6 +6,11 @@ on:
 permissions:
   contents: read
 
+# A new push to the same PR cancels the run still in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     name: Run yamllint
@@ -21,7 +26,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install yamllint
-        run: pip install yamllint
+        run: pip install --disable-pip-version-check yamllint
 
       - name: Run yamllint on data
         run: yamllint data

@@ -103,6 +103,7 @@ export type OrganizationRef = {
   /** Resolved at build time by scripts/generate-content.mjs */
   organizationName?: string;
   organizationShortName?: string;
+  organizationLogoUrl?: string;
   role?: string;
   level?: string;
   from?: number;
@@ -236,6 +237,9 @@ export type Organization = {
   location?: string;
   founded?: number;
   website?: string;
+  logoSource?: string;
+  /** Resolved at build time from images/organizations/ */
+  logoUrl?: string | null;
   parent?: string;
   identifiers?: {
     lcnaf?: string;
@@ -258,7 +262,9 @@ export type AuthorityChange = {
 
 export type PastProfile = Profile & { featuredDate: string };
 
-export type AdjacentRef = { slug: string; name: string } | { slug: null; name: null };
+export type AdjacentRef =
+  | { slug: string; name: string; imageUrl: string | null }
+  | { slug: null; name: null; imageUrl: null };
 
 export type ProfilePage = {
   profile: Profile;

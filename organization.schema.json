@@ -57,6 +57,11 @@
       "type": "string",
       "format": "uri"
     },
+    "logo_source": {
+      "type": "string",
+      "format": "uri",
+      "description": "Where the logo in images/organizations/<slug>.svg|png came from"
+    },
     "parent": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$",

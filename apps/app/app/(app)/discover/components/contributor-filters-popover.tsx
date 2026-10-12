@@ -1,12 +1,14 @@
 "use client";
 
-import { SlidersHorizontalIcon, XIcon } from "lucide-react";
+import { CheckIcon, SearchIcon, SlidersHorizontalIcon, XIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CONTRIBUTOR_ROLE_LABELS, CONTRIBUTOR_ROLES } from "@/lib/content/types";
+import { useMediaQuery } from "@/lib/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 
 export type ContributorFilters = {
@@ -21,10 +23,10 @@ const MIN_CONTRIBUTION_OPTIONS = [0, 5, 10, 25];
 
 const chipClass = (on: boolean) =>
   cn(
-    "h-auto cursor-pointer rounded-full border px-3 py-1 text-xs shadow-none",
+    "inline-flex h-8 items-center gap-1 rounded-full border px-3 text-[13px] transition-colors",
     on
-      ? "border-secondary bg-secondary text-secondary-foreground hover:bg-secondary/80"
-      : "border-black/10 bg-white hover:border-black/50 hover:bg-white/50"
+      ? "border-secondary bg-secondary text-secondary-foreground"
+      : "border-black/12 bg-white/60 hover:border-black/40"
   );
 
 export function ContributorFiltersPopover({
@@ -39,6 +41,7 @@ export function ContributorFiltersPopover({
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<ContributorFilters>(applied);
   const [orgSearch, setOrgSearch] = useState("");
+  const isDesktop = useMediaQuery("(min-width: 640px)");
 
   const appliedCount =
     applied.roles.length + applied.organizations.length + (applied.minContributions > 0 ? 1 : 0);
@@ -47,7 +50,6 @@ export function ContributorFiltersPopover({
     () => affiliationOptions.filter((o) => o.name.toLowerCase().includes(orgSearch.toLowerCase())),
     [affiliationOptions, orgSearch]
   );
-  const orgName = (slug: string) => affiliationOptions.find((o) => o.slug === slug)?.name ?? slug;
 
   const toggle = (key: "roles" | "organizations", value: string) =>
     setDraft((d) => ({
@@ -55,166 +57,189 @@ export function ContributorFiltersPopover({
       [key]: d[key].includes(value) ? d[key].filter((v) => v !== value) : [...d[key], value],
     }));
 
-  return (
-    <Popover
-      onOpenChange={(next) => {
-        setOpen(next);
-        if (next) {
-          setDraft(applied);
-        }
-      }}
-      open={open}
-    >
-      <PopoverTrigger asChild>
-        <Button
-          className={cn(
-            "cursor-pointer border-black/10 bg-white font-normal shadow-none hover:border-black/50 active:bg-white",
-            appliedCount > 0 &&
-              "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:text-secondary-foreground"
-          )}
-          variant="outline"
-        >
-          <SlidersHorizontalIcon className="size-4" />
-          {appliedCount > 0 ? `Filters applied (${appliedCount})` : "Filter"}
-        </Button>
-      </PopoverTrigger>
+  const draftCount =
+    draft.roles.length + draft.organizations.length + (draft.minContributions > 0 ? 1 : 0);
 
-      <PopoverContent align="end" className="max-w-[calc(100vw-2rem)] p-0 sm:w-[480px]">
-        <div className="flex flex-col gap-5 p-4">
-          <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 font-semibold text-sm">Role</legend>
-            <div className="flex flex-wrap gap-1">
-              {CONTRIBUTOR_ROLES.map((role) => (
-                <Button
-                  className={chipClass(draft.roles.includes(role))}
+  const onOpenChange = (next: boolean) => {
+    setOpen(next);
+    if (next) {
+      setDraft(applied);
+      setOrgSearch("");
+    }
+  };
+
+  const triggerClass = cn(
+    "h-9 cursor-pointer border-transparent bg-transparent font-normal shadow-none hover:bg-black/5 data-popup-open:bg-black/5",
+    appliedCount > 0 && "font-medium"
+  );
+  const triggerLabel = (
+    <>
+      <SlidersHorizontalIcon className="size-4" />
+      {appliedCount > 0 ? `Filter · ${appliedCount}` : "Filter"}
+    </>
+  );
+
+  const panel = (
+    <div className="flex max-h-[min(80dvh,620px)] flex-col">
+      <div className="flex items-center justify-between gap-2 px-4 pt-4 pb-1">
+        <p className="font-semibold text-sm">
+          Filter contributors
+          {draftCount > 0 && (
+            <span className="ml-1.5 font-normal text-muted-foreground">
+              · {draftCount} selected
+            </span>
+          )}
+        </p>
+        {!isDesktop && (
+          <Button
+            aria-label="Close"
+            onClick={() => setOpen(false)}
+            size="icon"
+            type="button"
+            variant="ghost"
+          >
+            <XIcon />
+          </Button>
+        )}
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain p-4">
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+            Role
+          </legend>
+          <div className="flex flex-wrap gap-1">
+            {CONTRIBUTOR_ROLES.map((role) => {
+              const on = draft.roles.includes(role);
+              return (
+                <button
+                  aria-pressed={on}
+                  className={chipClass(on)}
                   key={role}
                   onClick={() => toggle("roles", role)}
-                  variant="outline"
-                >
-                  {CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS]}
-                </Button>
-              ))}
-            </div>
-          </fieldset>
-
-          {affiliationOptions.length > 0 && (
-            <fieldset className="flex flex-col gap-2">
-              <legend className="mb-2 font-semibold text-sm">Affiliation</legend>
-              <Input
-                aria-label="Search affiliations"
-                className="w-full rounded-full border border-black/10 bg-white text-sm shadow-none"
-                onChange={(e) => setOrgSearch(e.target.value)}
-                placeholder="Search schools, universities, organizations"
-                value={orgSearch}
-              />
-              <div className="flex max-h-[180px] flex-col overflow-y-auto rounded-sm border border-black/10 bg-stone-50 p-1">
-                {visibleOrgs.length > 0 ? (
-                  visibleOrgs.map((org) => (
-                    <label
-                      className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-white"
-                      key={org.slug}
-                    >
-                      <input
-                        checked={draft.organizations.includes(org.slug)}
-                        onChange={() => toggle("organizations", org.slug)}
-                        type="checkbox"
-                      />
-                      {org.name}
-                      <span className="ml-auto text-muted-foreground text-xs">{org.count}</span>
-                    </label>
-                  ))
-                ) : (
-                  <p className="px-2 py-1 text-muted-foreground text-xs">No organizations found</p>
-                )}
-              </div>
-            </fieldset>
-          )}
-
-          <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 font-semibold text-sm">Documented contributions</legend>
-            <div className="flex gap-0.5 self-start rounded-md bg-black/5 p-0.5">
-              {MIN_CONTRIBUTION_OPTIONS.map((min) => (
-                <button
-                  className={cn(
-                    "rounded px-3 py-1 text-xs",
-                    draft.minContributions === min
-                      ? "bg-white font-semibold"
-                      : "text-muted-foreground"
-                  )}
-                  key={min}
-                  onClick={() => setDraft((d) => ({ ...d, minContributions: min }))}
                   type="button"
                 >
-                  {min === 0 ? "Any" : `${min}+`}
+                  {on && <CheckIcon className="size-3.5" />}
+                  {CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS]}
                 </button>
-              ))}
+              );
+            })}
+          </div>
+        </fieldset>
+
+        {affiliationOptions.length > 0 && (
+          <fieldset className="flex flex-col gap-2">
+            <legend className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+              Affiliation
+            </legend>
+            {affiliationOptions.length > 6 && (
+              <InputGroup className="h-10">
+                <InputGroupAddon>
+                  <SearchIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  aria-label="Search affiliations"
+                  onChange={(e) => setOrgSearch(e.target.value)}
+                  placeholder="Search organizations"
+                  value={orgSearch}
+                />
+              </InputGroup>
+            )}
+            <div className="flex flex-col">
+              {visibleOrgs.length > 0 ? (
+                visibleOrgs.map((org) => (
+                  // biome-ignore lint/a11y/noLabelWithoutControl: the Checkbox inside is the control
+                  <label
+                    className="flex cursor-pointer items-center gap-3 rounded-md px-1 py-2 text-sm hover:bg-black/4"
+                    key={org.slug}
+                  >
+                    <Checkbox
+                      checked={draft.organizations.includes(org.slug)}
+                      onCheckedChange={() => toggle("organizations", org.slug)}
+                    />
+                    <span className="min-w-0 flex-1">{org.name}</span>
+                    <span className="text-muted-foreground text-xs tabular-nums">{org.count}</span>
+                  </label>
+                ))
+              ) : (
+                <p className="py-3 text-center text-muted-foreground text-sm">
+                  No organizations match "{orgSearch}"
+                </p>
+              )}
             </div>
           </fieldset>
+        )}
 
-          {(draft.roles.length > 0 || draft.organizations.length > 0) && (
-            <div className="flex flex-wrap gap-1">
-              {draft.roles.map((role) => (
-                <Badge
-                  className="h-auto border-black/10 px-3 py-1 text-xs"
-                  key={role}
-                  variant="secondary"
-                >
-                  {CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS]}
-                  <button
-                    aria-label={`Remove ${CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS]}`}
-                    className="cursor-pointer"
-                    onClick={() => toggle("roles", role)}
-                    type="button"
-                  >
-                    <XIcon className="ml-1 h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
-              {draft.organizations.map((slug) => (
-                <Badge
-                  className="h-auto border-black/10 px-3 py-1 text-xs"
-                  key={slug}
-                  variant="secondary"
-                >
-                  {orgName(slug)}
-                  <button
-                    aria-label={`Remove ${orgName(slug)}`}
-                    className="cursor-pointer"
-                    onClick={() => toggle("organizations", slug)}
-                    type="button"
-                  >
-                    <XIcon className="ml-1 h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
-            </div>
-          )}
-        </div>
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+            Documented contributions
+          </legend>
+          <div className="flex gap-0.5 self-start rounded-full bg-black/5 p-0.5">
+            {MIN_CONTRIBUTION_OPTIONS.map((min) => (
+              <button
+                aria-pressed={draft.minContributions === min}
+                className={cn(
+                  "h-8 rounded-full px-3.5 text-[13px]",
+                  draft.minContributions === min
+                    ? "bg-white font-semibold shadow-xs"
+                    : "text-muted-foreground"
+                )}
+                key={min}
+                onClick={() => setDraft((d) => ({ ...d, minContributions: min }))}
+                type="button"
+              >
+                {min === 0 ? "Any" : `${min}+`}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      </div>
 
-        <div className="flex flex-row items-center justify-between gap-2 border-black/10 border-t p-4">
-          <Button
-            className="cursor-pointer border-black/10 bg-transparent shadow-none"
-            onClick={() => {
-              const cleared = { roles: [], organizations: [], minContributions: 0 };
-              setDraft(cleared);
-              onApply(cleared);
-              setOpen(false);
-            }}
-            variant="outline"
-          >
-            Clear
-          </Button>
-          <Button
-            className="cursor-pointer shadow-none"
-            onClick={() => {
-              onApply(draft);
-              setOpen(false);
-            }}
-          >
-            Show results
-          </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
+      <div className="flex items-center justify-between gap-2 border-black/10 border-t px-4 py-3">
+        <Button
+          disabled={draftCount === 0}
+          onClick={() => setDraft({ roles: [], organizations: [], minContributions: 0 })}
+          type="button"
+          variant="ghost"
+        >
+          Clear
+        </Button>
+        <Button
+          className="flex-1 sm:flex-none"
+          onClick={() => {
+            onApply(draft);
+            setOpen(false);
+          }}
+          type="button"
+        >
+          Show results
+        </Button>
+      </div>
+    </div>
+  );
+
+  if (isDesktop) {
+    return (
+      <Popover onOpenChange={onOpenChange} open={open}>
+        <PopoverTrigger render={<Button className={triggerClass} variant="outline" />}>
+          {triggerLabel}
+        </PopoverTrigger>
+        <PopoverContent align="end" className="w-[420px] gap-0 p-0">
+          {panel}
+        </PopoverContent>
+      </Popover>
+    );
+  }
+
+  return (
+    <Drawer onOpenChange={onOpenChange} open={open}>
+      <DrawerTrigger render={<Button className={triggerClass} variant="outline" />}>
+        {triggerLabel}
+      </DrawerTrigger>
+      <DrawerContent className="bg-background">
+        <DrawerTitle className="sr-only">Filter contributors</DrawerTitle>
+        {panel}
+      </DrawerContent>
+    </Drawer>
   );
 }

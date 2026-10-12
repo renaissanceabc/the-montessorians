@@ -2,6 +2,7 @@ import yaml from "js-yaml";
 import { z } from "zod";
 import { CONTRIBUTOR_ROLES, LINK_TYPES, SOURCE_TYPES } from "@/lib/content/types";
 import { githubIssueUrl } from "@/lib/url";
+import { toTitleCase } from "@/lib/utils";
 
 // A "suggest a Montessorian" submission. Shared by the contribute form (client)
 // and /api/submit (server), and mirrors profile.schema.json — minus `id`, which
@@ -13,11 +14,21 @@ const optionalText = (max?: number) =>
     (max ? z.string().trim().max(max) : z.string().trim()).optional()
   );
 
-const url = z.string().trim().url();
+const url = z.string().trim().url("Enter a full link, starting with https://");
+
+const organizationRef = z.object({
+  /** Existing organization slug; omitted for a new organization */
+  organization: z.string().optional(),
+  name: z.string().trim().min(2),
+  role: optionalText(120),
+});
 
 export const submissionSchema = z
   .object({
-    kind: z.enum(["alum", "contributor"]),
+    kinds: z
+      .array(z.enum(["alum", "contributor"]))
+      .min(1, "Pick at least one")
+      .max(2),
     name: z.string().trim().min(2, "Add their full name").max(120),
     tagline: z
       .string()
@@ -27,6 +38,8 @@ export const submissionSchema = z
       .refine((t) => !t.endsWith("."), "Taglines don't end with a period"),
     tags: z.array(z.string().trim().min(1)).min(1, "Add at least one tag").max(8),
     roles: z.array(z.enum(CONTRIBUTOR_ROLES)).optional(),
+    schools: z.array(organizationRef).optional(),
+    affiliations: z.array(organizationRef).optional(),
     sources: z
       .array(
         z.object({
@@ -47,22 +60,37 @@ export const submissionSchema = z
     links: z.array(z.object({ type: z.enum(LINK_TYPES), url })).optional(),
   })
   .superRefine((value, ctx) => {
-    if (value.kind === "contributor" && !value.roles?.length) {
-      ctx.addIssue({ code: "custom", path: ["roles"], message: "Pick at least one role" });
-    }
-    for (const [i, source] of value.sources.entries()) {
-      if (source.type === "personal-knowledge" ? !source.note : !source.url) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["sources", i],
-          message:
-            source.type === "personal-knowledge"
-              ? "Tell us how you know them"
-              : "Add a link to the source",
-        });
-      }
+    for (const issue of crossFieldIssues(value)) {
+      ctx.addIssue({ code: "custom", ...issue });
     }
   });
+
+type CrossFieldInput = {
+  kinds?: string[];
+  roles?: string[];
+  sources?: { type?: string; url?: string; note?: string }[];
+};
+
+/**
+ * Checks that span fields. Exported because zod skips object refinements while
+ * any field is invalid; the form runs these itself so every problem shows at once.
+ */
+export function crossFieldIssues(value: CrossFieldInput) {
+  const issues: { path: (string | number)[]; message: string }[] = [];
+  if (value.kinds?.includes("contributor") && !value.roles?.length) {
+    issues.push({ path: ["roles"], message: "Pick at least one role" });
+  }
+  for (const [i, source] of (value.sources ?? []).entries()) {
+    const personal = source.type === "personal-knowledge";
+    if (personal ? !source.note?.trim() : !source.url?.trim()) {
+      issues.push({
+        path: ["sources", i],
+        message: personal ? "Tell us how you know them" : "Add a link to the source",
+      });
+    }
+  }
+  return issues;
+}
 
 export type Submission = z.infer<typeof submissionSchema>;
 
@@ -76,20 +104,43 @@ export const slugify = (name: string) =>
 
 const tagSlug = (tag: string) => slugify(tag);
 
+/** New organizations named in a submission, which maintainers add to data/organizations. */
+export function newOrganizations(s: Submission): string[] {
+  return [...(s.schools ?? []), ...(s.affiliations ?? [])]
+    .filter((o) => !o.organization)
+    .map((o) => o.name);
+}
+
+const toRefs = (refs: Submission["schools"]) =>
+  refs?.map((r) => ({
+    organization: r.organization ?? slugify(r.name),
+    ...(r.role ? { role: r.role } : {}),
+  }));
+
 /** The profile YAML a maintainer would commit, minus the id. */
 export function submissionToYaml(s: Submission): string {
-  const isContributor = s.kind === "contributor";
+  const isAlum = s.kinds.includes("alum");
+  const isContributor = s.kinds.includes("contributor");
   const doc: Record<string, unknown> = {
     name: s.name,
     slug: slugify(s.name),
-    ...(isContributor ? { kind: "contributor", roles: s.roles } : {}),
+    ...(isContributor
+      ? { kind: isAlum ? ["alum", "contributor"] : "contributor", roles: s.roles }
+      : {}),
     tagline: s.tagline,
     bio: s.bio,
     tags: s.tags.map(tagSlug),
-    ...(isContributor ? {} : { education: ["montessori"], education_notes: s.education_notes }),
+    ...(isAlum
+      ? {
+          education: ["montessori"],
+          education_notes: s.education_notes,
+          schools: toRefs(s.schools),
+        }
+      : {}),
     montessori_notes: isContributor ? s.montessori_notes : undefined,
+    affiliations: toRefs(s.affiliations),
     contributions: isContributor ? s.contributions : undefined,
-    notable_achievements: isContributor ? undefined : s.notable_achievements,
+    notable_achievements: isAlum ? s.notable_achievements : undefined,
     quotes: s.quotes,
     sources: s.sources,
     verification: s.sources.some((src) => src.type === "personal-knowledge")
@@ -101,22 +152,47 @@ export function submissionToYaml(s: Submission): string {
   const clean = Object.fromEntries(
     Object.entries(doc).filter(([, v]) => v !== undefined && !(Array.isArray(v) && v.length === 0))
   );
-  return `id: # assigned by maintainers (bun run id:next)\n${yaml.dump(clean, { lineWidth: 120 })}`;
+  const added = newOrganizations(s);
+  const note = added.length
+    ? `# New organizations for maintainers to add: ${added.join(", ")}\n`
+    : "";
+  return `id: # assigned by maintainers (bun run id:next)\n${yaml.dump(clean, { lineWidth: 120 })}${note}`;
 }
 
-/** Parse YAML typed into the form's YAML mode back into a submission. */
-export function yamlToSubmission(text: string): unknown {
+/**
+ * Parse YAML typed into the form's YAML mode back into a submission. Slugs not
+ * in `knownOrganizations` are treated as new organizations.
+ */
+export function yamlToSubmission(
+  text: string,
+  knownOrganizations: Map<string, string> = new Map()
+): unknown {
   const doc = (yaml.load(text) ?? {}) as Record<string, unknown>;
+  const kinds = [doc.kind ?? "alum"].flat().filter((k) => k === "alum" || k === "contributor");
+  const fromRefs = (refs: unknown) =>
+    Array.isArray(refs)
+      ? refs.map((ref: { organization?: unknown; role?: unknown }) => {
+          const slug = String(ref?.organization ?? "");
+          const known = knownOrganizations.get(slug);
+          return {
+            organization: known ? slug : undefined,
+            name: known ?? toTitleCase(slug.replace(/-/g, " ")),
+            role: ref?.role,
+          };
+        })
+      : undefined;
   return {
     ...doc,
-    kind: doc.kind === "contributor" ? "contributor" : "alum",
+    schools: fromRefs(doc.schools),
+    affiliations: fromRefs(doc.affiliations),
+    kinds: kinds.length ? kinds : ["alum"],
     tags: Array.isArray(doc.tags) ? doc.tags.map(String) : [],
     sources: Array.isArray(doc.sources) ? doc.sources : [],
   };
 }
 
-export function issueTitle(s: Pick<Submission, "kind" | "name">) {
-  return `${s.kind === "contributor" ? "New contributor" : "New profile"}: ${s.name}`;
+export function issueTitle(s: Pick<Submission, "kinds" | "name">) {
+  return `${s.kinds.includes("contributor") ? "New contributor" : "New profile"}: ${s.name}`;
 }
 
 export function issueBody(s: Submission): string {
@@ -127,6 +203,9 @@ export function issueBody(s: Submission): string {
     submissionToYaml(s).trimEnd(),
     "```",
     "",
+    ...(newOrganizations(s).length
+      ? [`**New organizations to add:** ${newOrganizations(s).join(", ")}`, ""]
+      : []),
     "**Maintainer checklist**",
     "- [ ] Not a duplicate (search the directory and `bun run validate`)",
     "- [ ] Sources support the Montessori connection",
@@ -136,11 +215,11 @@ export function issueBody(s: Submission): string {
 }
 
 /** Prefilled GitHub issue (issue form 01_profile_request.yml), for the GitHub route. */
-export function githubSubmissionUrl(s: Partial<Submission> & { kind: Submission["kind"] }) {
+export function githubSubmissionUrl(s: Partial<Submission> & { kinds: Submission["kinds"] }) {
   const firstSource = s.sources?.[0];
   return githubIssueUrl("01_profile_request.yml", {
-    title: s.name ? issueTitle({ kind: s.kind, name: s.name }) : undefined,
-    kind: s.kind === "contributor" ? "Contributed to the field" : "Attended Montessori",
+    title: s.name ? issueTitle({ kinds: s.kinds, name: s.name }) : undefined,
+    kind: s.kinds.includes("contributor") ? "Contributed to the field" : "Attended Montessori",
     name: s.name,
     tagline: s.tagline,
     tags: s.tags?.join(", "),

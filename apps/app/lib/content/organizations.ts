@@ -10,10 +10,10 @@ const BY_ID = new Map(ALL.map((o) => [o.id, o]));
 
 export const ORGANIZATION_TYPE_LABELS: Record<Organization["type"], string> = {
   school: "School",
-  "training-center": "Training center",
+  "training-center": "Training Center",
   university: "University",
   association: "Association",
-  "research-center": "Research center",
+  "research-center": "Research Center",
   publisher: "Publisher",
   other: "Organization",
 };

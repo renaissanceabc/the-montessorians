@@ -1,15 +1,14 @@
-import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { contributionUrl, identifierEntries, idUrl, personJsonLd } from "@/lib/content/authority";
-import { getOrganizationBySlug } from "@/lib/content/organizations";
-import { getAllSlugs, getProfileWithAdjacent } from "@/lib/content/profiles";
+import { getAllSlugs, getProfileWithAdjacent, getRelatedPeople } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { correctionUrl } from "@/lib/url";
-import { siteUrl, toTitleCase } from "@/lib/utils";
+import { siteUrl } from "@/lib/utils";
 import ProfileActions from "./components/profile-actions";
-import ProfileDetails, { type OrganizationLabel } from "./components/profile-details";
+import ProfileDetails from "./components/profile-details";
+import { ProfileHeader } from "./components/profile-header";
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -53,52 +52,54 @@ export default async function ProfilePage(props: { params: Promise<{ slug: strin
   const { profile, previous, next } = data;
   const isContributor = profile.kind === "contributor";
 
-  const organizations: Record<string, OrganizationLabel> = {};
-  for (const ref of [...profile.schools, ...profile.affiliations]) {
-    const org = getOrganizationBySlug(ref.organization);
-    if (org) {
-      organizations[org.slug] = { slug: org.slug, name: org.name };
+  const contributions = profile.contributions.map((c) => {
+    const href = contributionUrl(c);
+    let host: string | null = null;
+    try {
+      host = href ? new URL(href).hostname.replace(/^www\./, "") : null;
+    } catch {
+      host = null;
     }
-  }
+    return { ...c, href, host };
+  });
 
-  const contributions = profile.contributions.map((c) => ({
-    title: c.title,
-    meta: [c.venue ?? (c.type === "book" ? "Book" : toTitleCase(c.type)), c.year]
-      .filter(Boolean)
-      .join(", "),
-    url: contributionUrl(c),
-  }));
-
+  const permanentUrl = idUrl(profile.id);
   const jsonLd = personJsonLd(profile);
 
   return (
     <>
-      <div className="container mx-auto flex max-w-3xl flex-row items-center justify-between gap-10 px-4 pt-8 pb-12 sm:px-8 lg:pt-0">
-        <div className="grid w-full items-center justify-items-center gap-10">
-          <Link
-            className="flex flex-row items-center gap-2 text-muted-foreground text-sm hover:underline"
-            href={isContributor ? "/contributors" : "/discover"}
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            {isContributor ? "Back to Contributors" : "Back to Montessorians"}
-          </Link>
+      <div className="container mx-auto flex max-w-3xl flex-col items-center gap-9 px-4 pt-8 pb-12 sm:px-8 lg:pt-0">
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/discover" },
+            isContributor
+              ? { label: "Contributors", href: "/contributors" }
+              : { label: "Alumni", href: "/alumni" },
+            { label: profile.name },
+          ]}
+        />
 
-          <ProfileDetails
-            contributions={contributions}
-            correctionUrl={correctionUrl(profile)}
-            identifiers={identifierEntries(profile.identifiers).map(({ label, value, url }) => ({
-              label,
-              value,
-              url,
-            }))}
-            organizations={organizations}
-            permanentUrl={idUrl(profile.id)}
-            profile={profile}
-          />
+        <ProfileHeader
+          correctionUrl={correctionUrl(profile)}
+          permanentUrl={permanentUrl}
+          profile={profile}
+        />
 
-          <Separator className="bg-black/10" />
-          <ProfileActions next={next} previous={previous} />
-        </div>
+        <ProfileDetails
+          contributions={contributions}
+          correctionUrl={correctionUrl(profile)}
+          identifiers={identifierEntries(profile.identifiers).map(({ label, value, url }) => ({
+            label,
+            value,
+            url,
+          }))}
+          permanentId={{ value: profile.id, url: permanentUrl }}
+          profile={profile}
+          related={getRelatedPeople(profile)}
+        />
+
+        <Separator className="bg-black/10" />
+        <ProfileActions next={next} previous={previous} />
       </div>
 
       <script

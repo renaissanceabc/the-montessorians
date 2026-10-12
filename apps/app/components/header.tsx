@@ -1,12 +1,11 @@
 "use client";
 
-import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/discover", label: "Discover" },
-  { href: "/contributors", label: "Contributors" },
   { href: "/about", label: "About" },
 ];
 
@@ -23,7 +22,7 @@ export default function Header() {
   return (
     <header className="sticky top-2 z-100 w-full px-3 sm:top-4 sm:my-4 sm:px-4 lg:top-8 lg:my-8 lg:px-8">
       <div
-        className={clsx(
+        className={cn(
           "container mx-auto flex max-w-screen-md flex-row items-center justify-between gap-3 rounded-full border border-transparent px-6 py-3 backdrop-blur-lg transition-colors duration-300 sm:gap-4 sm:py-4 lg:px-8 lg:py-6",
           {
             "bg-black/7": isSticky,

@@ -1,19 +1,12 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
 const WWW_REGEX = /^www\./;
 const TRAILING_SLASH_REGEX = /\/$/;
 const URL_CLEANUP_REGEX = /^(https?:\/\/)?/;
 const URL_SPLIT_REGEX = /[/?#]/;
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+export { cn } from "cn";
 
-export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`) ??
-  "http://localhost:3010";
+/** Set in next.config from the Vercel, portless, or localhost URL. */
+export const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
 
 // For API calls, always use relative URLs to avoid cross-domain issues
 export const baseUrl = "";

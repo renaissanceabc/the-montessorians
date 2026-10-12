@@ -44,7 +44,9 @@ export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profil
       >
         <Avatar className="h-24 w-24 rounded-full lg:h-32 lg:w-32">
           <AvatarImage alt={dailyProfile.name} src={dailyProfile.imageUrl ?? ""} />
-          <AvatarFallback>{dailyProfile.name.charAt(0).toUpperCase()}</AvatarFallback>
+          <AvatarFallback className="font-serif text-4xl lg:text-5xl">
+            {dailyProfile.name.charAt(0).toUpperCase()}
+          </AvatarFallback>
         </Avatar>
 
         <div className="flex flex-col items-center gap-2 text-center">

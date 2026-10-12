@@ -50,15 +50,15 @@ export default function Footer() {
             </div>
 
             <Badge
-              asChild
               className="flex gap-2 border border-white/20 bg-white/10 text-primary-foreground transition-colors duration-150 [a&]:hover:border-white/25 [a&]:hover:bg-white/18"
+              render={
+                <Link
+                  href="https://renaissance.education?utm_source=the_montessorians&utm_medium=footer"
+                  target="_blank"
+                />
+              }
             >
-              <Link
-                href="https://renaissance.education?utm_source=the_montessorians&utm_medium=footer"
-                target="_blank"
-              >
-                Made by Renaissance
-              </Link>
+              Made by Renaissance
             </Badge>
           </div>
 

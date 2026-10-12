@@ -36,7 +36,7 @@ export default function Home() {
             <h2 className="font-bold text-xl">Montessorians</h2>
             <Link
               className="flex flex-row items-center gap-1 font-semibold text-sm hover:underline"
-              href="/discover"
+              href="/alumni"
             >
               See all <ArrowRightIcon className="h-4 w-4" />
             </Link>

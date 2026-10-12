@@ -21,7 +21,7 @@ export default function About() {
           About us
         </h1>
 
-        <div className="prose prose-stone">
+        <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none">
           <p className="lead text-primary">
             <strong className="text-primary">The Montessorians</strong> is the largest open source
             dataset of Montessori alumni who've gone on to do great things.

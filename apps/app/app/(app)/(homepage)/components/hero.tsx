@@ -1,4 +1,4 @@
-import { LayoutGridIcon } from "lucide-react";
+import { SearchIcon, UserPlusIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Profile } from "@/lib/content/types";
@@ -21,15 +21,25 @@ export default function Hero({ dailyProfile }: { dailyProfile: Profile | null })
           </div>
 
           <div className="flex flex-col gap-2 md:flex-row">
-            <Button asChild className="shadow-none" size="lg">
-              <Link href="/discover">
-                <LayoutGridIcon className="h-4 w-4" />
-                Get inspired
-              </Link>
+            <Button
+              className="shadow-none"
+              nativeButton={false}
+              render={<Link href="/discover" />}
+              size="lg"
+            >
+              <SearchIcon className="h-4 w-4" />
+              Explore the directory
             </Button>
 
-            <Button asChild className="border-black/10 shadow-none" size="lg" variant="outline">
-              <Link href="/contribute">Contribute</Link>
+            <Button
+              className="border-black/10 shadow-none"
+              nativeButton={false}
+              render={<Link href="/contribute" />}
+              size="lg"
+              variant="outline"
+            >
+              <UserPlusIcon className="h-4 w-4" />
+              Contribute
             </Button>
           </div>
         </div>

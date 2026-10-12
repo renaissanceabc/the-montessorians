@@ -72,6 +72,32 @@ function schemaErrors(validate, doc) {
 
 // --- Organizations -----------------------------------------------------------
 
+// Logos are optional: images/organizations/<slug>.svg or .png. SVGs are served
+// from the site's origin, so they must be static images.
+const logoDir = path.join(imageDir, "organizations");
+const UNSAFE_SVG = [/<script/i, /\son[a-z]+\s*=/i, /javascript:/i, /<foreignObject/i];
+function logoErrors(slug) {
+  if (!slug || !fs.existsSync(logoDir)) {
+    return [];
+  }
+  const files = fs.readdirSync(logoDir).filter((name) => name.split(".")[0] === slug);
+  const errors = [];
+  for (const name of files) {
+    if (!/\.(svg|png)$/.test(name)) {
+      errors.push(`Logo must be .svg or .png: images/organizations/${name}`);
+    } else if (name.endsWith(".svg")) {
+      const svg = fs.readFileSync(path.join(logoDir, name), "utf8");
+      if (UNSAFE_SVG.some((re) => re.test(svg))) {
+        errors.push(`Logo SVG contains scripts or event handlers: images/organizations/${name}`);
+      }
+    }
+  }
+  if (files.length > 1) {
+    errors.push(`More than one logo for "${slug}": ${files.join(", ")}`);
+  }
+  return errors;
+}
+
 const orgs = [];
 for (const file of yamlFiles(orgDir)) {
   const doc = yaml.load(fs.readFileSync(path.join(orgDir, file), "utf8"));
@@ -81,6 +107,9 @@ for (const file of yamlFiles(orgDir)) {
   }
   if (doc?.slug && `${doc.slug}.yaml` !== file) {
     report(label, `slug "${doc.slug}" does not match filename`);
+  }
+  for (const message of logoErrors(doc?.slug)) {
+    report(label, message);
   }
   orgs.push({ file: label, doc });
 }

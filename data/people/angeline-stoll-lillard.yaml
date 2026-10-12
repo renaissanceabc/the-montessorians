@@ -24,6 +24,13 @@ affiliations:
     role: Commonwealth Professor of Psychology
     from: 1996
 contributions:
+  - title: Pretend Play Skills and the Child's Theory of Mind
+    type: article
+    year: 1993
+    venue: Child Development
+    doi: 10.2307/1131255
+    authors:
+      - Angeline S. Lillard
   - title: "Montessori: The Science Behind the Genius"
     type: book
     year: 2005
@@ -37,18 +44,31 @@ contributions:
     authors:
       - Angeline Lillard
       - Nicole Else-Quest
-  - title: "Montessori Preschool Elevates and Equalizes Child Outcomes: A Longitudinal Study"
+  - title: How Important Are the Montessori Materials?
     type: article
-    year: 2017
-    venue: Frontiers in Psychology
-    doi: 10.3389/fpsyg.2017.01783
-    authors:
-      - Angeline S. Lillard
-      - Megan J. Heise
-      - Eve M. Richey
-      - Xin Tong
-      - Alyssa Hart
-      - Paige M. Bray
+    year: 2008
+    venue: Montessori Life
+    url: https://eric.ed.gov/?id=EJ819577
+  - title: "Mindfulness Practices in Education: Montessori’s Approach"
+    type: article
+    year: 2011
+    venue: Mindfulness
+    doi: 10.1007/s12671-011-0045-6
+  - title: What Belongs in a Montessori Primary Classroom? Results from a Survey of AMI and AMS Teacher Trainers
+    type: article
+    year: 2011
+    venue: Montessori Life
+    url: https://eric.ed.gov/?id=EJ957115
+  - title: Preschool children's development in classic Montessori, supplemented Montessori, and conventional programs
+    type: article
+    year: 2012
+    venue: Journal of School Psychology
+    doi: 10.1016/j.jsp.2012.01.001
+  - title: Playful Learning and Montessori Education
+    type: article
+    year: 2013
+    venue: American Journal of Play
+    url: https://eric.ed.gov/?id=EJ1003949
   - title: "The impact of pretend play on children's development: A review of the evidence"
     type: article
     year: 2013
@@ -61,12 +81,248 @@ contributions:
       - Rebecca A. Dore
       - Eric D. Smith
       - Carolyn M. Palmquist
-  - title: Pretend Play Skills and the Child's Theory of Mind
+  - title:
+      "An Intervention Study: Removing Supplemented Materials from Montessori Classrooms Associated with Better Child
+      Outcomes"
     type: article
-    year: 1993
-    venue: Child Development
-    doi: 10.2307/1131255
+    year: 2016
+    venue: Journal of Montessori Research
+    doi: 10.17161/jomr.v2i1.5678
     authors:
+      - Angeline S. Lillard
+      - Megan J. Heise
+  - title: "Why Montessori is a facilitative environment for theory of mind: three speculations"
+    type: chapter
+    year: 2016
+    url: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315749181-12/montessori-facilitative-environment-theory-mind-three-speculations-angeline-lillard-sierra-eisen
+    authors:
+      - Angeline S. Lillard
+      - Sierra Eisen
+  - title: "Montessori Preschool Elevates and Equalizes Child Outcomes: A Longitudinal Study"
+    type: article
+    year: 2017
+    venue: Frontiers in Psychology
+    doi: 10.3389/fpsyg.2017.01783
+    authors:
+      - Angeline S. Lillard
+      - Megan J. Heise
+      - Eve M. Richey
+      - Xin Tong
+      - Alyssa Hart
+      - Paige M. Bray
+  - title: "Rethinking Education: Montessori’s Approach"
+    type: article
+    year: 2018
+    venue: Current Directions in Psychological Science
+    doi: 10.1177/0963721418769878
+  - title: "Children’s preference for real activities: Even stronger in the Montessori Children’s House"
+    type: article
+    year: 2018
+    venue: Journal of Montessori Research
+    doi: 10.17161/jomr.v4i2.7586
+    authors:
+      - Jessica Taggart
+      - Eren Fukuda
+      - Angeline Stoll Lillard
+  - title: "Pretend Play and Fantasy: What if Montessori Was Right?"
+    type: article
+    year: 2019
+    venue: Child Development Perspectives
+    doi: 10.1111/cdep.12314
+    authors:
+      - Angeline S. Lillard
+      - Jessica Taggart
+  - title: "Shunned and Admired: Montessori, Self-Determination, and a Case for Radical School Reform"
+    type: article
+    year: 2019
+    venue: Educational Psychology Review
+    doi: 10.1007/s10648-019-09483-3
+  - title: "Authentic Montessori: The Dottoressa’s View at the End of Her Life Part I: The Environment"
+    type: article
+    year: 2019
+    venue: Journal of Montessori Research
+    doi: 10.17161/jomr.v5i1.7716
+    authors:
+      - Angeline S. Lillard
+      - Virginia McHugh
+  - title: "Authentic Montessori: The Dotteressa’s View at the End of Her Life Part II: The Teacher and the Child"
+    type: article
+    year: 2019
+    venue: Journal of Montessori Research
+    doi: 10.17161/jomr.v5i1.9753
+    authors:
+      - Angeline S. Lillard
+      - Virginia McHugh
+  - title: Montessori as an alternative early childhood education
+    type: article
+    year: 2020
+    venue: Early Child Development and Care
+    doi: 10.1080/03004430.2020.1832998
+  - title: Math achievement outcomes associated with Montessori education
+    type: article
+    year: 2021
+    venue: Early Child Development and Care
+    doi: 10.1080/03004430.2020.1860955
+    authors:
+      - Abha Basargekar
+      - Angeline S. Lillard
+  - title: Standardized Test Proficiency in Public Montessori Schools
+    type: article
+    year: 2021
+    venue: Journal of School Choice
+    doi: 10.1080/15582159.2021.1958058
+    authors:
+      - Allyson L. Snyder
+      - Xin Tong
+      - Angeline S. Lillard
+  - title: An Association Between Montessori Education in Childhood and Adult Wellbeing
+    type: article
+    year: 2021
+    venue: Frontiers in Psychology
+    doi: 10.3389/fpsyg.2021.721943
+    authors:
+      - Angeline S. Lillard
+      - M. Joseph Meyer
+      - Dermina Vasc
+      - Eren Fukuda
+  - title:
+      "Reimagining Assessment in a Large Lecture: An Alternative Approach Inspired by Thomas Jefferson and Maria
+      Montessori"
+    type: article
+    year: 2022
+    venue: College Teaching
+    doi: 10.1080/87567555.2022.2140097
+    authors:
+      - Angeline S. Lillard
+      - Jessica Taggart
+  - title:
+      "“My Name Is Sally Brown, and I Hate School!”: A retrospective study of school liking among conventional and
+      Montessori school alumni"
+    type: article
+    year: 2022
+    venue: Psychology in the Schools
+    doi: 10.1002/pits.22777
+    authors:
+      - Allyson Snyder
+      - Lee LeBoeuf
+      - Angeline S. Lillard
+  - title: Rates of chronic absenteeism in Montessori and non-Montessori Title 1 schools
+    type: article
+    year: 2023
+    venue: Frontiers in Education
+    doi: 10.3389/feduc.2023.1059071
+    authors:
+      - Lee LeBoeuf
+      - Jacob Goldstein-Greenwood
+      - Angeline S. Lillard
+  - title: "Montessori education's impact on academic and nonacademic outcomes: A systematic review"
+    type: article
+    year: 2023
+    venue: Campbell Systematic Reviews
+    doi: 10.1002/cl2.1330
+    authors:
+      - Justus J. Randolph
+      - Anaya Bryson
+      - Lakshmi Menon
+      - David K. Henderson
+      - Austin Kureethara Manuel
+      - Stephen Michaels
+      - Debra Leigh Walls Rosenstein
+      - Warren McPherson
+      - Rebecca O'Grady
+      - Angeline S. Lillard
+  - title:
+      "Multilevel Modeling Resolves Ambiguities in Analyses of Discipline Disproportionality: A Demonstration Comparing
+      Title 1 Montessori and Non-Montessori Schools"
+    type: article
+    year: 2023
+    venue: Journal of Research on Educational Effectiveness
+    doi: 10.1080/19345747.2023.2186991
+    authors:
+      - Lee LeBoeuf
+      - Jacob Goldstein-Greenwood
+      - Angeline S. Lillard
+  - title: Motivation and Self-Determination in Montessori Education
+    type: chapter
+    year: 2023
+    venue: The Bloomsbury Handbook of Montessori Education
+    doi: 10.5040/9781350275638.ch-26
+    authors:
+      - Abha Basargekar
+      - Angeline S. Lillard
+  - title:
+      "Seeking Racial and Ethnic Parity in Preschool Outcomes: An Exploratory Study of Public Montessori Schools vs.
+      Business-as-Usual Schools"
+    type: article
+    year: 2023
+    venue: Journal of Montessori Research
+    doi: 10.17161/jomr.v9i1.19540
+    authors:
+      - Angeline S. Lillard
+      - Xin Tong
+      - Paige M. Bray
+  - title: "When bigger looks better: CLASS results in public Montessori preschool classrooms"
+    type: article
+    year: 2025
+    venue: Early Childhood Research Quarterly
+    doi: 10.1016/j.ecresq.2024.10.003
+    authors:
+      - Angeline S. Lillard
+      - Lee LeBoeuf
+      - Corey Borgman
+      - Elena Martynova
+      - Ann-Marie Faria
+      - Karen Manship
+  - title: "Perfect timing: sensitive periods for Montessori education and long-term wellbeing"
+    type: article
+    year: 2025
+    venue: Frontiers in Developmental Psychology
+    doi: 10.3389/fdpys.2025.1546451
+    authors:
+      - Angeline S. Lillard
+      - Richard Hua Jiang
+      - Xin Tong
+  - title:
+      A national randomized controlled trial of the impact of public Montessori preschool at the end of kindergarten
+    type: article
+    year: 2025
+    venue: Proceedings of the National Academy of Sciences
+    doi: 10.1073/pnas.2506130122
+    authors:
+      - Angeline S. Lillard
+      - David Loeb
+      - Juliette Berg
+      - Maya Escueta
+      - Karen Manship
+      - Alison Hauser
+      - Emily D. Daggett
+  - title: "The Montessori Difference: Considering the Evidence"
+    type: book
+    year: 2026
+    venue: Oxford University Press
+    doi: 10.1093/oso/9780198899853.001.0001
+  - title:
+      "Play as the meaningful work of childhood: views from evolutionary science, Indigenous cultures, and Montessori
+      pedagogy"
+    type: article
+    year: 2026
+    venue: Frontiers in Education
+    doi: 10.3389/feduc.2026.1895209
+    authors:
+      - Mariah A. Griffin
+      - Angeline S. Lillard
+  - title:
+      "Development and Validation of the TLOS: A Measure of Child-Centered and Adult-Centered Learning Orientations and
+      Its Revelations About Montessori Versus Conventional Pedagogy"
+    type: article
+    year: 2026
+    venue: Journal of Psychoeducational Assessment
+    doi: 10.1177/07342829261494068
+    authors:
+      - Christina M. Carroll
+      - Virginia E. Vitiello
+      - Libby M. Garrett
+      - Emily D. Daggett
       - Angeline S. Lillard
 sources:
   - type: authority
@@ -82,3 +338,4 @@ identifiers:
   wikidata: Q28458519
   orcid: 0000-0001-9697-6611
   isni: "0000000109029668"
+image_credit: Photo by UVA-CDL, via Wikimedia Commons (CC BY-SA 4.0)

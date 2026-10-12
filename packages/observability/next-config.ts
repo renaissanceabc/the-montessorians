@@ -46,6 +46,11 @@ export const withSentry = (sourceConfig: object): object => {
   return withSentryConfig(configWithTranspile, sentryConfig);
 };
 
-export const withLogging = (config: object): object => {
-  return withLogtail(config);
-};
+/** Better Stack (Logtail) only when its key is set — e.g. not on local dev. */
+export const loggingEnabled = Boolean(keys().BETTERSTACK_API_KEY);
+
+/** Sentry only when a DSN is set. */
+export const sentryEnabled = Boolean(keys().NEXT_PUBLIC_SENTRY_DSN);
+
+export const withLogging = (config: object): object =>
+  loggingEnabled ? withLogtail(config) : { ...config };

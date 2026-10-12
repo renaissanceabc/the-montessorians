@@ -101,6 +101,12 @@ contributions:
 [`profile.schema.json`](./profile.schema.json) and [`organization.schema.json`](./organization.schema.json) list every
 field.
 
+To find a contributor's Montessori-related works, run `bun run contributions:index -- <slug>` (or `-- --all`). It
+searches OpenAlex, Crossref, Open Library, and ERIC using the profile's names and identifiers, skips works already
+listed, and prints candidate `contributions` entries with where each came from. It doesn't change any files: check each
+candidate against its record, keep one entry per work (the first publication, not reprints or translations), and copy
+the ones that hold up into the profile. Set `INDEXER_CONTACT_EMAIL` if you want to send the APIs a contact address.
+
 ---
 
 ## ✅ Contribution Tips

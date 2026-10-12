@@ -1,406 +1,505 @@
 "use client";
 
-import { CheckIcon, CopyIcon, LinkIcon, NewspaperIcon, ShareIcon } from "lucide-react";
+import {
+  ArrowUpRightIcon,
+  BookIcon,
+  Building2Icon,
+  FileTextIcon,
+  GlobeIcon,
+  GraduationCapIcon,
+  InfoIcon,
+  LandmarkIcon,
+  LinkIcon,
+  MessageCircleIcon,
+  MicIcon,
+  NewspaperIcon,
+  PresentationIcon,
+  TrophyIcon,
+  UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { type ReactNode, useState } from "react";
-import { toast } from "sonner";
-import {
-  ImdbIcon,
-  InstagramIcon,
-  LinkedInIcon,
-  TikTokIcon,
-  WikipediaIcon,
-  XIcon,
-  YouTubeIcon,
-} from "@/components/icons";
-import { ShareDialogTrigger } from "@/components/share-dialog-trigger";
+import { OrgLogo } from "@/components/org-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import type { ProfilePage } from "@/lib/content/types";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { HowWeVerify } from "@/components/verification";
+import type {
+  Contribution,
+  OrganizationRef,
+  Profile,
+  RelatedPerson,
+  Source,
+} from "@/lib/content/types";
 import { prettyUrl, toTitleCase } from "@/lib/utils";
 
 /** Contributions shown before "Show all". */
 const CONTRIBUTIONS_PREVIEW = 3;
-/** Tags shown under the name. */
-const MAX_TAGS = 3;
+/** Co-authors named before "and N others". */
+const COAUTHORS_SHOWN = 2;
 
-export type OrganizationLabel = { slug: string; name: string };
 export type IdentifierLink = { label: string; value: string; url: string };
-export type ContributionLink = {
-  title: string;
-  meta: string;
-  url: string | null;
+export type ContributionLink = Contribution & { href: string | null; host: string | null };
+
+const RELATION_LABELS: Record<RelatedPerson["relation"], string> = {
+  coauthor: "Co-author",
+  parent: "Parent",
+  child: "Child",
+  sibling: "Sibling",
+  spouse: "Spouse",
+  trained_by: "Trained under",
+  trained: "Trained",
+  advisor: "Doctoral advisor",
+  advisee: "Advised",
+  colleague: "Colleague",
 };
 
-const SOURCE_LABELS: Record<string, string> = {
+const SOURCE_LABELS: Record<Source["type"], string> = {
   wikipedia: "Wikipedia",
-  article: "Article or interview",
-  social: "Social post",
+  article: "Article",
+  social: "Post",
   publication: "Publication",
-  authority: "Authority record",
+  authority: "Library record",
   "personal-knowledge": "Personal knowledge",
   other: "Source",
 };
 
-const VERIFICATION_LABELS: Record<string, string> = {
-  verified: "Verified by a published source",
-  reported: "Reported, not yet independently verified",
-  confirmed: "Confirmed by the person or the maintainers",
-  unverified: "Unverified: no reliable source yet. Know one? Suggest a correction.",
+const SOURCE_ICONS: Record<Source["type"], typeof GlobeIcon> = {
+  wikipedia: GlobeIcon,
+  article: NewspaperIcon,
+  social: MessageCircleIcon,
+  publication: FileTextIcon,
+  authority: LandmarkIcon,
+  "personal-knowledge": UsersIcon,
+  other: LinkIcon,
 };
 
-function yearRange(from?: number, to?: number) {
-  if (from && to) {
-    return from === to ? `${from}` : `${from}–${to}`;
+const CONTRIBUTION_ICONS: Record<Contribution["type"], typeof BookIcon> = {
+  book: BookIcon,
+  article: FileTextIcon,
+  chapter: FileTextIcon,
+  lecture: MicIcon,
+  "training-program": PresentationIcon,
+  media: MicIcon,
+  other: FileTextIcon,
+};
+
+const yearRange = (from?: number, to?: number) =>
+  from && to
+    ? from === to
+      ? `${from}`
+      : `${from} – ${to}`
+    : from
+      ? `${from} – present`
+      : to
+        ? `until ${to}`
+        : "";
+
+/** "with Nicole Else-Quest" / "with Heise, Richey, and 3 others", leaving out the person themselves. */
+function coauthorLine(authors: string[] | undefined, name: string): string | null {
+  const surname = name.split(" ").at(-1)?.toLowerCase();
+  const others = (authors ?? []).filter((a) => a.split(" ").at(-1)?.toLowerCase() !== surname);
+  if (others.length === 0) {
+    return null;
   }
-  if (from) {
-    return `${from}–`;
+  if (others.length <= COAUTHORS_SHOWN) {
+    return `with ${others.join(" and ")}`;
   }
-  return to ? `–${to}` : "";
+  const rest = others.length - COAUTHORS_SHOWN;
+  return `with ${others.slice(0, COAUTHORS_SHOWN).join(", ")}, and ${rest} other${rest === 1 ? "" : "s"}`;
 }
 
-function Row({ label, children }: { label: string; children: ReactNode }) {
+function Section({
+  title,
+  count,
+  info,
+  aside,
+  id,
+  children,
+}: {
+  title: string;
+  count?: number;
+  info?: ReactNode;
+  aside?: ReactNode;
+  id?: string;
+  children: ReactNode;
+}) {
   return (
-    <>
-      <dt className="font-semibold">{label}</dt>
-      <dd className="col-span-2 flex flex-col gap-2">{children}</dd>
-    </>
+    <section className="flex w-full scroll-mt-24 flex-col gap-2.5" id={id}>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-1.5">
+          <h2 className="font-semibold text-muted-foreground text-xs uppercase tracking-widest">
+            {title}
+            {count !== undefined && <span className="font-normal"> · {count}</span>}
+          </h2>
+          {info}
+        </div>
+        {aside}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function OrganizationCard({ refItem, school }: { refItem: OrganizationRef; school?: boolean }) {
+  const Icon = school ? GraduationCapIcon : Building2Icon;
+  const range = yearRange(refItem.from, refItem.to);
+  const detail = [refItem.role, refItem.level && toTitleCase(refItem.level)]
+    .filter(Boolean)
+    .join(" · ");
+  return (
+    <Link
+      className="flex items-center gap-3.5 rounded-lg border border-black/10 bg-white/55 px-3.5 py-3 transition-colors hover:border-black/25 hover:bg-white"
+      href={`/organizations/${refItem.organization}`}
+    >
+      <OrgLogo className="size-9" icon={Icon} logoUrl={refItem.organizationLogoUrl} />
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="font-semibold text-sm">
+          {refItem.organizationName ?? refItem.organization}
+          {refItem.organizationShortName && (
+            <span className="font-normal text-muted-foreground">
+              {" "}
+              ({refItem.organizationShortName})
+            </span>
+          )}
+        </span>
+        {detail && <span className="text-muted-foreground text-sm">{detail}</span>}
+      </span>
+      {range && (
+        <span className="shrink-0 text-muted-foreground text-xs tabular-nums">{range}</span>
+      )}
+    </Link>
   );
 }
 
 export default function ProfileDetails({
   profile,
-  organizations,
   identifiers,
   contributions,
+  related,
+  permanentId,
   correctionUrl,
-  permanentUrl,
 }: {
-  profile: ProfilePage["profile"];
-  organizations: Record<string, OrganizationLabel>;
+  profile: Profile;
   identifiers: IdentifierLink[];
   contributions: ContributionLink[];
+  related: RelatedPerson[];
+  permanentId: { value: string; url: string };
   correctionUrl: string;
-  /** The record's permanent URI (/id/<id>) */
-  permanentUrl: string;
 }) {
   const [showAllContributions, setShowAllContributions] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  if (!profile) {
-    return <div>No profile found</div>;
-  }
-
-  const linkIcons = {
-    wikipedia: <WikipediaIcon className="h-4 w-4" />,
-    linkedin: <LinkedInIcon className="h-4 w-4" />,
-    website: <LinkIcon className="h-4 w-4" />,
-    x: <XIcon className="h-4 w-4" />,
-    tiktok: <TikTokIcon className="h-4 w-4" />,
-    instagram: <InstagramIcon className="h-4 w-4" />,
-    article: <NewspaperIcon className="h-4 w-4" />,
-    youtube: <YouTubeIcon className="h-4 w-4" />,
-    imdb: <ImdbIcon className="h-4 w-4" />,
-  };
-
-  const isContributor = profile.kind === "contributor";
-  const orgName = (slug: string) => organizations[slug]?.name ?? toTitleCase(slug);
+  const isAlum = profile.kinds.includes("alum");
+  const isContributor = profile.kinds.includes("contributor");
   const visibleContributions = showAllContributions
     ? contributions
     : contributions.slice(0, CONTRIBUTIONS_PREVIEW);
-  const copyPermanentUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(permanentUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Couldn't copy the link");
-    }
-  };
 
   return (
-    <div className="flex w-full flex-col items-center gap-10">
-      <div className="flex flex-col items-center gap-2">
-        <Avatar className="h-48 w-48 rounded-full border border-gray-200">
-          <AvatarImage alt={profile.name} src={profile.imageUrl ?? ""} />
-          <AvatarFallback className="font-serif text-6xl">
-            {profile.name.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        {profile.imageCredit && (
-          <p className="max-w-xs text-center text-muted-foreground text-xs">
-            {profile.imageCredit}
-          </p>
-        )}
-      </div>
-
-      <div className="flex flex-col items-center gap-4">
-        <div className="space-y-2 text-center">
-          <p className="font-semibold text-muted-foreground text-xs uppercase tracking-widest">
-            {isContributor ? "Contributor" : "Alum"}
-          </p>
-          <h1 className="text-center font-semibold font-serif text-4xl">{profile.name}</h1>
-
-          {profile.tagline && (
-            <p className="text-center text-muted-foreground text-xl italic">{profile.tagline}</p>
+    <div className="flex w-full flex-col gap-9">
+      {(profile.bio || profile.tags.length > 0) && (
+        <div className="flex flex-col gap-3">
+          {profile.bio && <p className="text-base">{profile.bio}</p>}
+          {profile.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {profile.tags.map((tag) => (
+                <Badge
+                  className="bg-white/50"
+                  key={tag.slug}
+                  render={<Link href={`/tags/${tag.slug}`} />}
+                  variant="outline"
+                >
+                  {tag.label}
+                </Badge>
+              ))}
+            </div>
           )}
-        </div>
-
-        {profile.tags.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-1">
-            {profile.tags.slice(0, MAX_TAGS).map((tag) => (
-              <Badge asChild className="bg-white/50" key={tag.slug} variant="outline">
-                <Link href={`/tags/${tag.slug}`}>{tag.label}</Link>
-              </Badge>
-            ))}
-          </div>
-        )}
-
-        <ShareDialogTrigger profile={profile}>
-          {({ onClick }) => (
-            <Button className="text-xs" onClick={onClick} size="sm" variant="ghost">
-              <ShareIcon className="h-4 w-4" />
-              <span>Share this profile</span>
-            </Button>
-          )}
-        </ShareDialogTrigger>
-      </div>
-
-      <Separator className="w-full bg-black/10" />
-
-      {profile.bio && <p className="text-base">{profile.bio}</p>}
-
-      {profile.quotes.length > 0 && (
-        <div className="flex flex-col gap-4">
-          <p className="font-semibold text-sm">
-            A quote from {profile.name} about their education:
-          </p>
-
-          <div className="space-y-4">
-            {profile.quotes.map((quote) => (
-              <blockquote
-                className="border-l-4 border-l-primary/25 pl-5 text-lg text-primary italic sm:pl-10"
-                key={quote}
-              >
-                <p>"{quote}"</p>
-              </blockquote>
-            ))}
-          </div>
         </div>
       )}
 
-      <Separator className="w-full bg-black/10" />
+      {profile.quotes.length > 0 && (
+        <div className="flex flex-col gap-4">
+          {profile.quotes.map((quote) => (
+            <blockquote
+              className="border-l-[3px] border-l-primary/35 pl-5 font-serif text-[22px] italic leading-snug"
+              key={quote}
+            >
+              "{quote}"
+            </blockquote>
+          ))}
+        </div>
+      )}
 
-      <dl className="grid w-full grid-cols-3 gap-x-10 gap-y-5 text-sm">
-        {isContributor && profile.montessoriNotes && (
-          <Row label="Montessori Notes">
-            <p>{profile.montessoriNotes}</p>
-          </Row>
-        )}
+      {isAlum && (profile.schools.length > 0 || profile.educationNotes) && (
+        <Section title="Montessori education">
+          {profile.schools.map((school) => (
+            <OrganizationCard
+              key={`${school.organization}-${school.from ?? ""}`}
+              refItem={school}
+              school
+            />
+          ))}
+          {profile.educationNotes && (
+            <p className="text-[#4A433D] text-sm">{profile.educationNotes}</p>
+          )}
+        </Section>
+      )}
 
-        {!isContributor && profile.educationNotes && (
-          <Row label="Education Notes">
-            <p>{profile.educationNotes}</p>
-          </Row>
-        )}
+      {(profile.affiliations.length > 0 || (isContributor && profile.montessoriNotes)) && (
+        <Section title="Affiliations">
+          {isContributor && profile.montessoriNotes && (
+            <p className="text-[#4A433D] text-sm">{profile.montessoriNotes}</p>
+          )}
+          {profile.affiliations.map((affiliation) => (
+            <OrganizationCard
+              key={`${affiliation.organization}-${affiliation.role ?? ""}`}
+              refItem={affiliation}
+            />
+          ))}
+        </Section>
+      )}
 
-        {profile.schools.length > 0 && (
-          <Row label="Montessori School">
-            {profile.schools.map((school) => (
-              <p key={`${school.organization}-${school.from ?? ""}`}>
-                <Link
-                  className="underline hover:text-primary"
-                  href={`/organizations/${school.organization}`}
-                >
-                  {orgName(school.organization)}
-                </Link>
-                {(school.level || school.from || school.to) && (
-                  <span className="text-muted-foreground">
-                    {" · "}
-                    {[school.level && toTitleCase(school.level), yearRange(school.from, school.to)]
-                      .filter(Boolean)
-                      .join(", ")}
+      {contributions.length > 0 && (
+        <Section count={contributions.length} id="contributions" title="Contributions">
+          <ul className="flex flex-col">
+            {visibleContributions.map((c) => {
+              const Icon = CONTRIBUTION_ICONS[c.type] ?? FileTextIcon;
+              const withLine = coauthorLine(c.authors, profile.name);
+              const body = (
+                <>
+                  <Icon
+                    aria-label={toTitleCase(c.type)}
+                    className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+                  />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="font-medium text-sm">
+                      <span
+                        className={
+                          c.href
+                            ? "underline decoration-black/25 underline-offset-[3px] group-hover:decoration-current"
+                            : ""
+                        }
+                      >
+                        {c.title}
+                      </span>
+                      {c.href && (
+                        <ArrowUpRightIcon className="ml-1.5 inline size-3 text-muted-foreground" />
+                      )}
+                    </span>
+                    <span className="text-muted-foreground text-xs">
+                      {[c.venue, c.host].filter(Boolean).join(" · ")}
+                    </span>
+                    {withLine && (
+                      <span className="mt-0.5 flex items-center gap-1.5 text-[#4A433D] text-xs">
+                        <UsersIcon className="size-3" />
+                        <span>{withLine}</span>
+                      </span>
+                    )}
                   </span>
-                )}
-              </p>
-            ))}
-          </Row>
-        )}
-
-        {profile.affiliations.length > 0 && (
-          <Row label="Affiliations">
-            {profile.affiliations.map((affiliation) => (
-              <p key={`${affiliation.organization}-${affiliation.role ?? ""}`}>
-                <Link
-                  className="underline hover:text-primary"
-                  href={`/organizations/${affiliation.organization}`}
-                >
-                  {orgName(affiliation.organization)}
-                </Link>
-                {(affiliation.role || affiliation.from || affiliation.to) && (
-                  <span className="text-muted-foreground">
-                    {" · "}
-                    {[affiliation.role, yearRange(affiliation.from, affiliation.to)]
-                      .filter(Boolean)
-                      .join(", ")}
-                  </span>
-                )}
-              </p>
-            ))}
-          </Row>
-        )}
-
-        {contributions.length > 0 && (
-          <Row label="Notable Contributions">
-            <ul className="list-disc space-y-1.5 pl-4">
-              {visibleContributions.map((contribution) => (
-                <li className="pl-2" key={`${contribution.title}-${contribution.meta}`}>
-                  {contribution.url ? (
+                  {c.year && (
+                    <span className="shrink-0 text-muted-foreground text-xs tabular-nums">
+                      {c.year}
+                    </span>
+                  )}
+                </>
+              );
+              return (
+                <li className="border-black/7 border-b" key={`${c.title}-${c.year ?? ""}`}>
+                  {c.href ? (
                     <Link
-                      className="underline hover:text-primary"
-                      href={contribution.url}
+                      className="group flex items-start gap-2.5 py-2.5"
+                      href={c.href}
                       target="_blank"
                     >
-                      {contribution.title}
+                      {body}
                     </Link>
                   ) : (
-                    contribution.title
-                  )}
-                  {contribution.meta && (
-                    <span className="text-muted-foreground"> · {contribution.meta}</span>
+                    <div className="flex items-start gap-2.5 py-2.5">{body}</div>
                   )}
                 </li>
-              ))}
-            </ul>
-            {contributions.length > CONTRIBUTIONS_PREVIEW && (
-              <button
-                className="self-start font-semibold text-sm hover:underline"
-                onClick={() => setShowAllContributions((v) => !v)}
-                type="button"
+              );
+            })}
+          </ul>
+          {contributions.length > CONTRIBUTIONS_PREVIEW && (
+            <button
+              className="self-start py-1.5 font-semibold text-sm hover:underline"
+              onClick={() => setShowAllContributions((v) => !v)}
+              type="button"
+            >
+              {showAllContributions ? "Show fewer" : `Show all ${contributions.length}`}
+            </button>
+          )}
+        </Section>
+      )}
+
+      {profile.notableAchievements.length > 0 && (
+        <Section title="Notable achievements">
+          <ul className="flex flex-col">
+            {profile.notableAchievements.map((achievement) => (
+              <li
+                className="flex items-center gap-2.5 border-black/7 border-b py-2 text-sm"
+                key={achievement}
               >
-                {showAllContributions
-                  ? "Show fewer"
-                  : `Show all ${contributions.length} contributions`}
-              </button>
-            )}
-          </Row>
-        )}
-
-        {profile.notableAchievements.length > 0 && (
-          <Row label="Notable Achievements">
-            <ul className="list-disc space-y-1 pl-4">
-              {profile.notableAchievements.map((achievement) => (
-                <li className="pl-2" key={achievement}>
-                  {achievement}
-                </li>
-              ))}
-            </ul>
-          </Row>
-        )}
-
-        {profile.sources.length > 0 && (
-          <Row label="Sources">
-            {profile.sources.map((source) => (
-              <div className="flex flex-col" key={`${source.type}-${source.url ?? source.note}`}>
-                <span className="text-muted-foreground text-xs uppercase tracking-wide">
-                  {SOURCE_LABELS[source.type] ?? "Source"}
-                </span>
-                {source.url ? (
-                  <Link
-                    className="wrap-anywhere underline hover:text-primary"
-                    href={source.url}
-                    target="_blank"
-                  >
-                    {source.note ?? prettyUrl(source.url)}
-                  </Link>
-                ) : (
-                  <span>{source.note}</span>
-                )}
-              </div>
+                <TrophyIcon className="size-3.5 shrink-0 text-muted-foreground" />
+                {achievement}
+              </li>
             ))}
-            {profile.verification && (
-              <p className="text-muted-foreground text-xs">
-                {VERIFICATION_LABELS[profile.verification]}
-              </p>
-            )}
-          </Row>
-        )}
+          </ul>
+        </Section>
+      )}
 
-        {profile.links.length > 0 && (
-          <Row label="Links">
+      {related.length > 0 && (
+        <Section
+          info={
+            <Popover>
+              <PopoverTrigger
+                render={
+                  <button
+                    aria-label="About related people"
+                    className="flex size-6 items-center justify-center rounded-full text-muted-foreground hover:bg-black/5 hover:text-foreground"
+                    type="button"
+                  />
+                }
+              >
+                <InfoIcon className="size-3.5" />
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-72 text-sm">
+                Co-authors come from shared contributions. Training, advising, and family
+                relationships are added with a source.
+              </PopoverContent>
+            </Popover>
+          }
+          title="Related people"
+        >
+          <div className="grid gap-2 sm:grid-cols-2">
+            {related.map((person) => (
+              <Link
+                className="flex items-center gap-3 rounded-lg border border-black/10 bg-white/55 px-3 py-2.5 transition-colors hover:border-black/25 hover:bg-white"
+                href={`/${person.slug}`}
+                key={`${person.slug}-${person.relation}`}
+              >
+                <Avatar className="size-9">
+                  <AvatarImage alt="" src={person.imageUrl ?? ""} />
+                  <AvatarFallback className="font-serif">{person.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate font-medium text-sm">{person.name}</span>
+                  <span className="text-muted-foreground text-xs">
+                    {RELATION_LABELS[person.relation]}
+                    {person.count
+                      ? ` · ${person.count} contribution${person.count === 1 ? "" : "s"}`
+                      : ""}
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {profile.sources.length > 0 && (
+        <Section id="sources" info={<HowWeVerify />} title="Sources">
+          <div className="flex flex-wrap gap-1.5">
+            {profile.sources.map((source) => {
+              const Icon = SOURCE_ICONS[source.type] ?? LinkIcon;
+              const host = source.url ? prettyUrl(source.url).split("/")[0] : null;
+              const chip = (
+                <>
+                  <Icon className="size-3.5 shrink-0" />
+                  <span className="truncate">
+                    {[SOURCE_LABELS[source.type], host].filter(Boolean).join(" · ")}
+                  </span>
+                </>
+              );
+              return source.url ? (
+                <Link
+                  className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-black/12 bg-white px-3 py-1.5 text-[13px] transition-colors hover:border-black/30"
+                  href={source.url}
+                  key={`${source.type}-${source.url}`}
+                  target="_blank"
+                  title={source.note}
+                >
+                  {chip}
+                </Link>
+              ) : (
+                <span
+                  className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-black/12 bg-white px-3 py-1.5 text-[13px]"
+                  key={`${source.type}-${source.note}`}
+                  title={source.note}
+                >
+                  {chip}
+                </span>
+              );
+            })}
+          </div>
+        </Section>
+      )}
+
+      {profile.links.length > 0 && (
+        <Section title="Links">
+          <div className="flex flex-wrap gap-1.5">
             {profile.links.map((link) => (
               <Link
-                className="wrap-anywhere flex flex-row gap-2 underline hover:text-primary"
+                className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-black/12 bg-white px-3 py-1.5 text-[13px] transition-colors hover:border-black/30"
                 href={link.url}
                 key={link.url}
                 target="_blank"
               >
-                <span className="mt-1 size-4 shrink-0">{linkIcons[link.type]}</span>
-                {prettyUrl(link.url)}
+                <ArrowUpRightIcon className="size-3.5 shrink-0" />
+                <span className="truncate">{prettyUrl(link.url)}</span>
               </Link>
             ))}
-          </Row>
-        )}
-      </dl>
-
-      <section className="flex w-full flex-col gap-4 rounded-lg border border-black/10 bg-white/60 p-6 text-sm">
-        <h2 className="font-semibold font-serif text-2xl">Identifiers</h2>
-
-        <dl className="grid grid-cols-[10rem_1fr] gap-x-4 gap-y-1.5">
-          <dt className="text-muted-foreground">The Montessorians</dt>
-          <dd className="flex items-center gap-1.5">
-            <Link className="font-mono text-xs underline hover:text-primary" href={permanentUrl}>
-              {profile.id}
-            </Link>
-            <button
-              aria-label={copied ? "Copied" : `Copy the permanent link for ${profile.name}`}
-              className="rounded p-1 text-muted-foreground transition-colors hover:bg-black/5 hover:text-foreground"
-              onClick={copyPermanentUrl}
-              title="Copy permanent link"
-              type="button"
-            >
-              {copied ? <CheckIcon className="size-3.5" /> : <CopyIcon className="size-3.5" />}
-            </button>
-          </dd>
-          {identifiers.map((identifier) => (
-            <div className="contents" key={identifier.label}>
-              <dt className="text-muted-foreground">{identifier.label}</dt>
-              <dd>
-                <Link
-                  className="font-mono text-xs underline hover:text-primary"
-                  href={identifier.url}
-                  target="_blank"
-                >
-                  {identifier.value}
-                </Link>
-              </dd>
-            </div>
-          ))}
-        </dl>
-
-        {profile.glossaryCitations.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <span className="text-muted-foreground">Cited in the Montessori Glossary</span>
-            <div className="flex flex-wrap gap-1">
-              {profile.glossaryCitations.map((citation) => (
-                <Badge asChild className="bg-white" key={citation.url} variant="outline">
-                  <Link href={citation.url} target="_blank">
-                    {citation.label} ↗
-                  </Link>
-                </Badge>
-              ))}
-            </div>
           </div>
-        )}
+        </Section>
+      )}
 
-        <p className="text-muted-foreground text-xs">
-          <Link className="hover:underline" href={correctionUrl} target="_blank">
+      <Section
+        aside={
+          <Link
+            className="text-muted-foreground text-xs hover:underline"
+            href={correctionUrl}
+            target="_blank"
+          >
             Suggest a correction
           </Link>
-        </p>
-      </section>
+        }
+        title="Identifiers"
+      >
+        <div className="flex flex-wrap gap-1.5">
+          <Link
+            className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2.5 py-1.5 text-secondary-foreground text-xs"
+            href={permanentId.url}
+          >
+            <span className="opacity-75">The Montessorians</span>
+            <span className="font-mono">{permanentId.value}</span>
+          </Link>
+          {identifiers.map((identifier) => (
+            <Link
+              className="inline-flex items-center gap-1.5 rounded-md border border-black/12 bg-white px-2.5 py-1.5 text-xs transition-colors hover:border-black/30"
+              href={identifier.url}
+              key={identifier.label}
+              target="_blank"
+            >
+              <span className="text-muted-foreground">{identifier.label}</span>
+              <span className="font-mono">{identifier.value}</span>
+            </Link>
+          ))}
+        </div>
+        {profile.glossaryCitations.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+            <span className="text-muted-foreground text-xs">Cited in the Montessori Glossary:</span>
+            {profile.glossaryCitations.map((citation) => (
+              <Badge
+                className="bg-white"
+                key={citation.url}
+                render={<Link href={citation.url} target="_blank" />}
+                variant="outline"
+              >
+                {citation.label}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </Section>
     </div>
   );
 }

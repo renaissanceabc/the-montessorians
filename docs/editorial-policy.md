@@ -4,9 +4,9 @@ The Montessorians is an open directory and name authority for two kinds of peopl
 
 - **Alumni**: people who attended a Montessori school and went on to do great things, from famous figures to
   extraordinary everyday people.
-- **Contributors**: people who shaped the Montessori field through teacher preparation (trainers), guiding children (practitioners), practice
-  (teacher-scholars), scholarship (researchers), writing (authors), or philosophy (philosophers), whether or not they
-  attended Montessori themselves.
+- **Contributors**: people whose research, scholarship, or published work shaped Montessori pedagogy or the field:
+  researchers, philosophers, authors, founders of the method and its organizations, and trainers of teachers (and
+  practitioners or teacher-scholars who publish), whether or not they attended Montessori themselves.
 
 This page explains who we include, what counts as evidence, and how records are corrected, merged, or removed.
 
@@ -17,7 +17,8 @@ through secondary). People who only sent their children to Montessori, taught at
 publicly support Montessori are not alumni; adults who trained or taught may qualify as contributors instead.
 
 **Contributors** need at least one **documented contribution** to the field: a publication, research output,
-training program, or comparable public work that can be verified. A contribution is documented when someone else can
+training program, or comparable public work that can be verified. Teaching or guiding children alone, however
+excellent, doesn't make someone a contributor; the bar is work that shaped how Montessori is understood or practiced. A contribution is documented when someone else can
 find it: it has a DOI, an ISBN, a library catalog record, or a stable URL.
 
 Self-nominations are welcome when they include evidence.

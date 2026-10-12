@@ -1,3 +1,4 @@
+import { getDirectoryCounts } from "@/lib/content/directory";
 import { getAffiliationOptions } from "@/lib/content/organizations";
 import { getAllProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
@@ -19,6 +20,7 @@ export default function Contributors() {
   return (
     <ProfilesPageWrapper
       affiliationOptions={getAffiliationOptions()}
+      counts={getDirectoryCounts()}
       kind="contributor"
       profiles={getAllProfiles("contributor")}
       tags={[]}

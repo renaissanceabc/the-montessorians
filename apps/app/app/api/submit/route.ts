@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       title: issueTitle(submission),
       body: issueBody(submission),
-      labels: ["profile-request", submission.kind === "contributor" ? "contributor" : "alum"],
+      labels: ["profile-request", ...submission.kinds],
     }),
   });
 

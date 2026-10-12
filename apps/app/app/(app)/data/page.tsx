@@ -55,7 +55,7 @@ export default function Data() {
           Data &amp; API
         </h1>
 
-        <div className="prose prose-stone max-w-none">
+        <div className="prose prose-stone max-w-none prose-code:font-medium prose-code:before:content-none prose-code:after:content-none prose-pre:whitespace-pre-wrap prose-pre:break-all">
           <p className="lead">
             The Montessorians is an open name authority for Montessori alumni and contributors:{" "}
             {people.length} people and {getAllOrganizations().length} organizations, dedicated to
@@ -121,9 +121,8 @@ export default function Data() {
           <h3>Editorial policy</h3>
           <p>
             What we include, what counts as evidence, and how to request a correction or removal are
-            described in the{" "}
-            <Link href={`${REPO_URL}/blob/main/docs/editorial-policy.md`}>editorial policy</Link>.
-            Technical details are in{" "}
+            described in the <Link href="/about/editorial-policy">editorial policy</Link>. Technical
+            details are in{" "}
             <Link href={`${REPO_URL}/blob/main/docs/authority.md`}>docs/authority.md</Link>.
           </p>
 

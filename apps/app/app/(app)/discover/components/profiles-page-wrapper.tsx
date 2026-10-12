@@ -1,11 +1,9 @@
 "use client";
 
-import { SearchIcon, XIcon } from "lucide-react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Input } from "@/components/ui/input";
+import { type DirectoryCounts, DirectoryShell, FilterChip } from "@/components/directory-shell";
 import {
   Select,
   SelectContent,
@@ -14,9 +12,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { filterAndSortProfiles } from "@/lib/content/filter";
-import type { Profile, ProfileKind, Tag } from "@/lib/content/types";
+import {
+  CONTRIBUTOR_ROLE_LABELS,
+  type Profile,
+  type ProfileKind,
+  type Tag,
+} from "@/lib/content/types";
 import { DEFAULT_PROFILES_FILTERS, type getProfilesOptions } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import {
   type AffiliationOption,
   type ContributorFilters,
@@ -49,28 +51,32 @@ const SORT_OPTIONS = [
 
 type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
-const COLLECTIONS = [
-  { kind: "alum", label: "Alumni", href: "/discover" },
-  { kind: "contributor", label: "Contributors", href: "/contributors" },
-] as const;
+const PATHS: Record<"all" | ProfileKind, string> = {
+  all: "/discover",
+  alum: "/alumni",
+  contributor: "/contributors",
+};
 
 const splitList = (value: string | null) => (value ?? "").split(",").filter(Boolean);
 
 export function ProfilesPageWrapper({
   profiles,
   tags: availableTags,
-  kind = "alum",
+  kind,
+  counts,
   affiliationOptions = [],
 }: {
   profiles: Profile[];
   tags: Tag[];
+  /** Omit for the "All" view */
   kind?: ProfileKind;
+  counts: DirectoryCounts;
   affiliationOptions?: AffiliationOption[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isContributors = kind === "contributor";
-  const basePath = isContributors ? "/contributors" : "/discover";
+  const basePath = PATHS[kind ?? "all"];
 
   // Initial filter state comes from the URL so deep links work on a static page.
   const [search, setSearch] = useState(searchParams.get("q") ?? "");
@@ -86,14 +92,14 @@ export function ProfilesPageWrapper({
     organizations: splitList(searchParams.get("orgs")),
     minContributions: Number(searchParams.get("min") ?? 0) || 0,
   });
-  const [debouncedSearch] = useDebounce(search, 400);
+  const [debouncedSearch] = useDebounce(search, 300);
 
   const sortOptions = SORT_OPTIONS.filter((o) => isContributors || o.orderBy !== "contributions");
   const sortValue: SortValue =
     sortOptions.find((o) => o.orderBy === orderBy && o.sortBy === sortBy)?.value ??
     SORT_OPTIONS[0].value;
 
-  const handleSortChange = (value: string) => {
+  const handleSortChange = (value: string | null) => {
     const option = SORT_OPTIONS.find((o) => o.value === value);
     if (option) {
       setOrderBy(option.orderBy);
@@ -145,86 +151,108 @@ export function ProfilesPageWrapper({
     router,
   ]);
 
+  const tagSlugs = splitList(tags);
+  const tagLabel = (slug: string) => availableTags.find((t) => t.slug === slug)?.label ?? slug;
+  const orgName = (slug: string) => affiliationOptions.find((o) => o.slug === slug)?.name ?? slug;
+  const chips = isContributors
+    ? [
+        ...contributorFilters.roles.map((role) => ({
+          key: `role-${role}`,
+          label: CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS] ?? role,
+          remove: () =>
+            setContributorFilters((f) => ({ ...f, roles: f.roles.filter((r) => r !== role) })),
+        })),
+        ...contributorFilters.organizations.map((slug) => ({
+          key: `org-${slug}`,
+          label: orgName(slug),
+          remove: () =>
+            setContributorFilters((f) => ({
+              ...f,
+              organizations: f.organizations.filter((o) => o !== slug),
+            })),
+        })),
+        ...(contributorFilters.minContributions
+          ? [
+              {
+                key: "min",
+                label: `${contributorFilters.minContributions}+ contributions`,
+                remove: () => setContributorFilters((f) => ({ ...f, minContributions: 0 })),
+              },
+            ]
+          : []),
+      ]
+    : tagSlugs.map((slug) => ({
+        key: `tag-${slug}`,
+        label: tagLabel(slug),
+        remove: () => setTags(tagSlugs.filter((t) => t !== slug).join(",")),
+      }));
+
+  const clearAll = () => {
+    setTags("");
+    setContributorFilters({ roles: [], organizations: [], minContributions: 0 });
+  };
+
+  const total =
+    kind === "alum" ? counts.alumni : kind === "contributor" ? counts.contributors : counts.all;
+  const noun = kind === "contributor" ? "contributors" : "Montessorians";
+
   return (
-    <div className="container mx-auto max-w-screen-md items-center justify-between gap-10 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full space-y-8">
-        <h1 className="flex w-full justify-center font-bold font-serif text-4xl lg:text-5xl">
-          Explore the directory
-        </h1>
-
-        <nav
-          aria-label="Collections"
-          className="flex justify-center gap-7 border-black/10 border-b"
-        >
-          {COLLECTIONS.map((collection) => (
-            <Link
-              aria-current={collection.kind === kind ? "page" : undefined}
-              className={cn(
-                "-mb-px border-b-2 px-0.5 pb-2.5 text-base transition-colors",
-                collection.kind === kind
-                  ? "border-foreground font-semibold"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              )}
-              href={collection.href}
-              key={collection.kind}
+    <DirectoryShell
+      active={kind === "alum" ? "alumni" : kind === "contributor" ? "contributors" : "all"}
+      chips={
+        chips.length > 0 ? (
+          <>
+            {chips.map((chip) => (
+              <FilterChip key={chip.key} label={chip.label} onRemove={chip.remove} />
+            ))}
+            <button
+              className="px-1.5 py-0.5 text-muted-foreground text-xs underline hover:text-foreground"
+              onClick={clearAll}
+              type="button"
             >
-              {collection.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row">
-          <div className="relative flex w-full flex-row items-center gap-2 sm:w-auto">
-            <Input
-              className="w-full rounded-full border border-black/10 bg-white pl-10 text-sm shadow-none transition-colors sm:w-[260px]"
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={
-                isContributors ? "Search for a contributor" : "Search for a Montessorian"
-              }
-              value={search}
+              Clear all
+            </button>
+          </>
+        ) : undefined
+      }
+      controls={
+        <>
+          {isContributors ? (
+            <ContributorFiltersPopover
+              affiliationOptions={affiliationOptions}
+              applied={contributorFilters}
+              onApply={setContributorFilters}
             />
-            <SearchIcon className="absolute left-3 size-4" />
-            {search && (
-              <XIcon
-                className="absolute right-3 size-4 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
-                onClick={() => setSearch("")}
-              />
-            )}
-          </div>
-
-          <div className="flex flex-row items-center gap-1">
-            {isContributors ? (
-              <ContributorFiltersPopover
-                affiliationOptions={affiliationOptions}
-                applied={contributorFilters}
-                onApply={setContributorFilters}
-              />
-            ) : (
-              <TagsPopover
-                availableTags={availableTags}
-                initialTags={tags}
-                onApplyTags={(tagSlugs) => setTags(tagSlugs)}
-              />
-            )}
-
-            <Select onValueChange={handleSortChange} value={sortValue}>
-              <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-[state=open]:bg-white">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-
-              <SelectContent>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <ProfilesList hasSearch={Boolean(debouncedSearch)} profiles={filtered} />
-      </div>
-    </div>
+          ) : (
+            <TagsPopover
+              availableTags={availableTags}
+              initialTags={tags}
+              onApplyTags={(tagSlugs) => setTags(tagSlugs)}
+            />
+          )}
+          <Select items={sortOptions} onValueChange={handleSortChange} value={sortValue}>
+            <SelectTrigger
+              aria-label="Sort"
+              className="h-9 border-transparent bg-transparent shadow-none hover:bg-black/5 data-popup-open:bg-black/5"
+            >
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
+      }
+      counts={counts}
+      onSearch={setSearch}
+      search={search}
+      searchPlaceholder={`Search ${total} ${noun} by name`}
+    >
+      <ProfilesList hasSearch={Boolean(debouncedSearch)} profiles={filtered} />
+    </DirectoryShell>
   );
 }

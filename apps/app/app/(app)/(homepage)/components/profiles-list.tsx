@@ -19,10 +19,11 @@ export default function ProfilesHomepageList({ profiles }: { profiles: Profile[]
         <ProfileListItem key={profile.slug} profile={profile} />
       ))}
       <div className="flex justify-center pt-4">
-        <Button asChild>
-          <Link className="font-semibold text-sm" href="/discover">
-            See more Montessorians <ArrowRightIcon className="h-4 w-4" />
-          </Link>
+        <Button
+          nativeButton={false}
+          render={<Link className="font-semibold text-sm" href="/alumni" />}
+        >
+          See more Montessorians <ArrowRightIcon className="h-4 w-4" />
         </Button>
       </div>
     </div>

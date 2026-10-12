@@ -1,18 +1,8 @@
-import { SlidersHorizontalIcon, XIcon } from "lucide-react";
+import { CheckIcon, SearchIcon, SlidersHorizontalIcon, XIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
+import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import type { Tag } from "@/lib/content/types";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
@@ -38,54 +28,43 @@ export function TagsPopoverContent({
   availableTags: Tag[];
 }) {
   const [tagSearch, setTagSearch] = useState("");
-  const [_drawerOpen, _setDrawerOpen] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 640px)");
 
   const filteredTags = useMemo(() => {
-    return availableTags.filter(
-      (tag) =>
-        !selectedTags.some((t) => t.slug === tag.slug) &&
-        tag.label.toLowerCase().includes(tagSearch.toLowerCase())
-    );
-  }, [availableTags, selectedTags, tagSearch]);
+    const q = tagSearch.trim().toLowerCase();
+    return availableTags.filter((tag) => tag.label.toLowerCase().includes(q));
+  }, [availableTags, tagSearch]);
 
   if (isDesktop) {
     return (
       <Popover onOpenChange={setOpen} open={open}>
-        <PopoverTrigger asChild>
-          <Button
-            className={cn(
-              "cursor-pointer border-black/10 bg-white font-normal shadow-none hover:border-black/50 active:bg-white",
-              appliedTags.length > 0 &&
-                "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:text-secondary-foreground focus:bg-secondary/80 focus:text-secondary-foreground active:bg-secondary/80 active:text-secondary-foreground"
-            )}
-            variant="outline"
-          >
-            <SlidersHorizontalIcon className="size-4" />
-            {appliedTags.length > 0 ? `Filters applied (${appliedTags.length})` : "Filter"}
-          </Button>
+        <PopoverTrigger
+          render={
+            <Button
+              className={cn(
+                "h-9 cursor-pointer border-transparent bg-transparent font-normal shadow-none hover:bg-black/5 data-popup-open:bg-black/5",
+                appliedTags.length > 0 && "font-medium"
+              )}
+              variant="outline"
+            />
+          }
+        >
+          <SlidersHorizontalIcon className="size-4" />
+          {appliedTags.length > 0 ? `Filter · ${appliedTags.length}` : "Filter"}
         </PopoverTrigger>
 
-        <PopoverContent className="max-w-full p-0 sm:w-[480px]">
-          <TagsDrawerContent
+        <PopoverContent align="start" className="w-[min(480px,calc(100vw-2rem))] gap-0 p-0">
+          <TagsPanel
+            appliedTags={appliedTags}
             filteredTags={filteredTags}
             selectedTags={selectedTags}
+            setAppliedTags={setAppliedTags}
+            setOpen={setOpen}
             setSelectedTags={setSelectedTags}
             setTagSearch={setTagSearch}
+            setTagsQueryParam={setTagsQueryParam}
             tagSearch={tagSearch}
           />
-
-          <div className="flex flex-row items-center justify-between gap-2 border-black/10 border-t p-4">
-            <TagsDrawerFooter
-              appliedTags={appliedTags}
-              selectedTags={selectedTags}
-              setAppliedTags={setAppliedTags}
-              setOpen={setOpen}
-              setSelectedTags={setSelectedTags}
-              setTagSearch={setTagSearch}
-              setTagsQueryParam={setTagsQueryParam}
-            />
-          </div>
         </PopoverContent>
       </Popover>
     );
@@ -93,172 +72,165 @@ export function TagsPopoverContent({
 
   return (
     <Drawer onOpenChange={setOpen} open={open}>
-      <DrawerTrigger asChild>
-        <Button
-          className={cn(
-            "cursor-pointer border-black/10 bg-white font-normal shadow-none hover:bg-white/50",
-            appliedTags.length > 0 &&
-              "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:text-secondary-foreground focus:bg-secondary/80 focus:text-secondary-foreground active:bg-secondary/80 active:text-secondary-foreground"
-          )}
-          variant="outline"
-        >
-          <SlidersHorizontalIcon className="size-4" />
-          {appliedTags.length > 0 ? `Filters applied (${appliedTags.length})` : "Filter"}
-        </Button>
+      <DrawerTrigger
+        render={
+          <Button
+            className={cn(
+              "h-9 cursor-pointer border-transparent bg-transparent font-normal shadow-none hover:bg-black/5",
+              appliedTags.length > 0 && "font-medium"
+            )}
+            variant="outline"
+          />
+        }
+      >
+        <SlidersHorizontalIcon className="size-4" />
+        {appliedTags.length > 0 ? `Filter · ${appliedTags.length}` : "Filter"}
       </DrawerTrigger>
-      <DrawerContent className="bg-white">
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Filter by tags</DrawerTitle>
-          <DrawerDescription>
-            Select tags below to filter the directory of Montessorians. When you&apos;re content
-            with your selection, click <strong>Show Results</strong>.
-          </DrawerDescription>
-        </DrawerHeader>
-
-        <TagsDrawerContent
+      <DrawerContent className="bg-background">
+        <DrawerTitle className="sr-only">Filter by tags</DrawerTitle>
+        <TagsPanel
+          appliedTags={appliedTags}
           filteredTags={filteredTags}
           selectedTags={selectedTags}
+          setAppliedTags={setAppliedTags}
+          setOpen={setOpen}
           setSelectedTags={setSelectedTags}
           setTagSearch={setTagSearch}
+          setTagsQueryParam={setTagsQueryParam}
+          showClose
           tagSearch={tagSearch}
         />
-
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button className="cursor-pointer bg-stone-200 hover:bg-stone-200/80" variant="outline">
-              Cancel
-            </Button>
-          </DrawerClose>
-
-          <div className="grid grid-cols-2 gap-2">
-            <TagsDrawerFooter
-              appliedTags={appliedTags}
-              selectedTags={selectedTags}
-              setAppliedTags={setAppliedTags}
-              setOpen={setOpen}
-              setSelectedTags={setSelectedTags}
-              setTagSearch={setTagSearch}
-              setTagsQueryParam={setTagsQueryParam}
-            />
-          </div>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
 }
 
-function TagsDrawerContent({
+/** Search, toggle chips, and apply/clear: shared by the popover and the drawer. */
+function TagsPanel({
   filteredTags,
-  setTagSearch,
   tagSearch,
+  setTagSearch,
   selectedTags,
   setSelectedTags,
+  appliedTags,
+  setAppliedTags,
+  setTagsQueryParam,
+  setOpen,
+  showClose,
 }: {
   filteredTags: Tag[];
-  setTagSearch: (tagSearch: string) => void;
   tagSearch: string;
+  setTagSearch: (tagSearch: string) => void;
   selectedTags: Tag[];
   setSelectedTags: (selectedTags: Tag[]) => void;
+  appliedTags: Tag[];
+  setAppliedTags: (appliedTags: Tag[]) => void;
+  setTagsQueryParam: (tagSlugs: string) => void;
+  setOpen: (open: boolean) => void;
+  showClose?: boolean;
 }) {
-  return (
-    <div className="flex flex-col gap-2 p-4">
-      <Input
-        className="w-full rounded-full border border-black/10 bg-white text-sm shadow-none"
-        id="filters"
-        onChange={(e) => setTagSearch(e.target.value)}
-        placeholder="Search for a tag"
-        value={tagSearch}
-      />
+  const isSelected = (tag: Tag) => selectedTags.some((t) => t.slug === tag.slug);
+  const toggle = (tag: Tag) =>
+    setSelectedTags(
+      isSelected(tag) ? selectedTags.filter((t) => t.slug !== tag.slug) : [...selectedTags, tag]
+    );
 
-      <div className="relative flex max-h-[200px] flex-col gap-2 overflow-y-auto rounded-sm border border-black/10 bg-stone-50">
-        <div className="z-10 flex flex-wrap gap-1 p-2">
-          {filteredTags.length > 0 ? (
-            filteredTags.map((tag) => (
-              <Button
-                className="h-auto cursor-pointer border-1 border-black/10 bg-white px-3 py-1 text-xs shadow-none hover:border-black/50 hover:bg-white/50"
-                key={tag.slug}
-                onClick={() => setSelectedTags([...selectedTags, tag])}
-                variant="outline"
-              >
-                {tag.label}
-              </Button>
-            ))
-          ) : (
-            <p className="px-2 text-muted-foreground text-xs">No tags found</p>
+  const apply = () => {
+    const slugs = selectedTags.map((t) => t.slug).join(",");
+    setTagsQueryParam(slugs);
+    if (slugs !== appliedTags.map((t) => t.slug).join(",")) {
+      setAppliedTags([...selectedTags]);
+    }
+    setOpen(false);
+  };
+
+  const clear = () => {
+    setTagSearch("");
+    setSelectedTags([]);
+  };
+
+  return (
+    <div className="flex max-h-[min(80dvh,560px)] flex-col">
+      <div className="flex items-center justify-between gap-2 px-4 pt-4 pb-3">
+        <p className="font-semibold text-sm">
+          Filter by tags
+          {selectedTags.length > 0 && (
+            <span className="ml-1.5 font-normal text-muted-foreground">
+              · {selectedTags.length} selected
+            </span>
           )}
-        </div>
+        </p>
+        {showClose && (
+          <Button
+            aria-label="Close"
+            onClick={() => setOpen(false)}
+            size="icon"
+            type="button"
+            variant="ghost"
+          >
+            <XIcon />
+          </Button>
+        )}
       </div>
 
-      {selectedTags.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {selectedTags.map((tag) => (
-            <Badge
-              className="h-auto border-1 border-black/10 px-3 py-1 text-xs shadow-none"
-              key={tag.slug}
-              variant="secondary"
-            >
-              {tag.label}
-              <button
-                className="cursor-pointer"
-                onClick={() => setSelectedTags(selectedTags.filter((t) => t.slug !== tag.slug))}
-                type="button"
-              >
-                <XIcon className="ml-1 h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
-        </div>
-      )}
+      <div className="px-4 pb-3">
+        <InputGroup className="h-10">
+          <InputGroupAddon>
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupInput
+            aria-label="Search tags"
+            onChange={(e) => setTagSearch(e.target.value)}
+            placeholder="Search tags"
+            value={tagSearch}
+          />
+        </InputGroup>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-4">
+        {filteredTags.length > 0 ? (
+          <div className="flex flex-wrap gap-1">
+            {filteredTags.map((tag) => {
+              const on = isSelected(tag);
+              return (
+                <button
+                  aria-pressed={on}
+                  className={cn(
+                    "inline-flex h-8 items-center gap-1 rounded-full border px-3 text-[13px] transition-colors",
+                    on
+                      ? "border-secondary bg-secondary text-secondary-foreground"
+                      : "border-black/12 bg-white/60 hover:border-black/40"
+                  )}
+                  key={tag.slug}
+                  onClick={() => toggle(tag)}
+                  type="button"
+                >
+                  {on && <CheckIcon className="size-3.5" />}
+                  {tag.label}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="py-6 text-center text-muted-foreground text-sm">
+            No tags match "{tagSearch}"
+          </p>
+        )}
+      </div>
+
+      <div className="flex items-center justify-between gap-2 border-black/10 border-t px-4 py-3">
+        <Button
+          disabled={selectedTags.length === 0 && !tagSearch}
+          onClick={clear}
+          type="button"
+          variant="ghost"
+        >
+          Clear
+        </Button>
+        <Button className="flex-1 sm:flex-none" onClick={apply} type="button">
+          Show results
+        </Button>
+      </div>
     </div>
-  );
-}
-
-function TagsDrawerFooter({
-  setTagSearch,
-  setTagsQueryParam,
-  setSelectedTags,
-  setAppliedTags,
-  setOpen,
-  selectedTags,
-  appliedTags,
-}: {
-  setTagSearch: (tagSearch: string) => void;
-  setTagsQueryParam: (tagSlugs: string) => void;
-  setSelectedTags: (selectedTags: Tag[]) => void;
-  setAppliedTags: (appliedTags: Tag[]) => void;
-  setOpen: (open: boolean) => void;
-  selectedTags: Tag[];
-  appliedTags: Tag[];
-}) {
-  return (
-    <>
-      <Button
-        className="cursor-pointer border-black/10 bg-transparent shadow-none"
-        onClick={() => {
-          setTagSearch("");
-          setTagsQueryParam("");
-          setSelectedTags([]);
-          setAppliedTags([]);
-          setOpen(false);
-        }}
-        variant="outline"
-      >
-        Clear
-      </Button>
-      <Button
-        className="cursor-pointer shadow-none"
-        onClick={() => {
-          const slugs = selectedTags.map((t) => t.slug).join(",");
-          setTagsQueryParam(slugs);
-
-          if (slugs !== appliedTags.map((t) => t.slug).join(",")) {
-            setAppliedTags([...selectedTags]);
-          }
-          setOpen(false);
-        }}
-      >
-        Show results
-      </Button>
-    </>
   );
 }

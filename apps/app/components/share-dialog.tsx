@@ -59,10 +59,15 @@ export function ShareDialog({
         </DrawerHeader>
         <ShareContent onOpenChange={onOpenChange} profile={profile} />
         <DrawerFooter>
-          <DrawerClose asChild>
-            <Button className="cursor-pointer bg-stone-200 hover:bg-stone-200/80" variant="outline">
-              Close
-            </Button>
+          <DrawerClose
+            render={
+              <Button
+                className="cursor-pointer bg-stone-200 hover:bg-stone-200/80"
+                variant="outline"
+              />
+            }
+          >
+            Close
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

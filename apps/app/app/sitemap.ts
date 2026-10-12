@@ -60,7 +60,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.6,
     },
-    ...["contributors", "organizations", "contribute", "data"].map((path) => ({
+    ...[
+      "alumni",
+      "contributors",
+      "organizations",
+      "contribute",
+      "data",
+      "about/editorial-policy",
+    ].map((path) => ({
       url: `${siteUrl}/${path}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,

@@ -16,10 +16,14 @@ export default function About() {
         </div>
 
         <div className="flex flex-col gap-2 md:flex-row">
-          <Button asChild className="border-black/10 shadow-none" size="lg" variant="secondary">
-            <Link className="shadow-none" href="/about">
-              Learn more
-            </Link>
+          <Button
+            className="border-black/10 shadow-none"
+            nativeButton={false}
+            render={<Link className="shadow-none" href="/about" />}
+            size="lg"
+            variant="secondary"
+          >
+            Learn more
           </Button>
         </div>
       </div>
