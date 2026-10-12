@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import type { FieldErrors, Resolver } from "react-hook-form";
 
@@ -401,31 +402,36 @@ const PickKindHint = () => (
 const YamlField = ({
   errors,
   onTextChange,
+  reference,
   text,
 }: {
   errors: string[];
   onTextChange: (text: string) => void;
+  reference?: ReactNode;
   text: string;
 }) => (
-  <Field data-invalid={errors.length > 0 || undefined}>
-    <FieldLabel htmlFor={fieldId("yaml")}>Profile YAML</FieldLabel>
-    <Textarea
-      aria-invalid={errors.length > 0 || undefined}
-      className="min-h-96 font-mono text-xs leading-relaxed"
-      id={fieldId("yaml")}
-      onChange={(e) => onTextChange(e.target.value)}
-      spellCheck={false}
-      value={text}
-    />
-    {errors.length ? (
-      <FieldError errors={errors.map((message) => ({ message }))} />
-    ) : (
-      <FieldDescription>
-        Checked against the profile schema before it&apos;s sent. Switch back to Form to keep
-        editing with these values.
-      </FieldDescription>
-    )}
-  </Field>
+  <div className="flex flex-col gap-6">
+    <Field data-invalid={errors.length > 0 || undefined}>
+      <FieldLabel htmlFor={fieldId("yaml")}>Profile YAML</FieldLabel>
+      <Textarea
+        aria-invalid={errors.length > 0 || undefined}
+        className="min-h-96 font-mono text-xs leading-relaxed"
+        id={fieldId("yaml")}
+        onChange={(e) => onTextChange(e.target.value)}
+        spellCheck={false}
+        value={text}
+      />
+      {errors.length ? (
+        <FieldError errors={errors.map((message) => ({ message }))} />
+      ) : (
+        <FieldDescription>
+          Checked against the profile schema before it&apos;s sent. Switch back to Form to keep
+          editing with these values.
+        </FieldDescription>
+      )}
+    </Field>
+    {reference}
+  </div>
 );
 
 const FormFooter = ({
@@ -500,9 +506,12 @@ const FormFooter = ({
 export const ContributeForm = ({
   organizations,
   tagSuggestions,
+  yamlReference,
 }: {
   organizations: OrganizationOption[];
   tagSuggestions: Tag[];
+  /** Field reference shown beside the YAML editor (rendered on the server). */
+  yamlReference?: ReactNode;
 }) => {
   const knownOrganizations = new Map(organizations.map((o) => [o.slug, o.name]));
   const form = useForm<FormValues>({
@@ -1184,7 +1193,12 @@ export const ContributeForm = ({
       )}
 
       {mode === "yaml" && (
-        <YamlField errors={yamlErrors} onTextChange={setYamlText} text={yamlText} />
+        <YamlField
+          errors={yamlErrors}
+          onTextChange={setYamlText}
+          reference={yamlReference}
+          text={yamlText}
+        />
       )}
 
       {(mode === "yaml" || hasKind) && (

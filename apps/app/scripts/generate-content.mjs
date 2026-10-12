@@ -42,6 +42,102 @@ const tagRedirects = () =>
   );
 const SCHEMA_PATH = path.join(REPO_ROOT, "profile.schema.json");
 const ORG_SCHEMA_PATH = path.join(REPO_ROOT, "organization.schema.json");
+
+const SCHEMA_REFERENCE_OUT_PATH = path.join(
+  APP_DIR,
+  "lib",
+  "content",
+  "schema-reference.generated.json"
+);
+
+// The profile fields a submission may include, in profile-file order, and who
+// they apply to. Everything else in the schema is set by maintainers.
+const SUBMISSION_FIELDS = [
+  ["name", "both"],
+  ["kind", "both"],
+  ["roles", "contributor"],
+  ["tagline", "both"],
+  ["bio", "both"],
+  ["tags", "both"],
+  ["education", "alum"],
+  ["education_notes", "alum"],
+  ["schools", "alum"],
+  ["montessori_notes", "contributor"],
+  ["affiliations", "contributor"],
+  ["contributions", "contributor"],
+  ["notable_achievements", "alum"],
+  ["quotes", "both"],
+  ["sources", "both"],
+  ["links", "both"],
+];
+// Required to submit (the profile schema's own `required` also includes id and
+// slug, which maintainers and the form set).
+const SUBMISSION_REQUIRED = new Set(["name", "kind", "tagline", "tags", "sources"]);
+
+const resolveRef = (schema, node) =>
+  node?.$ref ? schema.definitions[node.$ref.replace("#/definitions/", "")] : node;
+
+const describeType = (schema, rawNode) => {
+  const node = resolveRef(schema, rawNode);
+  if (rawNode?.$ref?.endsWith("/year")) {
+    return "year";
+  }
+  if (node?.oneOf) {
+    return "text or list";
+  }
+  if (node?.type === "array") {
+    const item = resolveRef(schema, node.items);
+    return item?.type === "object" ? "list of entries" : "list of text";
+  }
+  if (node?.type === "integer") {
+    return "number";
+  }
+  return node?.format === "uri" ? "URL" : "text";
+};
+
+const allowedValues = (schema, rawNode) => {
+  const node = resolveRef(schema, rawNode);
+  return node?.enum ?? node?.items?.enum ?? node?.oneOf?.[0]?.enum ?? null;
+};
+
+/** A readable field reference for the contribute form's YAML mode. */
+const schemaReference = (organizations) => {
+  const schema = JSON.parse(fs.readFileSync(SCHEMA_PATH, "utf-8"));
+  const vocabulary = load(fs.readFileSync(TAGS_PATH, "utf-8")) ?? [];
+  const orgSlugs = organizations.map((o) => o.slug).toSorted();
+  const describeChildren = (node) => {
+    const item = resolveRef(schema, node?.items);
+    if (item?.type !== "object") {
+      return null;
+    }
+    const required = new Set(item.required);
+    return Object.entries(item.properties).map(([key, child]) => ({
+      description: resolveRef(schema, child)?.description ?? child.description ?? null,
+      key,
+      required: required.has(key),
+      type: describeType(schema, child),
+      values: key === "organization" ? orgSlugs : allowedValues(schema, child),
+    }));
+  };
+  const fields = SUBMISSION_FIELDS.map(([key, appliesTo]) => {
+    const node = schema.properties[key];
+    return {
+      appliesTo,
+      description: node.description ?? null,
+      items: describeChildren(node),
+      key,
+      required: SUBMISSION_REQUIRED.has(key) || (key === "roles" ? "contributors" : false),
+      type: describeType(schema, node),
+      values: key === "tags" ? vocabulary.map((t) => t.slug) : allowedValues(schema, node),
+    };
+  });
+  const submitted = new Set(SUBMISSION_FIELDS.map(([key]) => key));
+  return {
+    fields,
+    maintainerOnly: Object.keys(schema.properties).filter((key) => !submitted.has(key)),
+  };
+};
+
 const CONTENT_DIR = path.join(APP_DIR, "lib", "content");
 const OUT_PATH = path.join(CONTENT_DIR, "profiles.generated.json");
 const ORGS_OUT_PATH = path.join(CONTENT_DIR, "organizations.generated.json");
@@ -349,6 +445,7 @@ const main = () => {
   writeIfChanged(OUT_PATH, profiles);
   writeIfChanged(ORGS_OUT_PATH, organizations);
   writeIfChanged(CHANGES_OUT_PATH, changes);
+  writeIfChanged(SCHEMA_REFERENCE_OUT_PATH, schemaReference(organizations));
   writeIfChanged(REDIRECTS_OUT_PATH, [
     ...authorityRedirects(profiles, organizations, changes),
     ...tagRedirects(),

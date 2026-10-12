@@ -8,6 +8,7 @@ import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
 
 import { ContributeForm } from "./components/contribute-form";
+import { SchemaReference } from "./components/schema-reference";
 
 export const generateMetadata = () =>
   createMetadata({
@@ -37,6 +38,7 @@ const Contribute = () => (
         slug: org.slug,
       }))}
       tagSuggestions={getAllTags().data}
+      yamlReference={<SchemaReference />}
     />
   </div>
 );

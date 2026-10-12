@@ -1,5 +1,6 @@
 "use client";
 
+import { UserPlusIcon } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ const Contribute = () => (
           size="lg"
           variant="outline"
         >
+          <UserPlusIcon className="h-4 w-4" />
           Add a Montessorian
         </Button>
       </div>
