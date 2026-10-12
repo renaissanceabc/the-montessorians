@@ -29,4 +29,7 @@ sources:
   - type: other
     url: https://www.chiaravalle.org/community/alumni/kaliroe
     note: "School alumni profile: attended Chiaravalle Montessori from early childhood through 8th grade, class of 2011"
-verification: reported
+  - type: other
+    url: https://www.chiaravalle.org/community/alumni
+    note: Chiaravalle alumni page features her story, class of 2011
+verification: verified

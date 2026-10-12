@@ -23,12 +23,12 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Melissa_Gilbert
-sources:
-  - type: other
-    url: https://woodlandhill.org/who-we-are/our-alumni/famous-alumni
-    note: Montessori school's promotional list names 'Melissa and Sarah Gilbert' among those who attended Montessori
-verification: reported
 identifiers:
   lcnaf: no96013709
   viaf: "34047906"
   wikidata: Q230929
+verification: unverified
+sources:
+  - type: other
+    url: https://woodlandhill.org/who-we-are/our-alumni/famous-alumni
+    note: Montessori school's promotional list names 'Melissa and Sarah Gilbert' among those who attended Montessori

@@ -28,3 +28,14 @@ identifiers:
   lcnaf: n50007489
   viaf: "59214970"
   wikidata: Q96809
+sources:
+  - type: wikipedia
+    url: https://de.wikipedia.org/wiki/Peter_Bergmann_(Physiker)
+    note: Says he attended a Freiburg Montessori school started by his mother
+  - type: publication
+    url: https://arxiv.org/pdf/physics/0608067
+    note: "Salisbury (2006): his mother founded an early Montessori school in Freiburg, which he attended"
+  - type: wikipedia
+    url: https://de.wikipedia.org/wiki/Emmy_Bergmann
+    note: His mother's Montessori Kinderhaus in Freiburg included her son Peter
+verification: verified

@@ -17,6 +17,7 @@ export const PROFILE_KINDS = ["alum", "contributor"] as const;
 export const CONTRIBUTOR_ROLES = [
   "founder",
   "trainer",
+  "practitioner",
   "teacher-scholar",
   "researcher",
   "author",
@@ -25,6 +26,7 @@ export const CONTRIBUTOR_ROLES = [
 export const CONTRIBUTOR_ROLE_LABELS: Record<(typeof CONTRIBUTOR_ROLES)[number], string> = {
   founder: "Founder",
   trainer: "Trainer",
+  practitioner: "Practitioner",
   "teacher-scholar": "Teacher-scholar",
   researcher: "Researcher",
   author: "Author",
@@ -65,7 +67,7 @@ export type ContributorRole = (typeof CONTRIBUTOR_ROLES)[number];
 export type SourceType = (typeof SOURCE_TYPES)[number];
 export type ContributionType = (typeof CONTRIBUTION_TYPES)[number];
 export type OrganizationType = (typeof ORGANIZATION_TYPES)[number];
-export type Verification = "verified" | "reported" | "confirmed";
+export type Verification = "verified" | "reported" | "confirmed" | "unverified";
 export type RecordStatus = "provisional" | "reviewed";
 
 export type ProfileLink = {

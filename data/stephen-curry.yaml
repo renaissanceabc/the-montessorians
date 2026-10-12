@@ -27,6 +27,10 @@ links:
     url: https://en.wikipedia.org/wiki/Stephen_Curry
 schools:
   - organization: christian-montessori-school-of-lake-norman
+identifiers:
+  lcnaf: no2014060072
+  viaf: "308698264"
+  wikidata: Q352159
 sources:
   - type: article
     url: https://www.gospelherald.com/news/nba-mvp-stephen-curry-shining-example-success-christian-montessori-school-system
@@ -34,8 +38,7 @@ sources:
   - type: other
     url: https://www.mslf.org/famous-montessori-students
     note: Montessori school page quotes Curry saying Montessori gave him confidence at a young age
+  - type: other
+    url: https://firststatemontessori.org/living-montessori-stephen-curry-family/
+    note: Describes the 2013 American Montessori Society video with the Curry family
 verification: verified
-identifiers:
-  lcnaf: no2014060072
-  viaf: "308698264"
-  wikidata: Q352159

@@ -32,6 +32,10 @@ links:
 schools:
   - organization: house-of-learning
     level: elementary
+identifiers:
+  lcnaf: no2009117557
+  viaf: "96800423"
+  wikidata: Q181
 sources:
   - type: article
     url: https://encyclopediaofalabama.org/article/jimmy-wales/
@@ -39,8 +43,7 @@ sources:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Jimmy_Wales
     note: Says he described his childhood school as Montessori-influenced in a 2005 C-SPAN interview
-verification: verified
-identifiers:
-  lcnaf: no2009117557
-  viaf: "96800423"
-  wikidata: Q181
+  - type: social
+    url: https://x.com/jimmy_wales/status/440849974067081217
+    note: Wales says his school was influenced by Montessori, not a Montessori school
+verification: unverified

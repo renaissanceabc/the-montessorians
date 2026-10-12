@@ -48,6 +48,7 @@ const VERIFICATION_LABELS: Record<string, string> = {
   verified: "Verified by a published source",
   reported: "Reported, not yet independently verified",
   confirmed: "Confirmed by the person or the maintainers",
+  unverified: "Unverified: no reliable source yet. Know one? Suggest a correction.",
 };
 
 function yearRange(from?: number, to?: number) {

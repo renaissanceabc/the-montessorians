@@ -14,10 +14,6 @@ tags:
   - psychologist
   - child-development
   - theorist
-education:
-  - montessori
-education_notes: >-
-  Jean Piaget served as President of the Swiss Montessori Society and was a vocal supporter of Montessori pedagogy.
 notable_achievements:
   - Founder of the theory of cognitive development
   - President of the Swiss Montessori Society
@@ -29,3 +25,15 @@ identifiers:
   lcnaf: n78093533
   viaf: "39382513"
   wikidata: Q123190
+kind: contributor
+roles:
+  - researcher
+montessori_notes: Served as president of the Swiss Montessori Society.
+sources:
+  - type: publication
+    url: https://www.tandfonline.com/doi/full/10.1080/00309230.2022.2052732
+    note: Paedagogica Historica article quotes him as president of the Swiss Montessori Society
+  - type: other
+    url: https://www.montessori.org.nz/montessori/a-brief-history/
+    note: Montessori Aotearoa NZ says he headed the Swiss Montessori Society
+verification: verified

@@ -29,12 +29,15 @@ quotes:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Katharine_Graham
-sources:
-  - type: wikipedia
-    url: https://en.wikipedia.org/wiki/Katharine_Graham
-    note: Says she attended a Montessori school until fourth grade, then enrolled at The Potomac School
-verification: verified
 identifiers:
   lcnaf: n79109289
   viaf: "115577779"
   wikidata: Q435203
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Katharine_Graham
+    note: Says she attended a Montessori school until fourth grade, then enrolled at The Potomac School
+  - type: other
+    url: http://msmv.org/discover/noted-alumni
+    note: Quotes her memoir Personal History (1997) on her Montessori schooling
+verification: verified

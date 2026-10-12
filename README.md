@@ -115,7 +115,7 @@ links:
 
 ---
 
-A contributor record adds `kind: contributor`, `roles` (`founder`, `trainer`, `teacher-scholar`, `researcher`,
+A contributor record adds `kind: contributor`, `roles` (`founder`, `trainer`, `practitioner`, `teacher-scholar`, `researcher`,
 `author`, `philosopher`), `affiliations`, and `contributions`. See [`data/angeline-stoll-lillard.yaml`](./data/angeline-stoll-lillard.yaml)
 and [`profile.schema.json`](./profile.schema.json) for every field.
 

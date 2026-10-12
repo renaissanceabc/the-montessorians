@@ -25,6 +25,10 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/William,_Prince_of_Wales
+identifiers:
+  lcnaf: n83035580
+  viaf: "232263808"
+  wikidata: Q36812
 sources:
   - type: article
     url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries
@@ -32,8 +36,15 @@ sources:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Prince_William,_Prince_of_Wales
     note: Says he started at Jane Mynors' nursery school in London (does not call it Montessori)
+  - type: article
+    url: https://www.pressreader.com/uk/scottish-daily-mail/20160107/281483570366710
+    note: Daily Mail describes Mrs Mynors' Nursery School, which he started in 1985, as a Montessori
+  - type: article
+    url: https://www.hellomagazine.com/royalty/20220824149141/princess-diana-changed-education-royal-family/
+    note: Diana chose Montessori-style schooling for her sons
 verification: verified
-identifiers:
-  lcnaf: n83035580
-  viaf: "232263808"
-  wikidata: Q36812
+schools:
+  - organization: mrs-mynors-nursery-school
+    level: primary
+    from: 1985
+    to: 1987

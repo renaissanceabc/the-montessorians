@@ -24,6 +24,10 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Heike_Makatsch
+identifiers:
+  lcnaf: no2003056555
+  viaf: "118979992"
+  wikidata: Q62510
 sources:
   - type: wikipedia
     url: https://de.wikipedia.org/wiki/Heike_Makatsch
@@ -31,8 +35,7 @@ sources:
   - type: other
     url: https://last.fm/de/music/Heike+Makatsch/+wiki
     note: Bio says she attended the Montessori-Grundschule am Farnweg in Düsseldorf
+  - type: publication
+    url: https://www.munzinger.de/register/portrait/biographien/Heike%20Makatsch/00/22285
+    note: "Munzinger biography: Montessori primary school, then Max-Planck-Gymnasium in Düsseldorf"
 verification: verified
-identifiers:
-  lcnaf: no2003056555
-  viaf: "118979992"
-  wikidata: Q62510

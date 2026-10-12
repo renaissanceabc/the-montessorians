@@ -4,7 +4,7 @@ The Montessorians is an open directory and name authority for two kinds of peopl
 
 - **Alumni**: people who attended a Montessori school and went on to do great things, from famous figures to
   extraordinary everyday people.
-- **Contributors**: people who shaped the Montessori field through teacher preparation (trainers), practice
+- **Contributors**: people who shaped the Montessori field through teacher preparation (trainers), guiding children (practitioners), practice
   (teacher-scholars), scholarship (researchers), writing (authors), or philosophy (philosophers), whether or not they
   attended Montessori themselves.
 
@@ -44,6 +44,7 @@ Each record's `verification` summarizes its evidence:
 | `verified`  | At least one reliable published source supports the Montessori connection |
 | `reported`  | The only evidence is personal knowledge or self-published              |
 | `confirmed` | Confirmed directly by the person, or by the maintainers (self-submitted and community-reported profiles) |
+| `unverified` | Listed, often widely, but no reliable source yet; shown with an "Unverified" label until one is found |
 | _(none)_    | Not yet sourced; the record is under review                            |
 
 A record's `status` is `provisional` until a maintainer has reviewed it, then `reviewed`.

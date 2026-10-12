@@ -13,12 +13,6 @@ tags:
   - chef
   - food-activist
   - educator
-education:
-  - montessori
-education_notes: >-
-  After graduating from UC Berkeley, Alice Waters trained at the International Montessori School in London and taught at
-  a Montessori school in Berkeley. She credits Montessori principles with influencing her approach to education and
-  restaurant management.
 notable_achievements:
   - Founder of Chez Panisse restaurant
   - Founder of the Edible Schoolyard Project
@@ -32,3 +26,15 @@ identifiers:
   lcnaf: n81136337
   viaf: "72571344"
   wikidata: Q434513
+kind: contributor
+roles:
+  - practitioner
+montessori_notes: >-
+  After graduating from UC Berkeley, Alice Waters trained at the International Montessori School in London and taught at
+  a Montessori school in Berkeley. She credits Montessori principles with influencing her approach to education and
+  restaurant management.
+sources:
+  - type: article
+    url: https://achievement.org/achiever/alice-waters/
+    note: She took Montessori teacher training in London, then taught at a Berkeley Montessori school
+verification: verified

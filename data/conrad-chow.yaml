@@ -33,4 +33,10 @@ sources:
   - type: other
     url: https://ourkids.net/school/conrad-chow-violinist
     note: School-directory profile of Toronto Montessori Schools alumnus; began violin at age three at TMS
+  - type: other
+    url: https://www.ourkids.net/school/conrad-chow-violinist
+    note: Quotes him on starting violin at Toronto Montessori Schools
 verification: verified
+schools:
+  - organization: toronto-montessori-schools
+    level: primary

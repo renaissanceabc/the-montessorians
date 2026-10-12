@@ -41,6 +41,7 @@
         "enum": [
           "founder",
           "trainer",
+          "practitioner",
           "teacher-scholar",
           "researcher",
           "author",
@@ -204,8 +205,8 @@
     },
     "verification": {
       "type": "string",
-      "enum": ["verified", "reported", "confirmed"],
-      "description": "verified: backed by a published source. reported: from personal knowledge. confirmed: confirmed directly by the person or by the maintainers."
+      "enum": ["verified", "reported", "confirmed", "unverified"],
+      "description": "verified: backed by a published source. reported: from personal knowledge. confirmed: confirmed directly by the person or by the maintainers. unverified: listed, but no reliable source yet."
     },
     "status": {
       "type": "string",

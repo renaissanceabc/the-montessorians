@@ -25,6 +25,10 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Prince_Harry,_Duke_of_Sussex
+identifiers:
+  lcnaf: n00140230
+  viaf: "102307639"
+  wikidata: Q152316
 sources:
   - type: article
     url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries
@@ -32,8 +36,14 @@ sources:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Prince_Harry,_Duke_of_Sussex
     note: Says he began at Jane Mynors' nursery school in London (does not call it Montessori)
+  - type: article
+    url: https://www.pressreader.com/uk/scottish-daily-mail/20160107/281483570366710
+    note: Daily Mail describes Mrs Mynors' Nursery School as a Montessori
+  - type: article
+    url: https://www.hellomagazine.com/royalty/20220824149141/princess-diana-changed-education-royal-family/
+    note: Shows his first day at Mrs Mynors' in 1987
 verification: verified
-identifiers:
-  lcnaf: n00140230
-  viaf: "102307639"
-  wikidata: Q152316
+schools:
+  - organization: mrs-mynors-nursery-school
+    level: primary
+    from: 1987

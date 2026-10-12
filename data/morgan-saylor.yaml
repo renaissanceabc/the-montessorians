@@ -24,13 +24,16 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Morgan_Saylor
+identifiers:
+  lcnaf: no2012136529
+  viaf: "279559280"
+  wikidata: Q6911832
 sources:
   - type: other
     url: >-
       https://www.thecityceleb.com/biography/celebrity/actress/morgan-saylor-biography-net-worth-age-boyfriend-parents-height-movies-awards-wikipedia/
     note: Celebrity bio site says she attended Montessori programs through eighth grade before Decatur High School
-verification: reported
-identifiers:
-  lcnaf: no2012136529
-  viaf: "279559280"
-  wikidata: Q6911832
+  - type: article
+    url: https://www.fandango.com/people/morgan-saylor-599904/biography
+    note: Biography says she grew up in Georgia and attended Montessori schools
+verification: verified
