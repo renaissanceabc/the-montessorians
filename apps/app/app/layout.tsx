@@ -4,6 +4,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 import { Suspense } from "react";
 
+import { DevTools } from "@/components/dev-tools";
 import { Toaster } from "@/components/ui/sonner";
 import { fonts } from "@/lib/fonts";
 
@@ -24,6 +25,7 @@ const RootLayout = ({
             <main>{children}</main>
             <Footer />
             <Toaster richColors />
+            <DevTools />
           </AnalyticsProvider>
         </Suspense>
       </NuqsAdapter>

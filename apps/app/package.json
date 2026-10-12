@@ -44,6 +44,7 @@
     "@types/bun": "catalog:",
     "@types/js-yaml": "catalog:",
     "@types/node": "catalog:",
+    "agentation": "^3.1.2",
     "portless": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
