@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 .temp
+
+# agent-browser screenshots from bun run verify:ui
+.verify

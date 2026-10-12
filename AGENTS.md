@@ -1,3 +1,32 @@
+# Working in this repo
+
+The Montessorians is an open name authority for Montessori alumni and contributors: a Next.js app in `apps/app`, a YAML dataset in `data/`, and shared packages in `packages/` (`@montessorians/*`). Use bun.
+
+## Verify your work before calling it done
+
+Every change that affects what the site renders gets checked in a real browser with agent-browser, not just by tests.
+
+1. **Static checks**: `bun run check` (Ultracite), `bunx turbo run typecheck test`, and `bun run validate` when `data/` changed.
+2. **Run the app** if it isn't already: `cd apps/app && bun run dev:port` (http://localhost:3010).
+3. **Smoke test**: `bun run verify:ui` opens the key pages at desktop (1280px) and phone (375px) widths and fails on 404s, page or console errors, and sideways scrolling. Focus it with `bun run verify:ui -- http://localhost:3010 /contribute /maria-montessori`. Screenshots land in `.verify/`; look at the ones for pages you changed.
+4. **Exercise the change itself** with agent-browser. Run `agent-browser skills get core` first, use your own session (`export AGENT_BROWSER_SESSION=...`), then `open`, `snapshot -i`, interact, check `errors` and `console`, and screenshot at both widths. For forms, try the empty, invalid, and valid paths.
+5. **Report** what you verified and how, and anything you couldn't check.
+
+## Useful skills here
+
+- `agent-browser`: browser verification (above).
+- `vercel-react-best-practices`, `vercel-composition-patterns`: React and Next.js code.
+- `web-design-guidelines`, `emil-design-eng`, `mobile-native`, `break-ui`: UI review, polish, phone behavior, and worst-case data.
+- `animate`, `review-animations`, `animation-performance`: motion.
+- `writing-guidelines`: site copy and docs.
+- `ultracite`: lint and format.
+
+## Ground rules
+
+- Never put a personal email address (the user's or anyone's) in requests to external services, in User-Agent strings or `mailto` parameters, or in scripts.
+- Data changes follow `docs/editorial-policy.md`: real, verifiable sources only; never guess identifiers, dates, DOIs, or ISBNs.
+- Tags come from `data/authority/tags.yaml`; add a tag there before using it.
+
 # Ultracite Code Standards
 
 This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.

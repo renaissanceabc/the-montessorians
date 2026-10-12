@@ -10,5 +10,8 @@ export default defineConfig({
     // from the previous Biome setup).
     "apps/app/components/ui/**",
     "**/*.generated.json",
+    // Vendored agent skills (bunx skills add), tracked by skills-lock.json.
+    ".agents/**",
+    ".claude/skills/**",
   ],
 });
