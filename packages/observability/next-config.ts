@@ -1,21 +1,29 @@
 import { withLogtail } from "@logtail/next";
 import { withSentryConfig } from "@sentry/nextjs";
+
 import { keys } from "./keys";
 
+/*
+ * For all available options, see:
+ * https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+ */
 export const sentryConfig: Parameters<typeof withSentryConfig>[1] = {
+  /*
+   * Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
+   * See the following for more information:
+   * https://docs.sentry.io/product/crons/
+   * https://vercel.com/docs/cron-jobs
+   */
+  automaticVercelMonitors: true,
+
+  // Automatically tree-shake Sentry logger statements to reduce bundle size
+  disableLogger: true,
+
   org: keys().SENTRY_ORG,
   project: keys().SENTRY_PROJECT,
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
-
-  /*
-   * For all available options, see:
-   * https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-   */
-
-  // Upload a larger set of source maps for prettier stack traces (increases build time)
-  widenClientFileUpload: true,
 
   /*
    * Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
@@ -25,19 +33,11 @@ export const sentryConfig: Parameters<typeof withSentryConfig>[1] = {
    */
   tunnelRoute: "/monitoring",
 
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
-
-  /*
-   * Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-   * See the following for more information:
-   * https://docs.sentry.io/product/crons/
-   * https://vercel.com/docs/cron-jobs
-   */
-  automaticVercelMonitors: true,
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
+  widenClientFileUpload: true,
 };
 
-export const withSentry = (sourceConfig: object): object => {
+export const withSentry = <Config extends object>(sourceConfig: Config) => {
   const configWithTranspile = {
     ...sourceConfig,
     transpilePackages: ["@sentry/nextjs"],
@@ -52,5 +52,5 @@ export const loggingEnabled = Boolean(keys().BETTERSTACK_API_KEY);
 /** Sentry only when a DSN is set. */
 export const sentryEnabled = Boolean(keys().NEXT_PUBLIC_SENTRY_DSN);
 
-export const withLogging = (config: object): object =>
+export const withLogging = <Config extends object>(config: Config): Config =>
   loggingEnabled ? withLogtail(config) : { ...config };

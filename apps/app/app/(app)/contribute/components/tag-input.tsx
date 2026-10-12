@@ -2,13 +2,14 @@
 
 import { XIcon } from "lucide-react";
 import { useId, useMemo, useState } from "react";
+
 import type { Tag } from "@/lib/content/types";
 import { cn, toTitleCase } from "@/lib/utils";
 
 const MAX_SUGGESTIONS = 6;
 
 /** Tags as chips. Existing tags are suggested first so the list stays short. */
-export function TagInput({
+export const TagInput = ({
   value,
   onChange,
   suggestions,
@@ -22,7 +23,7 @@ export function TagInput({
   onChange: (value: string[]) => void;
   suggestions: Tag[];
   placeholder: string;
-}) {
+}) => {
   const listId = useId();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -39,7 +40,7 @@ export function TagInput({
   );
 
   const add = (label: string) => {
-    const clean = toTitleCase(label.trim().replace(/,$/, ""));
+    const clean = toTitleCase(label.trim().replace(/,$/u, ""));
     if (clean && !value.includes(clean)) {
       onChange([...value, clean]);
     }
@@ -51,19 +52,19 @@ export function TagInput({
     <div className="relative">
       <div
         className={cn(
-          "flex min-h-10 flex-wrap items-center gap-1 rounded-md border border-input bg-white/80 px-2 py-1.5 shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 dark:bg-input/30",
-          invalid && "border-destructive ring-3 ring-destructive/20"
+          "border-input focus-within:border-ring focus-within:ring-ring/50 dark:bg-input/30 flex min-h-10 flex-wrap items-center gap-1 rounded-md border bg-white/80 px-2 py-1.5 shadow-xs transition-[color,box-shadow] focus-within:ring-3",
+          invalid && "border-destructive ring-destructive/20 ring-3"
         )}
       >
         {value.map((tag) => (
           <span
-            className="inline-flex items-center gap-1 rounded bg-muted py-0.5 pr-0.5 pl-2 text-[13px]"
+            className="bg-muted inline-flex items-center gap-1 rounded py-0.5 pr-0.5 pl-2 text-[13px]"
             key={tag}
           >
             {tag}
             <button
               aria-label={`Remove ${tag}`}
-              className="flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-black/5 hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground flex size-5 items-center justify-center rounded hover:bg-black/5"
               onClick={() => onChange(value.filter((t) => t !== tag))}
               type="button"
             >
@@ -78,7 +79,7 @@ export function TagInput({
           aria-expanded={matches.length > 0}
           aria-invalid={invalid || undefined}
           aria-label="Add a tag"
-          className="h-7 min-w-32 flex-1 bg-transparent px-1 text-base outline-none placeholder:text-muted-foreground md:text-sm"
+          className="placeholder:text-muted-foreground h-7 min-w-32 flex-1 bg-transparent px-1 text-base outline-none md:text-sm"
           id={id}
           onChange={(e) => {
             if (e.target.value.endsWith(",")) {
@@ -113,8 +114,9 @@ export function TagInput({
       </div>
       {matches.length > 0 && (
         <ul
-          className="absolute inset-x-0 top-full z-20 mt-1 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10"
+          className="bg-popover text-popover-foreground ring-foreground/10 absolute inset-x-0 top-full z-20 mt-1 rounded-lg p-1 shadow-md ring-1"
           id={listId}
+          // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/prefer-tag-over-role -- ARIA combobox popup: a native <select>/<datalist> cannot render the custom rows or keep focus in the text input.
           role="listbox"
         >
           {matches.map((tag, i) => (
@@ -131,6 +133,7 @@ export function TagInput({
                 add(tag.label);
               }}
               onMouseEnter={() => setActive(i)}
+              // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/prefer-tag-over-role -- option row of the ARIA combobox listbox above; a native <option> cannot hold this markup.
               role="option"
             >
               {tag.label}
@@ -140,4 +143,4 @@ export function TagInput({
       )}
     </div>
   );
-}
+};

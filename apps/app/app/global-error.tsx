@@ -4,13 +4,14 @@ import { parseError } from "@repo/observability/error";
 import { AlertTriangle, Home, RotateCcw } from "lucide-react";
 import type NextError from "next/error";
 import { useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import { fonts } from "@/lib/fonts";
 
-type GlobalErrorProperties = {
+interface GlobalErrorProperties {
   readonly error: NextError & { digest?: string };
   readonly reset: () => void;
-};
+}
 
 const GlobalError = ({ error, reset }: GlobalErrorProperties) => {
   useEffect(() => {
@@ -27,7 +28,7 @@ const GlobalError = ({ error, reset }: GlobalErrorProperties) => {
             </div>
 
             <div className="space-y-2">
-              <h1 className="font-bold text-2xl text-gray-900">Critical Error</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Critical Error</h1>
               <p className="text-gray-600">
                 The application encountered a critical error. Please try refreshing the page.
               </p>

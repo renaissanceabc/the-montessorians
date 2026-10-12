@@ -3,7 +3,9 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { type DirectoryCounts, DirectoryShell, FilterChip } from "@/components/directory-shell";
+
+import { DirectoryShell, FilterChip } from "@/components/directory-shell";
+import type { DirectoryCounts, DirectoryTab } from "@/components/directory-shell";
 import {
   Select,
   SelectContent,
@@ -12,18 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { filterAndSortProfiles } from "@/lib/content/filter";
-import {
-  CONTRIBUTOR_ROLE_LABELS,
-  type Profile,
-  type ProfileKind,
-  type Tag,
-} from "@/lib/content/types";
-import { DEFAULT_PROFILES_FILTERS, type getProfilesOptions } from "@/lib/types";
-import {
-  type AffiliationOption,
-  type ContributorFilters,
-  ContributorFiltersPopover,
-} from "./contributor-filters-popover";
+import { CONTRIBUTOR_ROLE_LABELS } from "@/lib/content/types";
+import type { Profile, ProfileKind, Tag } from "@/lib/content/types";
+import { DEFAULT_PROFILES_FILTERS } from "@/lib/types";
+import type { getProfilesOptions } from "@/lib/types";
+
+import { ContributorFiltersPopover } from "./contributor-filters-popover";
+import type { AffiliationOption, ContributorFilters } from "./contributor-filters-popover";
 import ProfilesList from "./profiles-list";
 import { TagsPopover } from "./tags-popover";
 
@@ -32,15 +29,15 @@ type SortBy = NonNullable<getProfilesOptions["sortBy"]>;
 
 // Single combined sort control: field + direction in one menu.
 const SORT_OPTIONS = [
-  { value: "latest-desc", label: "Recently added", orderBy: "latest", sortBy: "desc" },
-  { value: "latest-asc", label: "Oldest first", orderBy: "latest", sortBy: "asc" },
-  { value: "alphabetical-asc", label: "A–Z", orderBy: "alphabetical", sortBy: "asc" },
-  { value: "alphabetical-desc", label: "Z–A", orderBy: "alphabetical", sortBy: "desc" },
+  { label: "Recently added", orderBy: "latest", sortBy: "desc", value: "latest-desc" },
+  { label: "Oldest first", orderBy: "latest", sortBy: "asc", value: "latest-asc" },
+  { label: "A–Z", orderBy: "alphabetical", sortBy: "asc", value: "alphabetical-asc" },
+  { label: "Z–A", orderBy: "alphabetical", sortBy: "desc", value: "alphabetical-desc" },
   {
-    value: "contributions-desc",
     label: "Most contributions",
     orderBy: "contributions",
     sortBy: "desc",
+    value: "contributions-desc",
   },
 ] as const satisfies readonly {
   value: string;
@@ -57,14 +54,22 @@ const PATHS: Record<"all" | ProfileKind, string> = {
   contributor: "/contributors",
 };
 
+const TABS_BY_KIND: Record<"all" | ProfileKind, DirectoryTab> = {
+  all: "all",
+  alum: "alumni",
+  contributor: "contributors",
+};
+
+const NO_AFFILIATIONS: AffiliationOption[] = [];
+
 const splitList = (value: string | null) => (value ?? "").split(",").filter(Boolean);
 
-export function ProfilesPageWrapper({
+export const ProfilesPageWrapper = ({
   profiles,
   tags: availableTags,
   kind,
   counts,
-  affiliationOptions = [],
+  affiliationOptions = NO_AFFILIATIONS,
 }: {
   profiles: Profile[];
   tags: Tag[];
@@ -72,7 +77,7 @@ export function ProfilesPageWrapper({
   kind?: ProfileKind;
   counts: DirectoryCounts;
   affiliationOptions?: AffiliationOption[];
-}) {
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isContributors = kind === "contributor";
@@ -80,17 +85,21 @@ export function ProfilesPageWrapper({
 
   // Initial filter state comes from the URL so deep links work on a static page.
   const [search, setSearch] = useState(searchParams.get("q") ?? "");
+  // SAFETY: DEFAULT_PROFILES_FILTERS always sets orderBy and sortBy. An unrecognized URL
+  // value matches no SORT_OPTIONS entry and filterAndSortProfiles falls back to its default order.
   const [orderBy, setOrderBy] = useState<OrderBy>(
     (searchParams.get("orderBy") as OrderBy) || (DEFAULT_PROFILES_FILTERS.orderBy as OrderBy)
   );
+  // SAFETY: DEFAULT_PROFILES_FILTERS always sets orderBy and sortBy. An unrecognized URL
+  // value matches no SORT_OPTIONS entry and filterAndSortProfiles falls back to its default order.
   const [sortBy, setSortBy] = useState<SortBy>(
     (searchParams.get("sortBy") as SortBy) || (DEFAULT_PROFILES_FILTERS.sortBy as SortBy)
   );
   const [tags, setTags] = useState(searchParams.get("tags") ?? "");
   const [contributorFilters, setContributorFilters] = useState<ContributorFilters>({
-    roles: splitList(searchParams.get("roles")),
-    organizations: splitList(searchParams.get("orgs")),
     minContributions: Number(searchParams.get("min") ?? 0) || 0,
+    organizations: splitList(searchParams.get("orgs")),
+    roles: splitList(searchParams.get("roles")),
   });
   const [debouncedSearch] = useDebounce(search, 300);
 
@@ -110,14 +119,14 @@ export function ProfilesPageWrapper({
   const filtered = useMemo(
     () =>
       filterAndSortProfiles(profiles, {
-        orderBy,
-        sortBy,
         kind,
-        search: debouncedSearch || undefined,
-        tags: isContributors ? undefined : tags || undefined,
-        roles: isContributors ? contributorFilters.roles.join(",") : undefined,
-        organizations: isContributors ? contributorFilters.organizations.join(",") : undefined,
         minContributions: isContributors ? contributorFilters.minContributions : undefined,
+        orderBy,
+        organizations: isContributors ? contributorFilters.organizations.join(",") : undefined,
+        roles: isContributors ? contributorFilters.roles.join(",") : undefined,
+        search: debouncedSearch || undefined,
+        sortBy,
+        tags: isContributors ? undefined : tags || undefined,
       }),
     [profiles, orderBy, sortBy, kind, debouncedSearch, tags, isContributors, contributorFilters]
   );
@@ -125,12 +134,22 @@ export function ProfilesPageWrapper({
   // Sync filter state to URL without triggering a server re-render
   useEffect(() => {
     const params = new URLSearchParams();
-    if (debouncedSearch) params.set("q", debouncedSearch);
-    if (orderBy !== DEFAULT_PROFILES_FILTERS.orderBy) params.set("orderBy", orderBy ?? "");
-    if (sortBy !== DEFAULT_PROFILES_FILTERS.sortBy) params.set("sortBy", sortBy ?? "");
-    if (!isContributors && tags) params.set("tags", tags);
+    if (debouncedSearch) {
+      params.set("q", debouncedSearch);
+    }
+    if (orderBy !== DEFAULT_PROFILES_FILTERS.orderBy) {
+      params.set("orderBy", orderBy ?? "");
+    }
+    if (sortBy !== DEFAULT_PROFILES_FILTERS.sortBy) {
+      params.set("sortBy", sortBy ?? "");
+    }
+    if (!isContributors && tags) {
+      params.set("tags", tags);
+    }
     if (isContributors) {
-      if (contributorFilters.roles.length) params.set("roles", contributorFilters.roles.join(","));
+      if (contributorFilters.roles.length) {
+        params.set("roles", contributorFilters.roles.join(","));
+      }
       if (contributorFilters.organizations.length) {
         params.set("orgs", contributorFilters.organizations.join(","));
       }
@@ -157,56 +176,58 @@ export function ProfilesPageWrapper({
   const chips = isContributors
     ? [
         ...contributorFilters.roles.map((role) => ({
-          key: `role-${role}`,
-          label: CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS] ?? role,
-          remove: () =>
+          handleRemove: () =>
             setContributorFilters((f) => ({ ...f, roles: f.roles.filter((r) => r !== role) })),
+          key: `role-${role}`,
+          // SAFETY: roles come from the URL; an unknown one indexes to undefined and falls
+          // back to the raw value.
+          label: CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS] ?? role,
         })),
         ...contributorFilters.organizations.map((slug) => ({
-          key: `org-${slug}`,
-          label: orgName(slug),
-          remove: () =>
+          handleRemove: () =>
             setContributorFilters((f) => ({
               ...f,
               organizations: f.organizations.filter((o) => o !== slug),
             })),
+          key: `org-${slug}`,
+          label: orgName(slug),
         })),
         ...(contributorFilters.minContributions
           ? [
               {
+                handleRemove: () => setContributorFilters((f) => ({ ...f, minContributions: 0 })),
                 key: "min",
                 label: `${contributorFilters.minContributions}+ contributions`,
-                remove: () => setContributorFilters((f) => ({ ...f, minContributions: 0 })),
               },
             ]
           : []),
       ]
     : tagSlugs.map((slug) => ({
+        handleRemove: () => setTags(tagSlugs.filter((t) => t !== slug).join(",")),
         key: `tag-${slug}`,
         label: tagLabel(slug),
-        remove: () => setTags(tagSlugs.filter((t) => t !== slug).join(",")),
       }));
 
   const clearAll = () => {
     setTags("");
-    setContributorFilters({ roles: [], organizations: [], minContributions: 0 });
+    setContributorFilters({ minContributions: 0, organizations: [], roles: [] });
   };
 
-  const total =
-    kind === "alum" ? counts.alumni : kind === "contributor" ? counts.contributors : counts.all;
+  const activeTab = TABS_BY_KIND[kind ?? "all"];
+  const total = counts[activeTab];
   const noun = kind === "contributor" ? "contributors" : "Montessorians";
 
   return (
     <DirectoryShell
-      active={kind === "alum" ? "alumni" : kind === "contributor" ? "contributors" : "all"}
+      active={activeTab}
       chips={
         chips.length > 0 ? (
           <>
             {chips.map((chip) => (
-              <FilterChip key={chip.key} label={chip.label} onRemove={chip.remove} />
+              <FilterChip key={chip.key} label={chip.label} onRemove={chip.handleRemove} />
             ))}
             <button
-              className="px-1.5 py-0.5 text-muted-foreground text-xs underline hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground px-1.5 py-0.5 text-xs underline"
               onClick={clearAll}
               type="button"
             >
@@ -227,7 +248,7 @@ export function ProfilesPageWrapper({
             <TagsPopover
               availableTags={availableTags}
               initialTags={tags}
-              onApplyTags={(tagSlugs) => setTags(tagSlugs)}
+              onApplyTags={(next) => setTags(next)}
             />
           )}
           <Select items={sortOptions} onValueChange={handleSortChange} value={sortValue}>
@@ -255,4 +276,4 @@ export function ProfilesPageWrapper({
       <ProfilesList hasSearch={Boolean(debouncedSearch)} profiles={filtered} />
     </DirectoryShell>
   );
-}
+};

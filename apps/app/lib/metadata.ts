@@ -1,26 +1,41 @@
 import type { Metadata } from "next";
+
 import { siteUrl } from "./utils";
 
-type PlainObject = Record<string, unknown>;
+/** A value inside a Next.js `Metadata` object: nested option groups, lists, and scalars. */
+type MetadataNode =
+  | MetadataTree
+  | readonly MetadataNode[]
+  | string
+  | number
+  | boolean
+  | URL
+  | null
+  | undefined;
 
-const isPlainObject = (value: unknown): value is PlainObject =>
+/** A `Metadata` option group, viewed by key so two of them can be merged. */
+interface MetadataTree {
+  [key: string]: MetadataNode;
+}
+
+const isMetadataTree = (value: MetadataNode): value is MetadataTree =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** Recursively merge `source` into `target` (plain objects deep-merged, everything else overwritten). */
-function deepMerge(target: PlainObject, source: PlainObject): PlainObject {
-  const output: PlainObject = { ...target };
+const deepMerge = (target: MetadataTree, source: MetadataTree): MetadataTree => {
+  const output = { ...target };
   for (const [key, sourceValue] of Object.entries(source)) {
     if (sourceValue === undefined) {
       continue;
     }
     const targetValue = output[key];
     output[key] =
-      isPlainObject(targetValue) && isPlainObject(sourceValue)
+      isMetadataTree(targetValue) && isMetadataTree(sourceValue)
         ? deepMerge(targetValue, sourceValue)
         : sourceValue;
   }
   return output;
-}
+};
 
 type MetadataGenerator = Omit<Metadata, "description" | "title"> & {
   title: string;
@@ -52,12 +67,27 @@ export const createMetadata = ({
   const parsedTitle = `${title} | ${applicationName}`;
   const ogImage = image ?? `${siteUrl}/og.png`;
   const defaultMetadata: Metadata = {
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: parsedTitle,
+    },
     applicationName,
-    title: parsedTitle,
-    description,
     authors: author,
     creator,
-    publisher,
+    description,
+    formatDetection: {
+      telephone: false,
+    },
+    icons: {
+      apple: "/apple-touch-icon.png",
+      icon: "/favicon.ico",
+      other: {
+        rel: "apple-touch-icon",
+        url: "/apple-touch-icon.png",
+      },
+      shortcut: "/favicon-96x96.png",
+    },
     keywords: [
       "montessori",
       "education",
@@ -67,67 +97,57 @@ export const createMetadata = ({
       "microschool",
       "homeschooling",
     ],
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
-    formatDetection: {
-      telephone: false,
-    },
-    icons: {
-      icon: "/favicon.ico",
-      shortcut: "/favicon-96x96.png",
-      apple: "/apple-touch-icon.png",
-      other: {
-        rel: "apple-touch-icon",
-        url: "/apple-touch-icon.png",
-      },
-    },
     manifest: "/site.webmanifest",
-    appleWebApp: {
-      capable: true,
-      statusBarStyle: "default",
-      title: parsedTitle,
-    },
     openGraph: {
-      type: "website",
+      description,
+      images: [
+        {
+          alt: title,
+          height: 630,
+          url: ogImage,
+          width: 1200,
+        },
+      ],
       locale: "en_US",
       siteName: applicationName,
       title,
-      description,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      type: "website",
     },
+    publisher,
+    robots: {
+      follow: true,
+      googleBot: {
+        follow: true,
+        index: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+      index: true,
+    },
+    title: parsedTitle,
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
       creator: twitterHandle,
+      description,
       images: [
         {
+          alt: title,
+          height: 630,
           url: ogImage,
           width: 1200,
-          height: 630,
-          alt: title,
         },
       ],
+      title,
     },
   };
 
-  const metadata = deepMerge(defaultMetadata as PlainObject, properties as PlainObject) as Metadata;
+  // SAFETY: `Metadata` is a tree of option groups, lists, and scalars, so both
+  // inputs can be viewed by key. Every key and value in the merge comes from one
+  // of the two `Metadata` inputs, so the result is still a `Metadata`.
+  const merged = deepMerge(defaultMetadata as MetadataTree, properties as MetadataTree);
+  // SAFETY: see above; the merged tree has only `Metadata` keys and value shapes.
+  const metadata = merged as Metadata;
 
   return metadata;
 };

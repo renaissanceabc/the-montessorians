@@ -13,8 +13,7 @@ jobs:
   changeset:
     name: Require changeset
     if: >-
-      !contains(github.event.pull_request.labels.*.name, 'skip-changeset')
-      && github.event.pull_request.title != 'Version Packages'
+      !contains(github.event.pull_request.labels.*.name, 'skip-changeset') && github.event.pull_request.title != 'Version Packages'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

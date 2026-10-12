@@ -1,10 +1,11 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
+
 import ProfileListItem from "@/components/profile-list-item";
 import { Button } from "@/components/ui/button";
 import type { Profile } from "@/lib/content/types";
 
-export default function ProfilesHomepageList({ profiles }: { profiles: Profile[] }) {
+const ProfilesHomepageList = ({ profiles }: { profiles: Profile[] }) => {
   if (!profiles.length) {
     return (
       <div className="text-muted-foreground text-sm italic">
@@ -21,11 +22,12 @@ export default function ProfilesHomepageList({ profiles }: { profiles: Profile[]
       <div className="flex justify-center pt-4">
         <Button
           nativeButton={false}
-          render={<Link className="font-semibold text-sm" href="/alumni" />}
+          render={<Link className="text-sm font-semibold" href="/alumni" />}
         >
           See more Montessorians <ArrowRightIcon className="h-4 w-4" />
         </Button>
       </div>
     </div>
   );
-}
+};
+export default ProfilesHomepageList;

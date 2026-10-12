@@ -1,25 +1,25 @@
 import { Geist, Geist_Mono, Instrument_Serif, Playfair_Display } from "next/font/google";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
   subsets: ["latin"],
+  variable: "--font-geist-sans",
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair-display",
   subsets: ["latin"],
+  variable: "--font-playfair-display",
 });
 
 const instrumentSerif = Instrument_Serif({
-  weight: ["400"],
   style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
   subsets: ["latin"],
+  variable: "--font-instrument-serif",
+  weight: ["400"],
 });
 
 export const fonts = `${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${playfairDisplay.variable}`;

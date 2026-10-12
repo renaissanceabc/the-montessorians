@@ -1,16 +1,16 @@
 import { notFound } from "next/navigation";
+
 import { getAllTags, getProfilesByTag, getTagBySlug } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
+
 import { TagProfilesPageWrapper } from "./components/tag-profiles-page-wrapper";
 
-export function generateStaticParams() {
-  return getAllTags().data.map((tag) => ({ slug: tag.slug }));
-}
+export const generateStaticParams = () => getAllTags().data.map((tag) => ({ slug: tag.slug }));
 
 export const dynamicParams = false;
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export const generateMetadata = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
   const tag = getTagBySlug(slug);
 
@@ -19,15 +19,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return createMetadata({
-    title: tag.label,
-    description: `Explore Montessorians tagged with "${tag.label}".`,
     alternates: {
       canonical: `${siteUrl}/tags/${tag.slug}`,
     },
+    description: `Explore Montessorians tagged with "${tag.label}".`,
+    title: tag.label,
   });
-}
+};
 
-export default async function TagPage(props: { params: Promise<{ slug: string }> }) {
+const TagPage = async (props: { params: Promise<{ slug: string }> }) => {
   const { slug } = await props.params;
   const tag = getTagBySlug(slug);
 
@@ -38,4 +38,5 @@ export default async function TagPage(props: { params: Promise<{ slug: string }>
   const profiles = getProfilesByTag(slug);
 
   return <TagProfilesPageWrapper profiles={profiles} tag={tag} />;
-}
+};
+export default TagPage;

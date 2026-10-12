@@ -11,5 +11,5 @@ initializeAnalytics();
 
 // Vercel BotID: invisible bot checks on the routes that create things.
 initBotId({
-  protect: [{ path: "/api/submit", method: "POST" }],
+  protect: [{ method: "POST", path: "/api/submit" }],
 });

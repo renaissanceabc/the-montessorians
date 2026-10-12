@@ -1,20 +1,20 @@
 import Link from "next/link";
+
 import { getAllOrganizations } from "@/lib/content/organizations";
 import { getAllProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { REPO_URL } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
 
-export const generateMetadata = () => {
-  return createMetadata({
-    title: "Data & API",
-    description:
-      "Permanent identifiers, bulk downloads, JSON-LD, and a reconciliation API for The Montessorians name authority.",
+export const generateMetadata = () =>
+  createMetadata({
     alternates: {
       canonical: `${siteUrl}/data`,
     },
+    description:
+      "Permanent identifiers, bulk downloads, JSON-LD, and a reconciliation API for The Montessorians name authority.",
+    title: "Data & API",
   });
-};
 
 const DOWNLOADS = [
   {
@@ -44,18 +44,18 @@ const DOWNLOADS = [
   },
 ];
 
-export default function Data() {
+const Data = () => {
   const people = getAllProfiles();
   const example = people.find((p) => p.kind === "contributor") ?? people[0];
 
   return (
     <div className="container mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
       <div className="w-full space-y-8 pt-12 pb-16">
-        <h1 className="flex w-full justify-center font-bold font-serif text-4xl lg:text-5xl">
+        <h1 className="flex w-full justify-center font-serif text-4xl font-bold lg:text-5xl">
           Data &amp; API
         </h1>
 
-        <div className="prose prose-stone max-w-none prose-code:font-medium prose-code:before:content-none prose-code:after:content-none prose-pre:whitespace-pre-wrap prose-pre:break-all">
+        <div className="prose prose-stone prose-code:font-medium prose-code:before:content-none prose-code:after:content-none prose-pre:whitespace-pre-wrap prose-pre:break-all max-w-none">
           <p className="lead">
             The Montessorians is an open name authority for Montessori alumni and contributors:{" "}
             {people.length} people and {getAllOrganizations().length} organizations, dedicated to
@@ -66,7 +66,7 @@ export default function Data() {
           <h3>Permanent identifiers</h3>
           <p>
             Every record has an identifier that never changes and is never reused, even if the
-            person's name or page address changes. Cite records by their URI:
+            person&apos;s name or page address changes. Cite records by their URI:
           </p>
           {example && (
             <pre>
@@ -76,9 +76,9 @@ export default function Data() {
             </pre>
           )}
           <p>
-            It redirects to the record's current page. If a record is merged into another, its URI
-            redirects to the surviving record; if it is withdrawn, the URI explains why. Person ids
-            look like <code>tm0000001</code>; organization ids look like <code>tmo000001</code>.
+            It redirects to the record&apos;s current page. If a record is merged into another, its
+            URI redirects to the surviving record; if it is withdrawn, the URI explains why. Person
+            ids look like <code>tm0000001</code>; organization ids look like <code>tmo000001</code>.
           </p>
 
           <h3>Downloads</h3>
@@ -137,4 +137,5 @@ export default function Data() {
       </div>
     </div>
   );
-}
+};
+export default Data;

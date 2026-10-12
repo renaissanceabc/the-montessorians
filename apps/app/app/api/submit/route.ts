@@ -1,19 +1,21 @@
 import { log } from "@repo/observability/log";
 import { checkBotId } from "botid/server";
 import { NextResponse } from "next/server";
+
 import { env } from "@/env";
 import { issueBody, issueTitle, submissionSchema } from "@/lib/submission";
 
 const REPO = "renaissanceabc/the-montessorians";
 
 /**
- * @route POST /api/submit
- * @description Turns a contribute-form submission into a GitHub issue for
+ * POST /api/submit
+ *
+ * Turns a contribute-form submission into a GitHub issue for
  * maintainers to review, so contributors don't need a GitHub account. Guarded by
  * Vercel BotID (and the Vercel firewall). Nothing is published until a
  * maintainer merges it.
  */
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
   const verification = await checkBotId();
   if (verification.isBot) {
     return NextResponse.json({ error: "Request blocked" }, { status: 403 });
@@ -34,17 +36,17 @@ export async function POST(request: Request) {
 
   const submission = parsed.data;
   const response = await fetch(`https://api.github.com/repos/${REPO}/issues`, {
-    method: "POST",
+    body: JSON.stringify({
+      body: issueBody(submission),
+      labels: ["profile-request", ...submission.kinds],
+      title: issueTitle(submission),
+    }),
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${env.GITHUB_SUBMISSIONS_TOKEN}`,
       "X-GitHub-Api-Version": "2022-11-28",
     },
-    body: JSON.stringify({
-      title: issueTitle(submission),
-      body: issueBody(submission),
-      labels: ["profile-request", ...submission.kinds],
-    }),
+    method: "POST",
   });
 
   if (!response.ok) {
@@ -52,6 +54,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not create the request" }, { status: 502 });
   }
 
+  // SAFETY: a 2xx from GitHub's create-issue endpoint returns the issue object, which
+  // always has html_url and number.
   const issue = (await response.json()) as { html_url: string; number: number };
-  return NextResponse.json({ url: issue.html_url, number: issue.number }, { status: 201 });
-}
+  return NextResponse.json({ number: issue.number, url: issue.html_url }, { status: 201 });
+};

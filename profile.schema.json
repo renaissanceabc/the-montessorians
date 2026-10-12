@@ -129,13 +129,7 @@
           },
           "level": {
             "type": "string",
-            "enum": [
-              "infant-toddler",
-              "primary",
-              "elementary",
-              "adolescent",
-              "secondary"
-            ]
+            "enum": ["infant-toddler", "primary", "elementary", "adolescent", "secondary"]
           },
           "from": {
             "$ref": "#/definitions/year"
@@ -187,15 +181,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "book",
-              "article",
-              "chapter",
-              "lecture",
-              "training-program",
-              "media",
-              "other"
-            ]
+            "enum": ["book", "article", "chapter", "lecture", "training-program", "media", "other"]
           },
           "year": {
             "$ref": "#/definitions/year"

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+
 import { CiteButton } from "@/components/cite-button";
 import { ShareDialog } from "@/components/share-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,25 +18,33 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { VerificationBadge } from "@/components/verification";
 import type { OrganizationRef, Profile } from "@/lib/content/types";
 
-const yearRange = (from?: number, to?: number) =>
-  from && to ? (from === to ? `${from}` : `${from}–${to}`) : from ? `${from}–` : to ? `–${to}` : "";
+const yearRange = (from?: number, to?: number) => {
+  if (from && to) {
+    return from === to ? `${from}` : `${from}–${to}`;
+  }
+  if (from) {
+    return `${from}–`;
+  }
+  if (to) {
+    return `–${to}`;
+  }
+  return "";
+};
 
 const orgLabel = (ref: OrganizationRef) =>
   ref.organizationShortName ?? ref.organizationName ?? ref.organization;
 
-function Divider() {
-  return (
-    <span aria-hidden="true" className="px-1 text-black/25">
-      ·
-    </span>
-  );
-}
+const Divider = () => (
+  <span aria-hidden="true" className="px-1 text-black/25">
+    ·
+  </span>
+);
 
 /**
  * The profile header: photo, name with its verification badge, tagline, and one
  * pill of facts with the actions people use most (Cite visible, the rest in "…").
  */
-export function ProfileHeader({
+export const ProfileHeader = ({
   profile,
   permanentUrl,
   correctionUrl,
@@ -43,11 +52,11 @@ export function ProfileHeader({
   profile: Profile;
   permanentUrl: string;
   correctionUrl: string;
-}) {
+}) => {
   const isContributor = profile.kinds.includes("contributor");
   const kindLabel = profile.kinds.map((k) => (k === "alum" ? "Alum" : "Contributor")).join(" · ");
-  const school = profile.schools[0];
-  const affiliation = profile.affiliations[0];
+  const [school] = profile.schools;
+  const [affiliation] = profile.affiliations;
   const org = isContributor ? affiliation : (school ?? affiliation);
   const extraOrgs = isContributor ? profile.affiliations.length - 1 : 0;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,21 +72,21 @@ export function ProfileHeader({
           </AvatarFallback>
         </Avatar>
         {profile.imageCredit && (
-          <p className="max-w-xs text-muted-foreground text-xs">{profile.imageCredit}</p>
+          <p className="text-muted-foreground max-w-xs text-xs">{profile.imageCredit}</p>
         )}
       </div>
 
       <div className="flex items-center justify-center gap-2.5">
-        <h1 className="font-semibold font-serif text-4xl leading-tight">{profile.name}</h1>
+        <h1 className="font-serif text-4xl leading-tight font-semibold">{profile.name}</h1>
         <VerificationBadge verification={profile.verification} />
       </div>
 
       {profile.tagline && (
-        <p className="max-w-xl text-lg text-muted-foreground italic">{profile.tagline}</p>
+        <p className="text-muted-foreground max-w-xl text-lg italic">{profile.tagline}</p>
       )}
 
-      <div className="flex max-w-full items-center justify-center gap-1 rounded-full border border-black/10 bg-white/60 py-1 pr-1 pl-4 text-[#4A433D] text-sm">
-        <span className="shrink-0 font-semibold text-[11px] text-muted-foreground uppercase tracking-wider">
+      <div className="flex max-w-full items-center justify-center gap-1 rounded-full border border-black/10 bg-white/60 py-1 pr-1 pl-4 text-sm text-[#4A433D]">
+        <span className="text-muted-foreground shrink-0 text-[11px] font-semibold tracking-wider uppercase">
           {kindLabel}
         </span>
 
@@ -148,7 +157,7 @@ export function ProfileHeader({
               }}
               type="button"
             >
-              <ShareIcon className="size-4 text-muted-foreground" />
+              <ShareIcon className="text-muted-foreground size-4" />
               Share this profile
             </button>
             <Link
@@ -157,7 +166,7 @@ export function ProfileHeader({
               onClick={() => setMenuOpen(false)}
               target="_blank"
             >
-              <PencilIcon className="size-4 text-muted-foreground" />
+              <PencilIcon className="text-muted-foreground size-4" />
               Suggest a correction
             </Link>
           </PopoverContent>
@@ -166,4 +175,4 @@ export function ProfileHeader({
       </div>
     </div>
   );
-}
+};

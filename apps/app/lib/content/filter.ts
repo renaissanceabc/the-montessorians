@@ -1,4 +1,5 @@
 import type { getProfilesOptions } from "@/lib/types";
+
 import type { Profile } from "./types";
 
 // Pure, isomorphic filtering/sorting over an in-memory profile list. Shared by
@@ -6,13 +7,13 @@ import type { Profile } from "./types";
 
 const splitList = (value: string | undefined) => (value ?? "").split(",").filter(Boolean);
 
-function sortProfiles(
+const sortProfiles = (
   list: Profile[],
   orderBy: NonNullable<getProfilesOptions["orderBy"]>,
   sortBy: NonNullable<getProfilesOptions["sortBy"]>
-): Profile[] {
+): Profile[] => {
   const dir = sortBy === "asc" ? 1 : -1;
-  return [...list].sort((a, b) => {
+  return list.toSorted((a, b) => {
     if (orderBy === "alphabetical") {
       return a.name.localeCompare(b.name) * dir;
     }
@@ -32,18 +33,17 @@ function sortProfiles(
     }
     return (a.addedAt < b.addedAt ? -1 : 1) * dir;
   });
-}
+};
 
-function matchesSearch(profile: Profile, q: string): boolean {
-  return [profile.name, profile.nameAuthorized, ...profile.nameVariants].some((name) =>
+const matchesSearch = (profile: Profile, q: string): boolean =>
+  [profile.name, profile.nameAuthorized, ...profile.nameVariants].some((name) =>
     name?.toLowerCase().includes(q)
   );
-}
 
-export function filterAndSortProfiles(
+export const filterAndSortProfiles = (
   list: Profile[],
   options: getProfilesOptions = {}
-): Profile[] {
+): Profile[] => {
   const {
     orderBy = "latest",
     sortBy = "desc",
@@ -95,4 +95,4 @@ export function filterAndSortProfiles(
   }
 
   return out;
-}
+};

@@ -1,19 +1,22 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import yaml from "js-yaml";
+
+import { load } from "js-yaml";
+
 import {
   newOrganizations,
   submissionSchema,
   submissionToYaml,
   yamlToSubmission,
 } from "./submission";
+import type { YamlMap } from "./submission";
 
 const alum = {
   kinds: ["alum"],
   name: "Jane Doe",
+  sources: [{ type: "article", url: "https://example.com/jane" }],
   tagline: "Engineer and author",
   tags: ["Engineer", "author"],
-  sources: [{ type: "article", url: "https://example.com/jane" }],
 };
 
 describe("submission", () => {
@@ -26,7 +29,7 @@ describe("submission", () => {
     assert.equal(
       submissionSchema.safeParse({
         ...alum,
-        sources: [{ type: "personal-knowledge", note: "Classmate" }],
+        sources: [{ note: "Classmate", type: "personal-knowledge" }],
       }).success,
       true
     );
@@ -43,7 +46,8 @@ describe("submission", () => {
   test("renders profile YAML with a slug and slugged tags, and parses it back", () => {
     const parsed = submissionSchema.parse(alum);
     const text = submissionToYaml(parsed);
-    const doc = yaml.load(text) as Record<string, unknown>;
+    // SAFETY: submissionToYaml always renders a mapping of plain YAML values.
+    const doc = load(text) as YamlMap;
     assert.equal(doc.slug, "jane-doe");
     assert.deepEqual(doc.tags, ["engineer", "author"]);
     assert.equal(doc.id, null);
@@ -53,14 +57,15 @@ describe("submission", () => {
   test("someone who is both gets a kind list, and new organizations are flagged", () => {
     const parsed = submissionSchema.parse({
       ...alum,
-      kinds: ["alum", "contributor"],
-      roles: ["trainer"],
       affiliations: [
         { name: "Example Training Center" },
-        { organization: "association-montessori-internationale", name: "AMI" },
+        { name: "AMI", organization: "association-montessori-internationale" },
       ],
+      kinds: ["alum", "contributor"],
+      roles: ["trainer"],
     });
-    const doc = yaml.load(submissionToYaml(parsed)) as Record<string, unknown>;
+    // SAFETY: submissionToYaml always renders a mapping of plain YAML values.
+    const doc = load(submissionToYaml(parsed)) as YamlMap;
     assert.deepEqual(doc.kind, ["alum", "contributor"]);
     assert.deepEqual(doc.affiliations, [
       { organization: "example-training-center" },

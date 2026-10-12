@@ -1,16 +1,17 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { AdjacentRef, ProfilePage } from "@/lib/content/types";
 import { cn } from "@/lib/utils";
 
-function AdjacentLink({
+const AdjacentLink = ({
   profile,
   direction,
 }: {
   profile: Extract<AdjacentRef, { slug: string }>;
   direction: "previous" | "next";
-}) {
+}) => {
   const isNext = direction === "next";
   const Arrow = isNext ? ArrowRightIcon : ArrowLeftIcon;
   return (
@@ -24,7 +25,7 @@ function AdjacentLink({
     >
       <Arrow
         className={cn(
-          "size-4 shrink-0 text-muted-foreground transition-transform group-hover:text-foreground",
+          "text-muted-foreground group-hover:text-foreground size-4 shrink-0 transition-transform",
           isNext ? "group-hover:translate-x-0.5" : "group-hover:-translate-x-0.5"
         )}
       />
@@ -40,19 +41,18 @@ function AdjacentLink({
       </span>
     </Link>
   );
-}
+};
 
-export default function ProfileActions({
+const ProfileActions = ({
   previous,
   next,
 }: {
   previous: ProfilePage["previous"];
   next: ProfilePage["next"];
-}) {
-  return (
-    <nav aria-label="More profiles" className="flex w-full items-center justify-between gap-4">
-      {previous.slug && <AdjacentLink direction="previous" profile={previous} />}
-      {next.slug && <AdjacentLink direction="next" profile={next} />}
-    </nav>
-  );
-}
+}) => (
+  <nav aria-label="More profiles" className="flex w-full items-center justify-between gap-4">
+    {previous.slug && <AdjacentLink direction="previous" profile={previous} />}
+    {next.slug && <AdjacentLink direction="next" profile={next} />}
+  </nav>
+);
+export default ProfileActions;

@@ -2,7 +2,7 @@ import { siteUrl } from "./utils";
 
 export const X_HANDLE = "montessoriansx";
 
-function resolveAbsoluteUrl(input: string): string {
+const resolveAbsoluteUrl = (input: string): string => {
   if (input.startsWith("http")) {
     return input;
   }
@@ -10,45 +10,50 @@ function resolveAbsoluteUrl(input: string): string {
     return new URL(input, window.location.origin).toString();
   }
   return `${siteUrl}${input.startsWith("/") ? input : `/${input}`}`;
-}
+};
 
-export function addUtmParamsToUrl(
+export const addUtmParamsToUrl = (
   rawUrl: string,
   params: { source: string; medium: string; campaign: string }
-): string {
+): string => {
   const url = new URL(resolveAbsoluteUrl(rawUrl));
   url.searchParams.set("utm_source", params.source);
   url.searchParams.set("utm_medium", params.medium);
   url.searchParams.set("utm_campaign", params.campaign);
   return url.toString();
-}
+};
 
 export const SHARE_CONFIG = {
-  X: {
-    baseUrl: "https://x.com/intent/tweet",
-    buildParams: (url: string, shareText: string) =>
-      new URLSearchParams({
-        url,
-        text: shareText,
-        via: X_HANDLE,
-      }).toString(),
-  },
   Facebook: {
     baseUrl: "https://www.facebook.com/sharer/sharer.php",
     buildParams: (url: string) => new URLSearchParams({ u: url }).toString(),
   },
-  Threads: {
-    baseUrl: "https://www.threads.net/intent/post",
-    buildParams: (url: string, shareText: string) =>
-      new URLSearchParams({
-        url,
-        text: shareText,
-      }).toString(),
-  },
   LinkedIn: {
     baseUrl: "https://www.linkedin.com/shareArticle",
     buildParams: (url: string, shareText: string) =>
-      new URLSearchParams({ url, mini: "true", title: shareText }).toString(),
+      // Tuples keep the parameter order (url, mini, title) in the share link.
+      new URLSearchParams([
+        ["url", url],
+        ["mini", "true"],
+        ["title", shareText],
+      ]).toString(),
+  },
+  Threads: {
+    baseUrl: "https://www.threads.net/intent/post",
+    buildParams: (url: string, shareText: string) =>
+      new URLSearchParams([
+        ["url", url],
+        ["text", shareText],
+      ]).toString(),
+  },
+  X: {
+    baseUrl: "https://x.com/intent/tweet",
+    buildParams: (url: string, shareText: string) =>
+      new URLSearchParams([
+        ["url", url],
+        ["text", shareText],
+        ["via", X_HANDLE],
+      ]).toString(),
   },
 } as const;
 
@@ -58,12 +63,12 @@ export const getShareUrl = (
   text?: string
 ): string => {
   const config = SHARE_CONFIG[platform];
-  const shareText = text ?? (typeof window !== "undefined" ? document.title : "");
+  const shareText = text ?? (typeof window === "undefined" ? "" : document.title);
 
   const decoratedUrl = addUtmParamsToUrl(rawUrl, {
-    source: platform.toLowerCase(),
-    medium: "social",
     campaign: "profile",
+    medium: "social",
+    source: platform.toLowerCase(),
   });
 
   const params = config.buildParams(decoratedUrl, shareText);
@@ -73,10 +78,10 @@ export const getShareUrl = (
 export const REPO_URL = "https://github.com/renaissanceabc/the-montessorians";
 
 /** A prefilled GitHub issue from one of the issue forms in .github/ISSUE_TEMPLATE. */
-export function githubIssueUrl(
+export const githubIssueUrl = (
   template: string,
   fields: Record<string, string | undefined>
-): string {
+): string => {
   const params = new URLSearchParams({ template });
   for (const [key, value] of Object.entries(fields)) {
     if (value) {
@@ -84,11 +89,10 @@ export function githubIssueUrl(
     }
   }
   return `${REPO_URL}/issues/new?${params.toString()}`;
-}
+};
 
-export function correctionUrl(profile: { id: string; name: string }): string {
-  return githubIssueUrl("04_correction.yml", {
-    title: `Correction: ${profile.name} (${profile.id})`,
+export const correctionUrl = (profile: { id: string; name: string }): string =>
+  githubIssueUrl("04_correction.yml", {
     record: profile.id,
+    title: `Correction: ${profile.name} (${profile.id})`,
   });
-}

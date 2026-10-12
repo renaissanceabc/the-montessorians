@@ -13,18 +13,6 @@
     "typecheck": "node scripts/generate-content.mjs && tsc --noEmit --emitDeclarationOnly false",
     "test": "node scripts/generate-content.mjs && bun test lib"
   },
-  "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "catalog:",
-    "@tailwindcss/typography": "catalog:",
-    "@types/bun": "catalog:",
-    "@types/js-yaml": "catalog:",
-    "@types/node": "catalog:",
-    "portless": "catalog:",
-    "tailwindcss": "catalog:",
-    "tw-animate-css": "catalog:",
-    "typescript": "catalog:"
-  },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
     "@hookform/resolvers": "^5.9.1",
@@ -48,5 +36,17 @@
     "sonner": "catalog:",
     "use-debounce": "catalog:",
     "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "catalog:",
+    "@tailwindcss/typography": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/js-yaml": "catalog:",
+    "@types/node": "catalog:",
+    "portless": "catalog:",
+    "tailwindcss": "catalog:",
+    "tw-animate-css": "catalog:",
+    "typescript": "catalog:"
   }
 }

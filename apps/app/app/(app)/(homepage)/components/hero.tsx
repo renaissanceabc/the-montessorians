@@ -1,51 +1,52 @@
 import { SearchIcon, UserPlusIcon } from "lucide-react";
 import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import type { Profile } from "@/lib/content/types";
+
 import FeaturedProfile from "./featured-profile";
 
-export default function Hero({ dailyProfile }: { dailyProfile: Profile | null }) {
-  return (
-    <section className="bg-black/5 py-12">
-      <div className="container mx-auto flex max-w-screen-md flex-col justify-between gap-10 px-4 sm:px-8 md:flex-row md:items-center">
-        <div className="flex w-full flex-col justify-between gap-4 sm:flex-row sm:items-center sm:gap-10 md:flex-col md:items-start md:gap-4">
-          <div className="flex w-full flex-col gap-2 text-center sm:text-left">
-            <h1 className="font-bold font-serif text-4xl sm:text-5xl">
-              Discover extraordinary
-              <br className="block md:hidden" /> Montessorians
-            </h1>
-            <p className="text-sm text-stone-600 sm:max-w-100">
-              Daily spotlight on Montessori alumni doing great things, and the people who shaped the
-              field. <strong>Open source</strong>.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-2 md:flex-row">
-            <Button
-              className="shadow-none"
-              nativeButton={false}
-              render={<Link href="/discover" />}
-              size="lg"
-            >
-              <SearchIcon className="h-4 w-4" />
-              Explore the directory
-            </Button>
-
-            <Button
-              className="border-black/10 shadow-none"
-              nativeButton={false}
-              render={<Link href="/contribute" />}
-              size="lg"
-              variant="outline"
-            >
-              <UserPlusIcon className="h-4 w-4" />
-              Contribute
-            </Button>
-          </div>
+const Hero = ({ dailyProfile }: { dailyProfile: Profile | null }) => (
+  <section className="bg-black/5 py-12">
+    <div className="container mx-auto flex max-w-screen-md flex-col justify-between gap-10 px-4 sm:px-8 md:flex-row md:items-center">
+      <div className="flex w-full flex-col justify-between gap-4 sm:flex-row sm:items-center sm:gap-10 md:flex-col md:items-start md:gap-4">
+        <div className="flex w-full flex-col gap-2 text-center sm:text-left">
+          <h1 className="font-serif text-4xl font-bold sm:text-5xl">
+            Discover extraordinary
+            <br className="block md:hidden" /> Montessorians
+          </h1>
+          <p className="text-sm text-stone-600 sm:max-w-100">
+            Daily spotlight on Montessori alumni doing great things, and the people who shaped the
+            field. <strong>Open source</strong>.
+          </p>
         </div>
 
-        <FeaturedProfile dailyProfile={dailyProfile} />
+        <div className="flex flex-col gap-2 md:flex-row">
+          <Button
+            className="shadow-none"
+            nativeButton={false}
+            render={<Link href="/discover" />}
+            size="lg"
+          >
+            <SearchIcon className="h-4 w-4" />
+            Explore the directory
+          </Button>
+
+          <Button
+            className="border-black/10 shadow-none"
+            nativeButton={false}
+            render={<Link href="/contribute" />}
+            size="lg"
+            variant="outline"
+          >
+            <UserPlusIcon className="h-4 w-4" />
+            Contribute
+          </Button>
+        </div>
       </div>
-    </section>
-  );
-}
+
+      <FeaturedProfile dailyProfile={dailyProfile} />
+    </div>
+  </section>
+);
+export default Hero;

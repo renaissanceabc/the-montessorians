@@ -35,10 +35,11 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-import yaml from "js-yaml";
+import { setTimeout as sleep } from "node:timers/promises";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { dump, load } from "js-yaml";
+
+const __dirname = import.meta.dirname;
 const ROOT = path.join(__dirname, "..");
 const peopleDir = path.join(ROOT, "data", "people");
 
@@ -51,7 +52,7 @@ const contact = process.env.INDEXER_CONTACT_EMAIL || "";
 const USER_AGENT =
   "the-montessorians-indexer (+https://github.com/renaissanceabc/the-montessorians)";
 
-const TOPIC = /montessori/i;
+const TOPIC = /montessori/iu;
 const SKIP_OPENALEX_TYPES = new Set([
   "paratext",
   "erratum",
@@ -65,24 +66,24 @@ const SKIP_OPENALEX_TYPES = new Set([
 ]);
 const TYPE_MAP = {
   article: "article",
-  review: "article",
-  "journal-article": "article",
   book: "book",
-  monograph: "book",
-  "edited-book": "book",
   "book-chapter": "chapter",
   chapter: "chapter",
   "conference-paper": "other",
-  "proceedings-article": "other",
   dissertation: "other",
+  "edited-book": "book",
+  "journal-article": "article",
+  monograph: "book",
+  "proceedings-article": "other",
+  review: "article",
 };
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function getJson(url) {
-  for (let attempt = 0; attempt < 3; attempt++) {
+// Retries are sequential by design: each waits on the previous attempt and backs off.
+const getJson = async (url) => {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- retry loop: each attempt depends on the previous one's status
     const res = await fetch(url, {
-      headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
+      headers: { Accept: "application/json", "User-Agent": USER_AGENT },
     });
     if (res.ok) {
       return res.json();
@@ -91,13 +92,14 @@ async function getJson(url) {
       return null;
     }
     if (res.status === 429 || res.status >= 500) {
+      // oxlint-disable-next-line eslint/no-await-in-loop -- deliberate backoff before the next retry
       await sleep(1000 * (attempt + 1));
       continue;
     }
     throw new Error(`${res.status} ${res.statusText} for ${url}`);
   }
   throw new Error(`Gave up on ${url}`);
-}
+};
 
 const withMailto = (url) =>
   contact ? `${url}${url.includes("?") ? "&" : "?"}mailto=${encodeURIComponent(contact)}` : url;
@@ -105,17 +107,17 @@ const withMailto = (url) =>
 const normalize = (s) =>
   String(s ?? "")
     .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
+    .replaceAll(/[̀-ͯ]/gu, "")
     .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, " ")
+    .replaceAll("&", "and")
+    .replaceAll(/[^a-z0-9]+/gu, " ")
     .trim();
 
 // Title without subtitle, for catching "Foo Bar Baz" vs "Foo Bar Baz: A Subtitle".
 // Too short a main title ("Montessori: ...") would match unrelated works.
 const shortTitle = (s) => {
-  const main = normalize(String(s ?? "").split(/[:.?]/)[0]);
-  return main.split(" ").length >= 3 ? main : normalize(s);
+  const mainTitle = normalize(String(s ?? "").split(/[:.?]/u)[0]);
+  return mainTitle.split(" ").length >= 3 ? mainTitle : normalize(s);
 };
 
 // "Angeline S. Lillard" and "Angeline Stoll Lillard" both become "angeline lillard".
@@ -124,26 +126,28 @@ const nameKey = (s) => {
   return parts.length < 2 ? parts.join(" ") : `${parts[0]} ${parts.at(-1)}`;
 };
 
-function loadProfile(slug) {
+const loadProfile = (slug) => {
   const file = path.join(peopleDir, `${slug}.yaml`);
   if (!fs.existsSync(file)) {
     throw new Error(`No profile at data/people/${slug}.yaml`);
   }
-  return yaml.load(fs.readFileSync(file, "utf8"));
-}
+  return load(fs.readFileSync(file, "utf-8"));
+};
 
-function contributorSlugs() {
-  return fs
+const contributorSlugs = () =>
+  fs
     .readdirSync(peopleDir)
     .filter((f) => f.endsWith(".yaml"))
-    .map((f) => f.replace(/\.yaml$/, ""))
+    .map((f) => f.replace(/\.yaml$/u, ""))
     .filter((slug) => [loadProfile(slug).kind].flat().includes("contributor"))
-    .sort();
-}
+    .toSorted();
 
 // --- OpenAlex --------------------------------------------------------------
 
-async function openAlexAuthors(profile) {
+// The API calls below run one at a time on purpose: it keeps the indexer within
+// the APIs' polite rate limits, and pagination needs the previous page's cursor.
+
+const openAlexAuthors = async (profile) => {
   const found = new Map();
   const orcid = profile.identifiers?.orcid;
   if (orcid) {
@@ -151,13 +155,14 @@ async function openAlexAuthors(profile) {
       withMailto(`https://api.openalex.org/authors?filter=orcid:${orcid}`)
     );
     for (const a of data?.results ?? []) {
-      found.set(a.id, { id: a.id, name: a.display_name, match: "orcid" });
+      found.set(a.id, { id: a.id, match: "orcid", name: a.display_name });
     }
   }
   const names = [profile.name, ...(profile.name_variants ?? [])];
   const keys = new Set(names.map(nameKey));
   const exact = new Set(names.map(normalize));
   for (const name of names) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- one request at a time, to stay within the API's rate limit
     const data = await getJson(
       withMailto(`https://api.openalex.org/authors?search=${encodeURIComponent(name)}&per_page=25`)
     );
@@ -169,87 +174,105 @@ async function openAlexAuthors(profile) {
       // whose display name is the person's name (or a variant) word for word,
       // or whose first and last names match and that have an ORCID-less record.
       if (exact.has(normalize(a.display_name))) {
-        found.set(a.id, { id: a.id, name: a.display_name, match: "exact name" });
+        found.set(a.id, { id: a.id, match: "exact name", name: a.display_name });
       } else if (keys.has(nameKey(a.display_name)) && !a.ids?.orcid) {
-        found.set(a.id, { id: a.id, name: a.display_name, match: "name" });
+        found.set(a.id, { id: a.id, match: "name", name: a.display_name });
       }
     }
   }
   return [...found.values()];
-}
+};
 
-function abstractText(inverted) {
+const abstractText = (inverted) => {
   if (!inverted) {
     return "";
   }
   return Object.keys(inverted).join(" ");
-}
+};
 
-async function openAlexWorks(authors, anyTopic) {
+/** An OpenAlex work as a candidate, or null when its type or topic rules it out. */
+const openAlexCandidate = (w, author, shortId, anyTopic) => {
+  if (SKIP_OPENALEX_TYPES.has(w.type) || !w.title) {
+    return null;
+  }
+  const text = `${w.title} ${abstractText(w.abstract_inverted_index)}`;
+  if (!(anyTopic || TOPIC.test(text))) {
+    return null;
+  }
+  const source = w.primary_location?.source;
+  return {
+    authors: w.authorships?.map((a) => a.author?.display_name).filter(Boolean),
+    doi: w.doi ? w.doi.replace(/^https?:\/\/doi\.org\//iu, "") : undefined,
+    from: `openalex ${w.id.split("/").pop()} (author ${shortId}, ${author.match})`,
+    title: w.title,
+    type: TYPE_MAP[w.type] ?? "other",
+    url: w.doi ? undefined : (w.primary_location?.landing_page_url ?? undefined),
+    venue: source?.display_name ?? undefined,
+    year: w.publication_year ?? undefined,
+  };
+};
+
+/** Every page of one OpenAlex author's works, as candidates. */
+const openAlexAuthorWorks = async (author, anyTopic) => {
   const works = [];
-  for (const author of authors) {
-    const shortId = author.id.split("/").pop();
-    const topic = anyTopic ? "" : ",title_and_abstract.search:montessori";
-    let cursor = "*";
-    while (cursor) {
-      const data = await getJson(
-        withMailto(
-          `https://api.openalex.org/works?filter=author.id:${shortId}${topic}&per_page=100&cursor=${cursor}` +
-            "&select=id,doi,title,publication_year,type,primary_location,authorships,abstract_inverted_index"
-        )
-      );
-      for (const w of data?.results ?? []) {
-        if (SKIP_OPENALEX_TYPES.has(w.type) || !w.title) {
-          continue;
-        }
-        const text = `${w.title} ${abstractText(w.abstract_inverted_index)}`;
-        if (!(anyTopic || TOPIC.test(text))) {
-          continue;
-        }
-        const source = w.primary_location?.source;
-        works.push({
-          title: w.title,
-          type: TYPE_MAP[w.type] ?? "other",
-          year: w.publication_year ?? undefined,
-          venue: source?.display_name ?? undefined,
-          doi: w.doi ? w.doi.replace(/^https?:\/\/doi\.org\//i, "") : undefined,
-          url: w.doi ? undefined : (w.primary_location?.landing_page_url ?? undefined),
-          authors: w.authorships?.map((a) => a.author?.display_name).filter(Boolean),
-          from: `openalex ${w.id.split("/").pop()} (author ${shortId}, ${author.match})`,
-        });
+  const shortId = author.id.split("/").pop();
+  const topic = anyTopic ? "" : ",title_and_abstract.search:montessori";
+  let cursor = "*";
+  while (cursor) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- cursor pagination: each page needs the previous page's cursor
+    const data = await getJson(
+      withMailto(
+        `https://api.openalex.org/works?filter=author.id:${shortId}${topic}&per_page=100&cursor=${cursor}` +
+          "&select=id,doi,title,publication_year,type,primary_location,authorships,abstract_inverted_index"
+      )
+    );
+    for (const w of data?.results ?? []) {
+      const candidate = openAlexCandidate(w, author, shortId, anyTopic);
+      if (candidate) {
+        works.push(candidate);
       }
-      cursor = data?.meta?.next_cursor ?? null;
-      if ((data?.results ?? []).length === 0) {
-        cursor = null;
-      }
+    }
+    cursor = data?.meta?.next_cursor ?? null;
+    if ((data?.results ?? []).length === 0) {
+      cursor = null;
     }
   }
   return works;
-}
+};
+
+const openAlexWorks = async (authors, anyTopic) => {
+  const works = [];
+  for (const author of authors) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- one author at a time, to stay within the API's rate limit
+    works.push(...(await openAlexAuthorWorks(author, anyTopic)));
+  }
+  return works;
+};
 
 // --- Crossref --------------------------------------------------------------
 
-function crossrefToCandidate(m, from) {
+const crossrefToCandidate = (m, from) => {
   const title = [m.title?.[0], m.subtitle?.[0]].filter(Boolean).join(": ");
   const year = (m.issued ?? m.published ?? m["published-print"])?.["date-parts"]?.[0]?.[0];
   const book = m.type === "book" || m.type === "monograph" || m.type === "edited-book";
   return {
-    title,
-    type: TYPE_MAP[m.type] ?? "other",
-    year: year ?? undefined,
-    venue: (book ? m.publisher : m["container-title"]?.[0]) ?? m.publisher ?? undefined,
-    doi: m.DOI,
     authors: (m.author ?? [])
       .map((a) => [a.given, a.family].filter(Boolean).join(" ") || a.name)
       .filter(Boolean),
+    doi: m.DOI,
     from,
+    title,
+    type: TYPE_MAP[m.type] ?? "other",
+    venue: (book ? m.publisher : m["container-title"]?.[0]) ?? m.publisher ?? undefined,
+    year: year ?? undefined,
   };
-}
+};
 
-async function crossrefByOrcid(orcid, anyTopic) {
+const crossrefByOrcid = async (orcid, anyTopic) => {
   const out = [];
   let cursor = "*";
   while (cursor) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- cursor pagination: each page needs the previous page's cursor
     const data = await getJson(
       withMailto(
         `https://api.crossref.org/works?filter=orcid:${orcid}&rows=200&cursor=${encodeURIComponent(cursor)}`
@@ -265,23 +288,24 @@ async function crossrefByOrcid(orcid, anyTopic) {
     cursor = items.length ? data.message["next-cursor"] : null;
   }
   return out;
-}
+};
 
-async function crossrefWork(doi) {
+const crossrefWork = async (doi) => {
   const data = await getJson(
     withMailto(`https://api.crossref.org/works/${encodeURIComponent(doi)}`)
   );
   return data?.message ?? null;
-}
+};
 
 // --- Open Library ----------------------------------------------------------
 
-async function openLibraryBooks(profile, anyTopic) {
+const openLibraryBooks = async (profile, anyTopic) => {
   const out = [];
   const names = [profile.name, ...(profile.name_variants ?? [])];
   const keys = new Set(names.map(nameKey));
   const seen = new Set();
   for (const name of names) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- one request at a time, to stay within the API's rate limit
     const data = await getJson(
       `https://openlibrary.org/search.json?author=${encodeURIComponent(name)}&limit=200` +
         "&fields=key,title,subtitle,first_publish_year,author_name,subject,language,publisher,edition_count"
@@ -299,42 +323,80 @@ async function openLibraryBooks(profile, anyTopic) {
         continue;
       }
       out.push({
-        title: [d.title, d.subtitle].filter(Boolean).join(": "),
-        type: "book",
-        year: d.first_publish_year ?? undefined,
-        venue: d.publisher?.[0] ?? undefined,
-        // Orphaned editions come back with a /works/…M key; they live under /books/.
-        url: `https://openlibrary.org${d.key.replace(/^\/works\/(OL\d+M)$/, "/books/$1")}`,
         authors: d.author_name,
         from: `openlibrary ${d.key} (${d.edition_count ?? "?"} editions; languages: ${(d.language ?? []).join(", ") || "?"})`,
+        title: [d.title, d.subtitle].filter(Boolean).join(": "),
+        type: "book",
+        // Orphaned editions come back with a /works/…M key; they live under /books/.
+        url: `https://openlibrary.org${d.key.replace(/^\/works\/(?<edition>OL\d+M)$/u, "/books/$<edition>")}`,
+        venue: d.publisher?.[0] ?? undefined,
+        year: d.first_publish_year ?? undefined,
       });
     }
   }
   return out;
-}
+};
 
 // --- ERIC ------------------------------------------------------------------
 
 const decodeEntities = (s) =>
   String(s ?? "")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&amp;/g, "&");
+    .replaceAll("&quot;", '"')
+    .replaceAll(/&#39;|&apos;/gu, "'")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&amp;", "&");
 
 // "Angeline Stoll Lillard" -> "Lillard, Angeline", the form ERIC indexes.
 const invertName = (s) => {
-  const parts = String(s).trim().split(/\s+/);
+  const parts = String(s).trim().split(/\s+/u);
   return parts.length < 2 ? s : `${parts.at(-1)}, ${parts[0]}`;
 };
 
-async function ericRecords(profile, anyTopic) {
+const ericType = (kinds) => {
+  if (kinds.includes("Journal Articles")) {
+    return "article";
+  }
+  if (kinds.includes("Books")) {
+    return "book";
+  }
+  return "other";
+};
+
+/** An ERIC record as a candidate, or null when the author or topic doesn't match. */
+const ericCandidate = (d, keys, anyTopic) => {
+  // ERIC lists authors as "Last, First"; turn them around before matching.
+  const authors = (d.author ?? []).map((a) => a.split(/,\s*/u).toReversed().join(" "));
+  if (!authors.some((a) => keys.has(nameKey(a)))) {
+    return null;
+  }
+  const text = `${d.title} ${d.description ?? ""} ${(d.subject ?? []).join(" ")} ${d.source ?? ""}`;
+  if (!(anyTopic || TOPIC.test(text))) {
+    return null;
+  }
+  const kinds = d.publicationtype ?? [];
+  const isbn = (d.isbn ?? [])
+    .map((i) => i.replace(/^ISBN-/u, "").replaceAll("-", ""))
+    .find(Boolean);
+  return {
+    authors,
+    from: `eric ${d.id} (${kinds.join(", ")})`,
+    isbn: isbn && /^(?:97[89])?\d{9}[\dX]$/u.test(isbn) ? isbn : undefined,
+    title: decodeEntities(d.title),
+    type: ericType(kinds),
+    url: `https://eric.ed.gov/?id=${d.id}`,
+    venue: d.source ?? undefined,
+    year: d.publicationdateyear ?? undefined,
+  };
+};
+
+const ericRecords = async (profile, anyTopic) => {
   const out = [];
   const names = [profile.name, ...(profile.name_variants ?? [])];
   const keys = new Set(names.map(nameKey));
   const seen = new Set();
   for (const query of new Set(names.map(invertName))) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- one request at a time, to stay within the API's rate limit
     const data = await getJson(
       `https://api.ies.ed.gov/eric/?search=${encodeURIComponent(`author:"${query}"`)}&format=json&rows=200` +
         "&fields=id,title,author,publicationdateyear,source,publicationtype,isbn,description,subject"
@@ -344,46 +406,23 @@ async function ericRecords(profile, anyTopic) {
         continue;
       }
       seen.add(d.id);
-      // ERIC lists authors as "Last, First"; turn them around before matching.
-      const authors = (d.author ?? []).map((a) => a.split(/,\s*/).reverse().join(" "));
-      if (!authors.some((a) => keys.has(nameKey(a)))) {
-        continue;
+      const candidate = ericCandidate(d, keys, anyTopic);
+      if (candidate) {
+        out.push(candidate);
       }
-      const text = `${d.title} ${d.description ?? ""} ${(d.subject ?? []).join(" ")} ${d.source ?? ""}`;
-      if (!(anyTopic || TOPIC.test(text))) {
-        continue;
-      }
-      const kinds = d.publicationtype ?? [];
-      const isbn = (d.isbn ?? [])
-        .map((i) => i.replace(/^ISBN-/, "").replace(/-/g, ""))
-        .find(Boolean);
-      out.push({
-        title: decodeEntities(d.title),
-        type: kinds.includes("Journal Articles")
-          ? "article"
-          : kinds.includes("Books")
-            ? "book"
-            : "other",
-        year: d.publicationdateyear ?? undefined,
-        venue: d.source ?? undefined,
-        isbn: isbn && /^(97[89])?\d{9}[\dX]$/.test(isbn) ? isbn : undefined,
-        url: `https://eric.ed.gov/?id=${d.id}`,
-        authors,
-        from: `eric ${d.id} (${kinds.join(", ")})`,
-      });
     }
   }
   return out;
-}
+};
 
 // --- Merge -----------------------------------------------------------------
 
 // Oxford Academic splits a monograph into a book DOI (<stem>.001.0001) and
 // front matter/chapters (<stem>.002.xxxx, <stem>.003.xxxx, ...). Fold the
 // parts into one candidate for the book.
-const OUP_PART = /^(10\.1093\/.+)\.00([2-9])\.\d{4}$/i;
+const OUP_PART = /^(?<stem>10\.1093\/.+)\.00(?<part>[2-9])\.\d{4}$/iu;
 
-function existingKeys(profile) {
+const existingKeys = (profile) => {
   const dois = new Set();
   const isbns = new Set();
   const titles = new Set();
@@ -398,33 +437,29 @@ function existingKeys(profile) {
     titles.add(shortTitle(c.title));
   }
   return { dois, isbns, titles };
-}
+};
 
-async function candidatesFor(slug) {
-  const profile = loadProfile(slug);
-  const anyTopic = flags.has("--any-topic") || slug === "maria-montessori";
-  const authors = await openAlexAuthors(profile);
-  const found = [...(await openAlexWorks(authors, anyTopic))];
-  if (profile.identifiers?.orcid) {
-    found.push(...(await crossrefByOrcid(profile.identifiers.orcid, anyTopic)));
-  }
-  found.push(...(await openLibraryBooks(profile, anyTopic)));
-  found.push(...(await ericRecords(profile, anyTopic)));
+/** Fold Oxford Academic chapter/front-matter DOIs into their book (in place). */
+const foldOupParts = (found) => {
   for (const c of found) {
     const part = c.doi?.match(OUP_PART);
     if (part) {
       Object.assign(c, {
+        doi: `${part.groups.stem}.001.0001`,
+        from: `${c.from}, folded into its book`,
         title: c.venue ?? c.title,
         type: "book",
-        doi: `${part[1]}.001.0001`,
         venue: undefined,
-        from: `${c.from}, folded into its book`,
       });
     }
   }
+};
 
-  // Prefer Crossref's metadata for anything with a DOI: it has the authors as
-  // printed and the container title.
+/**
+ * One candidate per DOI, preferring Crossref's metadata for anything with a DOI
+ * (it has the authors as printed and the container title), then those without.
+ */
+const mergeByDoi = async (found) => {
   const byDoi = new Map();
   const rest = [];
   for (const c of found) {
@@ -441,6 +476,7 @@ async function candidatesFor(slug) {
   }
   for (const [key, c] of byDoi) {
     if (!c.from.includes("crossref")) {
+      // oxlint-disable-next-line eslint/no-await-in-loop -- one request at a time, to stay within the API's rate limit
       const m = await crossrefWork(key);
       if (m) {
         const cr = crossrefToCandidate(m, c.from);
@@ -448,29 +484,32 @@ async function candidatesFor(slug) {
       }
     }
   }
+  return [...byDoi.values(), ...rest];
+};
 
-  const merged = [...byDoi.values()];
-  merged.push(...rest);
+/** Whether the profile already lists this candidate (same DOI, ISBN, or title). */
+const alreadyListed = (existing, c) =>
+  (c.doi && existing.dois.has(c.doi.toLowerCase())) ||
+  (c.isbn && existing.isbns.has(c.isbn)) ||
+  existing.titles.has(normalize(c.title)) ||
+  existing.titles.has(shortTitle(c.title)) ||
+  // "Montessori Today: A Subtitle" when the profile lists "Montessori Today"
+  existing.titles.has(normalize(String(c.title).split(":")[0]));
 
+/** Drop what the profile already has, and fold same-title records into the first. */
+const dedupe = (profile, merged) => {
   const existing = existingKeys(profile);
   const seenTitles = new Map();
   const candidates = [];
   // Within a year, records with a DOI win the title dedupe over those without.
-  merged.sort(
+  const ordered = merged.toSorted(
     (a, b) => (a.year ?? 9999) - (b.year ?? 9999) || Number(Boolean(b.doi)) - Number(Boolean(a.doi))
   );
-  for (const c of merged) {
-    const t = normalize(c.title);
-    if (
-      (c.doi && existing.dois.has(c.doi.toLowerCase())) ||
-      (c.isbn && existing.isbns.has(c.isbn)) ||
-      existing.titles.has(t) ||
-      existing.titles.has(shortTitle(c.title)) ||
-      // "Montessori Today: A Subtitle" when the profile lists "Montessori Today"
-      existing.titles.has(normalize(String(c.title).split(":")[0]))
-    ) {
+  for (const c of ordered) {
+    if (alreadyListed(existing, c)) {
       continue;
     }
+    const t = normalize(c.title);
     if (seenTitles.has(t)) {
       const kept = seenTitles.get(t);
       kept.from += `; also ${c.from}${c.year === kept.year ? "" : ` [${c.year}]`}`;
@@ -479,19 +518,39 @@ async function candidatesFor(slug) {
     seenTitles.set(t, c);
     candidates.push(c);
   }
-  return { profile, authors, candidates };
-}
+  return candidates;
+};
+
+const candidatesFor = async (slug) => {
+  const profile = loadProfile(slug);
+  const anyTopic = flags.has("--any-topic") || slug === "maria-montessori";
+  const authors = await openAlexAuthors(profile);
+  const found = [...(await openAlexWorks(authors, anyTopic))];
+  if (profile.identifiers?.orcid) {
+    found.push(...(await crossrefByOrcid(profile.identifiers.orcid, anyTopic)));
+  }
+  found.push(
+    ...(await openLibraryBooks(profile, anyTopic)),
+    ...(await ericRecords(profile, anyTopic))
+  );
+  foldOupParts(found);
+  const merged = await mergeByDoi(found);
+  return { authors, candidates: dedupe(profile, merged), profile };
+};
 
 // Some sources carry stray C1 control characters (e.g. around "The NAMTA journal").
+// API values arrive untyped; only strings are cleaned (years and the like pass through).
 const clean = (s) =>
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- raw API field: strings get cleaned, numbers (years) pass through unchanged
   typeof s === "string"
     ? s
-        .replace(/[\u0000-\u001f\u007f-\u009f]/g, "")
-        .replace(/\s+/g, " ")
+        // oxlint-disable-next-line eslint/no-control-regex -- stripping control characters is the point
+        .replaceAll(/[\u0000-\u001F\u007F-\u009F]/gu, "")
+        .replaceAll(/\s+/gu, " ")
         .trim()
     : s;
 
-function toYaml(c) {
+const toYaml = (c) => {
   const entry = { title: clean(c.title), type: c.type };
   for (const key of ["year", "venue", "doi", "isbn", "url"]) {
     if (c[key] !== undefined && c[key] !== "") {
@@ -501,11 +560,11 @@ function toYaml(c) {
   if ((c.authors ?? []).length > 1) {
     entry.authors = c.authors.map(clean);
   }
-  const body = yaml.dump([entry], { lineWidth: 120, quotingType: '"' }).trimEnd();
-  return `  # from ${c.from}\n${body.replace(/^/gm, "  ")}`;
-}
+  const body = dump([entry], { lineWidth: 120, quotingType: '"' }).trimEnd();
+  return `  # from ${c.from}\n${body.replaceAll(/^/gmu, "  ")}`;
+};
 
-async function main() {
+const main = async () => {
   const targets = flags.has("--all") ? contributorSlugs() : slugs;
   if (targets.length === 0) {
     console.error(
@@ -514,6 +573,7 @@ async function main() {
     process.exit(1);
   }
   for (const slug of targets) {
+    // oxlint-disable-next-line eslint/no-await-in-loop -- one profile at a time: keeps API traffic polite and the output in order
     const { profile, authors, candidates } = await candidatesFor(slug);
     console.log(`# ${profile.name} (data/people/${slug}.yaml)`);
     console.log(
@@ -531,9 +591,11 @@ async function main() {
     }
     console.log();
   }
-}
+};
 
-main().catch((error) => {
+try {
+  await main();
+} catch (error) {
   console.error(error.message);
   process.exit(1);
-});
+}

@@ -1,16 +1,30 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
+
 import { cn, siteUrl } from "@/lib/utils";
 
-export type Crumb = { label: string; href?: string };
+export interface Crumb {
+  label: string;
+  href?: string;
+}
+
+/** The last crumb that links somewhere: the parent page. */
+const lastLinked = (items: Crumb[]): Crumb | null => {
+  for (let i = items.length - 1; i >= 0; i -= 1) {
+    if (items[i].href) {
+      return items[i];
+    }
+  }
+  return null;
+};
 
 /**
  * Site-wide breadcrumbs: muted links separated by chevrons, the current page
  * last and unlinked. On phones it collapses to "‹ Parent". Also emits a
  * schema.org BreadcrumbList so search engines can show the trail.
  */
-export function Breadcrumbs({
+export const Breadcrumbs = ({
   items,
   align = "center",
   className,
@@ -18,16 +32,16 @@ export function Breadcrumbs({
   items: Crumb[];
   align?: "center" | "start";
   className?: string;
-}) {
-  const parent = [...items].reverse().find((item) => item.href);
+}) => {
+  const parent = lastLinked(items);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, i) => ({
       "@type": "ListItem",
-      position: i + 1,
-      name: item.label,
       item: item.href ? `${siteUrl}${item.href}` : undefined,
+      name: item.label,
+      position: i + 1,
     })),
   };
 
@@ -50,13 +64,13 @@ export function Breadcrumbs({
               <li className="min-w-0">
                 {item.href ? (
                   <Link
-                    className="text-muted-foreground transition-colors hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                     href={item.href}
                   >
                     {item.label}
                   </Link>
                 ) : (
-                  <span aria-current="page" className="block truncate font-medium text-foreground">
+                  <span aria-current="page" className="text-foreground block truncate font-medium">
                     {item.label}
                   </span>
                 )}
@@ -67,7 +81,7 @@ export function Breadcrumbs({
         {parent?.href && (
           <Link
             className={cn(
-              "flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground sm:hidden",
+              "text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors sm:hidden",
               align === "center" ? "justify-center" : "justify-start"
             )}
             href={parent.href}
@@ -78,10 +92,10 @@ export function Breadcrumbs({
         )}
       </nav>
       <script
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD payload, with `<` escaped to prevent breaking out of the script tag
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        // oxlint-disable-next-line react/no-danger -- JSON-LD payload, with `<` escaped to prevent breaking out of the script tag
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replaceAll("<", "\\u003c") }}
         type="application/ld+json"
       />
     </>
   );
-}
+};

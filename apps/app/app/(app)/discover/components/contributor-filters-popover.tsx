@@ -2,6 +2,7 @@
 
 import { CheckIcon, SearchIcon, SlidersHorizontalIcon, XIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
@@ -11,13 +12,17 @@ import { CONTRIBUTOR_ROLE_LABELS, CONTRIBUTOR_ROLES } from "@/lib/content/types"
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 
-export type ContributorFilters = {
+export interface ContributorFilters {
   roles: string[];
   organizations: string[];
   minContributions: number;
-};
+}
 
-export type AffiliationOption = { slug: string; name: string; count: number };
+export interface AffiliationOption {
+  slug: string;
+  name: string;
+  count: number;
+}
 
 const MIN_CONTRIBUTION_OPTIONS = [0, 5, 10, 25];
 
@@ -29,7 +34,7 @@ const chipClass = (on: boolean) =>
       : "border-black/12 bg-white/60 hover:border-black/40"
   );
 
-export function ContributorFiltersPopover({
+export const ContributorFiltersPopover = ({
   applied,
   affiliationOptions,
   onApply,
@@ -37,7 +42,7 @@ export function ContributorFiltersPopover({
   applied: ContributorFilters;
   affiliationOptions: AffiliationOption[];
   onApply: (filters: ContributorFilters) => void;
-}) {
+}) => {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<ContributorFilters>(applied);
   const [orgSearch, setOrgSearch] = useState("");
@@ -82,10 +87,10 @@ export function ContributorFiltersPopover({
   const panel = (
     <div className="flex max-h-[min(80dvh,620px)] flex-col">
       <div className="flex items-center justify-between gap-2 px-4 pt-4 pb-1">
-        <p className="font-semibold text-sm">
+        <p className="text-sm font-semibold">
           Filter contributors
           {draftCount > 0 && (
-            <span className="ml-1.5 font-normal text-muted-foreground">
+            <span className="text-muted-foreground ml-1.5 font-normal">
               · {draftCount} selected
             </span>
           )}
@@ -105,7 +110,7 @@ export function ContributorFiltersPopover({
 
       <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain p-4">
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+          <legend className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">
             Role
           </legend>
           <div className="flex flex-wrap gap-1">
@@ -120,7 +125,7 @@ export function ContributorFiltersPopover({
                   type="button"
                 >
                   {on && <CheckIcon className="size-3.5" />}
-                  {CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS]}
+                  {CONTRIBUTOR_ROLE_LABELS[role]}
                 </button>
               );
             })}
@@ -129,7 +134,7 @@ export function ContributorFiltersPopover({
 
         {affiliationOptions.length > 0 && (
           <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+            <legend className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">
               Affiliation
             </legend>
             {affiliationOptions.length > 6 && (
@@ -148,7 +153,6 @@ export function ContributorFiltersPopover({
             <div className="flex flex-col">
               {visibleOrgs.length > 0 ? (
                 visibleOrgs.map((org) => (
-                  // biome-ignore lint/a11y/noLabelWithoutControl: the Checkbox inside is the control
                   <label
                     className="flex cursor-pointer items-center gap-3 rounded-md px-1 py-2 text-sm hover:bg-black/4"
                     key={org.slug}
@@ -162,8 +166,8 @@ export function ContributorFiltersPopover({
                   </label>
                 ))
               ) : (
-                <p className="py-3 text-center text-muted-foreground text-sm">
-                  No organizations match "{orgSearch}"
+                <p className="text-muted-foreground py-3 text-center text-sm">
+                  No organizations match &quot;{orgSearch}&quot;
                 </p>
               )}
             </div>
@@ -171,7 +175,7 @@ export function ContributorFiltersPopover({
         )}
 
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+          <legend className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">
             Documented contributions
           </legend>
           <div className="flex gap-0.5 self-start rounded-full bg-black/5 p-0.5">
@@ -195,10 +199,10 @@ export function ContributorFiltersPopover({
         </fieldset>
       </div>
 
-      <div className="flex items-center justify-between gap-2 border-black/10 border-t px-4 py-3">
+      <div className="flex items-center justify-between gap-2 border-t border-black/10 px-4 py-3">
         <Button
           disabled={draftCount === 0}
-          onClick={() => setDraft({ roles: [], organizations: [], minContributions: 0 })}
+          onClick={() => setDraft({ minContributions: 0, organizations: [], roles: [] })}
           type="button"
           variant="ghost"
         >
@@ -242,4 +246,4 @@ export function ContributorFiltersPopover({
       </DrawerContent>
     </Drawer>
   );
-}
+};

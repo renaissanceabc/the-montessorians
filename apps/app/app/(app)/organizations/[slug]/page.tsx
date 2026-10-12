@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CiteButton } from "@/components/cite-button";
 import { OrgLogo } from "@/components/org-logo";
@@ -25,43 +26,45 @@ import { createMetadata } from "@/lib/metadata";
 import { githubIssueUrl } from "@/lib/url";
 import { prettyUrl, siteUrl, toTitleCase } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return getAllOrganizations().map((org) => ({ slug: org.slug }));
-}
+export const generateStaticParams = () => getAllOrganizations().map((org) => ({ slug: org.slug }));
 
 export const dynamicParams = false;
 
 const TYPE_ICONS: Partial<Record<OrganizationType, typeof Building2Icon>> = {
-  school: GraduationCapIcon,
   association: LandmarkIcon,
+  school: GraduationCapIcon,
 };
 
-const yearRange = (ref: OrganizationRef) =>
-  ref.from && ref.to
-    ? `${ref.from} – ${ref.to}`
-    : ref.from
-      ? `${ref.from} – present`
-      : ref.to
-        ? `until ${ref.to}`
-        : "";
+const yearRange = (ref: OrganizationRef) => {
+  if (ref.from && ref.to) {
+    return `${ref.from} – ${ref.to}`;
+  }
+  if (ref.from) {
+    return `${ref.from} – present`;
+  }
+  if (ref.to) {
+    return `until ${ref.to}`;
+  }
+  return "";
+};
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export const generateMetadata = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
   const org = getOrganizationBySlug(slug);
   if (!org) {
     notFound();
   }
   return createMetadata({
-    title: org.name,
-    description: org.description ?? `${org.name} on The Montessorians.`,
     alternates: {
       canonical: `${siteUrl}/organizations/${slug}`,
       types: { "application/ld+json": `${siteUrl}/data/${org.id}` },
     },
+    description: org.description ?? `${org.name} on The Montessorians.`,
+    title: org.name,
   });
-}
+};
 
-function Section({
+const Section = ({
   title,
   count,
   children,
@@ -69,19 +72,17 @@ function Section({
   title: string;
   count?: number;
   children: ReactNode;
-}) {
-  return (
-    <section className="flex w-full flex-col gap-2">
-      <h2 className="font-semibold text-muted-foreground text-xs uppercase tracking-widest">
-        {title}
-        {count !== undefined && <span className="font-normal"> · {count}</span>}
-      </h2>
-      {children}
-    </section>
-  );
-}
+}) => (
+  <section className="flex w-full flex-col gap-2">
+    <h2 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+      {title}
+      {count !== undefined && <span className="font-normal"> · {count}</span>}
+    </h2>
+    {children}
+  </section>
+);
 
-export default async function OrganizationPage({ params }: { params: Promise<{ slug: string }> }) {
+const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
   const org = getOrganizationBySlug(slug);
   if (!org) {
@@ -96,15 +97,15 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
   const identifiers = identifierEntries(org.identifiers);
   const Icon = TYPE_ICONS[org.type] ?? Building2Icon;
   const correction = githubIssueUrl("04_correction.yml", {
-    title: `Correction: ${org.name} (${org.id})`,
     record: org.id,
+    title: `Correction: ${org.name} (${org.id})`,
   });
 
   return (
     <>
       <div className="container mx-auto flex max-w-3xl flex-col items-center gap-9 px-4 pt-8 pb-12 sm:px-8 lg:pt-0">
         <Breadcrumbs
-          items={[{ label: "Organizations", href: "/organizations" }, { label: org.name }]}
+          items={[{ href: "/organizations", label: "Organizations" }, { label: org.name }]}
         />
 
         <div className="flex w-full min-w-0 flex-col items-center gap-4 text-center">
@@ -114,14 +115,14 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
             iconClassName="size-10 text-muted-foreground"
             logoUrl={org.logoUrl}
           />
-          <h1 className="font-semibold font-serif text-4xl">
+          <h1 className="font-serif text-4xl font-semibold">
             {org.name}
             {org.shortName && (
-              <span className="font-normal text-muted-foreground"> ({org.shortName})</span>
+              <span className="text-muted-foreground font-normal"> ({org.shortName})</span>
             )}
           </h1>
-          <div className="flex max-w-full items-center justify-center gap-1 rounded-full border border-black/10 bg-white/60 py-1 pr-1 pl-4 text-[#4A433D] text-sm">
-            <span className="shrink-0 font-semibold text-[11px] text-muted-foreground uppercase tracking-wider">
+          <div className="flex max-w-full items-center justify-center gap-1 rounded-full border border-black/10 bg-white/60 py-1 pr-1 pl-4 text-sm text-[#4A433D]">
+            <span className="text-muted-foreground shrink-0 text-[11px] font-semibold tracking-wider uppercase">
               {ORGANIZATION_TYPE_LABELS[org.type]}
             </span>
             {org.location && (
@@ -163,7 +164,7 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
         {parent && (
           <p className="w-full text-sm">
             Part of{" "}
-            <Link className="underline hover:text-primary" href={`/organizations/${parent.slug}`}>
+            <Link className="hover:text-primary underline" href={`/organizations/${parent.slug}`}>
               {parent.name}
             </Link>
           </p>
@@ -195,9 +196,9 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
           </Section>
         )}
 
-        <section className="flex w-full flex-col gap-2.5 border-black/10 border-t pt-5">
+        <section className="flex w-full flex-col gap-2.5 border-t border-black/10 pt-5">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-muted-foreground text-xs uppercase tracking-widest">
+            <h2 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
               Identifiers
             </h2>
             <Link
@@ -210,7 +211,7 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
           </div>
           <div className="flex flex-wrap gap-1.5">
             <Link
-              className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2.5 py-1.5 text-secondary-foreground text-xs"
+              className="bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs"
               href={idUrl(org.id)}
             >
               <span className="opacity-75">The Montessorians</span>
@@ -242,12 +243,13 @@ export default async function OrganizationPage({ params }: { params: Promise<{ s
       </div>
 
       <script
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD payload, with `<` escaped to prevent breaking out of the script tag
+        // oxlint-disable-next-line react/no-danger -- JSON-LD payload, with `<` escaped to prevent breaking out of the script tag
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationJsonLd(org)).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(organizationJsonLd(org)).replaceAll("<", "\\u003c"),
         }}
         type="application/ld+json"
       />
     </>
   );
-}
+};
+export default OrganizationPage;

@@ -9,7 +9,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { type DirectoryCounts, DirectoryShell } from "@/components/directory-shell";
+
+import { DirectoryShell } from "@/components/directory-shell";
+import type { DirectoryCounts } from "@/components/directory-shell";
 import { OrgLogo } from "@/components/org-logo";
 import {
   Select,
@@ -21,7 +23,7 @@ import {
 import type { OrganizationType } from "@/lib/content/types";
 import { cn } from "@/lib/utils";
 
-export type OrganizationRow = {
+export interface OrganizationRow {
   slug: string;
   name: string;
   shortName?: string;
@@ -31,7 +33,7 @@ export type OrganizationRow = {
   location?: string;
   logoUrl: string | null;
   people: number;
-};
+}
 
 const TYPE_FILTERS: { label: string; types: OrganizationType[] }[] = [
   { label: "Schools", types: ["school"] },
@@ -41,22 +43,22 @@ const TYPE_FILTERS: { label: string; types: OrganizationType[] }[] = [
 ];
 
 const TYPE_ICONS: Partial<Record<OrganizationType, typeof Building2Icon>> = {
-  school: GraduationCapIcon,
   association: LandmarkIcon,
+  school: GraduationCapIcon,
 };
 
 const SORT_ITEMS = [
-  { value: "people", label: "Most people" },
-  { value: "name", label: "A–Z" },
+  { label: "Most people", value: "people" },
+  { label: "A–Z", value: "name" },
 ];
 
-export function OrganizationsDirectory({
+export const OrganizationsDirectory = ({
   organizations,
   counts,
 }: {
   organizations: OrganizationRow[];
   counts: DirectoryCounts;
-}) {
+}) => {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [sort, setSort] = useState<"people" | "name">("people");
@@ -73,7 +75,7 @@ export function OrganizationsDirectory({
             v?.toLowerCase().includes(q)
           )
       )
-      .sort(
+      .toSorted(
         (a, b) => (sort === "people" ? b.people - a.people : 0) || a.name.localeCompare(b.name)
       );
   }, [organizations, search, typeFilter, sort]);
@@ -107,6 +109,7 @@ export function OrganizationsDirectory({
       controls={
         <Select
           items={SORT_ITEMS}
+          // SAFETY: SORT_ITEMS only holds the values "people" and "name".
           onValueChange={(v) => v && setSort(v as "people" | "name")}
           value={sort}
         >
@@ -128,7 +131,7 @@ export function OrganizationsDirectory({
       searchPlaceholder={`Search ${counts.organizations} organizations`}
     >
       {filtered.length === 0 ? (
-        <div className="flex flex-col items-center gap-4 py-12 text-muted-foreground text-sm italic">
+        <div className="text-muted-foreground flex flex-col items-center gap-4 py-12 text-sm italic">
           <SearchXIcon className="size-16" />
           No organizations found.
         </div>
@@ -149,10 +152,10 @@ export function OrganizationsDirectory({
                     logoUrl={org.logoUrl}
                   />
                   <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="font-semibold font-serif text-xl group-hover:text-primary">
+                    <span className="group-hover:text-primary font-serif text-xl font-semibold">
                       {org.name}
                       {org.shortName && (
-                        <span className="font-normal text-base text-muted-foreground">
+                        <span className="text-muted-foreground text-base font-normal">
                           {" "}
                           ({org.shortName})
                         </span>
@@ -163,7 +166,7 @@ export function OrganizationsDirectory({
                     </span>
                   </span>
                   <span
-                    className="inline-flex shrink-0 items-center gap-1 text-[#4A433D] text-sm tabular-nums"
+                    className="inline-flex shrink-0 items-center gap-1 text-sm text-[#4A433D] tabular-nums"
                     title={`${org.people} ${org.people === 1 ? "person" : "people"} in the directory`}
                   >
                     <UsersIcon className="size-3.5" />
@@ -177,4 +180,4 @@ export function OrganizationsDirectory({
       )}
     </DirectoryShell>
   );
-}
+};

@@ -1,17 +1,12 @@
 import { SearchXIcon } from "lucide-react";
+
 import ProfileListItem from "@/components/profile-list-item";
 import type { Profile } from "@/lib/content/types";
 
-export default function ProfilesList({
-  profiles,
-  hasSearch,
-}: {
-  profiles: Profile[];
-  hasSearch: boolean;
-}) {
+const ProfilesList = ({ profiles, hasSearch }: { profiles: Profile[]; hasSearch: boolean }) => {
   if (profiles.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 text-muted-foreground text-sm italic">
+      <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 text-sm italic">
         <SearchXIcon className="h-16 w-16" />
         {hasSearch
           ? "No Montessorians found. Try a different search."
@@ -27,4 +22,5 @@ export default function ProfilesList({
       ))}
     </div>
   );
-}
+};
+export default ProfilesList;

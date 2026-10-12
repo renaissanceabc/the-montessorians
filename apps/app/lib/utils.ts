@@ -1,7 +1,7 @@
-const WWW_REGEX = /^www\./;
-const TRAILING_SLASH_REGEX = /\/$/;
-const URL_CLEANUP_REGEX = /^(https?:\/\/)?/;
-const URL_SPLIT_REGEX = /[/?#]/;
+const WWW_REGEX = /^www\./u;
+const TRAILING_SLASH_REGEX = /\/$/u;
+const URL_CLEANUP_REGEX = /^(?:https?:\/\/)?/u;
+const URL_SPLIT_REGEX = /[/?#]/u;
 
 export { cn } from "cn";
 
@@ -13,16 +13,17 @@ export const baseUrl = "";
 
 const ACRONYMS = ["TV", "AI", "NASA", "NBA", "NHL", "NCAA", "NFL", "MLB", "MIT", "STEM"];
 
-export function toTitleCase(str: string) {
-  const titled = str.replace(/[_-]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+export const toTitleCase = (str: string) => {
+  let result = str.replaceAll(/[_-]/gu, " ").replaceAll(/\b\w/gu, (char) => char.toUpperCase());
 
-  return ACRONYMS.reduce((result, acronym) => {
-    const regex = new RegExp(`\\b${acronym[0]}${acronym.slice(1).toLowerCase()}\\b`, "g");
-    return result.replace(regex, acronym);
-  }, titled);
-}
+  for (const acronym of ACRONYMS) {
+    const regex = new RegExp(`\\b${acronym[0]}${acronym.slice(1).toLowerCase()}\\b`, "gu");
+    result = result.replaceAll(regex, acronym);
+  }
+  return result;
+};
 
-export function prettyUrl(rawUrl: string): string {
+export const prettyUrl = (rawUrl: string): string => {
   try {
     const url = new URL(rawUrl);
     const hostname = url.hostname.replace(WWW_REGEX, "");
@@ -31,4 +32,4 @@ export function prettyUrl(rawUrl: string): string {
   } catch {
     return rawUrl.replace(URL_CLEANUP_REGEX, "").replace(WWW_REGEX, "").split(URL_SPLIT_REGEX)[0];
   }
-}
+};

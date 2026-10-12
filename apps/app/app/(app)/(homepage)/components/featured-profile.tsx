@@ -1,28 +1,29 @@
 import { ArrowRightIcon, StarsIcon } from "lucide-react";
 import Link from "next/link";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import type { Profile } from "@/lib/content/types";
 
-export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profile | null }) {
+const FeaturedProfile = ({ dailyProfile }: { dailyProfile: Profile | null }) => {
   if (!dailyProfile) {
     return (
       <div className="flex flex-col items-center gap-4">
-        <h1 className="flex items-center gap-2 font-bold text-xs">
+        <h1 className="flex items-center gap-2 text-xs font-bold">
           <StarsIcon className="h-4 w-4" />
-          Today's Montessorian
+          Today&apos;s Montessorian
         </h1>
 
         <div className="flex max-w-md flex-col items-center gap-4 rounded-lg border border-black/20 bg-white/50 p-4 transition-colors sm:w-[320px] lg:w-[240px]">
           <div className="flex flex-col items-center gap-2 text-center">
-            <span className="font-semibold font-serif text-2xl group-hover:text-primary">
+            <span className="group-hover:text-primary font-serif text-2xl font-semibold">
               Oops – no daily profile found!
             </span>
           </div>
         </div>
 
         <Link
-          className="flex flex-row items-center gap-1 text-muted-foreground text-xs hover:underline"
+          className="text-muted-foreground flex flex-row items-center gap-1 text-xs hover:underline"
           href="/archive"
         >
           See past Montessorians <ArrowRightIcon className="h-3 w-3" />
@@ -33,9 +34,9 @@ export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profil
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <h1 className="flex items-center gap-2 font-bold text-xs">
+      <h1 className="flex items-center gap-2 text-xs font-bold">
         <StarsIcon className="h-4 w-4" />
-        Today's Montessorian
+        Today&apos;s Montessorian
       </h1>
 
       <Link
@@ -50,7 +51,7 @@ export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profil
         </Avatar>
 
         <div className="flex flex-col items-center gap-2 text-center">
-          <span className="font-semibold font-serif text-2xl group-hover:text-primary">
+          <span className="group-hover:text-primary font-serif text-2xl font-semibold">
             {dailyProfile.name}
           </span>
           <p className="text-muted-foreground text-sm">{dailyProfile.tagline}</p>
@@ -65,11 +66,12 @@ export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profil
       </Link>
 
       <Link
-        className="flex flex-row items-center gap-1 text-muted-foreground text-xs hover:underline"
+        className="text-muted-foreground flex flex-row items-center gap-1 text-xs hover:underline"
         href="/archive"
       >
         See past Montessorians <ArrowRightIcon className="h-3 w-3" />
       </Link>
     </div>
   );
-}
+};
+export default FeaturedProfile;

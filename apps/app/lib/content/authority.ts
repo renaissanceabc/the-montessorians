@@ -1,21 +1,21 @@
 import { siteUrl } from "@/lib/utils";
+
 import rawChanges from "./changes.generated.json";
 import { getOrganizationById, getOrganizationBySlug } from "./organizations";
 import { getProfileById } from "./profiles";
-import type { AuthorityChange, Organization, Profile } from "./types";
+import type { AuthorityChange, ContributionType, Organization, Profile } from "./types";
 
 // Everything that turns a record into a citable authority entry: permanent
 // ids, the merge/withdrawal log, external identifier URIs, and JSON-LD.
 
+// SAFETY: changes.generated.json is written by scripts/generate-content.mjs from
+// data/authority/changes.yaml, which scripts/validate.js checks against this shape.
 const CHANGES = rawChanges as AuthorityChange[];
 
-export function getChanges(): AuthorityChange[] {
-  return CHANGES;
-}
+export const getChanges = (): AuthorityChange[] => CHANGES;
 
-export function getChangeForId(id: string): AuthorityChange | null {
-  return CHANGES.find((c) => c.id === id && c.action !== "renamed") ?? null;
-}
+export const getChangeForId = (id: string): AuthorityChange | null =>
+  CHANGES.find((c) => c.id === id && c.action !== "renamed") ?? null;
 
 /** Permanent URI for a record. */
 export const idUrl = (id: string) => `${siteUrl}/id/${id}`;
@@ -27,7 +27,7 @@ export type ResolvedId =
   | { kind: "withdrawn"; change: AuthorityChange };
 
 /** Resolve a permanent id to its live record, following merges. */
-export function resolveId(id: string, depth = 0): ResolvedId | null {
+export const resolveId = (id: string, depth = 0): ResolvedId | null => {
   const profile = getProfileById(id);
   if (profile) {
     return { kind: "person", profile };
@@ -38,78 +38,91 @@ export function resolveId(id: string, depth = 0): ResolvedId | null {
   }
   const change = getChangeForId(id);
   if (change?.action === "merged" && change.replacedBy && depth < 5) {
-    return { kind: "merged", change, target: resolveId(change.replacedBy, depth + 1) };
+    return { change, kind: "merged", target: resolveId(change.replacedBy, depth + 1) };
   }
   if (change?.action === "withdrawn") {
-    return { kind: "withdrawn", change };
+    return { change, kind: "withdrawn" };
   }
   return null;
-}
+};
 
 /** The page URL path for a resolved id. */
-export function pathForResolved(resolved: ResolvedId | null): string | null {
+export const pathForResolved = (resolved: ResolvedId | null): string | null => {
   if (!resolved) {
     return null;
   }
   switch (resolved.kind) {
-    case "person":
+    case "person": {
       return `/${resolved.profile.slug}`;
-    case "organization":
+    }
+    case "organization": {
       return `/organizations/${resolved.organization.slug}`;
-    case "merged":
+    }
+    case "merged": {
       return pathForResolved(resolved.target);
-    default:
+    }
+    default: {
       return null;
+    }
   }
-}
+};
 
 export const IDENTIFIER_LABELS = {
+  isni: "ISNI",
   lcnaf: "Library of Congress",
+  orcid: "ORCID",
+  ror: "ROR",
+  snac: "SNAC",
   viaf: "VIAF",
   wikidata: "Wikidata",
-  orcid: "ORCID",
-  isni: "ISNI",
-  snac: "SNAC",
-  ror: "ROR",
 } as const;
 
 export type IdentifierScheme = keyof typeof IDENTIFIER_LABELS;
 
-export function identifierUrl(scheme: IdentifierScheme, value: string): string {
+export const identifierUrl = (scheme: IdentifierScheme, value: string): string => {
   switch (scheme) {
-    case "lcnaf":
+    case "lcnaf": {
       return `http://id.loc.gov/authorities/names/${value}`;
-    case "viaf":
+    }
+    case "viaf": {
       return `https://viaf.org/viaf/${value}`;
-    case "wikidata":
+    }
+    case "wikidata": {
       return `http://www.wikidata.org/entity/${value}`;
-    case "orcid":
+    }
+    case "orcid": {
       return `https://orcid.org/${value}`;
-    case "isni":
+    }
+    case "isni": {
       return `https://isni.org/isni/${value}`;
-    case "snac":
+    }
+    case "snac": {
       return `https://snaccooperative.org/ark:/99166/${value}`;
-    case "ror":
+    }
+    case "ror": {
       return `https://ror.org/${value}`;
-    default:
+    }
+    default: {
       return value;
+    }
   }
-}
+};
 
-export function identifierEntries(
+export const identifierEntries = (
   identifiers: Partial<Record<IdentifierScheme, string>> | undefined
-): { scheme: IdentifierScheme; label: string; value: string; url: string }[] {
-  return (Object.entries(identifiers ?? {}) as [IdentifierScheme, string][])
+): { scheme: IdentifierScheme; label: string; value: string; url: string }[] =>
+  // SAFETY: the keys of an identifiers map are IdentifierSchemes by its type, and
+  // the generated dataset only contains schemes validate.js accepts.
+  (Object.entries(identifiers ?? {}) as [IdentifierScheme, string][])
     .filter(([, value]) => Boolean(value))
     .map(([scheme, value]) => ({
-      scheme,
       label: IDENTIFIER_LABELS[scheme],
-      value,
+      scheme,
       url: identifierUrl(scheme, value),
+      value,
     }));
-}
 
-export function contributionUrl(c: Profile["contributions"][number]): string | null {
+export const contributionUrl = (c: Profile["contributions"][number]): string | null => {
   if (c.doi) {
     return `https://doi.org/${c.doi}`;
   }
@@ -120,84 +133,80 @@ export function contributionUrl(c: Profile["contributions"][number]): string | n
     return `https://openlibrary.org/isbn/${c.isbn}`;
   }
   return null;
-}
-
-const SCHEMA_CONTRIBUTION_TYPES: Record<string, string> = {
-  book: "Book",
-  article: "ScholarlyArticle",
-  chapter: "Chapter",
-  lecture: "Event",
-  "training-program": "Course",
-  media: "CreativeWork",
-  other: "CreativeWork",
 };
 
+const SCHEMA_CONTRIBUTION_TYPES = {
+  article: "ScholarlyArticle",
+  book: "Book",
+  chapter: "Chapter",
+  lecture: "Event",
+  media: "CreativeWork",
+  other: "CreativeWork",
+  "training-program": "Course",
+} satisfies Record<ContributionType, string>;
+
 /** schema.org JSON-LD for an organization. */
-export function organizationJsonLd(org: Organization) {
-  return {
-    "@context": "https://schema.org",
-    "@type":
-      org.type === "school" || org.type === "university"
-        ? "EducationalOrganization"
-        : "Organization",
-    "@id": idUrl(org.id),
-    identifier: org.id,
-    name: org.name,
-    alternateName: org.nameVariants,
-    description: org.description,
-    url: `${siteUrl}/organizations/${org.slug}`,
-    sameAs: [
-      ...identifierEntries(org.identifiers).map((e) => e.url),
-      ...(org.website ? [org.website] : []),
-    ],
-    foundingDate: org.founded ? String(org.founded) : undefined,
-    location: org.location,
-    parentOrganization: org.parent
-      ? { "@id": idUrl(getOrganizationBySlug(org.parent)?.id ?? org.parent) }
-      : undefined,
-  };
-}
+export const organizationJsonLd = (org: Organization) => ({
+  "@context": "https://schema.org",
+  "@id": idUrl(org.id),
+  "@type":
+    org.type === "school" || org.type === "university" ? "EducationalOrganization" : "Organization",
+  alternateName: org.nameVariants,
+  description: org.description,
+  foundingDate: org.founded ? String(org.founded) : undefined,
+  identifier: org.id,
+  location: org.location,
+  name: org.name,
+  parentOrganization: org.parent
+    ? { "@id": idUrl(getOrganizationBySlug(org.parent)?.id ?? org.parent) }
+    : undefined,
+  sameAs: [
+    ...identifierEntries(org.identifiers).map((e) => e.url),
+    ...(org.website ? [org.website] : []),
+  ],
+  url: `${siteUrl}/organizations/${org.slug}`,
+});
 
 /** schema.org JSON-LD for a person, linked to other authority files. */
-export function personJsonLd(profile: Profile) {
+export const personJsonLd = (profile: Profile) => {
   const orgNode = (slug: string) => {
     const org = getOrganizationBySlug(slug);
     return org ? { "@id": idUrl(org.id), name: org.name } : { name: slug };
   };
   return {
     "@context": "https://schema.org",
-    "@type": "Person",
     "@id": idUrl(profile.id),
-    identifier: profile.id,
-    name: profile.name,
-    alternateName: [profile.nameAuthorized, ...profile.nameVariants].filter(Boolean),
-    description: profile.tagline || profile.bio || undefined,
-    url: `${siteUrl}/${profile.slug}`,
-    image: profile.imageUrl ? `${siteUrl}/api/og/${profile.slug}.png` : undefined,
-    birthDate: profile.birthYear ? String(profile.birthYear) : undefined,
-    deathDate: profile.deathYear ? String(profile.deathYear) : undefined,
-    jobTitle: profile.roles.length > 0 ? profile.roles : undefined,
-    sameAs: [
-      ...identifierEntries(profile.identifiers).map((e) => e.url),
-      ...profile.links.map((l) => l.url),
-    ],
-    alumniOf:
-      profile.schools.length > 0 ? profile.schools.map((s) => orgNode(s.organization)) : undefined,
+    "@type": "Person",
     affiliation:
       profile.affiliations.length > 0
         ? profile.affiliations.map((a) => orgNode(a.organization))
         : undefined,
+    alternateName: [profile.nameAuthorized, ...profile.nameVariants].filter(Boolean),
+    alumniOf:
+      profile.schools.length > 0 ? profile.schools.map((s) => orgNode(s.organization)) : undefined,
+    birthDate: profile.birthYear ? String(profile.birthYear) : undefined,
+    dateModified: profile.addedAt,
+    deathDate: profile.deathYear ? String(profile.deathYear) : undefined,
+    description: profile.tagline || profile.bio || undefined,
+    identifier: profile.id,
+    image: profile.imageUrl ? `${siteUrl}/api/og/${profile.slug}.png` : undefined,
+    jobTitle: profile.roles.length > 0 ? profile.roles : undefined,
+    name: profile.name,
+    sameAs: [
+      ...identifierEntries(profile.identifiers).map((e) => e.url),
+      ...profile.links.map((l) => l.url),
+    ],
     subjectOf:
       profile.contributions.length > 0
         ? profile.contributions.map((c) => ({
             "@type": SCHEMA_CONTRIBUTION_TYPES[c.type] ?? "CreativeWork",
-            name: c.title,
             datePublished: c.year ? String(c.year) : undefined,
+            isbn: c.isbn,
+            name: c.title,
             publisher: c.venue,
             url: contributionUrl(c) ?? undefined,
-            isbn: c.isbn,
           }))
         : undefined,
-    dateModified: profile.addedAt,
+    url: `${siteUrl}/${profile.slug}`,
   };
-}
+};

@@ -1,7 +1,9 @@
 import { BookOpenIcon, Building2Icon, GraduationCapIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+
 import type { OrganizationRef, Profile } from "@/lib/content/types";
+
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 
@@ -18,14 +20,14 @@ const years = (profile: Profile) => {
 const orgLabel = (ref: OrganizationRef) =>
   ref.organizationShortName ?? ref.organizationName ?? ref.organization;
 
-export default function ProfileListItem({
+const ProfileListItem = ({
   profile,
   detail,
 }: {
   profile: Profile;
   /** Context for where it's listed, e.g. their level or role at an organization */
   detail?: ReactNode;
-}) {
+}) => {
   const isContributor = profile.kinds.includes("contributor");
   const orgs = isContributor ? profile.affiliations : profile.schools;
   const OrgIcon = isContributor ? Building2Icon : GraduationCapIcon;
@@ -45,7 +47,7 @@ export default function ProfileListItem({
       <div className="flex w-full min-w-0 flex-col gap-2.5">
         <div className="flex w-full flex-col gap-1">
           <p className="flex flex-wrap items-baseline gap-x-2">
-            <span className="font-semibold font-serif text-2xl group-hover:text-primary">
+            <span className="group-hover:text-primary font-serif text-2xl font-semibold">
               {profile.name}
             </span>
             {lifespan && (
@@ -62,7 +64,7 @@ export default function ProfileListItem({
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-[#4A433D] text-xs">
+        <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs text-[#4A433D]">
           {orgs.length > 0 && (
             <span
               className="inline-flex min-w-0 items-center gap-1.5"
@@ -100,4 +102,6 @@ export default function ProfileListItem({
       </div>
     </Link>
   );
-}
+};
+
+export default ProfileListItem;

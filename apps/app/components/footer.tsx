@@ -1,80 +1,81 @@
 import Link from "next/link";
+
 import { Badge } from "@/components/ui/badge";
 
 const links = [
   {
-    label: "Discover",
     href: "/discover",
+    label: "Discover",
   },
   {
-    label: "Contributors",
     href: "/contributors",
+    label: "Contributors",
   },
   {
-    label: "Organizations",
     href: "/organizations",
+    label: "Organizations",
   },
   {
-    label: "Archive",
     href: "/archive",
+    label: "Archive",
   },
   {
-    label: "Tags",
     href: "/tags",
+    label: "Tags",
   },
   {
-    label: "About",
     href: "/about",
+    label: "About",
   },
   {
-    label: "Data & API",
     href: "/data",
+    label: "Data & API",
   },
 ];
 
-export default function Footer() {
-  return (
-    <footer className="flex w-full flex-col bg-primary">
-      <div className="container mx-auto flex max-w-3xl flex-col gap-6 p-16">
-        <div className="flex flex-col items-center justify-between gap-10 sm:flex-row sm:gap-2">
-          <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
-            <div className="flex flex-col gap-2">
-              <Link
-                className="font-semibold font-serif text-3xl text-white transition-colors lg:text-4xl"
-                href="/"
-              >
-                the montessorians
-              </Link>
-
-              <p className="text-sm text-white/60">Discover extraordinary Montessorians</p>
-            </div>
-
-            <Badge
-              className="flex gap-2 border border-white/20 bg-white/10 text-primary-foreground transition-colors duration-150 [a&]:hover:border-white/25 [a&]:hover:bg-white/18"
-              render={
-                <Link
-                  href="https://renaissance.education?utm_source=the_montessorians&utm_medium=footer"
-                  target="_blank"
-                />
-              }
+const Footer = () => (
+  <footer className="bg-primary flex w-full flex-col">
+    <div className="container mx-auto flex max-w-3xl flex-col gap-6 p-16">
+      <div className="flex flex-col items-center justify-between gap-10 sm:flex-row sm:gap-2">
+        <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
+          <div className="flex flex-col gap-2">
+            <Link
+              className="font-serif text-3xl font-semibold text-white transition-colors lg:text-4xl"
+              href="/"
             >
-              Made by Renaissance
-            </Badge>
+              the montessorians
+            </Link>
+
+            <p className="text-sm text-white/60">Discover extraordinary Montessorians</p>
           </div>
 
-          <div className="flex flex-col items-center gap-3 sm:items-end sm:gap-2">
-            {links.map((link) => (
+          <Badge
+            className="text-primary-foreground flex gap-2 border border-white/20 bg-white/10 transition-colors duration-150 [a&]:hover:border-white/25 [a&]:hover:bg-white/18"
+            render={
               <Link
-                className="text-sm text-white/75 transition-colors hover:text-white hover:underline"
-                href={link.href}
-                key={link.href}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+                href="https://renaissance.education?utm_source=the_montessorians&utm_medium=footer"
+                target="_blank"
+              />
+            }
+          >
+            Made by Renaissance
+          </Badge>
+        </div>
+
+        <div className="flex flex-col items-center gap-3 sm:items-end sm:gap-2">
+          {links.map((link) => (
+            <Link
+              className="text-sm text-white/75 transition-colors hover:text-white hover:underline"
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
       </div>
-    </footer>
-  );
-}
+    </div>
+  </footer>
+);
+
+export default Footer;

@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+
 import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
 import { toTitleCase } from "@/lib/utils";
 
 export const dynamic = "force-static";
 
-export function GET() {
+export const GET = () => {
   const allProfiles = getAllProfiles();
   const allTags = getAllTags({ sortBy: "asc" }).data;
 
@@ -188,4 +189,4 @@ ${license}
       "Content-Type": "text/plain; charset=utf-8",
     },
   });
-}
+};

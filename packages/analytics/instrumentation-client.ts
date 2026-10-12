@@ -1,4 +1,5 @@
-import posthog from "posthog-js";
+import { posthog } from "posthog-js";
+
 import { keys } from "./keys";
 
 export const initializeAnalytics = () => {
@@ -10,10 +11,10 @@ export const initializeAnalytics = () => {
   try {
     posthog.init(NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: "/relay-r9etm",
-      ui_host: keys().NEXT_PUBLIC_POSTHOG_HOST,
-      person_profiles: "identified_only",
-      capture_pageview: false, // Disable automatic pageview capture, as we capture manually
-      capture_pageleave: true, // Overrides the `capture_pageview` setting
+      // Overrides the `capture_pageview` setting
+      capture_pageleave: true,
+      // Disable automatic pageview capture, as we capture manually
+      capture_pageview: false,
       loaded: (ph) => {
         let env = "production";
 
@@ -25,9 +26,10 @@ export const initializeAnalytics = () => {
 
         ph.register({ env });
       },
+      person_profiles: "identified_only",
+      ui_host: keys().NEXT_PUBLIC_POSTHOG_HOST,
     });
   } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: Critical analytics initialization error
     console.error("[PostHog] Failed to initialize:", error);
     throw error;
   }

@@ -8,37 +8,31 @@ import type { Profile } from "./types";
 const LICENSE = "https://creativecommons.org/publicdomain/zero/1.0/";
 
 /** A plain-JSON person record: the YAML fields plus the permanent URI. */
-export function personRecord(profile: Profile) {
-  return {
-    uri: idUrl(profile.id),
-    ...profile,
-    tags: profile.tags.map((t) => t.slug),
-  };
-}
+export const personRecord = (profile: Profile) => ({
+  uri: idUrl(profile.id),
+  ...profile,
+  tags: profile.tags.map((t) => t.slug),
+});
 
-export function peopleJson() {
-  return {
-    license: LICENSE,
-    generatedAt: new Date().toISOString(),
-    people: getAllProfiles().map(personRecord),
-  };
-}
+export const peopleJson = () => ({
+  generatedAt: new Date().toISOString(),
+  license: LICENSE,
+  people: getAllProfiles().map(personRecord),
+});
 
-export function peopleJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      ...getAllProfiles().map((p) => {
-        const { "@context": _, ...node } = personJsonLd(p);
-        return node;
-      }),
-      ...getAllOrganizations().map((o) => {
-        const { "@context": _, ...node } = organizationJsonLd(o);
-        return node;
-      }),
-    ],
-  };
-}
+export const peopleJsonLd = () => ({
+  "@context": "https://schema.org",
+  "@graph": [
+    ...getAllProfiles().map((p) => {
+      const { "@context": _, ...node } = personJsonLd(p);
+      return node;
+    }),
+    ...getAllOrganizations().map((o) => {
+      const { "@context": _, ...node } = organizationJsonLd(o);
+      return node;
+    }),
+  ],
+});
 
 const CSV_COLUMNS = [
   "id",
@@ -65,41 +59,44 @@ const CSV_COLUMNS = [
   "url",
 ] as const;
 
-const csvCell = (value: unknown) => {
+/** A CSV cell before quoting: missing values become empty cells. */
+type CsvValue = string | number | boolean | null | undefined;
+
+const csvCell = (value: CsvValue) => {
   const text = value === null || value === undefined ? "" : String(value);
-  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  return /[",\n]/u.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 };
 
-export function peopleCsv(siteUrl: string): string {
+export const peopleCsv = (siteUrl: string): string => {
   const rows = getAllProfiles().map((p) => {
     const ids = Object.fromEntries(
       identifierEntries(p.identifiers).map((e) => [e.scheme, e.value])
     );
-    const row: Record<(typeof CSV_COLUMNS)[number], unknown> = {
+    const row: Record<(typeof CSV_COLUMNS)[number], CsvValue> = {
+      affiliations: p.affiliations.map((a) => a.organizationName ?? a.organization).join("; "),
+      birth_year: p.birthYear,
+      contributions: p.contributions.length,
+      death_year: p.deathYear,
       id: p.id,
-      uri: idUrl(p.id),
+      isni: ids.isni,
+      kind: p.kind,
+      lcnaf: ids.lcnaf,
       name: p.name,
       name_authorized: p.nameAuthorized,
-      kind: p.kind,
+      orcid: ids.orcid,
       roles: p.roles.join("; "),
-      birth_year: p.birthYear,
-      death_year: p.deathYear,
+      schools: p.schools.map((s) => s.organizationName ?? s.organization).join("; "),
+      snac: ids.snac,
+      status: p.status,
       tagline: p.tagline,
       tags: p.tags.map((t) => t.slug).join("; "),
-      schools: p.schools.map((s) => s.organizationName ?? s.organization).join("; "),
-      affiliations: p.affiliations.map((a) => a.organizationName ?? a.organization).join("; "),
-      contributions: p.contributions.length,
+      uri: idUrl(p.id),
+      url: `${siteUrl}/${p.slug}`,
       verification: p.verification,
-      status: p.status,
-      lcnaf: ids.lcnaf,
       viaf: ids.viaf,
       wikidata: ids.wikidata,
-      orcid: ids.orcid,
-      isni: ids.isni,
-      snac: ids.snac,
-      url: `${siteUrl}/${p.slug}`,
     };
     return CSV_COLUMNS.map((c) => csvCell(row[c])).join(",");
   });
   return `${[CSV_COLUMNS.join(","), ...rows].join("\n")}\n`;
-}
+};

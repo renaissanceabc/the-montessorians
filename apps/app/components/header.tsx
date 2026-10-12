@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -9,7 +10,7 @@ const links = [
   { href: "/about", label: "About" },
 ];
 
-export default function Header() {
+const Header = () => {
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function Header() {
         )}
       >
         <Link
-          className="font-semibold font-serif text-2xl transition-colors hover:text-primary md:text-3xl lg:text-4xl"
+          className="hover:text-primary font-serif text-2xl font-semibold transition-colors md:text-3xl lg:text-4xl"
           href="/"
         >
           the montessorians
@@ -40,7 +41,7 @@ export default function Header() {
         <div className="flex h-5 items-center gap-3 sm:gap-4 lg:gap-6">
           {links.map((link) => (
             <Link
-              className="flex flex-row items-center gap-2 font-semibold text-sm transition-colors hover:underline sm:text-base"
+              className="flex flex-row items-center gap-2 text-sm font-semibold transition-colors hover:underline sm:text-base"
               href={link.href}
               key={link.label}
             >
@@ -48,7 +49,7 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            className="hidden rounded-md border border-black/20 px-3 py-1.5 font-semibold text-base transition-colors hover:border-black/50 hover:bg-white/50 sm:flex"
+            className="hidden rounded-md border border-black/20 px-3 py-1.5 text-base font-semibold transition-colors hover:border-black/50 hover:bg-white/50 sm:flex"
             href="/contribute"
           >
             Contribute
@@ -57,4 +58,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

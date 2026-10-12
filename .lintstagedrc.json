@@ -1,4 +1,4 @@
 {
-  "*.{ts,tsx,js,jsx,json}": ["bunx ultracite fix"],
-  "data/**/*.yaml": ["prettier --write"]
+  "*.{ts,tsx,js,jsx,mjs,mts,json,jsonc,css,md}": ["bunx ultracite fix"],
+  "data/**/*.yaml": ["oxfmt", "node scripts/validate.js"]
 }

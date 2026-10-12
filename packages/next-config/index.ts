@@ -1,31 +1,27 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
-function hostnameFromUrl(url: string | undefined) {
-  if (!url) {
+const hostnameFromUrl = (url: string | undefined) => {
+  if (!(url && URL.canParse(url))) {
     return;
   }
-  try {
-    return new URL(url).hostname;
-  } catch {
-    return;
-  }
-}
+  return new URL(url).hostname;
+};
 
 /**
  * The site's public origin: the Vercel production domain when set, then the
  * deployment URL (previews), then portless (montessorians.localhost), then
  * localhost. Permanent identifiers are built from it.
  */
-export function resolveSiteUrl() {
+export const resolveSiteUrl = () => {
   const host = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
   if (host) {
     return `https://${host}`;
   }
   return (
-    process.env.PORTLESS_URL?.replace(/\/$/, "") ?? `http://localhost:${process.env.PORT ?? 3000}`
+    process.env.PORTLESS_URL?.replace(/\/$/u, "") ?? `http://localhost:${process.env.PORT ?? 3000}`
   );
-}
+};
 
 const devOrigins = [hostnameFromUrl(process.env.PORTLESS_URL)].filter((host): host is string =>
   Boolean(host)
@@ -39,29 +35,27 @@ export const config: NextConfig = {
     SITE_URL: resolveSiteUrl(),
   },
 
-  // biome-ignore lint/suspicious/useAwait: rewrites is async
-  async rewrites() {
-    return [
+  rewrites: () =>
+    Promise.resolve([
       // OG images
       {
-        source: "/api/og/:slug.png",
         destination: "/api/og/:slug",
+        source: "/api/og/:slug.png",
       },
       // PostHog
       {
-        source: "/relay-r9etm/static/:path*",
         destination: "https://us-assets.i.posthog.com/static/:path*",
+        source: "/relay-r9etm/static/:path*",
       },
       {
-        source: "/relay-r9etm/:path*",
         destination: "https://us.i.posthog.com/:path*",
+        source: "/relay-r9etm/:path*",
       },
       {
-        source: "/relay-r9etm/decide",
         destination: "https://us.i.posthog.com/decide",
+        source: "/relay-r9etm/decide",
       },
-    ];
-  },
+    ]),
 
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,

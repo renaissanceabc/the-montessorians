@@ -2,6 +2,7 @@
 
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
+
 import { FacebookIcon, LinkedInIcon, ThreadsIcon, XIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,72 +23,23 @@ import {
 } from "@/components/ui/drawer";
 import type { ProfilePage } from "@/lib/content/types";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
-import { addUtmParamsToUrl, getShareUrl, type SHARE_CONFIG } from "@/lib/url";
+import { addUtmParamsToUrl, getShareUrl } from "@/lib/url";
+import type { SHARE_CONFIG } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
 
-export function ShareDialog({
-  open,
-  onOpenChange,
-  profile,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  profile: ProfilePage["profile"];
-}) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  if (isDesktop) {
-    return (
-      <Dialog onOpenChange={onOpenChange} open={open}>
-        <DialogContent className="bg-white sm:max-w-[320px]">
-          <DialogHeader>
-            <DialogTitle>Share this profile</DialogTitle>
-            <DialogDescription>Share this profile with your friends</DialogDescription>
-          </DialogHeader>
-          <ShareContent onOpenChange={onOpenChange} profile={profile} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer onOpenChange={onOpenChange} open={open}>
-      <DrawerContent className="bg-white">
-        <DrawerHeader>
-          <DrawerTitle>Share this profile</DrawerTitle>
-          <DrawerDescription>Share this profile with your friends</DrawerDescription>
-        </DrawerHeader>
-        <ShareContent onOpenChange={onOpenChange} profile={profile} />
-        <DrawerFooter>
-          <DrawerClose
-            render={
-              <Button
-                className="cursor-pointer bg-stone-200 hover:bg-stone-200/80"
-                variant="outline"
-              />
-            }
-          >
-            Close
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-}
-
-function ShareContent({
+const ShareContent = ({
   profile,
   onOpenChange,
 }: {
   profile: ProfilePage["profile"];
   onOpenChange: (open: boolean) => void;
-}) {
+}) => {
   const url = `${siteUrl}/${profile?.slug}`;
 
   const decoratedUrl = addUtmParamsToUrl(url, {
-    source: "other",
-    medium: "social",
     campaign: "profile",
+    medium: "social",
+    source: "other",
   });
 
   const copyLink = () => {
@@ -138,4 +90,54 @@ function ShareContent({
       </Button>
     </div>
   );
-}
+};
+
+export const ShareDialog = ({
+  open,
+  onOpenChange,
+  profile,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  profile: ProfilePage["profile"];
+}) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  if (isDesktop) {
+    return (
+      <Dialog onOpenChange={onOpenChange} open={open}>
+        <DialogContent className="bg-white sm:max-w-[320px]">
+          <DialogHeader>
+            <DialogTitle>Share this profile</DialogTitle>
+            <DialogDescription>Share this profile with your friends</DialogDescription>
+          </DialogHeader>
+          <ShareContent onOpenChange={onOpenChange} profile={profile} />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Drawer onOpenChange={onOpenChange} open={open}>
+      <DrawerContent className="bg-white">
+        <DrawerHeader>
+          <DrawerTitle>Share this profile</DrawerTitle>
+          <DrawerDescription>Share this profile with your friends</DrawerDescription>
+        </DrawerHeader>
+        <ShareContent onOpenChange={onOpenChange} profile={profile} />
+        <DrawerFooter>
+          <DrawerClose
+            render={
+              <Button
+                className="cursor-pointer bg-stone-200 hover:bg-stone-200/80"
+                variant="outline"
+              />
+            }
+          >
+            Close
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+};

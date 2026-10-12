@@ -18,7 +18,9 @@ import {
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { type ReactNode, useState } from "react";
+import { useState } from "react";
+import type { ReactNode } from "react";
+
 import { OrgLogo } from "@/components/org-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -38,65 +40,71 @@ const CONTRIBUTIONS_PREVIEW = 3;
 /** Co-authors named before "and N others". */
 const COAUTHORS_SHOWN = 2;
 
-export type IdentifierLink = { label: string; value: string; url: string };
+export interface IdentifierLink {
+  label: string;
+  value: string;
+  url: string;
+}
 export type ContributionLink = Contribution & { href: string | null; host: string | null };
 
 const RELATION_LABELS: Record<RelatedPerson["relation"], string> = {
-  coauthor: "Co-author",
-  parent: "Parent",
+  advisee: "Advised",
+  advisor: "Doctoral advisor",
   child: "Child",
+  coauthor: "Co-author",
+  colleague: "Colleague",
+  parent: "Parent",
   sibling: "Sibling",
   spouse: "Spouse",
-  trained_by: "Trained under",
   trained: "Trained",
-  advisor: "Doctoral advisor",
-  advisee: "Advised",
-  colleague: "Colleague",
+  trained_by: "Trained under",
 };
 
 const SOURCE_LABELS: Record<Source["type"], string> = {
-  wikipedia: "Wikipedia",
   article: "Article",
-  social: "Post",
-  publication: "Publication",
   authority: "Library record",
-  "personal-knowledge": "Personal knowledge",
   other: "Source",
+  "personal-knowledge": "Personal knowledge",
+  publication: "Publication",
+  social: "Post",
+  wikipedia: "Wikipedia",
 };
 
 const SOURCE_ICONS: Record<Source["type"], typeof GlobeIcon> = {
-  wikipedia: GlobeIcon,
   article: NewspaperIcon,
-  social: MessageCircleIcon,
-  publication: FileTextIcon,
   authority: LandmarkIcon,
-  "personal-knowledge": UsersIcon,
   other: LinkIcon,
+  "personal-knowledge": UsersIcon,
+  publication: FileTextIcon,
+  social: MessageCircleIcon,
+  wikipedia: GlobeIcon,
 };
 
 const CONTRIBUTION_ICONS: Record<Contribution["type"], typeof BookIcon> = {
-  book: BookIcon,
   article: FileTextIcon,
+  book: BookIcon,
   chapter: FileTextIcon,
   lecture: MicIcon,
-  "training-program": PresentationIcon,
   media: MicIcon,
   other: FileTextIcon,
+  "training-program": PresentationIcon,
 };
 
-const yearRange = (from?: number, to?: number) =>
-  from && to
-    ? from === to
-      ? `${from}`
-      : `${from} – ${to}`
-    : from
-      ? `${from} – present`
-      : to
-        ? `until ${to}`
-        : "";
+const yearRange = (from?: number, to?: number) => {
+  if (from && to) {
+    return from === to ? `${from}` : `${from} – ${to}`;
+  }
+  if (from) {
+    return `${from} – present`;
+  }
+  if (to) {
+    return `until ${to}`;
+  }
+  return "";
+};
 
 /** "with Nicole Else-Quest" / "with Heise, Richey, and 3 others", leaving out the person themselves. */
-function coauthorLine(authors: string[] | undefined, name: string): string | null {
+const coauthorLine = (authors: string[] | undefined, name: string): string | null => {
   const surname = name.split(" ").at(-1)?.toLowerCase();
   const others = (authors ?? []).filter((a) => a.split(" ").at(-1)?.toLowerCase() !== surname);
   if (others.length === 0) {
@@ -107,9 +115,9 @@ function coauthorLine(authors: string[] | undefined, name: string): string | nul
   }
   const rest = others.length - COAUTHORS_SHOWN;
   return `with ${others.slice(0, COAUTHORS_SHOWN).join(", ")}, and ${rest} other${rest === 1 ? "" : "s"}`;
-}
+};
 
-function Section({
+const Section = ({
   title,
   count,
   info,
@@ -123,25 +131,23 @@ function Section({
   aside?: ReactNode;
   id?: string;
   children: ReactNode;
-}) {
-  return (
-    <section className="flex w-full scroll-mt-24 flex-col gap-2.5" id={id}>
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-1.5">
-          <h2 className="font-semibold text-muted-foreground text-xs uppercase tracking-widest">
-            {title}
-            {count !== undefined && <span className="font-normal"> · {count}</span>}
-          </h2>
-          {info}
-        </div>
-        {aside}
+}) => (
+  <section className="flex w-full scroll-mt-24 flex-col gap-2.5" id={id}>
+    <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center gap-1.5">
+        <h2 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+          {title}
+          {count !== undefined && <span className="font-normal"> · {count}</span>}
+        </h2>
+        {info}
       </div>
-      {children}
-    </section>
-  );
-}
+      {aside}
+    </div>
+    {children}
+  </section>
+);
 
-function OrganizationCard({ refItem, school }: { refItem: OrganizationRef; school?: boolean }) {
+const OrganizationCard = ({ refItem, school }: { refItem: OrganizationRef; school?: boolean }) => {
   const Icon = school ? GraduationCapIcon : Building2Icon;
   const range = yearRange(refItem.from, refItem.to);
   const detail = [refItem.role, refItem.level && toTitleCase(refItem.level)]
@@ -154,10 +160,10 @@ function OrganizationCard({ refItem, school }: { refItem: OrganizationRef; schoo
     >
       <OrgLogo className="size-9" icon={Icon} logoUrl={refItem.organizationLogoUrl} />
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="font-semibold text-sm">
+        <span className="text-sm font-semibold">
           {refItem.organizationName ?? refItem.organization}
           {refItem.organizationShortName && (
-            <span className="font-normal text-muted-foreground">
+            <span className="text-muted-foreground font-normal">
               {" "}
               ({refItem.organizationShortName})
             </span>
@@ -166,13 +172,103 @@ function OrganizationCard({ refItem, school }: { refItem: OrganizationRef; schoo
         {detail && <span className="text-muted-foreground text-sm">{detail}</span>}
       </span>
       {range && (
-        <span className="shrink-0 text-muted-foreground text-xs tabular-nums">{range}</span>
+        <span className="text-muted-foreground shrink-0 text-xs tabular-nums">{range}</span>
       )}
     </Link>
   );
-}
+};
 
-export default function ProfileDetails({
+/** Contributions, with the first few shown until "Show all" is pressed. */
+const ContributionsSection = ({
+  contributions,
+  name,
+}: {
+  contributions: ContributionLink[];
+  name: string;
+}) => {
+  const [showAllContributions, setShowAllContributions] = useState(false);
+  if (contributions.length === 0) {
+    return null;
+  }
+  const visibleContributions = showAllContributions
+    ? contributions
+    : contributions.slice(0, CONTRIBUTIONS_PREVIEW);
+
+  return (
+    <Section count={contributions.length} id="contributions" title="Contributions">
+      <ul className="flex flex-col">
+        {visibleContributions.map((c) => {
+          const Icon = CONTRIBUTION_ICONS[c.type] ?? FileTextIcon;
+          const withLine = coauthorLine(c.authors, name);
+          const body = (
+            <>
+              <Icon
+                aria-label={toTitleCase(c.type)}
+                className="text-muted-foreground mt-0.5 size-4 shrink-0"
+              />
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="text-sm font-medium">
+                  <span
+                    className={
+                      c.href
+                        ? "underline decoration-black/25 underline-offset-[3px] group-hover:decoration-current"
+                        : ""
+                    }
+                  >
+                    {c.title}
+                  </span>
+                  {c.href && (
+                    <ArrowUpRightIcon className="text-muted-foreground ml-1.5 inline size-3" />
+                  )}
+                </span>
+                <span className="text-muted-foreground text-xs">
+                  {[c.venue, c.host].filter(Boolean).join(" · ")}
+                </span>
+                {withLine && (
+                  <span className="mt-0.5 flex items-center gap-1.5 text-xs text-[#4A433D]">
+                    <UsersIcon className="size-3" />
+                    <span>{withLine}</span>
+                  </span>
+                )}
+              </span>
+              {c.year && (
+                <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
+                  {c.year}
+                </span>
+              )}
+            </>
+          );
+          return (
+            <li className="border-b border-black/7" key={`${c.title}-${c.year ?? ""}`}>
+              {c.href ? (
+                <Link
+                  className="group flex items-start gap-2.5 py-2.5"
+                  href={c.href}
+                  target="_blank"
+                >
+                  {body}
+                </Link>
+              ) : (
+                <div className="flex items-start gap-2.5 py-2.5">{body}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {contributions.length > CONTRIBUTIONS_PREVIEW && (
+        <button
+          className="self-start py-1.5 text-sm font-semibold hover:underline"
+          onClick={() => setShowAllContributions((v) => !v)}
+          type="button"
+        >
+          {showAllContributions ? "Show fewer" : `Show all ${contributions.length}`}
+        </button>
+      )}
+    </Section>
+  );
+};
+
+const ProfileDetails = ({
   profile,
   identifiers,
   contributions,
@@ -186,13 +282,9 @@ export default function ProfileDetails({
   related: RelatedPerson[];
   permanentId: { value: string; url: string };
   correctionUrl: string;
-}) {
-  const [showAllContributions, setShowAllContributions] = useState(false);
+}) => {
   const isAlum = profile.kinds.includes("alum");
   const isContributor = profile.kinds.includes("contributor");
-  const visibleContributions = showAllContributions
-    ? contributions
-    : contributions.slice(0, CONTRIBUTIONS_PREVIEW);
 
   return (
     <div className="flex w-full flex-col gap-9">
@@ -220,10 +312,10 @@ export default function ProfileDetails({
         <div className="flex flex-col gap-4">
           {profile.quotes.map((quote) => (
             <blockquote
-              className="border-l-[3px] border-l-primary/35 pl-5 font-serif text-[22px] italic leading-snug"
+              className="border-l-primary/35 border-l-[3px] pl-5 font-serif text-[22px] leading-snug italic"
               key={quote}
             >
-              "{quote}"
+              &quot;{quote}&quot;
             </blockquote>
           ))}
         </div>
@@ -239,7 +331,7 @@ export default function ProfileDetails({
             />
           ))}
           {profile.educationNotes && (
-            <p className="text-[#4A433D] text-sm">{profile.educationNotes}</p>
+            <p className="text-sm text-[#4A433D]">{profile.educationNotes}</p>
           )}
         </Section>
       )}
@@ -247,7 +339,7 @@ export default function ProfileDetails({
       {(profile.affiliations.length > 0 || (isContributor && profile.montessoriNotes)) && (
         <Section title="Affiliations">
           {isContributor && profile.montessoriNotes && (
-            <p className="text-[#4A433D] text-sm">{profile.montessoriNotes}</p>
+            <p className="text-sm text-[#4A433D]">{profile.montessoriNotes}</p>
           )}
           {profile.affiliations.map((affiliation) => (
             <OrganizationCard
@@ -258,88 +350,17 @@ export default function ProfileDetails({
         </Section>
       )}
 
-      {contributions.length > 0 && (
-        <Section count={contributions.length} id="contributions" title="Contributions">
-          <ul className="flex flex-col">
-            {visibleContributions.map((c) => {
-              const Icon = CONTRIBUTION_ICONS[c.type] ?? FileTextIcon;
-              const withLine = coauthorLine(c.authors, profile.name);
-              const body = (
-                <>
-                  <Icon
-                    aria-label={toTitleCase(c.type)}
-                    className="mt-0.5 size-4 shrink-0 text-muted-foreground"
-                  />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="font-medium text-sm">
-                      <span
-                        className={
-                          c.href
-                            ? "underline decoration-black/25 underline-offset-[3px] group-hover:decoration-current"
-                            : ""
-                        }
-                      >
-                        {c.title}
-                      </span>
-                      {c.href && (
-                        <ArrowUpRightIcon className="ml-1.5 inline size-3 text-muted-foreground" />
-                      )}
-                    </span>
-                    <span className="text-muted-foreground text-xs">
-                      {[c.venue, c.host].filter(Boolean).join(" · ")}
-                    </span>
-                    {withLine && (
-                      <span className="mt-0.5 flex items-center gap-1.5 text-[#4A433D] text-xs">
-                        <UsersIcon className="size-3" />
-                        <span>{withLine}</span>
-                      </span>
-                    )}
-                  </span>
-                  {c.year && (
-                    <span className="shrink-0 text-muted-foreground text-xs tabular-nums">
-                      {c.year}
-                    </span>
-                  )}
-                </>
-              );
-              return (
-                <li className="border-black/7 border-b" key={`${c.title}-${c.year ?? ""}`}>
-                  {c.href ? (
-                    <Link
-                      className="group flex items-start gap-2.5 py-2.5"
-                      href={c.href}
-                      target="_blank"
-                    >
-                      {body}
-                    </Link>
-                  ) : (
-                    <div className="flex items-start gap-2.5 py-2.5">{body}</div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-          {contributions.length > CONTRIBUTIONS_PREVIEW && (
-            <button
-              className="self-start py-1.5 font-semibold text-sm hover:underline"
-              onClick={() => setShowAllContributions((v) => !v)}
-              type="button"
-            >
-              {showAllContributions ? "Show fewer" : `Show all ${contributions.length}`}
-            </button>
-          )}
-        </Section>
-      )}
+      <ContributionsSection contributions={contributions} name={profile.name} />
 
       {profile.notableAchievements.length > 0 && (
         <Section title="Notable achievements">
           <ul className="flex flex-col">
             {profile.notableAchievements.map((achievement) => (
               <li
-                className="flex items-center gap-2.5 border-black/7 border-b py-2 text-sm"
+                className="flex items-center gap-2.5 border-b border-black/7 py-2 text-sm"
                 key={achievement}
               >
-                <TrophyIcon className="size-3.5 shrink-0 text-muted-foreground" />
+                <TrophyIcon className="text-muted-foreground size-3.5 shrink-0" />
                 {achievement}
               </li>
             ))}
@@ -355,7 +376,7 @@ export default function ProfileDetails({
                 render={
                   <button
                     aria-label="About related people"
-                    className="flex size-6 items-center justify-center rounded-full text-muted-foreground hover:bg-black/5 hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground flex size-6 items-center justify-center rounded-full hover:bg-black/5"
                     type="button"
                   />
                 }
@@ -382,7 +403,7 @@ export default function ProfileDetails({
                   <AvatarFallback className="font-serif">{person.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <span className="flex min-w-0 flex-col">
-                  <span className="truncate font-medium text-sm">{person.name}</span>
+                  <span className="truncate text-sm font-medium">{person.name}</span>
                   <span className="text-muted-foreground text-xs">
                     {RELATION_LABELS[person.relation]}
                     {person.count
@@ -466,7 +487,7 @@ export default function ProfileDetails({
       >
         <div className="flex flex-wrap gap-1.5">
           <Link
-            className="inline-flex items-center gap-1.5 rounded-md bg-secondary px-2.5 py-1.5 text-secondary-foreground text-xs"
+            className="bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs"
             href={permanentId.url}
           >
             <span className="opacity-75">The Montessorians</span>
@@ -502,4 +523,5 @@ export default function ProfileDetails({
       </Section>
     </div>
   );
-}
+};
+export default ProfileDetails;

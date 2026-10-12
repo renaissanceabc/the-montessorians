@@ -2,24 +2,25 @@
 
 import { Building2Icon, PencilIcon, PlusIcon, SearchIcon, UsersIcon, XIcon } from "lucide-react";
 import { useId, useMemo, useRef, useState } from "react";
+
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 
-export type OrganizationOption = {
+export interface OrganizationOption {
   slug: string;
   name: string;
   shortName?: string;
   meta: string;
   people: number;
-};
+}
 
-export type PickedOrganization = {
+export interface PickedOrganization {
   /** Existing organization slug, or undefined for a new one */
   organization?: string;
   name: string;
   role?: string;
-};
+}
 
 const MAX_SUGGESTIONS = 6;
 
@@ -30,7 +31,7 @@ const label = (o: { name: string; shortName?: string }) =>
  * Pick existing organizations as you type (matched on name or short name), or
  * add a new one by name; new ones are reviewed with the submission.
  */
-export function OrganizationPicker({
+export const OrganizationPicker = ({
   options,
   value,
   onChange,
@@ -46,7 +47,7 @@ export function OrganizationPicker({
   onChange: (value: PickedOrganization[]) => void;
   placeholder: string;
   withRole?: boolean;
-}) {
+}) => {
   const listId = useId();
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
@@ -74,7 +75,7 @@ export function OrganizationPicker({
     onChange([
       ...value,
       item.kind === "existing"
-        ? { organization: item.option.slug, name: label(item.option) }
+        ? { name: label(item.option), organization: item.option.slug }
         : { name: query.trim() },
     ]);
     setQuery("");
@@ -85,19 +86,19 @@ export function OrganizationPicker({
     <div className="flex flex-col gap-2">
       {value.map((picked, i) => (
         <div
-          className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-lg border border-input bg-background py-1.5 pr-1.5 pl-3"
+          className="border-input bg-background flex flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-lg border py-1.5 pr-1.5 pl-3"
           // Keyed by position for new organizations so renaming keeps focus.
           key={picked.organization ?? `new-${i}`}
         >
-          <Building2Icon className="size-4 shrink-0 text-muted-foreground" />
+          <Building2Icon className="text-muted-foreground size-4 shrink-0" />
           <span className="flex min-w-0 flex-1 basis-40 flex-col gap-0.5">
             {picked.organization ? (
-              <span className="truncate font-medium text-sm">{picked.name}</span>
+              <span className="truncate text-sm font-medium">{picked.name}</span>
             ) : (
               // A new organization's name stays editable, to fix a typo after "Add".
               <input
                 aria-label="New organization name"
-                className="-mx-1.5 rounded px-1.5 py-0.5 font-medium text-sm outline-none hover:bg-black/4 focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="focus-visible:ring-ring/50 -mx-1.5 rounded px-1.5 py-0.5 text-sm font-medium outline-none hover:bg-black/4 focus-visible:bg-white focus-visible:ring-2"
                 onChange={(e) =>
                   onChange(value.map((v, j) => (j === i ? { ...v, name: e.target.value } : v)))
                 }
@@ -126,7 +127,7 @@ export function OrganizationPicker({
           {picked.organization && (
             <button
               aria-label={`Change ${picked.name}`}
-              className="flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-black/5 hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground flex size-8 items-center justify-center rounded-md hover:bg-black/5"
               onClick={() => {
                 // Put it back in the search box to pick another or edit the text.
                 onChange(value.filter((_, j) => j !== i));
@@ -142,7 +143,7 @@ export function OrganizationPicker({
           )}
           <button
             aria-label={`Remove ${picked.name}`}
-            className="flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-black/5 hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground flex size-8 items-center justify-center rounded-md hover:bg-black/5"
             onClick={() => onChange(value.filter((_, j) => j !== i))}
             type="button"
           >
@@ -185,13 +186,15 @@ export function OrganizationPicker({
           }}
           placeholder={placeholder}
           ref={searchRef}
+          // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- InputGroupInput renders a native <input>; the role makes it the ARIA combobox that owns the listbox below.
           role="combobox"
           value={query}
         />
         {items.length > 0 && (
           <ul
-            className="absolute inset-x-0 top-full z-20 mt-1 flex flex-col rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10"
+            className="bg-popover text-popover-foreground ring-foreground/10 absolute inset-x-0 top-full z-20 mt-1 flex flex-col rounded-lg p-1 shadow-md ring-1"
             id={listId}
+            // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/prefer-tag-over-role -- ARIA combobox popup: a native <select>/<datalist> cannot render the custom rows or keep focus in the text input.
             role="listbox"
           >
             {items.map((item, i) => (
@@ -200,7 +203,7 @@ export function OrganizationPicker({
                 className={cn(
                   "flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2 text-sm",
                   i === active && "bg-black/5",
-                  item.kind === "new" && "mt-1 border-black/8 border-t"
+                  item.kind === "new" && "mt-1 border-t border-black/8"
                 )}
                 id={`${listId}-${i}`}
                 key={item.kind === "existing" ? item.option.slug : "new"}
@@ -209,6 +212,7 @@ export function OrganizationPicker({
                   pick(item);
                 }}
                 onMouseEnter={() => setActive(i)}
+                // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/prefer-tag-over-role -- option row of the ARIA combobox listbox above; a native <option> cannot hold this markup.
                 role="option"
               >
                 {item.kind === "existing" ? (
@@ -218,7 +222,7 @@ export function OrganizationPicker({
                       <span className="text-muted-foreground text-xs">{item.option.meta}</span>
                     </span>
                     <span
-                      className="inline-flex items-center gap-1 text-muted-foreground text-xs"
+                      className="text-muted-foreground inline-flex items-center gap-1 text-xs"
                       title={`${item.option.people} ${item.option.people === 1 ? "person" : "people"} in the directory`}
                     >
                       <UsersIcon className="size-3" />
@@ -227,8 +231,8 @@ export function OrganizationPicker({
                   </>
                 ) : (
                   <>
-                    <PlusIcon className="size-4 text-muted-foreground" />
-                    Add "{query.trim()}" as a new organization
+                    <PlusIcon className="text-muted-foreground size-4" />
+                    Add &quot;{query.trim()}&quot; as a new organization
                   </>
                 )}
               </li>
@@ -238,4 +242,4 @@ export function OrganizationPicker({
       </InputGroup>
     </div>
   );
-}
+};

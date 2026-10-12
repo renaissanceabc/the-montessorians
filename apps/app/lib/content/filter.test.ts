@@ -1,84 +1,85 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
+
 import { filterAndSortProfiles } from "./filter";
 import type { Profile } from "./types";
 
 const profile = (overrides: Partial<Profile>): Profile => ({
-  id: "tm0000000",
-  slug: "x",
-  name: "X",
-  kind: "alum",
-  roles: [],
-  pinned: false,
-  nameAuthorized: null,
-  nameVariants: [],
-  birthYear: null,
-  deathYear: null,
-  tagline: null,
+  addedAt: "2025-01-01T00:00:00Z",
+  affiliations: [],
   bio: null,
+  birthYear: null,
+  contributions: [],
+  deathYear: null,
   education: [],
   educationNotes: null,
-  schools: [],
-  montessoriNotes: null,
-  affiliations: [],
-  contributions: [],
-  notableAchievements: [],
-  quotes: [],
-  sources: [],
-  verification: null,
-  status: "provisional",
-  identifiers: {},
   glossaryCitations: [],
-  related: [],
+  id: "tm0000000",
+  identifiers: {},
   imageCredit: null,
   imageUrl: null,
-  tags: [],
+  kind: "alum",
   links: [],
-  addedAt: "2025-01-01T00:00:00Z",
+  montessoriNotes: null,
+  name: "X",
+  nameAuthorized: null,
+  nameVariants: [],
+  notableAchievements: [],
+  pinned: false,
+  quotes: [],
+  related: [],
+  roles: [],
+  schools: [],
+  slug: "x",
+  sources: [],
+  status: "provisional",
+  tagline: null,
+  tags: [],
+  verification: null,
   ...overrides,
   kinds: overrides.kinds ?? [overrides.kind ?? "alum"],
 });
 
 const maria = profile({
-  slug: "maria",
-  name: "Maria Montessori",
-  kind: "contributor",
-  roles: ["founder"],
-  pinned: true,
   addedAt: "2026-01-01T00:00:00Z",
+  kind: "contributor",
+  name: "Maria Montessori",
+  pinned: true,
+  roles: ["founder"],
+  slug: "maria",
 });
 const mario = profile({
-  slug: "mario",
-  name: "Mario M. Montessori",
-  kind: "contributor",
-  roles: ["founder"],
-  pinned: true,
   addedAt: "2026-01-01T00:00:00Z",
+  kind: "contributor",
+  name: "Mario M. Montessori",
+  pinned: true,
+  roles: ["founder"],
+  slug: "mario",
 });
 const lillard = profile({
-  slug: "lillard",
-  name: "Angeline Stoll Lillard",
-  nameAuthorized: "Lillard, Angeline Stoll",
-  kind: "contributor",
-  roles: ["researcher"],
+  addedAt: "2026-06-01T00:00:00Z",
   affiliations: [{ organization: "university-of-virginia" }],
   contributions: [
     { title: "A", type: "book" },
     { title: "B", type: "article" },
   ],
-  addedAt: "2026-06-01T00:00:00Z",
+  kind: "contributor",
+  name: "Angeline Stoll Lillard",
+  nameAuthorized: "Lillard, Angeline Stoll",
+  roles: ["researcher"],
+  slug: "lillard",
 });
-const alum = profile({ slug: "alum", name: "Yo-Yo Ma", addedAt: "2026-09-01T00:00:00Z" });
+const alum = profile({ addedAt: "2026-09-01T00:00:00Z", name: "Yo-Yo Ma", slug: "alum" });
 const all = [alum, lillard, mario, maria];
 
 describe("filterAndSortProfiles", () => {
   test("someone who is both appears in both collections", () => {
     const both = profile({
-      slug: "both",
-      name: "Both",
       kind: "contributor",
       kinds: ["alum", "contributor"],
+      name: "Both",
       roles: ["trainer"],
+      slug: "both",
     });
     assert.deepEqual(
       filterAndSortProfiles([both], { kind: "alum" }).map((p) => p.slug),

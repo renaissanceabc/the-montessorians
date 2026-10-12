@@ -1,6 +1,5 @@
 "use client";
 
-import yaml from "js-yaml";
 import {
   AlertCircleIcon,
   BookOpenIcon,
@@ -11,14 +10,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import {
-  Controller,
-  type FieldErrors,
-  type Resolver,
-  useFieldArray,
-  useForm,
-  useWatch,
-} from "react-hook-form";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
+import type { FieldErrors, Resolver } from "react-hook-form";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -44,34 +38,27 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import {
-  CONTRIBUTOR_ROLE_LABELS,
-  CONTRIBUTOR_ROLES,
-  LINK_TYPES,
-  type SourceType,
-  type Tag,
-} from "@/lib/content/types";
+import { CONTRIBUTOR_ROLE_LABELS, CONTRIBUTOR_ROLES, LINK_TYPES } from "@/lib/content/types";
+import type { SourceType, Tag } from "@/lib/content/types";
 import {
   crossFieldIssues,
   githubSubmissionUrl,
-  type Submission,
   submissionSchema,
   submissionToYaml,
   yamlToSubmission,
 } from "@/lib/submission";
+import type { Submission } from "@/lib/submission";
 import { cn, toTitleCase } from "@/lib/utils";
-import {
-  type OrganizationOption,
-  OrganizationPicker,
-  type PickedOrganization,
-} from "./organization-picker";
+
+import { OrganizationPicker } from "./organization-picker";
+import type { OrganizationOption, PickedOrganization } from "./organization-picker";
 import { TagInput } from "./tag-input";
 
 type Kind = Submission["kinds"][number];
 type Mode = "form" | "yaml";
 type LinkType = (typeof LINK_TYPES)[number];
 
-type FormValues = {
+interface FormValues {
   kinds: Kind[];
   name: string;
   roles: string[];
@@ -87,78 +74,78 @@ type FormValues = {
   highlights: string;
   quote: string;
   links: { type: LinkType; url: string }[];
-};
+}
 
 const DEFAULT_VALUES: FormValues = {
+  affiliations: [],
+  bio: "",
+  highlights: "",
   kinds: [],
+  links: [{ type: "wikipedia", url: "" }],
   name: "",
+  notes: "",
+  quote: "",
   roles: [],
   schools: [],
-  affiliations: [],
-  tagline: "",
-  tags: [],
+  sourceNote: "",
   sourceType: "wikipedia",
   sourceUrl: "",
-  sourceNote: "",
-  bio: "",
-  notes: "",
-  highlights: "",
-  quote: "",
-  links: [{ type: "wikipedia", url: "" }],
+  tagline: "",
+  tags: [],
 };
 
 const KIND_OPTIONS = [
-  { value: "alum", label: "Attended Montessori", hint: "An alum", Icon: GraduationCapIcon },
+  { Icon: GraduationCapIcon, hint: "An alum", label: "Attended Montessori", value: "alum" },
   {
-    value: "contributor",
-    label: "Contributed to the field",
-    hint: "Researcher, author, philosopher, founder…",
     Icon: BookOpenIcon,
+    hint: "Researcher, author, philosopher, founder…",
+    label: "Contributed to the field",
+    value: "contributor",
   },
 ] as const;
 
 const SOURCE_OPTIONS: { type: SourceType; label: string; placeholder: string }[] = [
-  { type: "wikipedia", label: "Wikipedia", placeholder: "https://en.wikipedia.org/wiki/…" },
-  { type: "article", label: "Article or interview", placeholder: "https://…" },
-  { type: "social", label: "Social post", placeholder: "https://x.com/…" },
-  { type: "publication", label: "Book or publication", placeholder: "DOI, ISBN page, or URL" },
-  { type: "personal-knowledge", label: "Personal knowledge", placeholder: "" },
-  { type: "other", label: "Other", placeholder: "https://…" },
+  { label: "Wikipedia", placeholder: "https://en.wikipedia.org/wiki/…", type: "wikipedia" },
+  { label: "Article or interview", placeholder: "https://…", type: "article" },
+  { label: "Social post", placeholder: "https://x.com/…", type: "social" },
+  { label: "Book or publication", placeholder: "DOI, ISBN page, or URL", type: "publication" },
+  { label: "Personal knowledge", placeholder: "", type: "personal-knowledge" },
+  { label: "Other", placeholder: "https://…", type: "other" },
 ];
 
 const LINK_LABELS: Record<LinkType, string> = {
-  wikipedia: "Wikipedia",
-  website: "Website",
-  linkedin: "LinkedIn",
-  x: "X",
-  tiktok: "TikTok",
-  instagram: "Instagram",
   article: "Article",
-  youtube: "YouTube",
   imdb: "IMDb",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  tiktok: "TikTok",
+  website: "Website",
+  wikipedia: "Wikipedia",
+  x: "X",
+  youtube: "YouTube",
 };
 
-const LINK_ITEMS = LINK_TYPES.map((type) => ({ value: type, label: LINK_LABELS[type] }));
+const LINK_ITEMS = LINK_TYPES.map((type) => ({ label: LINK_LABELS[type], value: type }));
 
 /** Fields in page order, with the label used in the error summary. */
-const FIELD_ORDER: { name: string; label: string }[] = [
-  { name: "kinds", label: "They…" },
-  { name: "name", label: "Full name" },
-  { name: "roles", label: "Role" },
-  { name: "schools", label: "Montessori school" },
-  { name: "affiliations", label: "Affiliations" },
-  { name: "tagline", label: "Tagline" },
-  { name: "tags", label: "Tags" },
-  { name: "sourceUrl", label: "Source" },
-  { name: "sourceNote", label: "Source" },
-  { name: "bio", label: "Bio" },
-  { name: "notes", label: "Notes" },
-  { name: "highlights", label: "Highlights" },
-  { name: "quote", label: "Quote" },
-  { name: "links", label: "Links" },
+const FIELD_ORDER: { name: keyof FormValues; label: string }[] = [
+  { label: "They…", name: "kinds" },
+  { label: "Full name", name: "name" },
+  { label: "Role", name: "roles" },
+  { label: "Montessori school", name: "schools" },
+  { label: "Affiliations", name: "affiliations" },
+  { label: "Tagline", name: "tagline" },
+  { label: "Tags", name: "tags" },
+  { label: "Source", name: "sourceUrl" },
+  { label: "Source", name: "sourceNote" },
+  { label: "Bio", name: "bio" },
+  { label: "Notes", name: "notes" },
+  { label: "Highlights", name: "highlights" },
+  { label: "Quote", name: "quote" },
+  { label: "Links", name: "links" },
 ];
 
-const fieldId = (name: string) => `contribute-${name.replace(/\./g, "-")}`;
+const fieldId = (name: string) => `contribute-${name.replaceAll(".", "-")}`;
 
 const lines = (text: string) =>
   text
@@ -167,197 +154,367 @@ const lines = (text: string) =>
     .filter(Boolean);
 
 /** The form's values as a submission (unvalidated). */
-function toDraft(v: FormValues) {
+const toDraft = (v: FormValues) => {
   const isAlum = v.kinds.includes("alum");
   const isContributor = v.kinds.includes("contributor");
   const personal = v.sourceType === "personal-knowledge";
   return {
-    kinds: v.kinds,
-    name: v.name,
-    tagline: v.tagline,
-    tags: v.tags,
-    roles: isContributor ? v.roles : undefined,
-    schools: isAlum && v.schools.length ? v.schools : undefined,
     affiliations: isContributor && v.affiliations.length ? v.affiliations : undefined,
-    sources: [
-      personal
-        ? { type: v.sourceType, note: v.sourceNote }
-        : { type: v.sourceType, url: v.sourceUrl.trim() || undefined },
-    ],
     bio: v.bio,
-    education_notes: isAlum ? v.notes : undefined,
-    montessori_notes: isContributor && !isAlum ? v.notes : undefined,
-    notable_achievements: isContributor ? undefined : lines(v.highlights),
     contributions: isContributor
       ? lines(v.highlights).map((title) => ({ title, type: "other" }))
       : undefined,
-    quotes: v.quote.trim() ? [v.quote.trim()] : undefined,
+    education_notes: isAlum ? v.notes : undefined,
+    kinds: v.kinds,
     links: v.links.filter((l) => l.url.trim()).map((l) => ({ type: l.type, url: l.url.trim() })),
+    montessori_notes: isContributor && !isAlum ? v.notes : undefined,
+    name: v.name,
+    notable_achievements: isContributor ? undefined : lines(v.highlights),
+    quotes: v.quote.trim() ? [v.quote.trim()] : undefined,
+    roles: isContributor ? v.roles : undefined,
+    schools: isAlum && v.schools.length ? v.schools : undefined,
+    sources: [
+      personal
+        ? { note: v.sourceNote, type: v.sourceType }
+        : { type: v.sourceType, url: v.sourceUrl.trim() || undefined },
+    ],
+    tagline: v.tagline,
+    tags: v.tags,
   };
-}
+};
+
+/** The source fields of the form, from a submission's first source. */
+const toSourceValues = (
+  source: Submission["sources"][number] | undefined
+): Pick<FormValues, "sourceNote" | "sourceType" | "sourceUrl"> => ({
+  sourceNote: source?.note ?? "",
+  sourceType: source?.type ?? "wikipedia",
+  sourceUrl: source?.url ?? "",
+});
+
+/** The free-text fields of the form, from a submission. */
+const toTextValues = (
+  s: Partial<Submission>
+): Pick<FormValues, "bio" | "highlights" | "notes" | "quote" | "tagline"> => ({
+  bio: s.bio ?? "",
+  highlights: (s.notable_achievements ?? s.contributions?.map((c) => c.title) ?? []).join("\n"),
+  notes: s.education_notes ?? s.montessori_notes ?? "",
+  quote: s.quotes?.[0] ?? "",
+  tagline: s.tagline ?? "",
+});
 
 /** A parsed submission back into form values (for YAML → form). */
-function toValues(s: Partial<Submission>): FormValues {
-  const source = s.sources?.[0];
-  return {
-    ...DEFAULT_VALUES,
-    kinds: s.kinds ?? [],
-    name: s.name ?? "",
-    roles: s.roles ?? [],
-    schools: s.schools ?? [],
-    affiliations: s.affiliations ?? [],
-    tagline: s.tagline ?? "",
-    tags: (s.tags ?? []).map((t) => toTitleCase(t.replace(/-/g, " "))),
-    sourceType: (source?.type as SourceType) ?? "wikipedia",
-    sourceUrl: source?.url ?? "",
-    sourceNote: source?.note ?? "",
-    bio: s.bio ?? "",
-    notes: s.education_notes ?? s.montessori_notes ?? "",
-    highlights: (s.notable_achievements ?? s.contributions?.map((c) => c.title) ?? []).join("\n"),
-    quote: s.quotes?.[0] ?? "",
-    links: s.links?.length ? (s.links as FormValues["links"]) : DEFAULT_VALUES.links,
-  };
-}
+const toValues = (s: Partial<Submission>): FormValues => ({
+  ...DEFAULT_VALUES,
+  ...toTextValues(s),
+  ...toSourceValues(s.sources?.[0]),
+  affiliations: s.affiliations ?? [],
+  kinds: s.kinds ?? [],
+  links: s.links?.length ? s.links : DEFAULT_VALUES.links,
+  name: s.name ?? "",
+  roles: s.roles ?? [],
+  schools: s.schools ?? [],
+  tags: (s.tags ?? []).map((t) => toTitleCase(t.replaceAll("-", " "))),
+});
 
 /** Which form field a submission issue belongs to. */
-function fieldFor(path: PropertyKey[], v: FormValues): string {
+const fieldFor = (path: PropertyKey[], v: FormValues): string => {
   const [head, index] = path;
   switch (head) {
-    case "sources":
+    case "sources": {
       return v.sourceType === "personal-knowledge" ? "sourceNote" : "sourceUrl";
+    }
     case "education_notes":
-    case "montessori_notes":
+    case "montessori_notes": {
       return "notes";
+    }
     case "notable_achievements":
-    case "contributions":
+    case "contributions": {
       return "highlights";
-    case "quotes":
+    }
+    case "quotes": {
       return "quote";
+    }
     case "links": {
       // Empty rows are dropped from the draft, so map back to the row on screen.
       const rows = v.links.flatMap((l, i) => (l.url.trim() ? [i] : []));
-      return typeof index === "number" && rows[index] !== undefined
-        ? `links.${rows[index]}.url`
-        : "links";
+      const row = Number.isInteger(index) ? rows[Number(index)] : undefined;
+      return row === undefined ? "links" : `links.${row}.url`;
     }
-    default:
+    default: {
       return String(head ?? "root");
+    }
   }
+};
+
+interface ErrorLeaf {
+  message: string;
+  type: "validation";
 }
 
-function setError(errors: Record<string, unknown>, name: string, message: string) {
+/** Nested field errors in react-hook-form's layout (arrays for numeric segments). */
+interface ErrorTree {
+  [key: string]: ErrorLeaf | ErrorTree | ErrorTree[];
+}
+
+const setError = (errors: ErrorTree, name: string, message: string) => {
   const parts = name.split(".");
-  let node = errors as Record<string, unknown>;
+  let node = errors;
   for (const [i, part] of parts.entries()) {
     if (i === parts.length - 1) {
-      node[part] ??= { type: "validation", message };
+      node[part] ??= { message, type: "validation" };
     } else {
-      node[part] ??= /^\d+$/.test(parts[i + 1]) ? [] : {};
-      node = node[part] as Record<string, unknown>;
+      // react-hook-form keeps array fields (numeric segments) as arrays.
+      node[part] ??= /^\d+$/u.test(parts[i + 1]) ? [] : {};
+      // SAFETY: only the last segment holds a leaf, so this is a tree or an array set
+      // above; an array indexed by string keys behaves like the tree it stands in for.
+      node = node[part] as ErrorTree;
     }
   }
-}
+};
 
-function issuesFor(draft: ReturnType<typeof toDraft>) {
+const issuesFor = (draft: ReturnType<typeof toDraft>) => {
   const parsed = submissionSchema.safeParse(draft);
   if (parsed.success) {
     return [];
   }
   // Zod skips the cross-field checks while other fields fail; run them anyway.
   return [
-    ...parsed.error.issues.map((i) => ({ path: i.path, message: i.message })),
+    ...parsed.error.issues.map((i) => ({ message: i.message, path: i.path })),
     ...crossFieldIssues(draft),
   ];
-}
+};
 
 const resolver: Resolver<FormValues> = (values) => {
   const issues = issuesFor(toDraft(values));
   if (!issues.length) {
-    return { values, errors: {} };
+    return { errors: {}, values };
   }
-  const errors: Record<string, unknown> = {};
+  const errors: ErrorTree = {};
   for (const issue of issues) {
     setError(errors, fieldFor(issue.path, values), issue.message);
   }
-  return { values: {}, errors: errors as FieldErrors<FormValues> };
+  // SAFETY: setError builds the nested { message, type } layout FieldErrors describes,
+  // keyed by the form field names fieldFor returns.
+  return { errors: errors as FieldErrors<FormValues>, values: {} };
 };
 
 /** Flatten nested errors into [name, message] pairs in page order. */
-function errorList(errors: FieldErrors<FormValues>) {
+const errorList = (errors: FieldErrors<FormValues>) => {
   const out: { name: string; label: string; message: string }[] = [];
   for (const { name, label } of FIELD_ORDER) {
-    const error = errors[name as keyof FormValues];
+    const error = errors[name];
     if (!error) {
       continue;
     }
     if (name === "links" && Array.isArray(error)) {
-      error.forEach((row, i) => {
+      for (const [i, row] of error.entries()) {
         if (row?.url?.message) {
-          out.push({ name: `links.${i}.url`, label: `Link ${i + 1}`, message: row.url.message });
+          out.push({ label: `Link ${i + 1}`, message: row.url.message, name: `links.${i}.url` });
         }
-      });
+      }
     } else if ("message" in error && error.message) {
-      out.push({ name, label, message: String(error.message) });
+      out.push({ label, message: String(error.message), name });
     }
   }
   return out;
-}
+};
 
-function focusField(name: string) {
-  const el = document.getElementById(fieldId(name));
+const focusField = (name: string) => {
+  const el = document.querySelector<HTMLElement>(`#${CSS.escape(fieldId(name))}`);
   el?.scrollIntoView({ behavior: "smooth", block: "center" });
   el?.focus({ preventScroll: true });
+};
+
+interface ServerProblem {
+  title: string;
+  detail: string;
 }
 
-type ServerProblem = { title: string; detail: string };
-
-function problemFor(status: number): ServerProblem {
+const problemFor = (status: number): ServerProblem => {
   switch (status) {
-    case 400:
+    case 400: {
       return {
-        title: "Some details need another look",
         detail: "The fields marked below didn't pass our checks.",
+        title: "Some details need another look",
       };
-    case 403:
+    }
+    case 403: {
       return {
-        title: "We couldn't accept this from your browser",
         detail: "It was flagged as automated. Open it on GitHub instead; everything is filled in.",
+        title: "We couldn't accept this from your browser",
       };
-    case 429:
+    }
+    case 429: {
       return {
-        title: "Too many submissions",
         detail: "Please wait a few minutes and try again, or open it on GitHub.",
+        title: "Too many submissions",
       };
-    case 503:
+    }
+    case 503: {
       return {
-        title: "Direct submissions aren't switched on yet",
         detail: "Open it on GitHub instead; everything you entered is filled in.",
+        title: "Direct submissions aren't switched on yet",
       };
-    default:
+    }
+    default: {
       return {
-        title: "Something went wrong on our side",
         detail: `The request failed (error ${status}). Try again, or open it on GitHub.`,
+        title: "Something went wrong on our side",
       };
+    }
   }
+};
+
+interface YamlParseResult {
+  submission?: Submission;
+  errors: string[];
 }
 
-export function ContributeForm({
+/** The fields a js-yaml YAMLException (or a plain Error) carries. */
+interface YamlParseError {
+  reason?: string;
+  mark?: { line: number };
+  message?: string;
+}
+
+const sourceQuestion = (isContributor: boolean, isAlum: boolean) => {
+  if (isContributor) {
+    return "Where is their contribution documented?";
+  }
+  if (isAlum) {
+    return "How do we know they attended Montessori?";
+  }
+  return "How do we know about them?";
+};
+
+const PickKindHint = () => (
+  <div className="text-muted-foreground flex flex-col items-center gap-2 rounded-lg border border-dashed border-black/15 px-6 py-10 text-center text-sm">
+    <AlertCircleIcon className="size-5" />
+    <p className="max-w-sm text-balance">
+      Pick one or both above to start. We&apos;ll show the fields that fit: their Montessori school
+      for alumni, or roles, affiliations, and published work for contributors.
+    </p>
+  </div>
+);
+
+const YamlField = ({
+  errors,
+  onTextChange,
+  text,
+}: {
+  errors: string[];
+  onTextChange: (text: string) => void;
+  text: string;
+}) => (
+  <Field data-invalid={errors.length > 0 || undefined}>
+    <FieldLabel htmlFor={fieldId("yaml")}>Profile YAML</FieldLabel>
+    <Textarea
+      aria-invalid={errors.length > 0 || undefined}
+      className="min-h-96 font-mono text-xs leading-relaxed"
+      id={fieldId("yaml")}
+      onChange={(e) => onTextChange(e.target.value)}
+      spellCheck={false}
+      value={text}
+    />
+    {errors.length ? (
+      <FieldError errors={errors.map((message) => ({ message }))} />
+    ) : (
+      <FieldDescription>
+        Checked against the profile schema before it&apos;s sent. Switch back to Form to keep
+        editing with these values.
+      </FieldDescription>
+    )}
+  </Field>
+);
+
+const FormFooter = ({
+  errors,
+  githubUrl,
+  problem,
+  showSummary,
+  submitting,
+}: {
+  errors: ReturnType<typeof errorList>;
+  githubUrl: string;
+  problem: ServerProblem | null;
+  showSummary: boolean;
+  submitting: boolean;
+}) => (
+  <div className="flex flex-col gap-4 border-t border-black/10 pt-6">
+    {showSummary && (
+      <Alert variant="destructive">
+        <AlertCircleIcon />
+        <AlertTitle>
+          {errors.length === 1 ? "One thing to fix" : `${errors.length} things to fix`}
+        </AlertTitle>
+        <AlertDescription>
+          <ul className="flex flex-col gap-1">
+            {errors.map((error) => (
+              <li key={error.name}>
+                <button
+                  className="text-left underline-offset-2 hover:underline"
+                  onClick={() => focusField(error.name)}
+                  type="button"
+                >
+                  <span className="font-medium">{error.label}:</span> {error.message}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </AlertDescription>
+      </Alert>
+    )}
+
+    {problem && (
+      <Alert variant="destructive">
+        <AlertCircleIcon />
+        <AlertTitle>{problem.title}</AlertTitle>
+        <AlertDescription>
+          <p>{problem.detail}</p>
+          <Link className="font-medium underline" href={githubUrl} target="_blank">
+            Open it on GitHub
+          </Link>
+        </AlertDescription>
+      </Alert>
+    )}
+
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+      <Button className="w-full sm:w-auto" disabled={submitting} size="lg" type="submit">
+        {submitting ? "Submitting…" : "Submit for review"}
+      </Button>
+      <Link
+        className="text-muted-foreground text-center text-sm hover:underline sm:text-left"
+        href={githubUrl}
+        target="_blank"
+      >
+        or open it as a GitHub issue
+      </Link>
+    </div>
+    <p className="text-muted-foreground text-xs">
+      Nothing is published until a maintainer reviews it.
+    </p>
+  </div>
+);
+
+export const ContributeForm = ({
   organizations,
   tagSuggestions,
 }: {
   organizations: OrganizationOption[];
   tagSuggestions: Tag[];
-}) {
+}) => {
   const knownOrganizations = new Map(organizations.map((o) => [o.slug, o.name]));
   const form = useForm<FormValues>({
     defaultValues: DEFAULT_VALUES,
-    resolver,
     mode: "onSubmit",
     reValidateMode: "onChange",
+    resolver,
     shouldFocusError: false,
   });
   const { control, handleSubmit, formState, reset, getValues } = form;
   const links = useFieldArray({ control, name: "links" });
+  // SAFETY: every field has a default value, so the watched values are always complete.
   const values = useWatch({ control }) as FormValues;
 
   const [mode, setMode] = useState<Mode>("form");
@@ -376,16 +533,20 @@ export function ContributeForm({
   const errors = errorList(formState.errors);
   const showSummary = formState.submitCount > 0 && errors.length > 0;
 
+  // SAFETY: the draft has the submission's field names and types; githubSubmissionUrl
+  // only prefills an issue, so it accepts values that haven't been validated yet.
   const githubUrl = githubSubmissionUrl(
     toDraft(getValues()) as Partial<Submission> & { kinds: Kind[] }
   );
 
-  const parseYaml = (): { submission?: Submission; errors: string[] } => {
+  const parseYaml = (): YamlParseResult => {
     let candidate: unknown;
     try {
       candidate = yamlToSubmission(yamlText, knownOrganizations);
     } catch (error) {
-      const e = error as { reason?: string; mark?: { line: number }; message?: string };
+      // SAFETY: yamlToSubmission throws js-yaml's YAMLException or a plain Error; every
+      // field read below is optional and checked before use.
+      const e = error as YamlParseError;
       return {
         errors: [
           e.mark
@@ -396,8 +557,10 @@ export function ContributeForm({
     }
     const parsed = submissionSchema.safeParse(candidate);
     if (parsed.success) {
-      return { submission: parsed.data, errors: [] };
+      return { errors: [], submission: parsed.data };
     }
+    // SAFETY: crossFieldIssues reads kinds, roles, and sources with optional chaining,
+    // so a partially valid candidate is safe to check.
     const issues = [
       ...parsed.error.issues,
       ...crossFieldIssues(candidate as Parameters<typeof crossFieldIssues>[0]),
@@ -418,6 +581,8 @@ export function ContributeForm({
     if (next === "yaml") {
       const draft = toDraft(getValues());
       const parsed = submissionSchema.safeParse(draft);
+      // SAFETY: an invalid draft is only turned into YAML text for editing; the required
+      // fields are filled with placeholders and nothing is submitted from it.
       setYamlText(
         submissionToYaml(
           parsed.success
@@ -435,6 +600,8 @@ export function ContributeForm({
     } else {
       // Carry YAML edits back into the form when they parse.
       try {
+        // SAFETY: toValues only reads fields with defaults, so a partial or loosely typed
+        // parse still produces complete form values.
         const candidate = yamlToSubmission(yamlText, knownOrganizations) as Partial<Submission>;
         reset(toValues(candidate), { keepSubmitCount: true });
       } catch {
@@ -444,14 +611,12 @@ export function ContributeForm({
     setMode(next);
   };
 
-  const send = async (submission: Submission) => {
-    setProblem(null);
-    setSubmitting(true);
+  const post = async (submission: Submission) => {
     try {
       const response = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submission),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
       });
       if (response.ok) {
         setSubmitted(await response.json());
@@ -459,24 +624,32 @@ export function ContributeForm({
       }
       setProblem(problemFor(response.status));
       if (response.status === 400 && mode === "form") {
+        // SAFETY: a 400 from /api/submit carries { issues } (zod issues); a body that
+        // fails to parse becomes null and the optional fields are checked before use.
         const body = (await response.json().catch(() => null)) as {
           issues?: { path: PropertyKey[]; message: string }[];
         } | null;
         for (const issue of body?.issues ?? []) {
+          // SAFETY: fieldFor maps submission paths onto the form's field names.
           form.setError(fieldFor(issue.path, getValues()) as keyof FormValues, {
-            type: "server",
             message: issue.message,
+            type: "server",
           });
         }
       }
     } catch {
       setProblem({
-        title: "We couldn't reach the server",
         detail: "Check your connection and try again, or open it on GitHub.",
+        title: "We couldn't reach the server",
       });
-    } finally {
-      setSubmitting(false);
     }
+  };
+
+  const send = async (submission: Submission) => {
+    setProblem(null);
+    setSubmitting(true);
+    await post(submission);
+    setSubmitting(false);
   };
 
   const onSubmit = () => {
@@ -491,7 +664,7 @@ export function ContributeForm({
     handleSubmit(
       (v) => send(submissionSchema.parse(toDraft(v))),
       (invalid) => {
-        const first = errorList(invalid)[0];
+        const [first] = errorList(invalid);
         if (first) {
           focusField(first.name);
         }
@@ -502,13 +675,13 @@ export function ContributeForm({
   if (submitted) {
     return (
       <div className="flex flex-col items-center gap-4 rounded-lg border border-black/10 bg-white/60 px-6 py-10 text-center">
-        <CheckCircle2Icon className="size-10 text-primary" />
-        <h2 className="font-semibold font-serif text-3xl">Thank you!</h2>
-        <p className="max-w-md text-muted-foreground text-sm">
-          A maintainer will review the submission before it's published. You can follow along on
-          GitHub.
+        <CheckCircle2Icon className="text-primary size-10" />
+        <h2 className="font-serif text-3xl font-semibold">Thank you!</h2>
+        <p className="text-muted-foreground max-w-md text-sm">
+          A maintainer will review the submission before it&apos;s published. You can follow along
+          on GitHub.
         </p>
-        <Link className="font-semibold text-sm underline" href={submitted.url} target="_blank">
+        <Link className="text-sm font-semibold underline" href={submitted.url} target="_blank">
           View the request
         </Link>
       </div>
@@ -524,7 +697,7 @@ export function ContributeForm({
         onSubmit();
       }}
     >
-      <div className="flex items-center justify-between gap-4 border-black/10 border-b pb-4">
+      <div className="flex items-center justify-between gap-4 border-b border-black/10 pb-4">
         <p className="text-muted-foreground text-sm">
           {mode === "form"
             ? "Know the profile schema? Switch to YAML."
@@ -533,13 +706,14 @@ export function ContributeForm({
         <ToggleGroup
           aria-label="Input mode"
           className="shrink-0 rounded-md bg-black/5 p-0.5"
+          // SAFETY: the only items are "form" and "yaml".
           onValueChange={(next) => next[0] && switchMode(next[0] as Mode)}
           spacing={0}
           value={[mode]}
         >
           {(["form", "yaml"] as const).map((value) => (
             <ToggleGroupItem
-              className="rounded! px-4 text-muted-foreground aria-pressed:bg-white aria-pressed:font-semibold aria-pressed:text-foreground"
+              className="text-muted-foreground aria-pressed:text-foreground rounded! px-4 aria-pressed:bg-white aria-pressed:font-semibold"
               key={value}
               value={value}
             >
@@ -556,7 +730,7 @@ export function ContributeForm({
           render={({ field, fieldState }) => (
             <FieldSet data-invalid={fieldState.invalid || undefined}>
               <FieldLegend variant="label">
-                They… <span className="font-normal text-muted-foreground">(pick one or both)</span>
+                They… <span className="text-muted-foreground font-normal">(pick one or both)</span>
               </FieldLegend>
               <div className="grid gap-2 sm:grid-cols-2">
                 {KIND_OPTIONS.map(({ value, label, hint, Icon }, i) => {
@@ -584,7 +758,7 @@ export function ContributeForm({
                         <Checkbox
                           aria-invalid={fieldState.invalid || undefined}
                           checked={on}
-                          className={cn(on && "border-white! bg-white! text-secondary!")}
+                          className={cn(on && "text-secondary! border-white! bg-white!")}
                           id={i === 0 ? fieldId("kinds") : undefined}
                           onCheckedChange={(checked) =>
                             field.onChange(
@@ -605,15 +779,9 @@ export function ContributeForm({
         />
       )}
 
-      {mode === "form" && !hasKind ? (
-        <div className="flex flex-col items-center gap-2 rounded-lg border border-black/15 border-dashed px-6 py-10 text-center text-muted-foreground text-sm">
-          <AlertCircleIcon className="size-5" />
-          <p className="max-w-sm text-balance">
-            Pick one or both above to start. We'll show the fields that fit: their Montessori school
-            for alumni, or roles, affiliations, and published work for contributors.
-          </p>
-        </div>
-      ) : mode === "form" ? (
+      {mode === "form" && !hasKind && <PickKindHint />}
+
+      {mode === "form" && hasKind && (
         <FieldGroup className="gap-6">
           <Controller
             control={control}
@@ -648,18 +816,18 @@ export function ContributeForm({
                     aria-invalid={fieldState.invalid || undefined}
                     className="w-full flex-wrap"
                     multiple
-                    onValueChange={field.onChange}
+                    onValueChange={(next) => field.onChange(next)}
                     spacing={1}
                     value={field.value}
                   >
                     {CONTRIBUTOR_ROLES.map((role, i) => (
                       <ToggleGroupItem
-                        className="h-9 rounded-full border border-black/15 bg-white/60 px-3.5 font-normal hover:border-black/40 aria-pressed:border-secondary aria-pressed:bg-secondary aria-pressed:text-secondary-foreground"
+                        className="aria-pressed:border-secondary aria-pressed:bg-secondary aria-pressed:text-secondary-foreground h-9 rounded-full border border-black/15 bg-white/60 px-3.5 font-normal hover:border-black/40"
                         id={i === 0 ? fieldId("roles") : undefined}
                         key={role}
                         value={role}
                       >
-                        {CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS]}
+                        {CONTRIBUTOR_ROLE_LABELS[role]}
                       </ToggleGroupItem>
                     ))}
                   </ToggleGroup>
@@ -677,12 +845,12 @@ export function ContributeForm({
                 <Field data-invalid={fieldState.invalid || undefined}>
                   <FieldLabel htmlFor={fieldId("schools")}>
                     Montessori school{" "}
-                    <span className="font-normal text-muted-foreground">(if you know it)</span>
+                    <span className="text-muted-foreground font-normal">(if you know it)</span>
                   </FieldLabel>
                   <OrganizationPicker
                     id={fieldId("schools")}
                     invalid={fieldState.invalid}
-                    onChange={field.onChange}
+                    onChange={(next) => field.onChange(next)}
                     options={organizations}
                     placeholder="Search schools, or type a new one"
                     value={field.value}
@@ -703,7 +871,7 @@ export function ContributeForm({
                   <OrganizationPicker
                     id={fieldId("affiliations")}
                     invalid={fieldState.invalid}
-                    onChange={field.onChange}
+                    onChange={(next) => field.onChange(next)}
                     options={organizations}
                     placeholder="Search schools, universities, organizations, or type a new one"
                     value={field.value}
@@ -761,7 +929,7 @@ export function ContributeForm({
                 <TagInput
                   id={fieldId("tags")}
                   invalid={fieldState.invalid}
-                  onChange={field.onChange}
+                  onChange={(next) => field.onChange(next)}
                   placeholder={isContributor ? "Researcher, Author" : "Musician, Cellist"}
                   suggestions={tagSuggestions}
                   value={field.value}
@@ -783,13 +951,7 @@ export function ContributeForm({
               formState.errors.sourceUrl || formState.errors.sourceNote ? true : undefined
             }
           >
-            <FieldLegend variant="label">
-              {isContributor
-                ? "Where is their contribution documented?"
-                : isAlum
-                  ? "How do we know they attended Montessori?"
-                  : "How do we know about them?"}
-            </FieldLegend>
+            <FieldLegend variant="label">{sourceQuestion(isContributor, isAlum)}</FieldLegend>
             <Controller
               control={control}
               name="sourceType"
@@ -803,7 +965,7 @@ export function ContributeForm({
                 >
                   {SOURCE_OPTIONS.map((option) => (
                     <ToggleGroupItem
-                      className="h-9 rounded-full border border-black/15 bg-white/60 px-3.5 font-normal hover:border-black/40 aria-pressed:border-secondary aria-pressed:bg-secondary aria-pressed:text-secondary-foreground"
+                      className="aria-pressed:border-secondary aria-pressed:bg-secondary aria-pressed:text-secondary-foreground h-9 rounded-full border border-black/15 bg-white/60 px-3.5 font-normal hover:border-black/40"
                       key={option.type}
                       value={option.type}
                     >
@@ -852,7 +1014,7 @@ export function ContributeForm({
             )}
           </FieldSet>
 
-          <FieldSeparator className="my-1 [&_[data-slot=field-separator-content]]:bg-background [&_[data-slot=field-separator-content]]:font-semibold [&_[data-slot=field-separator-content]]:text-xs [&_[data-slot=field-separator-content]]:uppercase [&_[data-slot=field-separator-content]]:tracking-widest">
+          <FieldSeparator className="[&_[data-slot=field-separator-content]]:bg-background my-1 [&_[data-slot=field-separator-content]]:text-xs [&_[data-slot=field-separator-content]]:font-semibold [&_[data-slot=field-separator-content]]:tracking-widest [&_[data-slot=field-separator-content]]:uppercase">
             Optional
           </FieldSeparator>
 
@@ -1019,84 +1181,21 @@ export function ContributeForm({
             Have a photo? Attach it on GitHub after you submit, with who took it.
           </p>
         </FieldGroup>
-      ) : (
-        <Field data-invalid={yamlErrors.length > 0 || undefined}>
-          <FieldLabel htmlFor={fieldId("yaml")}>Profile YAML</FieldLabel>
-          <Textarea
-            aria-invalid={yamlErrors.length > 0 || undefined}
-            className="min-h-96 font-mono text-xs leading-relaxed"
-            id={fieldId("yaml")}
-            onChange={(e) => setYamlText(e.target.value)}
-            spellCheck={false}
-            value={yamlText}
-          />
-          {yamlErrors.length ? (
-            <FieldError errors={yamlErrors.map((message) => ({ message }))} />
-          ) : (
-            <FieldDescription>
-              Checked against the profile schema before it's sent. Switch back to Form to keep
-              editing with these values.
-            </FieldDescription>
-          )}
-        </Field>
+      )}
+
+      {mode === "yaml" && (
+        <YamlField errors={yamlErrors} onTextChange={setYamlText} text={yamlText} />
       )}
 
       {(mode === "yaml" || hasKind) && (
-        <div className="flex flex-col gap-4 border-black/10 border-t pt-6">
-          {showSummary && mode === "form" && (
-            <Alert variant="destructive">
-              <AlertCircleIcon />
-              <AlertTitle>
-                {errors.length === 1 ? "One thing to fix" : `${errors.length} things to fix`}
-              </AlertTitle>
-              <AlertDescription>
-                <ul className="flex flex-col gap-1">
-                  {errors.map((error) => (
-                    <li key={error.name}>
-                      <button
-                        className="text-left underline-offset-2 hover:underline"
-                        onClick={() => focusField(error.name)}
-                        type="button"
-                      >
-                        <span className="font-medium">{error.label}:</span> {error.message}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {problem && (
-            <Alert variant="destructive">
-              <AlertCircleIcon />
-              <AlertTitle>{problem.title}</AlertTitle>
-              <AlertDescription>
-                <p>{problem.detail}</p>
-                <Link className="font-medium underline" href={githubUrl} target="_blank">
-                  Open it on GitHub
-                </Link>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <Button className="w-full sm:w-auto" disabled={submitting} size="lg" type="submit">
-              {submitting ? "Submitting…" : "Submit for review"}
-            </Button>
-            <Link
-              className="text-center text-muted-foreground text-sm hover:underline sm:text-left"
-              href={githubUrl}
-              target="_blank"
-            >
-              or open it as a GitHub issue
-            </Link>
-          </div>
-          <p className="text-muted-foreground text-xs">
-            Nothing is published until a maintainer reviews it.
-          </p>
-        </div>
+        <FormFooter
+          errors={errors}
+          githubUrl={githubUrl}
+          problem={problem}
+          showSummary={showSummary && mode === "form"}
+          submitting={submitting}
+        />
       )}
     </form>
   );
-}
+};
