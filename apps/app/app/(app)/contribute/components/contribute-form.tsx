@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
-import type { FieldErrors, Resolver } from "react-hook-form";
+import type { Control, FieldErrors, Resolver, UseFieldArrayReturn } from "react-hook-form";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,6 @@ import {
   FieldGroup,
   FieldLabel,
   FieldLegend,
-  FieldSeparator,
   FieldSet,
   FieldTitle,
 } from "@/components/ui/field";
@@ -503,6 +502,97 @@ const FormFooter = ({
   </div>
 );
 
+/** Links, one row per link type: a row offers its own type plus the unused ones. */
+const LinksFieldSet = ({
+  control,
+  links,
+}: {
+  control: Control<FormValues>;
+  links: UseFieldArrayReturn<FormValues, "links">;
+}) => {
+  const linkValues = useWatch({ control, name: "links" });
+  const usedLinkTypes = new Set(linkValues.map((link) => link.type));
+  const unusedLinkTypes = LINK_TYPES.filter((type) => !usedLinkTypes.has(type));
+  const linkItemsFor = (current: LinkType) =>
+    LINK_ITEMS.filter((item) => item.value === current || !usedLinkTypes.has(item.value));
+  return (
+    <FieldSet>
+      <FieldLegend variant="label">Links</FieldLegend>
+      <div className="flex flex-col gap-2">
+        {links.fields.map((row, i) => (
+          <Controller
+            control={control}
+            key={row.id}
+            name={`links.${i}.url`}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid || undefined}>
+                <div className="flex gap-2">
+                  <Controller
+                    control={control}
+                    name={`links.${i}.type`}
+                    render={({ field: typeField }) => (
+                      <Select
+                        items={linkItemsFor(typeField.value)}
+                        onValueChange={(next) => next && typeField.onChange(next)}
+                        value={typeField.value}
+                      >
+                        <SelectTrigger aria-label="Link type" className="w-28 shrink-0 sm:w-36">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {linkItemsFor(typeField.value).map((item) => (
+                            <SelectItem key={item.value} value={item.value}>
+                              {item.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  <Input
+                    {...field}
+                    aria-invalid={fieldState.invalid || undefined}
+                    aria-label="Link URL"
+                    id={fieldId(`links.${i}.url`)}
+                    inputMode="url"
+                    placeholder="https://…"
+                    type="url"
+                  />
+                  {links.fields.length > 1 && (
+                    <Button
+                      aria-label="Remove link"
+                      className="shrink-0"
+                      onClick={() => links.remove(i)}
+                      size="icon"
+                      type="button"
+                      variant="ghost"
+                    >
+                      <XIcon />
+                    </Button>
+                  )}
+                </div>
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+        ))}
+      </div>
+      {unusedLinkTypes.length > 0 && (
+        <Button
+          className="self-start"
+          onClick={() => links.append({ type: unusedLinkTypes[0], url: "" })}
+          size="sm"
+          type="button"
+          variant="ghost"
+        >
+          <PlusIcon />
+          Add another link
+        </Button>
+      )}
+    </FieldSet>
+  );
+};
+
 export const ContributeForm = ({
   organizations,
   tagSuggestions,
@@ -802,11 +892,7 @@ export const ContributeForm = ({
                   id={fieldId("name")}
                   placeholder={isContributor ? "Angeline Stoll Lillard" : "Yo-Yo Ma"}
                 />
-                {fieldState.error ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : (
-                  <FieldDescription>The page address is made from the name</FieldDescription>
-                )}
+                <FieldError errors={[fieldState.error]} />
               </Field>
             )}
           />
@@ -943,10 +1029,7 @@ export const ContributeForm = ({
                 {fieldState.error ? (
                   <FieldError errors={[fieldState.error]} />
                 ) : (
-                  <FieldDescription>
-                    Press Enter after each tag. Existing tags are suggested first; the first three
-                    show on their card.
-                  </FieldDescription>
+                  <FieldDescription>Press Enter after each tag.</FieldDescription>
                 )}
               </Field>
             )}
@@ -1020,9 +1103,12 @@ export const ContributeForm = ({
             )}
           </FieldSet>
 
-          <FieldSeparator className="[&_[data-slot=field-separator-content]]:bg-background my-1 [&_[data-slot=field-separator-content]]:text-xs [&_[data-slot=field-separator-content]]:font-semibold [&_[data-slot=field-separator-content]]:tracking-widest [&_[data-slot=field-separator-content]]:uppercase">
-            Optional
-          </FieldSeparator>
+          <div aria-hidden="true" className="flex items-center gap-3 pt-2">
+            <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+              Optional
+            </span>
+            <span className="h-px flex-1 bg-black/10" />
+          </div>
 
           <Controller
             control={control}
@@ -1107,81 +1193,7 @@ export const ContributeForm = ({
             )}
           />
 
-          <FieldSet>
-            <FieldLegend variant="label">Links</FieldLegend>
-            <div className="flex flex-col gap-2">
-              {links.fields.map((row, i) => (
-                <Controller
-                  control={control}
-                  key={row.id}
-                  name={`links.${i}.url`}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid || undefined}>
-                      <div className="flex gap-2">
-                        <Controller
-                          control={control}
-                          name={`links.${i}.type`}
-                          render={({ field: typeField }) => (
-                            <Select
-                              items={LINK_ITEMS}
-                              onValueChange={(next) => next && typeField.onChange(next)}
-                              value={typeField.value}
-                            >
-                              <SelectTrigger
-                                aria-label="Link type"
-                                className="w-28 shrink-0 sm:w-36"
-                              >
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {LINK_ITEMS.map((item) => (
-                                  <SelectItem key={item.value} value={item.value}>
-                                    {item.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          )}
-                        />
-                        <Input
-                          {...field}
-                          aria-invalid={fieldState.invalid || undefined}
-                          aria-label="Link URL"
-                          id={fieldId(`links.${i}.url`)}
-                          inputMode="url"
-                          placeholder="https://…"
-                          type="url"
-                        />
-                        {links.fields.length > 1 && (
-                          <Button
-                            aria-label="Remove link"
-                            className="shrink-0"
-                            onClick={() => links.remove(i)}
-                            size="icon"
-                            type="button"
-                            variant="ghost"
-                          >
-                            <XIcon />
-                          </Button>
-                        )}
-                      </div>
-                      <FieldError errors={[fieldState.error]} />
-                    </Field>
-                  )}
-                />
-              ))}
-            </div>
-            <Button
-              className="self-start"
-              onClick={() => links.append({ type: "website", url: "" })}
-              size="sm"
-              type="button"
-              variant="ghost"
-            >
-              <PlusIcon />
-              Add another link
-            </Button>
-          </FieldSet>
+          <LinksFieldSet control={control} links={links} />
 
           <p className="text-muted-foreground text-sm">
             Have a photo? Attach it on GitHub after you submit, with who took it.
