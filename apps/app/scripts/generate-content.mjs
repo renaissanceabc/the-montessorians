@@ -2,15 +2,15 @@
 /**
  * Build-time content generator.
  *
- * Reads the CC0 dataset (`<repo-root>/data/*.yaml`), validates each profile
+ * Reads the CC0 dataset (`<repo-root>/data/people/*.yaml`), validates each profile
  * against `<repo-root>/profile.schema.json`, normalizes keys to camelCase, and
  * writes a single bundled JSON (`lib/content/profiles.generated.json`) that the
  * app imports. Generating a bundled JSON (rather than reading the YAML at
  * runtime) guarantees the data is traced into the build for both static
  * generation and ISR, regardless of monorepo layout.
  *
- * Also bundles the organizations (`<repo-root>/organizations/*.yaml`) and the
- * merge/withdrawal log (`<repo-root>/authority/changes.yaml`).
+ * Also bundles the organizations (`<repo-root>/data/organizations/*.yaml`) and the
+ * merge/withdrawal log (`<repo-root>/data/authority/changes.yaml`).
  *
  * Runs before `dev`, `build`, and `typecheck`. Throws (failing the build) on a
  * malformed record. Profile images are optional.
@@ -25,10 +25,10 @@ import yaml from "js-yaml";
 
 const APP_DIR = path.resolve(import.meta.dirname, "..");
 const REPO_ROOT = path.resolve(APP_DIR, "..", "..");
-const DATA_DIR = path.join(REPO_ROOT, "data");
+const DATA_DIR = path.join(REPO_ROOT, "data", "people");
 const IMAGES_DIR = path.join(REPO_ROOT, "images");
-const ORGS_DIR = path.join(REPO_ROOT, "organizations");
-const CHANGES_PATH = path.join(REPO_ROOT, "authority", "changes.yaml");
+const ORGS_DIR = path.join(REPO_ROOT, "data", "organizations");
+const CHANGES_PATH = path.join(REPO_ROOT, "data", "authority", "changes.yaml");
 const SCHEMA_PATH = path.join(REPO_ROOT, "profile.schema.json");
 const ORG_SCHEMA_PATH = path.join(REPO_ROOT, "organization.schema.json");
 const CONTENT_DIR = path.join(APP_DIR, "lib", "content");
@@ -76,7 +76,7 @@ function addedAtFor(file) {
   try {
     const out = execFileSync(
       "git",
-      ["log", "--diff-filter=A", "--follow", "--format=%cI", "-1", "--", `data/${file}`],
+      ["log", "--diff-filter=A", "--follow", "--format=%cI", "-1", "--", `data/people/${file}`],
       { cwd: REPO_ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }
     ).trim();
     if (out) {

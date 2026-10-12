@@ -26,18 +26,18 @@ Something wrong on an existing profile? Use the
 1. Fork this repo
 2. Run `bun install` to install dependencies
 3. Run `bun run id:next` to get the next permanent id
-4. Add a new `.yaml` file to the `/data` folder (see the format below)
+4. Add a new `.yaml` file to the `data/people` folder (see the format below)
 5. Optionally add a profile image (`.jpg`) to `/images`, using the same `slug` as the filename, and credit it in
    `image_credit`
 6. If the person attended or is affiliated with a school, university, training center, or association that isn't in
-   `/organizations` yet, add it there (`bun run id:next -- org`)
+   `data/organizations` yet, add it there (`bun run id:next -- org`)
 7. Run `bun run data:lint` and confirm that it succeeds before opening a pull request
 8. Add a changeset (`bunx changeset`) describing who you added or what you changed
    ([how to write one](./docs/CHANGESETS.md))
 9. Submit a pull request against the `develop` branch
 
 **Never change or reuse an `id`.** To merge, withdraw, or rename a record, add an entry to
-[`authority/changes.yaml`](./authority/changes.yaml) in the same pull request (see [`docs/authority.md`](./docs/authority.md)).
+[`data/authority/changes.yaml`](./data/authority/changes.yaml) in the same pull request (see [`docs/authority.md`](./docs/authority.md)).
 
 ---
 
@@ -123,6 +123,6 @@ field.
 
 ## 📄 License
 
-By contributing, you agree that dataset additions (`data/`, `organizations/`, and `authority/`) are released under
+By contributing, you agree that dataset additions (`data/`) are released under
 [CC0](./LICENSE.md), and that code contributions (`apps/` and `packages/`) are released under the
 [MIT license](./LICENSE-CODE.md). Photos keep their original terms and are credited per profile.

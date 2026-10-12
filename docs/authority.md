@@ -14,13 +14,13 @@ and publishes everything as linked open data under CC0. This page is the technic
 - The `id` is assigned once, when a record is accepted (`bun run id:next`, or `bun run id:next -- org`), and never
   changes, even if the person's name or the record's `slug` changes.
 - An id is never deleted or reused. `bun run validate` fails if an id that exists on the base branch disappears without an
-  entry in [`authority/changes.yaml`](../authority/changes.yaml) (CI sets `BASE_REF` to check this on every pull
+  entry in [`data/authority/changes.yaml`](../data/authority/changes.yaml) (CI sets `BASE_REF` to check this on every pull
   request).
 - `/id/<id>` redirects permanently to the record's current page. Cite the `/id/` URI, not the page address.
 
 ### Merges, withdrawals, and renames
 
-Record these in `authority/changes.yaml` in the same pull request that makes them:
+Record these in `data/authority/changes.yaml` in the same pull request that makes them:
 
 | Action      | What the site does                                                                 |
 | ----------- | ---------------------------------------------------------------------------------- |
@@ -47,7 +47,7 @@ authority entry:
 
 `bun run validate` checks the schemas and the cross-record rules: unique ids and slugs, references that resolve, the
 changes log, and likely duplicates (identical names fail; very similar names warn unless listed in
-[`authority/distinct.yaml`](../authority/distinct.yaml)).
+[`data/authority/distinct.yaml`](../data/authority/distinct.yaml)).
 
 ## Linked data
 

@@ -16,18 +16,21 @@ Created and maintained by [Renaissance](https://renaissance.education), an educa
 
 This repository holds both the **dataset** and the **website** that renders it ([themontessorians.xyz](https://themontessorians.xyz)).
 
-- `data/` — structured YAML files, one per person (the dataset; **CC0**, see [`LICENSE.md`](./LICENSE.md))
-- `organizations/` — schools, training centers, universities, and associations, one per file (**CC0**)
-- `authority/` — the log of merged, withdrawn, and renamed records (**CC0**)
+- `data/` — the dataset (**CC0**, see [`LICENSE.md`](./LICENSE.md)):
+  - `data/people/` — one YAML file per person
+  - `data/organizations/` — schools, training centers, universities, and associations, one per file
+  - `data/authority/` — the log of merged, withdrawn, and renamed records
 - `images/` — profile photos (credited per profile; see [Photos](#photos))
 - `apps/` and `packages/` — the Next.js website and its supporting packages (the application code; **MIT**, see [`LICENSE-CODE.md`](./LICENSE-CODE.md))
 
 ```
-/data/                 # CC0 dataset: people
-  - yo-yo-ma.yaml
-/organizations/        # CC0 dataset: organizations
-  - association-montessori-internationale.yaml
-/authority/            # merges, withdrawals, renames
+/data/                 # CC0 dataset
+  people/
+    - yo-yo-ma.yaml
+  organizations/
+    - association-montessori-internationale.yaml
+  authority/           # merges, withdrawals, renames
+    - changes.yaml
 /images/               # profile photos
   - yo-yo-ma.jpg
 /apps/app/             # the website
@@ -70,7 +73,7 @@ We welcome contributions from the community! To add or update a profile, you hav
 
 1. Fork this repo
 2. Run `bun install` to install dependencies
-3. Add a new `.yaml` file to the `/data` folder (see the [example below](#example-profile)), with an `id` from
+3. Add a new `.yaml` file to the `data/people` folder (see the [example below](#example-profile)), with an `id` from
    `bun run id:next`
 4. Optionally add a profile image (`.jpg`) to `/images`, using the same `slug` as the filename from step #3, and credit
    it in `image_credit`
@@ -116,7 +119,7 @@ links:
 ---
 
 A contributor record adds `kind: contributor`, `roles` (`founder`, `trainer`, `practitioner`, `teacher-scholar`, `researcher`,
-`author`, `philosopher`), `affiliations`, and `contributions`. See [`data/angeline-stoll-lillard.yaml`](./data/angeline-stoll-lillard.yaml)
+`author`, `philosopher`), `affiliations`, and `contributions`. See [`data/people/angeline-stoll-lillard.yaml`](./data/people/angeline-stoll-lillard.yaml)
 and [`profile.schema.json`](./profile.schema.json) for every field.
 
 ---
@@ -131,7 +134,7 @@ request, or open an issue. Something wrong on a profile? Use
 
 ### Contribution License
 
-By contributing, you agree that dataset additions (`data/`, `organizations/`, and `authority/`) are released under
+By contributing, you agree that dataset additions (`data/`) are released under
 [CC0](./LICENSE.md), and that code contributions (`apps/` and `packages/`) are released under the
 [MIT license](./LICENSE-CODE.md).
 
@@ -141,7 +144,7 @@ By contributing, you agree that dataset additions (`data/`, `organizations/`, an
 
 This repository is open source and dual-licensed:
 
-- **Dataset** (`data/`, `organizations/`, `authority/`) — [CC0 1.0 Universal](./LICENSE.md) (public domain dedication)
+- **Dataset** (`data/`) — [CC0 1.0 Universal](./LICENSE.md) (public domain dedication)
 - **Application code** (`apps/`, `packages/`) — [MIT](./LICENSE-CODE.md)
 
 ### Photos

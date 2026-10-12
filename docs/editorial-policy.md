@@ -57,7 +57,7 @@ A record's `status` is `provisional` until a maintainer has reviewed it, then `r
 - Record birth and death **years** only, never full dates, and only for public figures or when the person has shared
   them. Never record a birth year for a minor.
 - Link the same person in other authority files (`identifiers`) only when you have confirmed it is the same person.
-- Schools, universities, training centers, and associations are their own records in `organizations/`; link to them
+- Schools, universities, training centers, and associations are their own records in `data/organizations/`; link to them
   rather than writing their names as text.
 
 ## Photos
@@ -75,7 +75,7 @@ Anyone can request a change with the
 
 - **Corrections** are made directly in the record.
 - **Duplicates** are merged: the surviving record keeps its id, and the duplicate's id is recorded as `merged` in
-  [`authority/changes.yaml`](../authority/changes.yaml) so its links keep working.
+  [`data/authority/changes.yaml`](../data/authority/changes.yaml) so its links keep working.
 - **Removal requests** from the person themselves (or their family, for people who have died recently) are honored.
   The record is withdrawn: its id is recorded as `withdrawn` with a short public reason, and it is never reused.
 - Records whose Montessori connection turns out to be wrong are withdrawn, or converted to a contributor record if

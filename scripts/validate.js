@@ -7,7 +7,7 @@
  * resolve, likely duplicates).
  *
  * Set BASE_REF (e.g. BASE_REF=origin/main) to also check that no id present on
- * that ref was removed without being recorded in authority/changes.yaml.
+ * that ref was removed without being recorded in data/authority/changes.yaml.
  */
 
 import { execFileSync } from "node:child_process";
@@ -21,10 +21,10 @@ import yaml from "js-yaml";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
-const dataDir = path.join(ROOT, "data");
-const orgDir = path.join(ROOT, "organizations");
+const dataDir = path.join(ROOT, "data", "people");
+const orgDir = path.join(ROOT, "data", "organizations");
 const imageDir = path.join(ROOT, "images");
-const changesPath = path.join(ROOT, "authority", "changes.yaml");
+const changesPath = path.join(ROOT, "data", "authority", "changes.yaml");
 const checksumPath = path.join(ROOT, ".checksums.json");
 
 const ajv = new Ajv({ allErrors: true, strict: false, validateFormats: "fast" });
@@ -75,7 +75,7 @@ function schemaErrors(validate, doc) {
 const orgs = [];
 for (const file of yamlFiles(orgDir)) {
   const doc = yaml.load(fs.readFileSync(path.join(orgDir, file), "utf8"));
-  const label = `organizations/${file}`;
+  const label = `data/organizations/${file}`;
   for (const message of schemaErrors(validateOrg, doc)) {
     report(label, message);
   }
@@ -94,7 +94,7 @@ for (const file of yamlFiles(dataDir)) {
   const filePath = path.join(dataDir, file);
   const fileContent = fs.readFileSync(filePath, "utf8");
   const doc = yaml.load(fileContent);
-  const label = `data/${file}`;
+  const label = `data/people/${file}`;
   profiles.push({ file: label, doc });
 
   const slug = doc?.slug;
@@ -146,7 +146,7 @@ for (const file of yamlFiles(dataDir)) {
 
 const changes = yaml.load(fs.readFileSync(changesPath, "utf8")) ?? [];
 if (!Array.isArray(changes)) {
-  report("authority/changes.yaml", "must be a list");
+  report("data/authority/changes.yaml", "must be a list");
 }
 
 const records = [...profiles, ...orgs];
@@ -173,7 +173,7 @@ for (const { file, doc } of profiles) {
     if (!orgSlugs.has(ref.organization)) {
       report(
         file,
-        `unknown organization "${ref.organization}" (add organizations/${ref.organization}.yaml)`
+        `unknown organization "${ref.organization}" (add data/organizations/${ref.organization}.yaml)`
       );
     }
   }
@@ -186,7 +186,7 @@ for (const { file, doc } of orgs) {
 
 const changedIds = new Set();
 for (const [i, change] of (Array.isArray(changes) ? changes : []).entries()) {
-  const where = `authority/changes.yaml[${i}]`;
+  const where = `data/authority/changes.yaml[${i}]`;
   if (!/^tmo?[0-9]{6,7}$/.test(change?.id ?? "")) {
     report(where, "id is missing or malformed");
     continue;
@@ -224,7 +224,8 @@ for (const [i, change] of (Array.isArray(changes) ? changes : []).entries()) {
 if (process.env.BASE_REF) {
   const ref = process.env.BASE_REF;
   const git = (...args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf8" });
-  for (const dir of ["data", "organizations"]) {
+  // Both layouts: the base ref may predate the move to data/people and data/organizations.
+  for (const dir of ["data", "organizations", "data/people", "data/organizations"]) {
     let listing = "";
     try {
       listing = git("ls-tree", "--name-only", `${ref}:${dir}`);
@@ -236,7 +237,7 @@ if (process.env.BASE_REF) {
       if (doc?.id && !liveIds.has(doc.id) && !changedIds.has(doc.id)) {
         report(
           `${dir}/${name}`,
-          `id ${doc.id} existed on ${ref} but was removed without an authority/changes.yaml entry`
+          `id ${doc.id} existed on ${ref} but was removed without a data/authority/changes.yaml entry`
         );
       }
     }
@@ -271,9 +272,9 @@ function similarity(a, b) {
   return 1 - d[m][n] / Math.max(m, n, 1);
 }
 const distinct = new Set(
-  (yaml.load(fs.readFileSync(path.join(ROOT, "authority", "distinct.yaml"), "utf8")) ?? []).map(
-    (pair) => [...pair].sort().join("|")
-  )
+  (
+    yaml.load(fs.readFileSync(path.join(ROOT, "data", "authority", "distinct.yaml"), "utf8")) ?? []
+  ).map((pair) => [...pair].sort().join("|"))
 );
 const slugOf = (file) => path.basename(file, ".yaml");
 const names = profiles.flatMap(({ file, doc }) =>
@@ -305,7 +306,7 @@ for (let i = 0; i < names.length; i++) {
 
 // Never cache a file that failed a cross-record check.
 for (const file of reports.keys()) {
-  delete checksumCache[file.replace(/^data\//, "")];
+  delete checksumCache[file.replace(/^data\/people\//, "")];
 }
 fs.writeFileSync(
   checksumPath,

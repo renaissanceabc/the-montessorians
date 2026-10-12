@@ -1,4 +1,4 @@
 {
   "*.{ts,tsx,js,jsx,json}": ["bunx ultracite fix"],
-  "{data,organizations,authority}/**/*.yaml": ["prettier --write"]
+  "data/**/*.yaml": ["prettier --write"]
 }

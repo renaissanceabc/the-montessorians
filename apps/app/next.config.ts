@@ -8,7 +8,7 @@ import authorityRedirects from "./lib/content/redirects.generated.json";
 let nextConfig: NextConfig = withLogging(config);
 
 // Permanent ids (/id/<id>) and old slugs from renames and merges
-// (authority/changes.yaml) redirect to the current page.
+// (data/authority/changes.yaml) redirect to the current page.
 nextConfig.redirects = async () => [
   ...((await config.redirects?.()) ?? []),
   ...authorityRedirects.map((r: { source: string; destination: string }) => ({

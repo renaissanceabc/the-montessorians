@@ -26,7 +26,7 @@ jobs:
           args: >-
             --no-progress --max-concurrency 4 --accept 200..=299,403,429
             --exclude "linkedin\\.com" --exclude "x\\.com" --exclude "instagram\\.com" --exclude "tiktok\\.com"
-            "data/**/*.yaml" "organizations/**/*.yaml"
+            "data/**/*.yaml"
           output: ./lychee/out.md
           fail: false
 

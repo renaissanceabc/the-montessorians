@@ -6,7 +6,7 @@
  *   bun run id:next          → next person id (tm0000067)
  *   bun run id:next -- org   → next organization id (tmo000004)
  *
- * Ids recorded in authority/changes.yaml count as used: an id is never reused.
+ * Ids recorded in data/authority/changes.yaml count as used: an id is never reused.
  */
 
 import fs from "node:fs";
@@ -16,7 +16,7 @@ import yaml from "js-yaml";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const isOrg = process.argv.includes("org");
-const [dir, prefix, width] = isOrg ? ["organizations", "tmo", 6] : ["data", "tm", 7];
+const [dir, prefix, width] = isOrg ? ["data/organizations", "tmo", 6] : ["data/people", "tm", 7];
 const pattern = new RegExp(`^${prefix}(\\d{${width}})$`);
 
 const used = [];
@@ -27,7 +27,7 @@ for (const file of fs.existsSync(fullDir) ? fs.readdirSync(fullDir) : []) {
   }
 }
 for (const change of yaml.load(
-  fs.readFileSync(path.join(ROOT, "authority", "changes.yaml"), "utf8")
+  fs.readFileSync(path.join(ROOT, "data", "authority", "changes.yaml"), "utf8")
 ) ?? []) {
   used.push(change.id);
 }
