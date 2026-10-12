@@ -757,9 +757,7 @@ export const ContributeForm = ({
                         <Icon className="size-5 shrink-0" />
                         <FieldContent className="gap-0.5">
                           <FieldTitle>{label}</FieldTitle>
-                          <FieldDescription
-                            className={cn("text-xs", on && "text-secondary-foreground/80")}
-                          >
+                          <FieldDescription className={cn(on && "text-secondary-foreground/80")}>
                             {hint}
                           </FieldDescription>
                         </FieldContent>
