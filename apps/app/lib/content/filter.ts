@@ -59,7 +59,7 @@ export function filterAndSortProfiles(
   let out = list;
 
   if (kind) {
-    out = out.filter((p) => p.kind === kind);
+    out = out.filter((p) => p.kinds.includes(kind));
   }
 
   if (search) {

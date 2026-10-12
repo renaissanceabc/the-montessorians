@@ -2,14 +2,25 @@ import type { getProfilesOptions, getTagsOptions } from "@/lib/types";
 import { toTitleCase } from "@/lib/utils";
 import { filterAndSortProfiles } from "./filter";
 import rawProfiles from "./profiles.generated.json";
-import type { Profile, ProfileKind, ProfilePage, RawProfile, Tag, TagWithCount } from "./types";
+import type {
+  Profile,
+  ProfileKind,
+  ProfilePage,
+  RawProfile,
+  RawRelated,
+  RelatedPerson,
+  Tag,
+  TagWithCount,
+} from "./types";
 
 function enrich(raw: RawProfile): Profile {
+  const kinds = [raw.kind ?? "alum"].flat();
   return {
     id: raw.id,
     slug: raw.slug,
     name: raw.name,
-    kind: raw.kind ?? "alum",
+    kind: kinds.includes("contributor") ? "contributor" : "alum",
+    kinds,
     roles: raw.roles ?? [],
     pinned: raw.pinned ?? false,
     nameAuthorized: raw.nameAuthorized ?? null,
@@ -31,6 +42,7 @@ function enrich(raw: RawProfile): Profile {
     status: raw.status ?? "provisional",
     identifiers: raw.identifiers ?? {},
     glossaryCitations: raw.glossaryCitations ?? [],
+    related: raw.related ?? [],
     imageCredit: raw.imageCredit ?? null,
     imageUrl: raw.imageUrl ?? null,
     tags: (raw.tags ?? []).map((slug) => ({ slug, label: toTitleCase(slug) })),
@@ -46,7 +58,66 @@ const BY_SLUG = new Map(ALL.map((p) => [p.slug, p]));
 const BY_ID = new Map(ALL.map((p) => [p.id, p]));
 
 export function getAllProfiles(kind?: ProfileKind): Profile[] {
-  return kind ? ALL.filter((p) => p.kind === kind) : ALL;
+  return kind ? ALL.filter((p) => p.kinds.includes(kind)) : ALL;
+}
+
+const INVERSE: Record<RawRelated["relation"], RawRelated["relation"]> = {
+  parent: "child",
+  child: "parent",
+  sibling: "sibling",
+  spouse: "spouse",
+  trained_by: "trained",
+  trained: "trained_by",
+  advisor: "advisee",
+  advisee: "advisor",
+  colleague: "colleague",
+};
+
+/**
+ * Everyone related to a person: relationships recorded on either side (the
+ * other side is inferred), plus co-authors derived from shared DOIs/titles.
+ */
+export function getRelatedPeople(profile: Profile): RelatedPerson[] {
+  const out = new Map<string, RelatedPerson>();
+  const add = (
+    other: Profile,
+    relation: RelatedPerson["relation"],
+    extra: Partial<RelatedPerson> = {}
+  ) => {
+    const key = `${other.slug}:${relation}`;
+    if (!out.has(key)) {
+      out.set(key, {
+        slug: other.slug,
+        name: other.name,
+        imageUrl: other.imageUrl,
+        relation,
+        ...extra,
+      });
+    }
+  };
+  for (const rel of profile.related) {
+    const other = BY_SLUG.get(rel.person);
+    if (other) {
+      add(other, rel.relation, { source: rel.source });
+    }
+  }
+  for (const other of ALL) {
+    if (other.slug === profile.slug) {
+      continue;
+    }
+    for (const rel of other.related) {
+      if (rel.person === profile.slug) {
+        add(other, INVERSE[rel.relation], { source: rel.source });
+      }
+    }
+    const key = (c: Profile["contributions"][number]) => c.doi ?? c.isbn ?? c.title.toLowerCase();
+    const mine = new Set(profile.contributions.map(key));
+    const shared = other.contributions.filter((c) => mine.has(key(c))).length;
+    if (shared > 0) {
+      add(other, "coauthor", { count: shared });
+    }
+  }
+  return [...out.values()];
 }
 
 export function getProfileById(id: string): Profile | null {
@@ -78,7 +149,7 @@ export function getProfileWithAdjacent(slug: string): ProfilePage | null {
 
   // Neighbors follow the alphabetical display order (ALL is sorted by name),
   // within the same collection (alumni or contributors).
-  const siblings = ALL.filter((p) => p.kind === profile.kind);
+  const siblings = ALL.filter((p) => p.kinds.includes(profile.kind));
   const idx = siblings.findIndex((p) => p.slug === slug);
   const prev = idx > 0 ? siblings[idx - 1] : null;
   const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;

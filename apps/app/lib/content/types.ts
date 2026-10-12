@@ -88,6 +88,8 @@ export type Source = {
 
 export type Contribution = {
   title: string;
+  /** All authors in publication order, including the profile's own person */
+  authors?: string[];
   type: ContributionType;
   year?: number;
   venue?: string;
@@ -100,6 +102,7 @@ export type OrganizationRef = {
   organization: string;
   /** Resolved at build time by scripts/generate-content.mjs */
   organizationName?: string;
+  organizationShortName?: string;
   role?: string;
   level?: string;
   from?: number;
@@ -117,12 +120,44 @@ export type PersonIdentifiers = {
 
 export type GlossaryCitation = { label: string; url: string };
 
+export const RELATIONS = [
+  "parent",
+  "child",
+  "sibling",
+  "spouse",
+  "trained_by",
+  "trained",
+  "advisor",
+  "advisee",
+  "colleague",
+] as const;
+export type Relation = (typeof RELATIONS)[number] | "coauthor";
+
+/** As recorded in YAML: how `person` relates to the record's own person. */
+export type RawRelated = {
+  person: string;
+  relation: (typeof RELATIONS)[number];
+  source?: string;
+  note?: string;
+};
+
+/** Resolved for display: both sides of every relationship, plus derived co-authors. */
+export type RelatedPerson = {
+  slug: string;
+  name: string;
+  imageUrl: string | null;
+  relation: Relation;
+  /** Shared contributions, for co-authors */
+  count?: number;
+  source?: string;
+};
+
 /** Shape of a single record in `profiles.generated.json` (tags are raw slugs). */
 export type RawProfile = {
   id: string;
   slug: string;
   name: string;
-  kind?: ProfileKind;
+  kind?: ProfileKind | ProfileKind[];
   roles?: ContributorRole[];
   pinned?: boolean;
   nameAuthorized?: string;
@@ -145,6 +180,7 @@ export type RawProfile = {
   status?: RecordStatus;
   identifiers?: PersonIdentifiers;
   glossaryCitations?: GlossaryCitation[];
+  related?: RawRelated[];
   imageCredit?: string;
   links?: ProfileLink[];
   imageUrl: string | null;
@@ -156,7 +192,10 @@ export type Profile = {
   id: string;
   slug: string;
   name: string;
+  /** Primary collection: contributor if the person is one, otherwise alum */
   kind: ProfileKind;
+  /** Every collection the person belongs to (someone can be both) */
+  kinds: ProfileKind[];
   roles: ContributorRole[];
   pinned: boolean;
   nameAuthorized: string | null;
@@ -178,6 +217,7 @@ export type Profile = {
   status: RecordStatus;
   identifiers: PersonIdentifiers;
   glossaryCitations: GlossaryCitation[];
+  related: RawRelated[];
   imageCredit: string | null;
   imageUrl: string | null;
   tags: ProfileTag[];
@@ -189,6 +229,7 @@ export type Organization = {
   id: string;
   slug: string;
   name: string;
+  shortName?: string;
   type: OrganizationType;
   nameVariants?: string[];
   description?: string;

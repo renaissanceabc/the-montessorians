@@ -29,12 +29,14 @@ const profile = (overrides: Partial<Profile>): Profile => ({
   status: "provisional",
   identifiers: {},
   glossaryCitations: [],
+  related: [],
   imageCredit: null,
   imageUrl: null,
   tags: [],
   links: [],
   addedAt: "2025-01-01T00:00:00Z",
   ...overrides,
+  kinds: overrides.kinds ?? [overrides.kind ?? "alum"],
 });
 
 const maria = profile({
@@ -70,6 +72,24 @@ const alum = profile({ slug: "alum", name: "Yo-Yo Ma", addedAt: "2026-09-01T00:0
 const all = [alum, lillard, mario, maria];
 
 describe("filterAndSortProfiles", () => {
+  test("someone who is both appears in both collections", () => {
+    const both = profile({
+      slug: "both",
+      name: "Both",
+      kind: "contributor",
+      kinds: ["alum", "contributor"],
+      roles: ["trainer"],
+    });
+    assert.deepEqual(
+      filterAndSortProfiles([both], { kind: "alum" }).map((p) => p.slug),
+      ["both"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles([both], { kind: "contributor" }).map((p) => p.slug),
+      ["both"]
+    );
+  });
+
   test("filters by kind", () => {
     assert.deepEqual(
       filterAndSortProfiles(all, { kind: "alum" }).map((p) => p.slug),

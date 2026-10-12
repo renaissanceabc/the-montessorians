@@ -120,8 +120,14 @@ for (const file of yamlFiles(dataDir)) {
   if (doc?.birth_year && doc?.death_year && doc.birth_year > doc.death_year) {
     report(label, "birth_year is after death_year");
   }
-  if (doc?.kind === "contributor" && !(doc.contributions?.length || doc.sources?.length)) {
-    report(label, "contributors need at least one documented contribution or source");
+  const kinds = [doc?.kind ?? "alum"].flat();
+  if (kinds.includes("contributor")) {
+    if (!doc.roles?.length) {
+      report(label, "contributors need at least one role");
+    }
+    if (!(doc.contributions?.length || doc.sources?.length)) {
+      report(label, "contributors need at least one documented contribution or source");
+    }
   }
   if (doc?.verification === "verified" && !doc.sources?.some((s) => s.url)) {
     report(label, 'verification "verified" needs a source with a url');
@@ -175,6 +181,17 @@ for (const { file, doc } of profiles) {
         file,
         `unknown organization "${ref.organization}" (add data/organizations/${ref.organization}.yaml)`
       );
+    }
+  }
+}
+const profileSlugs = new Set(profiles.map((p) => p.doc?.slug));
+for (const { file, doc } of profiles) {
+  for (const rel of doc?.related ?? []) {
+    if (!profileSlugs.has(rel.person)) {
+      report(file, `related person "${rel.person}" does not exist`);
+    }
+    if (rel.person === doc.slug) {
+      report(file, "a person can't be related to themselves");
     }
   }
 }

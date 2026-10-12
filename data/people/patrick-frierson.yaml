@@ -33,11 +33,15 @@ contributions:
     year: 2014
     venue: British Journal for the History of Philosophy
     doi: 10.1080/09608788.2014.960794
+    authors:
+      - Patrick R. Frierson
   - title: Maria Montessori's metaphysics of life
     type: article
     year: 2018
     venue: European Journal of Philosophy
     doi: 10.1111/ejop.12326
+    authors:
+      - Patrick Frierson
   - title: "Intellectual Agency and Virtue Epistemology: A Montessori Perspective"
     type: book
     year: 2020

@@ -264,10 +264,14 @@ function main() {
 
   // Denormalize organization names onto references so lists can show them
   // without loading the organization index on the client.
-  const orgNames = new Map(organizations.map((o) => [o.slug, o.name]));
+  const orgsBySlug = new Map(organizations.map((o) => [o.slug, o]));
   for (const profile of profiles) {
     for (const ref of [...(profile.schools ?? []), ...(profile.affiliations ?? [])]) {
-      ref.organizationName = orgNames.get(ref.organization) ?? ref.organization;
+      const org = orgsBySlug.get(ref.organization);
+      ref.organizationName = org?.name ?? ref.organization;
+      if (org?.shortName) {
+        ref.organizationShortName = org.shortName;
+      }
     }
   }
   const changes = snakeToCamel(yaml.load(fs.readFileSync(CHANGES_PATH, "utf8")) ?? []);

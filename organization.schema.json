@@ -10,8 +10,18 @@
       "pattern": "^tmo[0-9]{6}$",
       "description": "Permanent identifier (e.g. tmo000001). Never changes and is never reused."
     },
-    "name": { "type": "string" },
-    "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "name": {
+      "type": "string"
+    },
+    "short_name": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "A widely recognized abbreviation (e.g. AMI). Set only when it is established; never invented."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
     "type": {
       "type": "string",
       "enum": [
@@ -24,14 +34,29 @@
         "other"
       ]
     },
-    "name_variants": { "type": "array", "items": { "type": "string" } },
-    "description": { "type": "string", "maxLength": 500 },
+    "name_variants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500
+    },
     "location": {
       "type": "string",
       "description": "City and country, e.g. \"Amsterdam, Netherlands\""
     },
-    "founded": { "type": "integer", "minimum": 1000, "maximum": 2100 },
-    "website": { "type": "string", "format": "uri" },
+    "founded": {
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 2100
+    },
+    "website": {
+      "type": "string",
+      "format": "uri"
+    },
     "parent": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$",
@@ -40,11 +65,26 @@
     "identifiers": {
       "type": "object",
       "properties": {
-        "lcnaf": { "type": "string", "pattern": "^n[a-z]?[0-9]{8,10}$" },
-        "viaf": { "type": "string", "pattern": "^[0-9]+$" },
-        "wikidata": { "type": "string", "pattern": "^Q[0-9]+$" },
-        "ror": { "type": "string", "pattern": "^0[a-z0-9]{8}$" },
-        "isni": { "type": "string", "pattern": "^[0-9]{15}[0-9X]$" }
+        "lcnaf": {
+          "type": "string",
+          "pattern": "^n[a-z]?[0-9]{8,10}$"
+        },
+        "viaf": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "wikidata": {
+          "type": "string",
+          "pattern": "^Q[0-9]+$"
+        },
+        "ror": {
+          "type": "string",
+          "pattern": "^0[a-z0-9]{8}$"
+        },
+        "isni": {
+          "type": "string",
+          "pattern": "^[0-9]{15}[0-9X]$"
+        }
       },
       "additionalProperties": false
     }

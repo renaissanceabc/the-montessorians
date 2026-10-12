@@ -37,3 +37,7 @@ identifiers:
   viaf: "12564714"
   wikidata: Q3293508
   isni: "0000000110388983"
+related:
+  - person: maria-montessori
+    relation: parent
+    source: https://id.loc.gov/authorities/names/n78061985.html

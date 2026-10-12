@@ -34,21 +34,40 @@ contributions:
     year: 2006
     venue: Science
     doi: 10.1126/science.1132362
+    authors:
+      - Angeline Lillard
+      - Nicole Else-Quest
   - title: "Montessori Preschool Elevates and Equalizes Child Outcomes: A Longitudinal Study"
     type: article
     year: 2017
     venue: Frontiers in Psychology
     doi: 10.3389/fpsyg.2017.01783
+    authors:
+      - Angeline S. Lillard
+      - Megan J. Heise
+      - Eve M. Richey
+      - Xin Tong
+      - Alyssa Hart
+      - Paige M. Bray
   - title: "The impact of pretend play on children's development: A review of the evidence"
     type: article
     year: 2013
     venue: Psychological Bulletin
     doi: 10.1037/a0029321
+    authors:
+      - Angeline S. Lillard
+      - Matthew D. Lerner
+      - Emily J. Hopkins
+      - Rebecca A. Dore
+      - Eric D. Smith
+      - Carolyn M. Palmquist
   - title: Pretend Play Skills and the Child's Theory of Mind
     type: article
     year: 1993
     venue: Child Development
     doi: 10.2307/1131255
+    authors:
+      - Angeline S. Lillard
 sources:
   - type: authority
     url: https://id.loc.gov/authorities/names/n2004103917.html
