@@ -1,6 +1,10 @@
 ---
+id: tm0000012
 name: Friedensreich Hundertwasser
 slug: friedensreich-hundertwasser
+name_authorized: Hundertwasser, Friedensreich
+birth_year: 1928
+death_year: 2000
 tagline: Visionary artist and architect who rejected straight lines and embraced nature
 bio: >-
   Friedensreich Hundertwasser was a Viennese painter, architect, and environmentalist known for his colorful, organic
@@ -27,3 +31,17 @@ links:
     url: https://en.wikipedia.org/wiki/Friedensreich_Hundertwasser
   - type: website
     url: https://www.hundertwasser.com/
+sources:
+  - type: other
+    url: https://hundertwasser.com/en/biography
+    note: >-
+      Official biography: in 1936 attended the Montessori School in Vienna for one year; report praised his sense of
+      colour and form
+  - type: other
+    url: https://emuseum.mcmaster.ca/emuseum/people/1461/hundertwasser-friedensreich
+    note: "McMaster Museum biography: attended the Montessori School in Vienna for one year in 1936"
+verification: verified
+identifiers:
+  lcnaf: n50036736
+  viaf: "12426797"
+  wikidata: Q151836

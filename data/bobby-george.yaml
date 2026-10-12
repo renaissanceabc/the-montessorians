@@ -1,6 +1,8 @@
 ---
+id: tm0000064
 name: Bobby George
 slug: bobby-george
+name_authorized: George, Bobby
 tagline: Design-driven creative leader, co-founder and CEO of Lightning
 bio: >-
   Bobby George is the Co-Founder and CEO of Lightning. He was previously a co-founder and CEO at Montessorium, and
@@ -28,3 +30,7 @@ links:
     url: https://www.linkedin.com/in/bobbyjgeorge
   - type: x
     url: https://x.com/bobbyjgeorge
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

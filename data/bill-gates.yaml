@@ -1,6 +1,9 @@
 ---
+id: tm0000007
 name: Bill Gates
 slug: bill-gates
+name_authorized: Gates, Bill, 1955-
+birth_year: 1955
 tagline: Co-founder of Microsoft and philanthropist
 bio: >-
   Bill Gates is a technology pioneer and co-founder of Microsoft Corporation. He has significantly influenced the
@@ -21,3 +24,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Bill_Gates
+identifiers:
+  lcnaf: n91008414
+  viaf: "102370574"
+  wikidata: Q5284

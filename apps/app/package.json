@@ -1,9 +1,10 @@
 {
   "name": "app",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "content": "node scripts/generate-content.mjs",
-    "dev": "node scripts/generate-content.mjs && PORTLESS_TLD=ca portless --name montessorians.karel -- next dev --turbopack",
+    "dev": "node scripts/generate-content.mjs && portless --name montessorians -- next dev --turbopack",
     "dev:port": "node scripts/generate-content.mjs && next dev -p 3010 --turbopack",
     "build": "node scripts/generate-content.mjs && next build --turbopack",
     "start": "next start",
@@ -27,6 +28,7 @@
     "@repo/next-config": "workspace:*",
     "@repo/observability": "workspace:*",
     "@t3-oss/env-nextjs": "catalog:",
+    "botid": "^1.5.11",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "date-fns": "catalog:",

@@ -1,6 +1,9 @@
 ---
+id: tm0000041
 name: Prince William
 slug: prince-william
+name_authorized: William, Prince of Wales, 1982-
+birth_year: 1982
 tagline: Heir apparent to the British throne and advocate for conservation and mental health
 bio: >-
   Prince William, Prince of Wales, is the eldest son of King Charles III and the late Princess Diana. As the heir
@@ -22,3 +25,15 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/William,_Prince_of_Wales
+sources:
+  - type: article
+    url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries
+    note: Reports William and Harry were taught at a Montessori nursery at Mrs Mynors School in west London
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Prince_William,_Prince_of_Wales
+    note: Says he started at Jane Mynors' nursery school in London (does not call it Montessori)
+verification: verified
+identifiers:
+  lcnaf: n83035580
+  viaf: "232263808"
+  wikidata: Q36812

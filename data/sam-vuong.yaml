@@ -1,6 +1,8 @@
 ---
+id: tm0000042
 name: Sam Vuong
 slug: sam-vuong
+name_authorized: Vuong, Sam
 tagline: Founder of Renaissance and writer in alternative education
 bio: >-
   Sam Vuong is the co-founder of Renaissance, an education-focused startup studio working to bring greater education
@@ -26,3 +28,7 @@ links:
     url: https://www.linkedin.com/in/samjanevuong/
   - type: x
     url: https://x.com/samjvuong
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

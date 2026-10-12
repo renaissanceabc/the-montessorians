@@ -25,8 +25,13 @@ export const keys = () => {
       NEXT_RUNTIME: z.enum(["nodejs", "edge"]).optional(),
     },
     client: {
-      NEXT_PUBLIC_POSTHOG_HOST: z.string().min(1).url(),
-      NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
+      // Required on Vercel, optional locally (see @repo/analytics/keys).
+      NEXT_PUBLIC_POSTHOG_HOST: process.env.VERCEL
+        ? z.string().min(1).url()
+        : z.string().min(1).url().optional(),
+      NEXT_PUBLIC_POSTHOG_KEY: process.env.VERCEL
+        ? z.string().min(1)
+        : z.string().min(1).optional(),
       NEXT_PUBLIC_SENTRY_DSN: z.string().min(1).url().optional(),
     },
     runtimeEnv: {

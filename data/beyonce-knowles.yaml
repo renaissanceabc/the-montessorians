@@ -1,6 +1,9 @@
 ---
+id: tm0000006
 name: Beyoncé Knowles
 slug: beyonce-knowles
+name_authorized: Knowles, Beyoncé Giselle
+birth_year: 1981
 tagline: Global music icon and business mogul redefining modern pop culture
 bio: >-
   Beyoncé Knowles is a Grammy-winning singer, actress, and entrepreneur, widely recognized as one of the most
@@ -26,3 +29,17 @@ links:
     url: https://en.wikipedia.org/wiki/Beyonc%C3%A9
   - type: website
     url: https://www.beyonce.com/
+schools:
+  - organization: st-mary-of-the-purification-montessori-school
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Beyonc%C3%A9
+    note: Says she began her education at St. Mary's Montessori School in Houston and took dance classes there
+  - type: article
+    url: https://afrotech.com/beyonces-father-recalls-defending-daughter-against-naysayers
+    note: Mathew Knowles recalls her at St. Mary of the Purification, a Montessori school where he sat on the board
+verification: verified
+identifiers:
+  lcnaf: no00017294
+  viaf: "48766193"
+  wikidata: Q36153

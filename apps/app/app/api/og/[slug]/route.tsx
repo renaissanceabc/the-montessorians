@@ -39,8 +39,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
 
   try {
     const profile = getProfileBySlug(slug);
-    if (!profile?.imageUrl) {
+    if (!profile) {
       return new Response(null, { status: 404 });
+    }
+    if (!profile.imageUrl) {
+      return generateFallbackResponse(slug);
     }
 
     const [backgroundImageUrl, profileImageUrl] = await Promise.all([

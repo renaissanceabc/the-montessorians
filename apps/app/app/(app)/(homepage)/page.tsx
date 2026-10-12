@@ -5,6 +5,7 @@ import { getDailyProfile, getEasternDate } from "@/lib/content/daily";
 import { getProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
+import ContributorsBand from "./components/contributors-band";
 import Hero from "./components/hero";
 import ProfilesHomepageList from "./components/profiles-list";
 
@@ -22,7 +23,8 @@ export const generateMetadata = () => {
 };
 
 export default function Home() {
-  const profiles = getProfiles({ limit: 10 });
+  const profiles = getProfiles({ limit: 10, kind: "alum" });
+  const contributors = getProfiles({ limit: 6, kind: "contributor" });
   const dailyProfile = getDailyProfile(getEasternDate());
 
   return (
@@ -43,6 +45,8 @@ export default function Home() {
           <ProfilesHomepageList profiles={profiles} />
         </div>
       </div>
+
+      <ContributorsBand contributors={contributors} />
 
       <Contribute />
     </>

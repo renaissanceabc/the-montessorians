@@ -1,6 +1,9 @@
 ---
+id: tm0000025
 name: John Cusack
 slug: john-cusack
+name_authorized: Cusack, John
+birth_year: 1966
 tagline: Actor and screenwriter known for iconic roles in cult classics
 bio: >-
   John Cusack is an American actor and screenwriter known for his roles in films like "Say Anything," "High Fidelity,"
@@ -20,3 +23,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/John_Cusack
+identifiers:
+  lcnaf: n95111489
+  viaf: "85338940"
+  wikidata: Q106175

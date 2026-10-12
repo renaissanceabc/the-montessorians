@@ -69,3 +69,26 @@ export const getShareUrl = (
   const params = config.buildParams(decoratedUrl, shareText);
   return `${config.baseUrl}?${params}`;
 };
+
+export const REPO_URL = "https://github.com/renaissanceabc/the-montessorians";
+
+/** A prefilled GitHub issue from one of the issue forms in .github/ISSUE_TEMPLATE. */
+export function githubIssueUrl(
+  template: string,
+  fields: Record<string, string | undefined>
+): string {
+  const params = new URLSearchParams({ template });
+  for (const [key, value] of Object.entries(fields)) {
+    if (value) {
+      params.set(key, value);
+    }
+  }
+  return `${REPO_URL}/issues/new?${params.toString()}`;
+}
+
+export function correctionUrl(profile: { id: string; name: string }): string {
+  return githubIssueUrl("04_correction.yml", {
+    title: `Correction: ${profile.name} (${profile.id})`,
+    record: profile.id,
+  });
+}

@@ -1,0 +1,65 @@
+---
+id: tm0000067
+name: Maria Montessori
+slug: maria-montessori
+kind: contributor
+roles:
+  - founder
+  - author
+pinned: true
+name_authorized: Montessori, Maria, 1870-1952
+birth_year: 1870
+death_year: 1952
+tagline: Physician and educator who created the Montessori method
+bio: >-
+  Maria Montessori was an Italian physician and educator who developed the Montessori method of education. After opening
+  her first Casa dei Bambini in Rome in 1907, she wrote widely on children's development, including The Montessori
+  Method, The Secret of Childhood, and The Absorbent Mind. In 1929 she founded the Association Montessori Internationale
+  with her son Mario to carry her work forward.
+tags:
+  - physician
+  - educator
+  - author
+montessori_notes: Created the Montessori method and founded the Association Montessori Internationale.
+affiliations:
+  - organization: association-montessori-internationale
+    role: Founder
+    from: 1929
+contributions:
+  - title: Il metodo della pedagogia scientifica applicato all'educazione infantile nelle case dei bambini
+    type: book
+    year: 1909
+    url: https://openlibrary.org/works/OL22982339W
+  - title: The Montessori Method
+    type: book
+    year: 1912
+    url: https://www.gutenberg.org/ebooks/39863
+  - title: Dr. Montessori's Own Handbook
+    type: book
+    year: 1914
+    url: https://www.gutenberg.org/ebooks/29635
+  - title: The Secret of Childhood
+    type: book
+    year: 1936
+    url: https://www.wikidata.org/wiki/Q106254567
+  - title: The Absorbent Mind
+    type: book
+    year: 1949
+    url: https://www.wikidata.org/wiki/Q138413751
+sources:
+  - type: authority
+    url: https://id.loc.gov/authorities/names/n79064558.html
+    note: Library of Congress name authority record
+  - type: article
+    url: https://montessori-ami.org/resource-library/facts/timeline-maria-montessoris-life
+    note: AMI's timeline of Maria Montessori's life
+verification: verified
+identifiers:
+  lcnaf: n79064558
+  viaf: "99929837"
+  wikidata: Q131117
+  isni: "0000000121450228"
+  snac: w6jb70hm
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Maria_Montessori

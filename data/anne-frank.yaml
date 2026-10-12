@@ -1,6 +1,10 @@
 ---
+id: tm0000003
 name: Anne Frank
 slug: anne-frank
+name_authorized: Frank, Anne
+birth_year: 1929
+death_year: 1945
 tagline: Teenage diarist of the Holocaust whose words outlived war
 bio: >-
   Anne Frank was a Jewish teenager whose diary chronicled her life in hiding during the Nazi occupation of the
@@ -24,3 +28,20 @@ links:
     url: https://en.wikipedia.org/wiki/Anne_Frank
   - type: website
     url: https://www.annefrank.org/en/anne-frank/
+schools:
+  - organization: 6e-montessorischool-anne-frank
+    level: primary
+    from: 1934
+    to: 1941
+sources:
+  - type: article
+    url: https://research.annefrank.org/en/gebeurtenissen/7580b697-5097-4ee5-8537-44e9928396de/
+    note: "Anne Frank House research: from 1934 she attended the kindergarten of the 6th Montessori School, Amsterdam"
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/6th_Montessori_School_Anne_Frank
+    note: School renamed for Anne Frank, a former pupil, in 1957; Jewish pupils forced out in 1941
+verification: verified
+identifiers:
+  lcnaf: n79125789
+  viaf: "27064673"
+  wikidata: Q4583

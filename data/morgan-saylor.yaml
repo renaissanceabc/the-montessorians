@@ -1,6 +1,9 @@
 ---
+id: tm0000035
 name: Morgan Saylor
 slug: morgan-saylor
+name_authorized: Saylor, Morgan
+birth_year: 1994
 tagline: Actress best known for her breakout role in "Homeland"
 bio: >-
   Morgan Saylor is an American actress best known for playing Dana Brody in the Showtime series "Homeland." She has
@@ -21,3 +24,13 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Morgan_Saylor
+sources:
+  - type: other
+    url: >-
+      https://www.thecityceleb.com/biography/celebrity/actress/morgan-saylor-biography-net-worth-age-boyfriend-parents-height-movies-awards-wikipedia/
+    note: Celebrity bio site says she attended Montessori programs through eighth grade before Decatur High School
+verification: reported
+identifiers:
+  lcnaf: no2012136529
+  viaf: "279559280"
+  wikidata: Q6911832

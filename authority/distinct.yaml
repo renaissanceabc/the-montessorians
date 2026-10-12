@@ -1,0 +1,5 @@
+# Pairs of records with similar names that are confirmed to be different
+# people. Listing a pair here silences the validator's duplicate warning.
+
+- [joan-cusack, john-cusack]
+- [maria-montessori, mario-m-montessori]

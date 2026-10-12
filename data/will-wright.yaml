@@ -1,6 +1,9 @@
 ---
+id: tm0000049
 name: Will Wright
 slug: will-wright
+name_authorized: Wright, Will
+birth_year: 1960
 tagline: Visionary game designer and creator of The Sims
 bio: >-
   Will Wright is a pioneering video game designer and co-founder of Maxis, best known for creating the iconic simulation
@@ -27,4 +30,16 @@ quotes:
     they will abstract from it principles of urban design."
 links:
   - type: wikipedia
-    url: https://en.wikipedia.org/wiki/Will_Wright
+    url: https://en.wikipedia.org/wiki/Will_Wright_(game_designer)
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Will_Wright_(game_designer)
+    note: Says he attended a Montessori school until age nine
+  - type: article
+    url: https://kotaku.com/maria-montessori-the-138-year-old-inspiration-behind-s-5164248
+    note: Says Wright attended a Montessori elementary school in Atlanta and credits it in his game design
+verification: verified
+identifiers:
+  lcnaf: n2008018258
+  viaf: "10057254"
+  wikidata: Q309493

@@ -1,6 +1,9 @@
 ---
+id: tm0000014
 name: George Clooney
 slug: george-clooney
+name_authorized: Clooney, George
+birth_year: 1961
 tagline: Oscar-winning actor and humanitarian with global impact
 bio: >-
   George Clooney is an acclaimed American actor, director, producer, and humanitarian. Rising to fame through his role
@@ -22,8 +25,10 @@ notable_achievements:
   - Academy Award for Best Supporting Actor ("Syriana")
   - Academy Award for Best Picture ("Argo")
   - Co-founder of the Clooney Foundation for Justice
-quotes:
-  - "Turns out Montessori's approach—unfolding students, not molding them—guides the most successful teachers"
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/George_Clooney
+identifiers:
+  lcnaf: no96040669
+  viaf: "14928451"
+  wikidata: Q23844

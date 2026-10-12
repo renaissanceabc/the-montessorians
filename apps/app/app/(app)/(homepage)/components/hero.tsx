@@ -1,6 +1,5 @@
 import { LayoutGridIcon } from "lucide-react";
 import Link from "next/link";
-import { GitHubIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import type { Profile } from "@/lib/content/types";
 import FeaturedProfile from "./featured-profile";
@@ -13,11 +12,11 @@ export default function Hero({ dailyProfile }: { dailyProfile: Profile | null })
           <div className="flex w-full flex-col gap-2 text-center sm:text-left">
             <h1 className="font-bold font-serif text-4xl sm:text-5xl">
               Discover extraordinary
-              <br className="block md:hidden" /> Montessori alumni
+              <br className="block md:hidden" /> Montessorians
             </h1>
             <p className="text-sm text-stone-600 sm:max-w-100">
-              Daily spotlight and a growing directory of Montessori alumni who've gone on to do
-              great things. <strong>Open source</strong>.
+              Daily spotlight on Montessori alumni doing great things, and the people who shaped the
+              field. <strong>Open source</strong>.
             </p>
           </div>
 
@@ -30,14 +29,7 @@ export default function Hero({ dailyProfile }: { dailyProfile: Profile | null })
             </Button>
 
             <Button asChild className="border-black/10 shadow-none" size="lg" variant="outline">
-              <Link
-                href="https://github.com/renaissanceabc/the-montessorians"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <GitHubIcon className="h-4 w-4" />
-                Contribute
-              </Link>
+              <Link href="/contribute">Contribute</Link>
             </Button>
           </div>
         </div>

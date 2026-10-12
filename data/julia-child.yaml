@@ -1,6 +1,10 @@
 ---
+id: tm0000027
 name: Julia Child
 slug: julia-child
+name_authorized: Child, Julia
+birth_year: 1912
+death_year: 2004
 tagline: Beloved chef who brought French cuisine to American kitchens
 bio: >-
   Julia Child was an American chef, author, and television personality best known for making French cooking accessible
@@ -22,3 +26,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Julia_Child
+identifiers:
+  lcnaf: n79096956
+  viaf: "65286075"
+  wikidata: Q214477

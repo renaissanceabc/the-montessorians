@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getAllOrganizations } from "@/lib/content/organizations";
 import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
 import { siteUrl } from "@/lib/utils";
 
@@ -11,7 +12,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(profile.addedAt),
     changeFrequency: "weekly" as const,
     priority: 0.6,
-    images: [`${siteUrl}/api/og/${profile.slug}.png`],
+    images: profile.imageUrl ? [`${siteUrl}/api/og/${profile.slug}.png`] : undefined,
+  }));
+
+  const organizationUrls = getAllOrganizations().map((org) => ({
+    url: `${siteUrl}/organizations/${org.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.4,
   }));
 
   const tagUrls = allTags.map((tag) => ({
@@ -52,7 +60,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.6,
     },
+    ...["contributors", "organizations", "contribute", "data"].map((path) => ({
+      url: `${siteUrl}/${path}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    })),
     ...profileUrls,
+    ...organizationUrls,
     ...tagUrls,
   ];
 }

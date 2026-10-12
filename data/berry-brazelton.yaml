@@ -1,6 +1,10 @@
 ---
+id: tm0000005
 name: Berry Brazelton
 slug: berry-brazelton
+name_authorized: Brazelton, T. Berry
+birth_year: 1918
+death_year: 2018
 tagline: Renowned pediatrician who revolutionized early childhood care
 bio: >-
   Dr. T. Berry Brazelton was an influential American pediatrician, author, and researcher best known for creating the
@@ -24,3 +28,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/T._Berry_Brazelton
+identifiers:
+  lcnaf: n79148104
+  viaf: "102065416"
+  wikidata: Q3106664

@@ -1,6 +1,9 @@
 ---
+id: tm0000023
 name: Joan Cusack
 slug: joan-cusack
+name_authorized: Cusack, Joan
+birth_year: 1962
 tagline: Academy Award-nominated actress known for wit and range
 bio: >-
   Joan Cusack is an American actress known for her quirky, heartfelt performances in both comedic and dramatic roles.
@@ -22,3 +25,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Joan_Cusack
+identifiers:
+  lcnaf: n92054235
+  viaf: "19877967"
+  wikidata: Q272946

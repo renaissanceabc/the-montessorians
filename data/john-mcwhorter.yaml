@@ -1,5 +1,8 @@
+id: tm0000056
 name: John McWhorter
 slug: john-mcwhorter
+name_authorized: McWhorter, John H.
+birth_year: 1965
 tagline: American linguist, professor at Columbia University, author, and social commentator
 bio: >-
   John McWhorter is an influential American academic and one of the foremost public intellectuals on topics of language
@@ -30,3 +33,17 @@ links:
     url: https://johnmcwhorter.substack.com/
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/John_McWhorter
+sources:
+  - type: article
+    url: https://stanfordmag.org/contents/word-nerd
+    note: Stanford Magazine (Dec 2020) says he attended integrated Quaker and Montessori schools
+  - type: article
+    url: https://www.babbel.com/en/magazine/6-questions-with-john-mcwhorter-transcript
+    note: >-
+      McWhorter mentions Hebrew school was held in the same building as his Montessori school, growing up in
+      Philadelphia
+verification: verified
+identifiers:
+  lcnaf: n96026351
+  viaf: "100310457"
+  wikidata: Q2468338

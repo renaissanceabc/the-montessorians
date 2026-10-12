@@ -1,5 +1,7 @@
+id: tm0000059
 name: Caroline Jevon
 slug: caroline-jevon
+name_authorized: Jevon, Caroline
 tagline: Lead Content Creator for the U.S. Department of State
 bio: >-
   Caroline Jevon serves as the Lead Content Creator for the U.S. Department of State's Bureau of Global Public Affairs.
@@ -25,3 +27,12 @@ notable_achievements:
 links:
   - type: website
     url: https://www.chiaravalle.org/community/alumni/caroline
+schools:
+  - organization: chiaravalle-montessori
+    level: elementary
+    to: 2011
+sources:
+  - type: other
+    url: https://www.chiaravalle.org/community/alumni/caroline
+    note: "School alumni profile: Chiaravalle class of 2011, attended lower elementary through middle school"
+verification: verified

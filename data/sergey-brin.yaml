@@ -1,6 +1,9 @@
 ---
+id: tm0000044
 name: Sergey Brin
 slug: sergey-brin
+name_authorized: Brin, Sergey
+birth_year: 1973
 tagline: Co-founder of Google and pioneer of internet search
 bio: >-
   Sergey Brin is a computer scientist and entrepreneur who co-founded Google alongside Larry Page. A key figure in
@@ -25,3 +28,16 @@ quotes:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Sergey_Brin
+schools:
+  - organization: paint-branch-montessori-school
+    level: elementary
+sources:
+  - type: article
+    url: https://fortune.com/2023/11/14/the-geek-way-book-excerpt-larry-page-sergey-brin-jeff-bezos-montessori
+    note:
+      Book excerpt says Brin, like Page, attended Montessori and both credited it in a 2004 Barbara Walters interview
+verification: verified
+identifiers:
+  lcnaf: no2005073928
+  viaf: "120111435"
+  wikidata: Q92764

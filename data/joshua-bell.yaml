@@ -1,6 +1,9 @@
 ---
+id: tm0000026
 name: Joshua Bell
 slug: joshua-bell
+name_authorized: Bell, Joshua
+birth_year: 1967
 tagline: World-renowned violinist with a career spanning concert halls and film scores
 bio: >-
   Joshua Bell is an internationally acclaimed violinist celebrated for his technical brilliance and emotional depth. He
@@ -24,3 +27,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Joshua_Bell
+identifiers:
+  lcnaf: nr88012889
+  viaf: "115769026"
+  wikidata: Q312792

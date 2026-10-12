@@ -15,8 +15,9 @@ function hash(str: string): number {
 
 // A fixed pseudo-random rotation order (independent of the alphabetical display
 // order), deterministic across builds. The daily feature walks this in order,
-// so every profile is featured once before any repeats.
-const ROTATION: Profile[] = [...getAllProfiles()].sort((a, b) => {
+// so every profile is featured once before any repeats. "Today's Montessorian"
+// spotlights alumni only.
+const ROTATION: Profile[] = [...getAllProfiles("alum")].sort((a, b) => {
   const diff = hash(a.slug) - hash(b.slug);
   return diff === 0 ? a.slug.localeCompare(b.slug) : diff;
 });

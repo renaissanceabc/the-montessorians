@@ -1,6 +1,9 @@
 ---
+id: tm0000015
 name: Heike Makatsch
 slug: heike-makatsch
+name_authorized: Makatsch, Heike
+birth_year: 1971
 tagline: German actress and singer known for "Love Actually" and "Resident Evil"
 bio: >-
   Heike Makatsch is a German actress and singer who gained international recognition for her roles in "Love Actually"
@@ -21,3 +24,15 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Heike_Makatsch
+sources:
+  - type: wikipedia
+    url: https://de.wikipedia.org/wiki/Heike_Makatsch
+    note: German Wikipedia says she attended the Montessori primary school, then the Max-Planck-Gymnasium in Düsseldorf
+  - type: other
+    url: https://last.fm/de/music/Heike+Makatsch/+wiki
+    note: Bio says she attended the Montessori-Grundschule am Farnweg in Düsseldorf
+verification: verified
+identifiers:
+  lcnaf: no2003056555
+  viaf: "118979992"
+  wikidata: Q62510

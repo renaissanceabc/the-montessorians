@@ -1,6 +1,8 @@
 ---
+id: tm0000002
 name: Anita Hanks
 slug: anita-hanks
+name_authorized: Hanks, Anita
 tagline: Montessori leader and educator; President of the American Montessori Society
 bio: >-
   Anita Hanks is a lifelong Montessori educator and advocate, currently serving as President of the American Montessori
@@ -25,3 +27,9 @@ notable_achievements:
 links:
   - type: website
     url: https://amshq.org/About-AMS/Board-of-Directors/Anita-Hanks
+sources:
+  - type: article
+    url: >-
+      https://amshq.org/blog/announcements/meet-anita-hanks-ams-board-president-a-montessori-journey-and-the-path-forward/
+    note: "AMS profile: her mother enrolled Anita and her sister in a local Montessori school in Dallas"
+verification: verified

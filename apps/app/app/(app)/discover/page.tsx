@@ -19,8 +19,8 @@ export default function Profiles() {
   // The full dataset is tiny — ship it once and filter/sort/search on the
   // client. Initial filter state is read from the URL inside the wrapper, so
   // this page stays fully static.
-  const profiles = getAllProfiles();
-  const tagsList = getAllTags(DEFAULT_TAGS_FILTERS).data;
+  const profiles = getAllProfiles("alum");
+  const tagsList = getAllTags(DEFAULT_TAGS_FILTERS, "alum").data;
 
-  return <ProfilesPageWrapper profiles={profiles} tags={tagsList} />;
+  return <ProfilesPageWrapper kind="alum" profiles={profiles} tags={tagsList} />;
 }

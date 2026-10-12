@@ -3,10 +3,10 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GitHubIcon } from "@/components/icons";
 
 const links = [
   { href: "/discover", label: "Discover" },
+  { href: "/contributors", label: "Contributors" },
   { href: "/about", label: "About" },
 ];
 
@@ -49,12 +49,9 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            className="hidden flex-row items-center gap-2 font-semibold text-base transition-colors hover:underline sm:flex"
-            href="https://github.com/renaissanceabc/the-montessorians"
-            rel="noopener noreferrer"
-            target="_blank"
+            className="hidden rounded-md border border-black/20 px-3 py-1.5 font-semibold text-base transition-colors hover:border-black/50 hover:bg-white/50 sm:flex"
+            href="/contribute"
           >
-            <GitHubIcon className="h-4 w-4" />
             Contribute
           </Link>
         </div>

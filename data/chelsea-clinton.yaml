@@ -1,6 +1,9 @@
 ---
+id: tm0000008
 name: Chelsea Clinton
 slug: chelsea-clinton
+name_authorized: Clinton, Chelsea, 1980-
+birth_year: 1980
 tagline: Advocate for public health and education
 bio: >-
   Chelsea Clinton is an American author and global health advocate. As vice chair of the Clinton Foundation, she focuses
@@ -21,3 +24,12 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Chelsea_Clinton
+sources:
+  - type: other
+    url: https://main-cm-prod.amshq.org/Educators/Events/Superintendents-Day-2021/Chelsea-Clinton
+    note: American Montessori Society keynote bio describes her as a former Montessori student
+verification: verified
+identifiers:
+  lcnaf: n94073291
+  viaf: "26295145"
+  wikidata: Q229671

@@ -1,6 +1,10 @@
 ---
+id: tm0000019
 name: Jacqueline Kennedy Onassis
 slug: jacqueline-kennedy-onassis
+name_authorized: Onassis, Jacqueline Kennedy
+birth_year: 1929
+death_year: 1994
 tagline: Former First Lady and literary editor
 bio: >-
   Jacqueline Kennedy Onassis was the First Lady of the United States from 1961 to 1963, known for her style, elegance,
@@ -22,3 +26,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Jacqueline_Kennedy_Onassis
+identifiers:
+  lcnaf: n50002974
+  viaf: "117604909"
+  wikidata: Q165421

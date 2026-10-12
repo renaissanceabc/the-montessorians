@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import type { Tag } from "@/lib/content/types";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
 import { cn } from "@/lib/utils";
-import type { Tag } from "@/lib/content/types";
 
 export function TagsPopoverContent({
   selectedTags,

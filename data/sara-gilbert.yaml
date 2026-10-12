@@ -1,0 +1,34 @@
+---
+id: tm0000043
+name: Sara Gilbert
+slug: sara-gilbert
+name_authorized: Gilbert, Sara
+birth_year: 1975
+tagline: Actress and producer known for "Roseanne" and "The Talk"
+bio: >-
+  Sara Gilbert is an American actress and producer best known for her role as Darlene Conner on the sitcom "Roseanne"
+  and as co-creator and host of the daytime talk show "The Talk."
+tags:
+  - actor
+  - producer
+  - television
+education:
+  - montessori
+education_notes: >-
+  Sara Gilbert attended a Montessori school in the United States alongside her sister Melissa.
+notable_achievements:
+  - Starred in "Roseanne" and "The Conners"
+  - Co-creator and host of "The Talk"
+  - Emmy-nominated television personality
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Sara_Gilbert
+sources:
+  - type: other
+    url: https://woodlandhill.org/who-we-are/our-alumni/famous-alumni
+    note: Montessori school's promotional list names 'Melissa and Sarah Gilbert' among those who attended Montessori
+verification: reported
+identifiers:
+  lcnaf: no97013060
+  viaf: "21744622"
+  wikidata: Q231405

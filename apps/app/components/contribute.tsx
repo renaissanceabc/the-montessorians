@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { GitHubIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
 export default function Contribute() {
@@ -11,8 +10,8 @@ export default function Contribute() {
         <div className="flex w-full flex-col items-center gap-2 text-center">
           <h1 className="font-bold font-serif text-3xl sm:text-4xl">Contribute to the directory</h1>
           <p className="text-muted-foreground text-sm sm:max-w-lg">
-            The Montessorians is the largest open source dataset of Montessori alumni. Help us grow
-            by adding your Montessori story.
+            The Montessorians is the largest open source dataset of Montessori alumni and the people
+            who shaped the field. Help us grow by adding someone you know, or yourself.
           </p>
         </div>
 
@@ -23,14 +22,7 @@ export default function Contribute() {
             size="lg"
             variant="outline"
           >
-            <Link
-              href="https://github.com/renaissanceabc/the-montessorians"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <GitHubIcon className="h-4 w-4" />
-              Contribute
-            </Link>
+            <Link href="/contribute">Add a Montessorian</Link>
           </Button>
         </div>
       </div>

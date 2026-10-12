@@ -1,6 +1,10 @@
 ---
+id: tm0000037
 name: Peter Bergmann
 slug: peter-bergmann
+name_authorized: Bergmann, Peter G. (Peter Gabriel)
+birth_year: 1915
+death_year: 2002
 tagline: Theoretical physicist and assistant to Albert Einstein
 bio: >-
   Peter Bergmann was a German-American theoretical physicist who collaborated with Albert Einstein on the general theory
@@ -20,3 +24,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Peter_Bergmann
+identifiers:
+  lcnaf: n50007489
+  viaf: "59214970"
+  wikidata: Q96809

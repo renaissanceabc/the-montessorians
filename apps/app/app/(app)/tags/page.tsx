@@ -26,7 +26,7 @@ export default function TagsPage() {
           Tags
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-1">
           {tags.length === 0 && <p className="text-muted-foreground">No tags found.</p>}
           {tags.map((tag) => (
             <Link href={`/tags/${tag.slug}`} key={tag.slug}>

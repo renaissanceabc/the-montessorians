@@ -1,6 +1,10 @@
 ---
+id: tm0000024
 name: John Bradshaw
 slug: john-bradshaw
+name_authorized: Bradshaw, John
+birth_year: 1933
+death_year: 2016
 tagline: Pioneer of inner child healing and bestselling author on emotional recovery
 bio: >-
   John Bradshaw was an influential American educator, counselor, author, and speaker best known for popularizing the
@@ -30,3 +34,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/John_Bradshaw_(author)
+identifiers:
+  lcnaf: n87873062
+  viaf: "86595748"
+  wikidata: Q1699390

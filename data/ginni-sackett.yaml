@@ -1,0 +1,29 @@
+---
+id: tm0000072
+name: Ginni Sackett
+slug: ginni-sackett
+kind: contributor
+roles:
+  - trainer
+name_authorized: Sackett, Ginni
+tagline: AMI trainer and former Director of Pedagogy at the Association Montessori Internationale
+bio: >-
+  Ginni Sackett is an AMI trainer, consultant, and examiner at the 3–6 level. She was 3–6 Director of Training at
+  Montessori Northwest in Portland, Oregon, until 2017, and served as AMI's Director of Pedagogy from 2018 to 2021.
+tags:
+  - trainer
+  - educator
+montessori_notes: Trains Montessori teachers for the 3–6 age range.
+affiliations:
+  - organization: association-montessori-internationale
+    role: Director of Pedagogy
+    from: 2018
+    to: 2021
+  - organization: montessori-northwest
+    role: 3–6 Director of Training
+    to: 2017
+sources:
+  - type: article
+    url: https://www.amiusa.org/pedagogical-articles-by-ami-trainers
+    note: AMI/USA biography of AMI trainers
+verification: verified

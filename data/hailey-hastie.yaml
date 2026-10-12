@@ -1,6 +1,8 @@
 ---
+id: tm0000054
 name: Hailey Hastie
 slug: hailey-hastie
+name_authorized: Hastie, Hailey
 tagline: Founder & CEO of The Social Soulpreneur, a full-service marketing agency
 bio: >-
   Hailey Hastie is the founder and CEO of The Social Soulpreneur, a full-service marketing agency based in Sudbury,
@@ -30,3 +32,7 @@ links:
     url: https://www.instagram.com/haileyhastie/
   - type: article
     url: https://www.sudbury.com/success/success-girl-boss-hailey-hastie-loves-what-she-does-6287900
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

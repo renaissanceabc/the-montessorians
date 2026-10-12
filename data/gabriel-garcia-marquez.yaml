@@ -1,6 +1,10 @@
 ---
+id: tm0000013
 name: Gabriel García Márquez
 slug: gabriel-garcia-marquez
+name_authorized: García Márquez, Gabriel
+birth_year: 1927
+death_year: 2014
 tagline: Nobel Prize-winning author who pioneered magical realism
 bio: >-
   Gabriel García Márquez was a Colombian novelist, journalist, and screenwriter, best known for popularizing the
@@ -27,3 +31,21 @@ quotes:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez
+schools:
+  - organization: colegio-montessori-de-aracataca
+    level: primary
+    from: 1934
+    to: 1936
+sources:
+  - type: article
+    url: >-
+      https://www.infobae.com/historias/2025/08/29/el-metodo-montessori-que-marco-la-vida-de-gabriel-garcia-marquez-y-revelo-su-genio-literario/
+    note: Says he began school in 1934 at the Montessori school in Aracataca, directed by Rosa Elena Fergusson
+  - type: article
+    url: https://www.laprensa.hn/mundo/biografia-de-gabriel-garcia-marquez-IGLP653913
+    note: Biography says he learned to write at the Montessori school of Aracataca under teacher Rosa Elena Fergusson
+verification: verified
+identifiers:
+  lcnaf: n79063441
+  viaf: "54147956"
+  wikidata: Q5878

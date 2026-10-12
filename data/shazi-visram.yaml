@@ -1,6 +1,8 @@
 ---
+id: tm0000045
 name: Shazi Visram
 slug: shazi-visram
+name_authorized: Visram, Shazi
 tagline: Founder of Happy Family Organics and impact investor
 bio: >-
   Shazi Visram is an American entrepreneur and philanthropist, best known for founding Happy Family Organics, a leading
@@ -23,3 +25,7 @@ links:
     url: https://en.wikipedia.org/wiki/Shazi_Visram
   - type: website
     url: https://www.happyfamilyorganics.com
+identifiers:
+  lcnaf: no2016127637
+  viaf: "59147663008460551562"
+  wikidata: Q7491733

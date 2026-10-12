@@ -1,6 +1,9 @@
 ---
+id: tm0000021
 name: Jeff Bezos
 slug: jeff-bezos
+name_authorized: Bezos, Jeff
+birth_year: 1964
 tagline: Tech visionary and founder of Amazon
 bio: >-
   Jeff Bezos is the founder of Amazon and one of the most influential entrepreneurs of the digital era. Under his
@@ -27,3 +30,20 @@ quotes:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Jeff_Bezos
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jeff_Bezos
+    note: Says he attended a Montessori school in Albuquerque at age two
+  - type: article
+    url: https://www.sacurrent.com/?p=309162
+    note: >-
+      Reports Bezos crediting his local Albuquerque Montessori preschool and recalling sandpaper letters in a Bezos
+      Academy video
+  - type: article
+    url: https://fortune.com/2023/11/14/the-geek-way-book-excerpt-larry-page-sergey-brin-jeff-bezos-montessori
+    note: Book excerpt says Bezos attended Montessori as a toddler; his mother recalled his intense absorption
+verification: verified
+identifiers:
+  lcnaf: n99280137
+  viaf: "1808007"
+  wikidata: Q312556

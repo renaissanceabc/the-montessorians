@@ -1,6 +1,9 @@
 ---
+id: tm0000022
 name: Jeremy Allaire
 slug: jeremy-allaire
+name_authorized: Allaire, Jeremy
+birth_year: 1971
 tagline: Tech entrepreneur and founder of Brightcove and Circle
 bio: >-
   Jeremy Allaire is an American technologist and entrepreneur known for founding Brightcove, a leading online video
@@ -24,3 +27,13 @@ links:
     url: https://en.wikipedia.org/wiki/Jeremy_Allaire
   - type: website
     url: https://www.circle.com/en/about
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jeremy_Allaire
+    note: Says he was educated in the Montessori tradition, citing his 2011 NYT Corner Office interview with Adam Bryant
+  - type: other
+    url: https://businessabc.net/wiki/jeremy-allaire
+    note: Profile says he was educated in the Montessori tradition, crediting it with self-direction and collaboration
+verification: verified
+identifiers:
+  wikidata: Q6181059

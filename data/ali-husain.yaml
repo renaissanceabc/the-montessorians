@@ -1,6 +1,8 @@
 ---
+id: tm0000062
 name: Ali Husain
 slug: ali-husain
+name_authorized: Husain, Ali
 tagline: Co-Founder and CEO of Navigate, data marketplace for AI agents and apps
 bio: >-
   Ali Husain is a versatile technology leader and computer scientist with expertise spanning artificial intelligence,
@@ -26,3 +28,7 @@ links:
     url: https://www.linkedin.com/in/ali-husain1/
   - type: x
     url: https://x.com/forgotmachine
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

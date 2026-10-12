@@ -1,6 +1,8 @@
 ---
+id: tm0000065
 name: David O'Hara
 slug: david-ohara
+name_authorized: O'Hara, David
 tagline: Professor of Philosophy, Classics & Environmental Studies at Augustana University
 bio: >-
   Dr. David O'Hara teaches a variety of courses, including Ancient Philosophy, American Philosophy, Environmental Ethics
@@ -32,3 +34,7 @@ notable_achievements:
 links:
   - type: x
     url: https://x.com/Davoh
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

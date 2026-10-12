@@ -1,6 +1,9 @@
 ---
+id: tm0000050
 name: Yo-Yo Ma
 slug: yo-yo-ma
+name_authorized: Ma, Yo-Yo
+birth_year: 1955
 tagline: World-renowned cellist, United Nations Peace Ambassador, and winner of 19 Grammy Awards
 bio: >-
   Yo-Yo Ma is an acclaimed American cellist known for his extraordinary technique and deep musicality. A cultural
@@ -23,3 +26,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Yo-Yo_Ma
+identifiers:
+  lcnaf: n80016911
+  viaf: "27047399"
+  wikidata: Q234891

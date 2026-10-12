@@ -1,6 +1,8 @@
 ---
+id: tm0000031
 name: Lauren Kyle McDavid
 slug: lauren-kyle-mcdavid
+name_authorized: McDavid, Lauren Kyle
 tagline: Fashion and interior designer; founder of Kyle & Co Design Studio and Trove Living
 bio: >-
   Lauren Kyle McDavid is a Canadian interior designer and entrepreneur making a significant mark on the design
@@ -30,3 +32,7 @@ links:
     url: https://www.troveliving.ca/
   - type: instagram
     url: https://www.instagram.com/laurenkyle1/
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

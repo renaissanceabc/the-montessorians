@@ -1,6 +1,9 @@
 ---
+id: tm0000010
 name: David Blaine
 slug: david-blaine
+name_authorized: Blaine, David
+birth_year: 1973
 tagline: Magician and endurance artist redefining the limits of the human body
 bio: >-
   David Blaine is a magician, illusionist, and endurance artist known for his high-profile feats of physical and mental
@@ -26,3 +29,15 @@ links:
     url: https://en.wikipedia.org/wiki/David_Blaine
   - type: website
     url: https://davidblaine.com/
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/David_Blaine
+    note: Says he was raised by his mother and attended a Montessori school in Brooklyn
+  - type: other
+    url: https://www.mslf.org/famous-montessori-students
+    note: Montessori school page says he was a four-year-old Montessori student when he fell for magic
+verification: verified
+identifiers:
+  lcnaf: n2002103677
+  viaf: "65066869"
+  wikidata: Q353983

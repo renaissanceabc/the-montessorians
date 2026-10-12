@@ -2,18 +2,36 @@ import type { getProfilesOptions, getTagsOptions } from "@/lib/types";
 import { toTitleCase } from "@/lib/utils";
 import { filterAndSortProfiles } from "./filter";
 import rawProfiles from "./profiles.generated.json";
-import type { Profile, ProfilePage, RawProfile, Tag, TagWithCount } from "./types";
+import type { Profile, ProfileKind, ProfilePage, RawProfile, Tag, TagWithCount } from "./types";
 
 function enrich(raw: RawProfile): Profile {
   return {
+    id: raw.id,
     slug: raw.slug,
     name: raw.name,
+    kind: raw.kind ?? "alum",
+    roles: raw.roles ?? [],
+    pinned: raw.pinned ?? false,
+    nameAuthorized: raw.nameAuthorized ?? null,
+    nameVariants: raw.nameVariants ?? [],
+    birthYear: raw.birthYear ?? null,
+    deathYear: raw.deathYear ?? null,
     tagline: raw.tagline ?? null,
     bio: raw.bio ?? null,
     education: raw.education ?? [],
     educationNotes: raw.educationNotes ?? null,
+    schools: raw.schools ?? [],
+    montessoriNotes: raw.montessoriNotes ?? null,
+    affiliations: raw.affiliations ?? [],
+    contributions: raw.contributions ?? [],
     notableAchievements: raw.notableAchievements ?? [],
     quotes: raw.quotes ?? [],
+    sources: raw.sources ?? [],
+    verification: raw.verification ?? null,
+    status: raw.status ?? "provisional",
+    identifiers: raw.identifiers ?? {},
+    glossaryCitations: raw.glossaryCitations ?? [],
+    imageCredit: raw.imageCredit ?? null,
     imageUrl: raw.imageUrl ?? null,
     tags: (raw.tags ?? []).map((slug) => ({ slug, label: toTitleCase(slug) })),
     links: raw.links ?? [],
@@ -25,9 +43,14 @@ function enrich(raw: RawProfile): Profile {
 // is produced by scripts/generate-content.mjs and is already sorted by name.
 const ALL: Profile[] = (rawProfiles as RawProfile[]).map(enrich);
 const BY_SLUG = new Map(ALL.map((p) => [p.slug, p]));
+const BY_ID = new Map(ALL.map((p) => [p.id, p]));
 
-export function getAllProfiles(): Profile[] {
-  return ALL;
+export function getAllProfiles(kind?: ProfileKind): Profile[] {
+  return kind ? ALL.filter((p) => p.kind === kind) : ALL;
+}
+
+export function getProfileById(id: string): Profile | null {
+  return BY_ID.get(id) ?? null;
 }
 
 export function getProfileBySlug(slug: string): Profile | null {
@@ -53,10 +76,12 @@ export function getProfileWithAdjacent(slug: string): ProfilePage | null {
     return null;
   }
 
-  // Neighbors follow the alphabetical display order (ALL is sorted by name).
-  const idx = ALL.findIndex((p) => p.slug === slug);
-  const prev = idx > 0 ? ALL[idx - 1] : null;
-  const next = idx >= 0 && idx < ALL.length - 1 ? ALL[idx + 1] : null;
+  // Neighbors follow the alphabetical display order (ALL is sorted by name),
+  // within the same collection (alumni or contributors).
+  const siblings = ALL.filter((p) => p.kind === profile.kind);
+  const idx = siblings.findIndex((p) => p.slug === slug);
+  const prev = idx > 0 ? siblings[idx - 1] : null;
+  const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 
   return {
     profile,
@@ -69,9 +94,9 @@ export function getProfilesByTag(tagSlug: string): Profile[] {
   return ALL.filter((p) => p.tags.some((t) => t.slug === tagSlug));
 }
 
-export function getAllTags(options: getTagsOptions = {}): { data: Tag[] } {
+export function getAllTags(options: getTagsOptions = {}, kind?: ProfileKind): { data: Tag[] } {
   const map = new Map<string, string>();
-  for (const p of ALL) {
+  for (const p of getAllProfiles(kind)) {
     for (const t of p.tags) {
       map.set(t.slug, t.label);
     }

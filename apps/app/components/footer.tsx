@@ -7,6 +7,14 @@ const links = [
     href: "/discover",
   },
   {
+    label: "Contributors",
+    href: "/contributors",
+  },
+  {
+    label: "Organizations",
+    href: "/organizations",
+  },
+  {
     label: "Archive",
     href: "/archive",
   },
@@ -17,6 +25,10 @@ const links = [
   {
     label: "About",
     href: "/about",
+  },
+  {
+    label: "Data & API",
+    href: "/data",
   },
 ];
 
@@ -34,7 +46,7 @@ export default function Footer() {
                 the montessorians
               </Link>
 
-              <p className="text-sm text-white/60">Discover extraordinary Montessori alumni</p>
+              <p className="text-sm text-white/60">Discover extraordinary Montessorians</p>
             </div>
 
             <Badge

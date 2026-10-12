@@ -1,6 +1,10 @@
 ---
+id: tm0000029
 name: Katharine Graham
 slug: katharine-graham
+name_authorized: Graham, Katharine
+birth_year: 1917
+death_year: 2001
 tagline: Pioneering journalist and Pulitzer-winning publisher of The Washington Post
 bio: >-
   Katharine Graham was the publisher of The Washington Post during the Watergate scandal and the Pentagon Papers,
@@ -25,3 +29,12 @@ quotes:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Katharine_Graham
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Katharine_Graham
+    note: Says she attended a Montessori school until fourth grade, then enrolled at The Potomac School
+verification: verified
+identifiers:
+  lcnaf: n79109289
+  viaf: "115577779"
+  wikidata: Q435203

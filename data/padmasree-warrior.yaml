@@ -1,6 +1,8 @@
 ---
+id: tm0000036
 name: Padmasree Warrior
 slug: padmasree-warrior
+name_authorized: Warrior, Padmasree
 tagline: Tech executive and former CTO of Cisco; champion of innovation and leadership
 bio: >-
   Padmasree Warrior is a prominent technology executive and entrepreneur who has held leadership roles at major
@@ -32,3 +34,12 @@ links:
     url: https://en.wikipedia.org/wiki/Padmasree_Warrior
   - type: website
     url: https://fable.co/
+schools:
+  - organization: childrens-montessori-school-vijayawada
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Padmasree_Warrior
+    note: Says she went to school at the Children's Montessori School and Maris Stella College in Vijayawada
+verification: verified
+identifiers:
+  wikidata: Q55173

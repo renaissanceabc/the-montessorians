@@ -1,6 +1,10 @@
 ---
+id: tm0000051
 name: Yul Brynner
 slug: yul-brynner
+name_authorized: Brynner, Yul
+birth_year: 1920
+death_year: 1985
 tagline: Iconic actor best known for his Tony and Oscar-winning role in The King and I
 bio: >-
   Yul Brynner was a Russian-born actor whose commanding presence and distinctive look made him a legendary figure in
@@ -21,3 +25,7 @@ education_notes: >-
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Yul_Brynner
+identifiers:
+  lcnaf: n82115477
+  viaf: "6283699"
+  wikidata: Q102813

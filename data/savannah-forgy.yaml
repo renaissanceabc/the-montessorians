@@ -1,6 +1,8 @@
 ---
+id: tm0000057
 name: Savannah Forgy
 slug: savannah-forgy
+name_authorized: Forgy, Savannah
 tagline: Writer, filmmaker, and advocate for alternative education
 bio: >-
   Savannah Forgy is an 18-year-old writer, filmmaker, and a current Writing Fellow at the Foundation for Economic
@@ -28,3 +30,10 @@ links:
     url: https://x.com/savannahforgy
   - type: article
     url: https://fee.org/articles/the-birth-of-the-cole-summers-fellowship/
+sources:
+  - type: social
+    url: https://savannahforgy.substack.com/p/my-valedictorian-speech
+    note: >-
+      Her own post says she attended a small Montessori school in rural Illinois from age two until it closed when she
+      was eight
+verification: reported

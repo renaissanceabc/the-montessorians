@@ -1,0 +1,68 @@
+---
+id: tm0000071
+name: Patrick Frierson
+slug: patrick-frierson
+kind: contributor
+roles:
+  - philosopher
+  - author
+name_authorized: Frierson, Patrick R., 1974-
+name_variants:
+  - Patrick R. Frierson
+birth_year: 1974
+tagline: Philosopher writing on the moral philosophy and epistemology of Maria Montessori
+bio: >-
+  Patrick R. Frierson is the Paul Pigott and William M. Allen Professor of Philosophy at Whitman College. A scholar of
+  Kant, he has written extensively on the philosophy of Maria Montessori, including The Moral Philosophy of Maria
+  Montessori and Maria Montessori's Philosophy: Following the Child.
+tags:
+  - philosopher
+  - author
+montessori_notes: Writes on Maria Montessori as a philosopher, including her ethics, epistemology, and metaphysics.
+affiliations:
+  - organization: whitman-college
+    role: Paul Pigott and William M. Allen Professor of Philosophy
+contributions:
+  - title: Freedom and Anthropology in Kant's Moral Philosophy
+    type: book
+    year: 2003
+    venue: Cambridge University Press
+    isbn: "9780521824002"
+  - title: Maria Montessori's Epistemology
+    type: article
+    year: 2014
+    venue: British Journal for the History of Philosophy
+    doi: 10.1080/09608788.2014.960794
+  - title: Maria Montessori's metaphysics of life
+    type: article
+    year: 2018
+    venue: European Journal of Philosophy
+    doi: 10.1111/ejop.12326
+  - title: "Intellectual Agency and Virtue Epistemology: A Montessori Perspective"
+    type: book
+    year: 2020
+    venue: Bloomsbury
+    url: https://www.whitman.edu/academics/majors-and-programs/philosophy/faculty/patrick-frierson
+  - title: "The Moral Philosophy of Maria Montessori: Agency and the Structure of Ethical Life"
+    type: book
+    year: 2022
+    venue: Bloomsbury Academic
+    isbn: "9781350176379"
+  - title: "Maria Montessori's Philosophy: Following the Child"
+    type: book
+    year: 2025
+    venue: Oxford University Press
+    url: https://www.whitman.edu/academics/majors-and-programs/philosophy/faculty/patrick-frierson
+sources:
+  - type: authority
+    url: https://id.loc.gov/authorities/names/n2002112177.html
+    note: Library of Congress name authority record
+  - type: other
+    url: https://www.whitman.edu/academics/majors-and-programs/philosophy/faculty/patrick-frierson
+    note: Whitman College faculty page
+verification: verified
+identifiers:
+  lcnaf: n2002112177
+  viaf: "119242469"
+  wikidata: Q112466307
+  isni: "0000000110860395"

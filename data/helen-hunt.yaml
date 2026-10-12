@@ -1,6 +1,9 @@
 ---
+id: tm0000016
 name: Helen Hunt
 slug: helen-hunt
+name_authorized: Hunt, Helen
+birth_year: 1963
 tagline: Emmy and Oscar-winning actress known for range and emotional depth
 bio: >-
   Helen Hunt is an acclaimed American actress, director, and screenwriter best known for her roles in "Mad About You"
@@ -24,3 +27,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Helen_Hunt
+identifiers:
+  lcnaf: no96009636
+  viaf: "85594182"
+  wikidata: Q170574

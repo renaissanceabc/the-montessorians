@@ -1,6 +1,9 @@
 ---
+id: tm0000011
 name: Devi Sridhar
 slug: devi-sridhar
+name_authorized: Sridhar, Devi Lalita
+birth_year: 1984
 tagline: Global health expert and youngest American Rhodes Scholar
 bio: >-
   Devi Sridhar is a professor of global public health and a leading expert in health policy. She became the youngest
@@ -20,3 +23,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Devi_Sridhar
+identifiers:
+  lcnaf: nr2007013524
+  viaf: "31963888"
+  wikidata: Q64498584

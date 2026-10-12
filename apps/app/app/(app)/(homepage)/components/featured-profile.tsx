@@ -52,7 +52,7 @@ export default function FeaturedProfile({ dailyProfile }: { dailyProfile: Profil
             {dailyProfile.name}
           </span>
           <p className="text-muted-foreground text-sm">{dailyProfile.tagline}</p>
-          <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
+          <div className="flex flex-wrap justify-center gap-1">
             {dailyProfile.tags.slice(0, 3).map((tag) => (
               <Badge className="text-xs" key={tag.slug} variant="outline">
                 {tag.label}

@@ -1,6 +1,9 @@
 ---
+id: tm0000040
 name: Prince Harry
 slug: prince-harry
+name_authorized: Harry, Prince, Duke of Sussex, 1984-
+birth_year: 1984
 tagline: British royal, veteran, and advocate for mental health and veterans' issues
 bio: >-
   Prince Harry, Duke of Sussex, is a member of the British royal family and the younger son of King Charles III and
@@ -22,3 +25,15 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Prince_Harry,_Duke_of_Sussex
+sources:
+  - type: article
+    url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries
+    note: Reports William and Harry were taught at a Montessori nursery at Mrs Mynors School in west London
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Prince_Harry,_Duke_of_Sussex
+    note: Says he began at Jane Mynors' nursery school in London (does not call it Montessori)
+verification: verified
+identifiers:
+  lcnaf: n00140230
+  viaf: "102307639"
+  wikidata: Q152316

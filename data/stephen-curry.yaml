@@ -1,6 +1,9 @@
 ---
+id: tm0000046
 name: Stephen Curry
 slug: stephen-curry
+name_authorized: Curry, Stephen
+birth_year: 1988
 tagline: NBA superstar known for transforming the modern game
 bio: >-
   Stephen Curry is a professional basketball player for the Golden State Warriors and widely regarded as the greatest
@@ -22,3 +25,17 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Stephen_Curry
+schools:
+  - organization: christian-montessori-school-of-lake-norman
+sources:
+  - type: article
+    url: https://www.gospelherald.com/news/nba-mvp-stephen-curry-shining-example-success-christian-montessori-school-system
+    note: Reports Curry attended the Christian Montessori school his mother founded and credited it in a 2013 AMS video
+  - type: other
+    url: https://www.mslf.org/famous-montessori-students
+    note: Montessori school page quotes Curry saying Montessori gave him confidence at a young age
+verification: verified
+identifiers:
+  lcnaf: no2014060072
+  viaf: "308698264"
+  wikidata: Q352159

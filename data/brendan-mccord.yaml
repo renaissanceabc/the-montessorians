@@ -1,5 +1,7 @@
+id: tm0000066
 name: Brendan McCord
 slug: brendan-mccord
+name_authorized: McCord, Brendan
 tagline: Founder and Chair of Cosmos Institute, AI entrepreneur, and philosopher-builder
 bio: >-
   Brendan McCord is founder and Chair of the Cosmos Institute, an academy developing philosopher-builders to guide AI
@@ -36,3 +38,7 @@ links:
     url: https://x.com/mbrendan1
   - type: linkedin
     url: https://www.linkedin.com/in/brendan-mccord/
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

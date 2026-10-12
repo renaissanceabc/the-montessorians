@@ -1,6 +1,8 @@
 ---
+id: tm0000052
 name: Danny Shehata
 slug: danny-shehata
+name_authorized: Shehata, Danny
 tagline: Resident Physician, Family Medicine at SIHF Healthcare
 bio: >-
   Danny Shehata, MD, is a resident physician specializing in Family Medicine. Danny Shehata earned his medical degree
@@ -20,3 +22,7 @@ notable_achievements:
 links:
   - type: website
     url: https://www.sihf.org/provider/777-danny-shehata
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

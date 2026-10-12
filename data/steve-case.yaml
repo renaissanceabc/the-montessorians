@@ -1,6 +1,9 @@
 ---
+id: tm0000047
 name: Steve Case
 slug: steve-case
+name_authorized: Case, Steve
+birth_year: 1958
 tagline: Co-founder of AOL and internet pioneer
 bio: >-
   Steve Case is an American entrepreneur best known as the co-founder and former CEO of America Online (AOL). He played
@@ -24,3 +27,7 @@ links:
     url: https://en.wikipedia.org/wiki/Steve_Case
   - type: website
     url: https://revolution.com/team-member/steve-case/
+identifiers:
+  lcnaf: n97118467
+  viaf: "67302836"
+  wikidata: Q562917

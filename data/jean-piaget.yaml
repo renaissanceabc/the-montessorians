@@ -1,6 +1,10 @@
 ---
+id: tm0000020
 name: Jean Piaget
 slug: jean-piaget
+name_authorized: Piaget, Jean
+birth_year: 1896
+death_year: 1980
 tagline: Groundbreaking psychologist who helped shape modern child development theory
 bio: >-
   Jean Piaget was a Swiss psychologist best known for his pioneering work in child development and cognitive theory. He
@@ -21,3 +25,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Jean_Piaget
+identifiers:
+  lcnaf: n78093533
+  viaf: "39382513"
+  wikidata: Q123190

@@ -1,6 +1,9 @@
 ---
+id: tm0000048
 name: Taylor Swift
 slug: taylor-swift
+name_authorized: Swift, Taylor
+birth_year: 1989
 tagline: Global pop icon and award-winning singer-songwriter
 bio: >-
   Taylor Swift is a globally celebrated singer-songwriter known for her storytelling, genre-spanning artistry, and
@@ -22,3 +25,18 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Taylor_Swift
+schools:
+  - organization: alvernia-montessori-school
+    level: primary
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Taylor_Swift
+    note: Says she attended preschool and kindergarten at a Montessori school run by the Bernardine Sisters
+  - type: article
+    url: https://www.cbsnews.com/amp/philadelphia/news/berks-county-community-taylor-swift-person-of-the-year-honor
+    note: CBS Philadelphia reports Swift attended Alvernia Montessori School as a child
+verification: verified
+identifiers:
+  lcnaf: no2007053238
+  viaf: "88580701"
+  wikidata: Q26876

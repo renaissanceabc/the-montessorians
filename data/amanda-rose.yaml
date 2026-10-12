@@ -1,6 +1,8 @@
 ---
+id: tm0000063
 name: Amanda Rose
 slug: amanda-rose
+name_authorized: Rose, Amanda
 tagline: Social impact entrepreneur and movement builder; Founder & CEO of Timecounts
 bio: >-
   Amanda Rose is a globally recognized leader in social impact and community organizing. She founded Twestival, a
@@ -30,3 +32,7 @@ links:
     url: https://www.amandarose.net/
   - type: x
     url: https://twitter.com/amanda
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

@@ -1,6 +1,8 @@
 ---
+id: tm0000053
 name: David Webster
 slug: david-webster
+name_authorized: Webster, David
 tagline: Canadian actor and writer known for “The Way Home” and “Luckiest Girl Alive.”
 bio: >-
   David Webster is a Canadian actor who booked his first lead role at age 12 in Janelle Monáe's Heroes: “Pepsi Beats of
@@ -23,3 +25,7 @@ notable_achievements:
 links:
   - type: website
     url: https://www.imdb.com/name/nm7486145/
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed

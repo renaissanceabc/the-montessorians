@@ -1,6 +1,9 @@
 ---
+id: tm0000004
 name: Anthony Doerr
 slug: anthony-doerr
+name_authorized: Doerr, Anthony
+birth_year: 1973
 tagline: Pulitzer Prize-winning author known for luminous, layered storytelling
 bio: >-
   Anthony Doerr is an acclaimed American author best known for his novel "All the Light We Cannot See," which won the
@@ -25,3 +28,17 @@ links:
     url: https://en.wikipedia.org/wiki/Anthony_Doerr
   - type: website
     url: https://www.anthonydoerr.com/
+schools:
+  - organization: ruffing-montessori-school
+sources:
+  - type: article
+    url: https://www.goodreads.com/interviews/show/995.Anthony_Doerr
+    note: Doerr says he attended a Montessori school in Cleveland Heights, a 50-minute drive each way
+  - type: article
+    url: https://www.geaugamapleleaf.com/news/geauga-county-native-wins-pulitzer-prize-in-fiction/
+    note: Reports he attended Ruffing Montessori School in Cleveland Heights, where his mother taught
+verification: verified
+identifiers:
+  lcnaf: n2001038314
+  viaf: "79550093"
+  wikidata: Q2754186

@@ -1,5 +1,7 @@
+id: tm0000060
 name: Conrad Chow
 slug: conrad-chow
+name_authorized: Chow, Conrad
 tagline: Canadian violinist, educator, and Doctor of Musical Arts
 bio: >-
   Dr. Conrad Chow is a multifaceted Canadian violinist and distinguished educator. He began his violin studies at age
@@ -27,3 +29,8 @@ notable_achievements:
 links:
   - type: website
     url: https://www.conradchow.com/
+sources:
+  - type: other
+    url: https://ourkids.net/school/conrad-chow-violinist
+    note: School-directory profile of Toronto Montessori Schools alumnus; began violin at age three at TMS
+verification: verified

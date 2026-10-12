@@ -1,6 +1,10 @@
 ---
+id: tm0000038
 name: Peter Drucker
 slug: peter-drucker
+name_authorized: Drucker, Peter F. (Peter Ferdinand)
+birth_year: 1909
+death_year: 2005
 tagline: Visionary thinker who laid the foundation for modern management
 bio: >-
   Peter F. Drucker was an Austrian-born American management consultant, educator, and author whose work shaped the
@@ -24,3 +28,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Peter_Drucker
+identifiers:
+  lcnaf: n79149070
+  viaf: "2469565"
+  wikidata: Q84238

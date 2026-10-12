@@ -1,0 +1,65 @@
+---
+id: tm0000069
+name: Angeline Stoll Lillard
+slug: angeline-stoll-lillard
+kind: contributor
+roles:
+  - researcher
+  - author
+name_authorized: Lillard, Angeline Stoll
+name_variants:
+  - Angeline S. Lillard
+tagline: Psychologist whose research forms much of the evidence base for Montessori education
+bio: >-
+  Angeline Stoll Lillard is Commonwealth Professor of Psychology at the University of Virginia. Her research on
+  children's development includes some of the most widely cited studies of Montessori education, and her book
+  Montessori: The Science Behind the Genius connects Montessori's methods to findings in developmental science.
+tags:
+  - psychologist
+  - researcher
+  - author
+montessori_notes: Studies the outcomes of Montessori education and its grounding in developmental science.
+affiliations:
+  - organization: university-of-virginia
+    role: Commonwealth Professor of Psychology
+    from: 1996
+contributions:
+  - title: "Montessori: The Science Behind the Genius"
+    type: book
+    year: 2005
+    venue: Oxford University Press
+    isbn: "9780195168686"
+  - title: Evaluating Montessori Education
+    type: article
+    year: 2006
+    venue: Science
+    doi: 10.1126/science.1132362
+  - title: "Montessori Preschool Elevates and Equalizes Child Outcomes: A Longitudinal Study"
+    type: article
+    year: 2017
+    venue: Frontiers in Psychology
+    doi: 10.3389/fpsyg.2017.01783
+  - title: "The impact of pretend play on children's development: A review of the evidence"
+    type: article
+    year: 2013
+    venue: Psychological Bulletin
+    doi: 10.1037/a0029321
+  - title: Pretend Play Skills and the Child's Theory of Mind
+    type: article
+    year: 1993
+    venue: Child Development
+    doi: 10.2307/1131255
+sources:
+  - type: authority
+    url: https://id.loc.gov/authorities/names/n2004103917.html
+    note: Library of Congress name authority record
+  - type: publication
+    url: https://doi.org/10.1126/science.1132362
+    note: Evaluating Montessori Education, Science (2006)
+verification: verified
+identifiers:
+  lcnaf: n2004103917
+  viaf: "54443882"
+  wikidata: Q28458519
+  orcid: 0000-0001-9697-6611
+  isni: "0000000109029668"

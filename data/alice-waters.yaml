@@ -1,6 +1,9 @@
 ---
+id: tm0000001
 name: Alice Waters
 slug: alice-waters
+name_authorized: Waters, Alice
+birth_year: 1944
 tagline: Chef and food activist; founder of Chez Panisse and the Edible Schoolyard Project
 bio: >-
   Alice Waters is an American chef, restaurateur, and advocate for sustainable agriculture. She founded Chez Panisse in
@@ -25,3 +28,7 @@ links:
     url: https://en.wikipedia.org/wiki/Alice_Waters
   - type: website
     url: https://edibleschoolyard.org
+identifiers:
+  lcnaf: n81136337
+  viaf: "72571344"
+  wikidata: Q434513

@@ -2,8 +2,13 @@ import posthog from "posthog-js";
 import { keys } from "./keys";
 
 export const initializeAnalytics = () => {
+  const { NEXT_PUBLIC_POSTHOG_KEY } = keys();
+  if (!NEXT_PUBLIC_POSTHOG_KEY) {
+    return;
+  }
+
   try {
-    posthog.init(keys().NEXT_PUBLIC_POSTHOG_KEY, {
+    posthog.init(NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: "/relay-r9etm",
       ui_host: keys().NEXT_PUBLIC_POSTHOG_HOST,
       person_profiles: "identified_only",

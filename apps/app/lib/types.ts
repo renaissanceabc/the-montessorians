@@ -4,10 +4,18 @@
 export type getProfilesOptions = {
   limit?: number;
   page?: number;
-  orderBy?: "latest" | "trending" | "alphabetical";
+  orderBy?: "latest" | "trending" | "alphabetical" | "contributions";
   sortBy?: "asc" | "desc";
   search?: string;
   tags?: string;
+  /** alum | contributor */
+  kind?: "alum" | "contributor";
+  /** Comma-separated contributor roles */
+  roles?: string;
+  /** Comma-separated organization slugs (affiliations or schools) */
+  organizations?: string;
+  /** Only people with at least this many documented contributions */
+  minContributions?: number;
 };
 
 export type getTagsOptions = {
@@ -15,7 +23,9 @@ export type getTagsOptions = {
   sortBy?: "asc" | "desc";
 };
 
-export const PROFILES_DEFAULTS: Required<Omit<getProfilesOptions, "search">> = {
+export const PROFILES_DEFAULTS: Required<
+  Pick<getProfilesOptions, "limit" | "page" | "orderBy" | "sortBy" | "tags">
+> = {
   limit: 10,
   page: 1,
   orderBy: "latest",

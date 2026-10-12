@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Montessori Organization",
+  "description": "An organization record in The Montessorians name authority: a school, training center, university, or association.",
+  "type": "object",
+  "required": ["id", "name", "slug", "type"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^tmo[0-9]{6}$",
+      "description": "Permanent identifier (e.g. tmo000001). Never changes and is never reused."
+    },
+    "name": { "type": "string" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "school",
+        "training-center",
+        "university",
+        "association",
+        "research-center",
+        "publisher",
+        "other"
+      ]
+    },
+    "name_variants": { "type": "array", "items": { "type": "string" } },
+    "description": { "type": "string", "maxLength": 500 },
+    "location": {
+      "type": "string",
+      "description": "City and country, e.g. \"Amsterdam, Netherlands\""
+    },
+    "founded": { "type": "integer", "minimum": 1000, "maximum": 2100 },
+    "website": { "type": "string", "format": "uri" },
+    "parent": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Slug of the parent organization, e.g. a university for one of its centers"
+    },
+    "identifiers": {
+      "type": "object",
+      "properties": {
+        "lcnaf": { "type": "string", "pattern": "^n[a-z]?[0-9]{8,10}$" },
+        "viaf": { "type": "string", "pattern": "^[0-9]+$" },
+        "wikidata": { "type": "string", "pattern": "^Q[0-9]+$" },
+        "ror": { "type": "string", "pattern": "^0[a-z0-9]{8}$" },
+        "isni": { "type": "string", "pattern": "^[0-9]{15}[0-9X]$" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,10 +1,17 @@
 import { keys as core } from "@repo/next-config/keys";
 import { keys as observability } from "@repo/observability/keys";
 import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   extends: [core(), observability()],
-  server: {},
+  server: {
+    // Fine-grained token with "Issues: write" on the repo. Without it the
+    // contribute form falls back to opening a prefilled GitHub issue.
+    GITHUB_SUBMISSIONS_TOKEN: z.string().min(1).optional(),
+  },
   client: {},
-  runtimeEnv: {},
+  runtimeEnv: {
+    GITHUB_SUBMISSIONS_TOKEN: process.env.GITHUB_SUBMISSIONS_TOKEN,
+  },
 });

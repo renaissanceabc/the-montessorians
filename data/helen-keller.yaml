@@ -1,6 +1,10 @@
 ---
+id: tm0000017
 name: Helen Keller
 slug: helen-keller
+name_authorized: Keller, Helen
+birth_year: 1880
+death_year: 1968
 tagline: Advocate and author who overcame deaf-blindness
 bio: >-
   Helen Keller was an American author, political activist, and lecturer. Despite losing her sight and hearing at a young
@@ -21,3 +25,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Helen_Keller
+identifiers:
+  lcnaf: n83158974
+  viaf: "36920292"
+  wikidata: Q38203

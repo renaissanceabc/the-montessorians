@@ -1,6 +1,9 @@
 ---
+id: tm0000009
 name: Cher Bono
 slug: cher-bono
+name_authorized: Cher, 1946-
+birth_year: 1946
 tagline: Groundbreaking pop icon and Academy Award-winning performer
 bio: >-
   Cher is an American singer, actress, and television personality whose groundbreaking six-decade career has made her a
@@ -33,3 +36,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Cher
+identifiers:
+  lcnaf: n50038010
+  viaf: "101870495"
+  wikidata: Q12003

@@ -1,5 +1,7 @@
+id: tm0000061
 name: Kaliroe Pappas
 slug: kaliroe-pappas
+name_authorized: Pappas, Kaliroe
 tagline: PhD Candidate in Particle Physics at MIT
 bio: >-
   Kaliroe Pappas is currently a PhD candidate in Particle Physics at the Massachusetts Institute of Technology (MIT).
@@ -20,3 +22,11 @@ notable_achievements:
 links:
   - type: website
     url: https://www.chiaravalle.org/community/alumni/kaliroe
+schools:
+  - organization: chiaravalle-montessori
+    to: 2011
+sources:
+  - type: other
+    url: https://www.chiaravalle.org/community/alumni/kaliroe
+    note: "School alumni profile: attended Chiaravalle Montessori from early childhood through 8th grade, class of 2011"
+verification: reported

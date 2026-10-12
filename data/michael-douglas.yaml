@@ -1,6 +1,9 @@
 ---
+id: tm0000034
 name: Michael Douglas
 slug: michael-douglas
+name_authorized: Douglas, Michael
+birth_year: 1944
 tagline: Award-winning actor and producer known for iconic roles in film and television
 bio: >-
   Michael Douglas is an acclaimed American actor and producer whose career spans decades of critically acclaimed and
@@ -30,3 +33,7 @@ notable_achievements:
 links:
   - type: wikipedia
     url: https://en.wikipedia.org/wiki/Michael_Douglas
+identifiers:
+  lcnaf: n85376869
+  viaf: "84033248"
+  wikidata: Q119798
