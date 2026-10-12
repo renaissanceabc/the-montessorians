@@ -70,17 +70,27 @@ function syncPublicImages(slugs) {
 /**
  * When a profile was first added, used for the "recently added" sort and
  * sitemap lastModified. Prefers the git commit that introduced the file (stable
- * across clones); falls back to filesystem mtime, then build time.
+ * across clones), following renames, including slug renames recorded in
+ * data/authority/changes.yaml whose edits git can't match as renames; falls
+ * back to filesystem mtime, then build time.
  */
-function addedAtFor(file) {
+function addedAtFor(file, previousSlugs = []) {
+  const git = (filePath) =>
+    execFileSync("git", ["log", "--diff-filter=A", "--follow", "--format=%cI", "--", filePath], {
+      cwd: REPO_ROOT,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .split("\n")
+      .filter(Boolean);
   try {
-    const out = execFileSync(
-      "git",
-      ["log", "--diff-filter=A", "--follow", "--format=%cI", "-1", "--", `data/people/${file}`],
-      { cwd: REPO_ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }
-    ).trim();
-    if (out) {
-      return out;
+    const dates = [
+      ...git(`data/people/${file}`),
+      // Earlier layouts and earlier slugs.
+      ...previousSlugs.flatMap((slug) => [...git(`data/people/${slug}.yaml`), ...git(`data/${slug}.yaml`)]),
+    ].sort();
+    if (dates.length > 0) {
+      return dates[0];
     }
   } catch {
     // git unavailable (shallow clone / non-git build) — fall through
@@ -200,6 +210,14 @@ function main() {
     .filter((f) => f.endsWith(".yaml") || f.endsWith(".yml"))
     .sort();
 
+  // Slugs each id had before a rename, so its "added" date survives the rename.
+  const previousSlugs = new Map();
+  for (const change of yaml.load(fs.readFileSync(CHANGES_PATH, "utf8")) ?? []) {
+    if (change.action === "renamed") {
+      previousSlugs.set(change.id, [...(previousSlugs.get(change.id) ?? []), change.slug]);
+    }
+  }
+
   const profiles = [];
   const errors = [];
 
@@ -225,7 +243,7 @@ function main() {
 
     const profile = snakeToCamel(raw);
     profile.imageUrl = hasImage ? `/images/${slug}.jpg` : null;
-    profile.addedAt = addedAtFor(file);
+    profile.addedAt = addedAtFor(file, previousSlugs.get(raw.id) ?? []);
     profiles.push(profile);
   }
 
