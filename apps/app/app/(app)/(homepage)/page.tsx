@@ -1,10 +1,10 @@
 import { Container } from "@/components/container";
-import Contribute from "@/components/contribute";
 import { getDailyProfile, getEasternDate } from "@/lib/content/daily";
 import { getAllProfiles, getProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
 
+import ContributeBand from "./components/contribute-band";
 import ContributorsBand from "./components/contributors-band";
 import Hero from "./components/hero";
 import ProfilesHomepageList from "./components/profiles-list";
@@ -24,21 +24,15 @@ export const generateMetadata = () =>
 
 const Home = () => {
   const profiles = getProfiles({ kind: "alum", limit: 6 });
-  const peopleCount = getAllProfiles().length;
   const contributors = getProfiles({ kind: "contributor", limit: 6 });
+  const peopleCount = getAllProfiles().length;
   const dailyProfile = getDailyProfile(getEasternDate());
 
   return (
-    <>
-      <Container className="pt-8 lg:pt-16">
-        <Hero dailyProfile={dailyProfile} />
-      </Container>
+    <Container className="flex flex-col gap-14 pt-8 pb-16 lg:gap-24 lg:pt-16 lg:pb-24">
+      <Hero dailyProfile={dailyProfile} />
 
-      <Container
-        aria-labelledby="home-recent"
-        as="section"
-        className="flex flex-col gap-6 py-14 lg:py-24"
-      >
+      <section aria-labelledby="home-recent" className="flex flex-col gap-6">
         <SectionHeader
           action={`Browse all ${peopleCount}`}
           href="/discover"
@@ -48,14 +42,12 @@ const Home = () => {
           title="Recently added"
         />
         <ProfilesHomepageList profiles={profiles} />
-      </Container>
+      </section>
 
-      <Container className="pb-14 lg:pb-24">
-        <ContributorsBand contributors={contributors} />
-      </Container>
+      <ContributorsBand contributors={contributors} />
 
-      <Contribute />
-    </>
+      <ContributeBand />
+    </Container>
   );
 };
 export default Home;
