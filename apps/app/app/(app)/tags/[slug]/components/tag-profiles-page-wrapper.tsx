@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Container } from "@/components/container";
 import {
   Select,
   SelectContent,
@@ -80,21 +81,25 @@ export const TagProfilesPageWrapper = ({ tag, profiles }: { tag: Tag; profiles: 
   );
 
   return (
-    <div className="container mx-auto max-w-screen-md items-center justify-between gap-10 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full space-y-8">
-        <div className="flex w-full flex-col items-center gap-2">
-          <Link
-            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-            href="/tags"
-          >
-            All Tags
-          </Link>
-          <h1 className="font-serif text-4xl font-bold lg:text-5xl">{tag.label}</h1>
-        </div>
+    <Container className="flex flex-col gap-6 pt-6 pb-16 lg:pt-8">
+      <div className="flex flex-col gap-3">
+        <Breadcrumbs
+          align="start"
+          items={[{ href: "/tags", label: "Tags" }, { label: tag.label }]}
+        />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex min-w-0 flex-col gap-2">
+            <h1 className="type-title">{tag.label}</h1>
+            <p className="type-lead">
+              {profiles.length} {profiles.length === 1 ? "Montessorian" : "Montessorians"}
+            </p>
+          </div>
 
-        <div className="flex w-full items-center justify-end gap-1">
           <Select items={SORT_OPTIONS} onValueChange={handleSortChange} value={sortValue}>
-            <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-popup-open:bg-white">
+            <SelectTrigger
+              aria-label="Sort"
+              className="w-fit shrink-0 border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-popup-open:bg-white"
+            >
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
 
@@ -107,9 +112,9 @@ export const TagProfilesPageWrapper = ({ tag, profiles }: { tag: Tag; profiles: 
             </SelectContent>
           </Select>
         </div>
-
-        <ProfilesList hasSearch={false} profiles={filtered} />
       </div>
-    </div>
+
+      <ProfilesList hasSearch={false} profiles={filtered} />
+    </Container>
   );
 };

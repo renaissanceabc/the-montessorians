@@ -131,46 +131,49 @@ export const OrganizationsDirectory = ({
       searchPlaceholder={`Search ${counts.organizations} organizations`}
     >
       {filtered.length === 0 ? (
-        <div className="text-muted-foreground flex flex-col items-center gap-4 py-12 text-sm italic">
-          <SearchXIcon className="size-16" />
+        <div className="text-muted-foreground flex min-h-64 flex-col items-center justify-center gap-4 py-12 text-sm italic">
+          <SearchXIcon aria-hidden="true" className="size-16" />
           No organizations found.
         </div>
       ) : (
-        <ul className="flex flex-col gap-1">
+        <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((org) => {
             const Icon = TYPE_ICONS[org.type] ?? Building2Icon;
             return (
-              <li key={org.slug}>
+              <li className="min-w-0" key={org.slug}>
                 <Link
-                  className="group flex items-center gap-4 rounded-lg border border-transparent p-3 transition-all hover:border-black/10 hover:bg-white"
+                  className="group flex h-full min-w-0 items-start gap-4 rounded-xl border border-black/8 bg-white/45 p-4 transition-colors hover:border-black/15 hover:bg-white"
                   href={`/organizations/${org.slug}`}
                 >
                   <OrgLogo
-                    className="size-12 rounded-xl"
+                    className="size-14 rounded-xl"
                     icon={Icon}
-                    iconClassName="size-[22px] text-muted-foreground"
+                    iconClassName="size-6 text-muted-foreground"
                     logoUrl={org.logoUrl}
+                    size={56}
                   />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="group-hover:text-primary font-serif text-xl font-semibold">
+                  <span className="flex min-w-0 flex-1 flex-col gap-1">
+                    <span className="type-name group-hover:text-primary transition-colors">
                       {org.name}
                       {org.shortName && (
-                        <span className="text-muted-foreground text-base font-normal">
+                        <span className="text-muted-foreground font-normal">
                           {" "}
                           ({org.shortName})
                         </span>
                       )}
                     </span>
-                    <span className="text-muted-foreground text-sm">
+                    <span className="type-meta">
                       {[org.typeLabel, org.location].filter(Boolean).join(" · ")}
                     </span>
-                  </span>
-                  <span
-                    className="inline-flex shrink-0 items-center gap-1 text-sm text-[#4A433D] tabular-nums"
-                    title={`${org.people} ${org.people === 1 ? "person" : "people"} in the directory`}
-                  >
-                    <UsersIcon className="size-3.5" />
-                    {org.people}
+                    <span
+                      className="type-meta inline-flex items-center gap-1.5 text-[#4A433D] tabular-nums"
+                      title={`${org.people} ${org.people === 1 ? "person" : "people"} in the directory`}
+                    >
+                      <UsersIcon aria-hidden="true" className="size-3.5" />
+                      {org.people === 0
+                        ? "No people yet"
+                        : `${org.people} ${org.people === 1 ? "person" : "people"}`}
+                    </span>
                   </span>
                 </Link>
               </li>
