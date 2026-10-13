@@ -104,6 +104,7 @@ export interface OrganizationRef {
   organizationName?: string;
   organizationShortName?: string;
   organizationLogoUrl?: string;
+  organizationNameVariants?: string[];
   role?: string;
   level?: string;
   from?: number;

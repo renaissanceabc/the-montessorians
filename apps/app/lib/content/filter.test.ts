@@ -125,5 +125,86 @@ describe("filterAndSortProfiles", () => {
       filterAndSortProfiles(all, { search: "lillard, ang" }).map((p) => p.slug),
       ["lillard"]
     );
+    const variant = profile({ name: "Yo-Yo Ma", nameVariants: ["马友友"], slug: "variant" });
+    assert.deepEqual(
+      filterAndSortProfiles([variant], { search: "马友友" }).map((p) => p.slug),
+      ["variant"]
+    );
+  });
+
+  test("search ignores case and accents", () => {
+    const jose = profile({ name: "José Ortega", slug: "jose" });
+    assert.deepEqual(
+      filterAndSortProfiles([jose, alum], { search: "JOSE" }).map((p) => p.slug),
+      ["jose"]
+    );
+  });
+
+  test("search matches taglines and tag labels", () => {
+    const cellist = profile({
+      name: "Someone",
+      slug: "cellist",
+      tagline: "Cellist and composer",
+      tags: [{ label: "Musician", slug: "musician" }],
+    });
+    assert.deepEqual(
+      filterAndSortProfiles([cellist, alum], { search: "composer" }).map((p) => p.slug),
+      ["cellist"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles([cellist, alum], { search: "musician" }).map((p) => p.slug),
+      ["cellist"]
+    );
+  });
+
+  test("search matches organization names, short names, and name variants", () => {
+    const student = profile({
+      name: "Student",
+      schools: [
+        {
+          organization: "association-montessori-internationale",
+          organizationName: "Association Montessori Internationale",
+          organizationNameVariants: ["Internationale Montessori Vereniging"],
+          organizationShortName: "AMI",
+        },
+      ],
+      slug: "student",
+    });
+    for (const search of ["association montessori", "ami", "vereniging"]) {
+      assert.deepEqual(
+        filterAndSortProfiles([student, alum], { search }).map((p) => p.slug),
+        ["student"],
+        search
+      );
+    }
+  });
+
+  test("name matches rank ahead of other matches, keeping the sort within each group", () => {
+    const taggedOld = profile({
+      addedAt: "2020-01-01T00:00:00Z",
+      name: "Ada Teacher",
+      slug: "tagged-old",
+      tags: [{ label: "Lillard method", slug: "lillard-method" }],
+    });
+    const taggedNew = profile({
+      addedAt: "2027-01-01T00:00:00Z",
+      name: "Bea Teacher",
+      slug: "tagged-new",
+      tagline: "Studied with Lillard",
+    });
+    assert.deepEqual(
+      filterAndSortProfiles([taggedOld, taggedNew, lillard], { search: "lillard" }).map(
+        (p) => p.slug
+      ),
+      ["lillard", "tagged-new", "tagged-old"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles([taggedOld, taggedNew, lillard], {
+        orderBy: "alphabetical",
+        search: "lillard",
+        sortBy: "asc",
+      }).map((p) => p.slug),
+      ["lillard", "tagged-old", "tagged-new"]
+    );
   });
 });

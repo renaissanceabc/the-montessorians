@@ -425,6 +425,10 @@ const denormalizeOrganizations = (profiles, organizations) => {
       if (org?.logoUrl) {
         ref.organizationLogoUrl = org.logoUrl;
       }
+      // For directory search, which runs on the client.
+      if (org?.nameVariants?.length) {
+        ref.organizationNameVariants = org.nameVariants;
+      }
     }
   }
 };

@@ -35,10 +35,43 @@ const sortProfiles = (
   });
 };
 
-const matchesSearch = (profile: Profile, q: string): boolean =>
-  [profile.name, profile.nameAuthorized, ...profile.nameVariants].some((name) =>
-    name?.toLowerCase().includes(q)
-  );
+const COMBINING_MARKS = /[̀-ͯ]/gu;
+
+/** Lowercase and strip accents, so "jose" finds "José". */
+export const normalizeSearch = (s: string): string =>
+  s.normalize("NFKD").replaceAll(COMBINING_MARKS, "").toLowerCase().trim();
+
+/** How well a profile matches a search: by name first, then by anything else. */
+type SearchRank = "name" | "other" | null;
+
+const nameFields = (p: Profile): (string | null)[] => [p.name, p.nameAuthorized, ...p.nameVariants];
+
+const otherFields = (p: Profile): (string | null | undefined)[] => [
+  p.tagline,
+  ...p.tags.map((t) => t.label),
+  ...[...p.schools, ...p.affiliations].flatMap((ref) => [
+    ref.organizationName,
+    ref.organizationShortName,
+    ...(ref.organizationNameVariants ?? []),
+  ]),
+];
+
+const includesQuery = (q: string) => (field: string | null | undefined) =>
+  Boolean(field && normalizeSearch(field).includes(q));
+
+export const searchRank = (profile: Profile, query: string): SearchRank => {
+  const q = normalizeSearch(query);
+  if (!q) {
+    return "name";
+  }
+  if (nameFields(profile).some(includesQuery(q))) {
+    return "name";
+  }
+  if (otherFields(profile).some(includesQuery(q))) {
+    return "other";
+  }
+  return null;
+};
 
 export const filterAndSortProfiles = (
   list: Profile[],
@@ -62,9 +95,14 @@ export const filterAndSortProfiles = (
     out = out.filter((p) => p.kinds.includes(kind));
   }
 
+  // Search matches names (including authorized names and variants), taglines,
+  // tag labels, and organization names. Name matches rank first.
+  const ranks = new Map<string, SearchRank>();
   if (search) {
-    const q = search.toLowerCase();
-    out = out.filter((p) => matchesSearch(p, q));
+    for (const p of out) {
+      ranks.set(p.slug, searchRank(p, search));
+    }
+    out = out.filter((p) => ranks.get(p.slug) !== null);
   }
 
   const wantedTags = splitList(tags);
@@ -89,6 +127,14 @@ export const filterAndSortProfiles = (
   }
 
   out = sortProfiles(out, orderBy, sortBy);
+
+  if (search) {
+    // Stable: the chosen sort order holds within each group.
+    out = [
+      ...out.filter((p) => ranks.get(p.slug) === "name"),
+      ...out.filter((p) => ranks.get(p.slug) === "other"),
+    ];
+  }
 
   if (limit && limit > 0) {
     out = out.slice(0, limit);
