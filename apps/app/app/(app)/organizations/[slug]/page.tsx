@@ -1,5 +1,6 @@
 import {
   Building2Icon,
+  CalendarIcon,
   GlobeIcon,
   GraduationCapIcon,
   LandmarkIcon,
@@ -87,8 +88,9 @@ const Section = ({
   </section>
 );
 
+// Separators only on the single-line pill; on phones the facts wrap freely.
 const Dot = () => (
-  <span aria-hidden="true" className="px-1 text-black/25">
+  <span aria-hidden="true" className="px-1 text-black/25 max-sm:hidden">
     ·
   </span>
 );
@@ -132,8 +134,10 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
           </h1>
         </div>
 
-        <div className="flex w-fit max-w-full flex-wrap items-center gap-y-1 rounded-3xl border border-black/10 bg-white/60 px-4 py-1.5 text-sm text-[#4A433D]">
-          <span className="type-eyebrow shrink-0">{ORGANIZATION_TYPE_LABELS[org.type]}</span>
+        <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-[#4A433D] sm:w-fit sm:gap-x-0 sm:rounded-3xl sm:border sm:border-black/10 sm:bg-white/60 sm:px-4 sm:py-1.5">
+          <span className="type-eyebrow shrink-0 max-sm:basis-full">
+            {ORGANIZATION_TYPE_LABELS[org.type]}
+          </span>
           {org.location && (
             <>
               <Dot />
@@ -146,7 +150,10 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
           {org.founded && (
             <>
               <Dot />
-              <span className="shrink-0">Founded {org.founded}</span>
+              <span className="inline-flex shrink-0 items-center gap-1">
+                <CalendarIcon aria-hidden="true" className="size-3.5 sm:hidden" />
+                Founded {org.founded}
+              </span>
             </>
           )}
           <Dot />
