@@ -20,6 +20,7 @@ import { RecordLayout } from "@/components/record-layout";
 import { CorrectionButton, RecordDetails } from "@/components/record-rail";
 import { ShareButton } from "@/components/share-button";
 import { identifierEntries, idUrl, organizationJsonLd } from "@/lib/content/authority";
+import { formatLocation } from "@/lib/content/location";
 import {
   getAllOrganizations,
   getOrganizationBySlug,
@@ -145,7 +146,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                 <Dot />
                 <span className="inline-flex min-w-0 items-center gap-1" title={org.location}>
                   <MapPinIcon aria-hidden="true" className="size-3.5 shrink-0" />
-                  <span className="truncate">{org.location}</span>
+                  <span className="truncate">{formatLocation(org.location)}</span>
                 </span>
               </>
             )}

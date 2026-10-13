@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formatLocation } from "@/lib/content/location";
 import type { OrganizationType } from "@/lib/content/types";
 import { cn } from "@/lib/utils";
 
@@ -163,7 +164,9 @@ export const OrganizationsDirectory = ({
                       )}
                     </span>
                     <span className="type-meta">
-                      {[org.typeLabel, org.location].filter(Boolean).join(" · ")}
+                      {[org.typeLabel, org.location && formatLocation(org.location)]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </span>
                     <span
                       className="type-meta inline-flex items-center gap-1.5 text-[#4A433D] tabular-nums"
