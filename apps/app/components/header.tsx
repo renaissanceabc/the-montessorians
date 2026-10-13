@@ -33,7 +33,7 @@ const Header = () => {
         <div
           className={cn(
             "-mx-3 flex flex-row items-center justify-between gap-3 rounded-full px-3 py-3 transition-colors duration-200 ease-out sm:-mx-5 sm:gap-4 sm:px-5 sm:py-4 lg:-mx-8 lg:px-8 lg:py-6",
-            isSticky ? "bg-black/7 backdrop-blur-lg" : "bg-transparent"
+            isSticky ? "bg-black/7 backdrop-blur-md" : "bg-transparent"
           )}
         >
           <Link
