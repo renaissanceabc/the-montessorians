@@ -25,8 +25,10 @@ const AdjacentLink = ({
     >
       <Arrow
         className={cn(
-          "text-muted-foreground group-hover:text-foreground size-4 shrink-0 transition-transform",
-          isNext ? "group-hover:translate-x-0.5" : "group-hover:-translate-x-0.5"
+          "text-muted-foreground group-hover:text-foreground size-4 shrink-0 transition-[color,transform] motion-reduce:transition-colors",
+          isNext
+            ? "group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0"
+            : "group-hover:-translate-x-0.5 motion-reduce:group-hover:translate-x-0"
         )}
       />
       <span className="flex min-w-0 items-center gap-2.5">

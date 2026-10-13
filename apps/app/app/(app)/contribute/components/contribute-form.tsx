@@ -323,7 +323,8 @@ const errorList = (errors: FieldErrors<FormValues>) => {
 
 const focusField = (name: string) => {
   const el = document.querySelector<HTMLElement>(`#${CSS.escape(fieldId(name))}`);
-  el?.scrollIntoView({ behavior: "smooth", block: "center" });
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
   el?.focus({ preventScroll: true });
 };
 
