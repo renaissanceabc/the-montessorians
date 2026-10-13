@@ -85,7 +85,7 @@ const TagsPanel = ({
           <InputGroupInput
             aria-label="Search tags"
             onChange={(e) => setTagSearch(e.target.value)}
-            placeholder="Search tags"
+            placeholder="Search tags…"
             value={tagSearch}
           />
         </InputGroup>

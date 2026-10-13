@@ -128,7 +128,7 @@ export const OrganizationsDirectory = ({
       counts={counts}
       onSearch={setSearch}
       search={search}
-      searchPlaceholder={`Search ${counts.organizations} organizations`}
+      searchPlaceholder={`Search ${counts.organizations} organizations…`}
     >
       {filtered.length === 0 ? (
         <div className="text-muted-foreground flex min-h-64 flex-col items-center justify-center gap-4 py-12 text-sm italic">

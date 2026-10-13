@@ -52,6 +52,8 @@ export const OrganizationPicker = ({
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
   const [active, setActive] = useState(0);
+  // Closed by Escape or leaving the field; typing opens it again.
+  const [dismissed, setDismissed] = useState(false);
   const q = query.trim().toLowerCase();
 
   const matches = useMemo(() => {
@@ -70,6 +72,7 @@ export const OrganizationPicker = ({
     ...matches.map((m) => ({ kind: "existing" as const, option: m })),
     ...(canAdd ? [{ kind: "new" as const }] : []),
   ];
+  const open = items.length > 0 && !dismissed;
 
   const pick = (item: (typeof items)[number]) => {
     onChange([
@@ -157,18 +160,28 @@ export const OrganizationPicker = ({
           <SearchIcon />
         </InputGroupAddon>
         <InputGroupInput
-          aria-activedescendant={items.length ? `${listId}-${active}` : undefined}
+          aria-activedescendant={open ? `${listId}-${active}` : undefined}
           aria-autocomplete="list"
           aria-controls={listId}
-          aria-expanded={items.length > 0}
+          aria-expanded={open}
           aria-invalid={invalid || undefined}
           id={id}
+          onBlur={() => setDismissed(true)}
           onChange={(e) => {
             setQuery(e.target.value);
             setActive(0);
+            setDismissed(false);
           }}
           onKeyDown={(e) => {
             if (!items.length) {
+              return;
+            }
+            if (!open) {
+              // ArrowDown or Enter reopens the list after Escape or a blur.
+              if (e.key === "ArrowDown" || e.key === "Enter") {
+                e.preventDefault();
+                setDismissed(false);
+              }
               return;
             }
             if (e.key === "ArrowDown") {
@@ -181,7 +194,9 @@ export const OrganizationPicker = ({
               e.preventDefault();
               pick(items[active]);
             } else if (e.key === "Escape") {
-              setQuery("");
+              // Close the list, keep the text.
+              e.preventDefault();
+              setDismissed(true);
             }
           }}
           placeholder={placeholder}
@@ -190,7 +205,7 @@ export const OrganizationPicker = ({
           role="combobox"
           value={query}
         />
-        {items.length > 0 && (
+        {open && (
           <ul
             className="bg-popover text-popover-foreground ring-foreground/10 absolute inset-x-0 top-full z-20 mt-1 flex flex-col rounded-lg p-1 shadow-md ring-1"
             id={listId}

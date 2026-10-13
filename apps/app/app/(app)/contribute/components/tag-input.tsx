@@ -27,6 +27,8 @@ export const TagInput = ({
   const listId = useId();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
+  // Closed by Escape or leaving the field; typing opens it again.
+  const [dismissed, setDismissed] = useState(false);
   const q = query.trim().toLowerCase();
 
   const matches = useMemo(
@@ -38,6 +40,7 @@ export const TagInput = ({
         : [],
     [q, suggestions, value]
   );
+  const open = matches.length > 0 && !dismissed;
 
   const add = (label: string) => {
     const clean = toTitleCase(label.trim().replace(/,$/u, ""));
@@ -73,15 +76,17 @@ export const TagInput = ({
           </span>
         ))}
         <input
-          aria-activedescendant={matches.length ? `${listId}-${active}` : undefined}
+          aria-activedescendant={open ? `${listId}-${active}` : undefined}
           aria-autocomplete="list"
           aria-controls={listId}
-          aria-expanded={matches.length > 0}
+          aria-expanded={open}
           aria-invalid={invalid || undefined}
           aria-label="Add a tag"
           className="placeholder:text-muted-foreground h-7 min-w-32 flex-1 bg-transparent px-1 text-base outline-none md:text-sm"
           id={id}
+          onBlur={() => setDismissed(true)}
           onChange={(e) => {
+            setDismissed(false);
             if (e.target.value.endsWith(",")) {
               add(e.target.value);
             } else {
@@ -92,17 +97,22 @@ export const TagInput = ({
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              if (matches.length) {
+              if (open) {
                 add(matches[active].label);
               } else if (q) {
                 add(query);
               }
+            } else if (e.key === "Escape" && open) {
+              // Close the list, keep the text.
+              e.preventDefault();
+              setDismissed(true);
             } else if (e.key === "Backspace" && !query && value.length) {
               onChange(value.slice(0, -1));
             } else if (e.key === "ArrowDown" && matches.length) {
               e.preventDefault();
-              setActive((a) => (a + 1) % matches.length);
-            } else if (e.key === "ArrowUp" && matches.length) {
+              setDismissed(false);
+              setActive((a) => (open ? (a + 1) % matches.length : 0));
+            } else if (e.key === "ArrowUp" && open) {
               e.preventDefault();
               setActive((a) => (a - 1 + matches.length) % matches.length);
             }
@@ -112,7 +122,7 @@ export const TagInput = ({
           value={query}
         />
       </div>
-      {matches.length > 0 && (
+      {open && (
         <ul
           className="bg-popover text-popover-foreground ring-foreground/10 absolute inset-x-0 top-full z-20 mt-1 rounded-lg p-1 shadow-md ring-1"
           id={listId}

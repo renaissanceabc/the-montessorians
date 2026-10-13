@@ -944,7 +944,7 @@ export const ContributeForm = ({
                     invalid={fieldState.invalid}
                     onChange={(next) => field.onChange(next)}
                     options={organizations}
-                    placeholder="Search schools, or type a new one"
+                    placeholder="Search schools, or type a new one…"
                     value={field.value}
                   />
                   <FieldError errors={[fieldState.error]} />
@@ -965,7 +965,7 @@ export const ContributeForm = ({
                     invalid={fieldState.invalid}
                     onChange={(next) => field.onChange(next)}
                     options={organizations}
-                    placeholder="Search schools, universities, organizations, or type a new one"
+                    placeholder="Search schools, universities, organizations, or type a new one…"
                     value={field.value}
                     withRole
                   />

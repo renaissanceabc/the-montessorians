@@ -105,8 +105,25 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Keep anchors and keyboard focus clear of the sticky header. */
+  html {
+    scroll-padding-top: 6rem;
+
+    @media (width >= 64rem) {
+      scroll-padding-top: 9rem;
+    }
+  }
   body {
     @apply bg-background text-foreground;
+  }
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  summary {
+    touch-action: manipulation;
   }
   /* A visible, brand-colored focus ring for anything focused from the keyboard.
      Components that draw their own ring (outline-none plus ring-*) override it. */

@@ -141,7 +141,7 @@ export const ContributorFiltersPopover = ({
                 <InputGroupInput
                   aria-label="Search affiliations"
                   onChange={(e) => setOrgSearch(e.target.value)}
-                  placeholder="Search organizations"
+                  placeholder="Search organizations…"
                   value={orgSearch}
                 />
               </InputGroup>
