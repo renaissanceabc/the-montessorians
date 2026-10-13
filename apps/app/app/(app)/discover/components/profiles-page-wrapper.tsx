@@ -271,7 +271,7 @@ export const ProfilesPageWrapper = ({
       counts={counts}
       onSearch={setSearch}
       search={search}
-      searchPlaceholder={`Search ${total} ${noun} by name…`}
+      searchPlaceholder={`Search ${total} ${noun}…`}
     >
       <ProfilesList hasSearch={Boolean(debouncedSearch)} profiles={filtered} />
     </DirectoryShell>

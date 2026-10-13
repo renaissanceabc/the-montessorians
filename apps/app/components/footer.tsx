@@ -33,6 +33,7 @@ const GROUPS = [
       { href: "/data#permanent-identifiers", label: "Permanent IDs" },
       { href: "/data#reconciliation-api", label: "Reconciliation API" },
       { href: "/about", label: "About" },
+      { href: "/privacy", label: "Privacy" },
     ],
     title: "Data",
   },

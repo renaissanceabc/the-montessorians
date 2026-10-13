@@ -347,7 +347,7 @@ const problemFor = (status: number): ServerProblem => {
     }
     case 429: {
       return {
-        detail: "Please wait a few minutes and try again, or open it on GitHub.",
+        detail: "You can send a few per hour. Try again later, or open it on GitHub.",
         title: "Too many submissions",
       };
     }
