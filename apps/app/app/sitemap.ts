@@ -68,6 +68,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       "contribute",
       "data",
       "about/editorial-policy",
+      "privacy",
     ].map((path) => ({
       changeFrequency: "weekly" as const,
       lastModified: new Date(),
