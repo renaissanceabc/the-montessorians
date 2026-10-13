@@ -22,8 +22,7 @@ const TABS: { id: DirectoryTab; label: string; short?: string; href: string }[] 
 const SUBTITLES: Record<DirectoryTab, string> = {
   all: "Montessori alumni who went on to do great things, and the people who shaped the field.",
   alumni: "People who went to a Montessori school and went on to do great things.",
-  contributors:
-    "Trainers, researchers, authors, and philosophers with documented contributions to Montessori.",
+  contributors: "Researchers, authors, trainers, and philosophers who shaped Montessori.",
   organizations: "Schools, training centers, universities, and associations.",
 };
 
@@ -56,7 +55,8 @@ export const DirectoryShell = ({
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
         <div className="flex max-w-2xl flex-col gap-2">
           <h1 className="type-title">Explore the directory</h1>
-          <p className="type-lead">{SUBTITLES[active]}</p>
+          {/* Two lines reserved so switching tabs doesn't shift the layout. */}
+          <p className="type-lead min-h-[3.2em] text-balance">{SUBTITLES[active]}</p>
         </div>
         <label className="relative flex w-full shrink-0 items-center lg:w-sm">
           <span className="sr-only">{searchPlaceholder}</span>
