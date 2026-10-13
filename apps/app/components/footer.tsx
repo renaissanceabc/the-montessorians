@@ -49,7 +49,7 @@ const Footer = () => (
     <Container className="flex flex-col gap-12 pt-14">
       <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
         <p className="type-section max-w-sm font-normal text-white/90">
-          People shaped by Montessori, <em>and the people who shaped it.</em>
+          People shaped by Montessori, and the people who shaped it.
         </p>
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-12 lg:gap-x-16">
