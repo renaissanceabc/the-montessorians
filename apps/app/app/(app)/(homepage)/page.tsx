@@ -1,16 +1,14 @@
-import { ArrowRightIcon } from "lucide-react";
-import Link from "next/link";
-
 import { Container } from "@/components/container";
 import Contribute from "@/components/contribute";
 import { getDailyProfile, getEasternDate } from "@/lib/content/daily";
-import { getProfiles } from "@/lib/content/profiles";
+import { getAllProfiles, getProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
 
 import ContributorsBand from "./components/contributors-band";
 import Hero from "./components/hero";
 import ProfilesHomepageList from "./components/profiles-list";
+import SectionHeader from "./components/section-header";
 
 // Regenerate daily so the featured profile rotates without a redeploy.
 export const revalidate = 86_400;
@@ -25,7 +23,8 @@ export const generateMetadata = () =>
   });
 
 const Home = () => {
-  const profiles = getProfiles({ kind: "alum", limit: 10 });
+  const profiles = getProfiles({ kind: "alum", limit: 6 });
+  const peopleCount = getAllProfiles().length;
   const contributors = getProfiles({ kind: "contributor", limit: 6 });
   const dailyProfile = getDailyProfile(getEasternDate());
 
@@ -35,17 +34,19 @@ const Home = () => {
         <Hero dailyProfile={dailyProfile} />
       </Container>
 
-      <Container as="section" className="flex flex-col gap-5 py-12">
-        <div className="flex flex-row items-end justify-between gap-4">
-          <h2 className="type-section">Montessorians</h2>
-          <Link
-            className="flex shrink-0 flex-row items-center gap-1 text-sm font-semibold hover:underline"
-            href="/alumni"
-          >
-            See all <ArrowRightIcon aria-hidden="true" className="size-4" />
-          </Link>
-        </div>
-
+      <Container
+        aria-labelledby="home-recent"
+        as="section"
+        className="flex flex-col gap-6 py-14 lg:py-24"
+      >
+        <SectionHeader
+          action={`Browse all ${peopleCount}`}
+          href="/discover"
+          id="home-recent"
+          lead="The newest people in the directory."
+          shortAction={`All ${peopleCount}`}
+          title="Recently added"
+        />
         <ProfilesHomepageList profiles={profiles} />
       </Container>
 
