@@ -17,8 +17,10 @@ const AdjacentLink = ({
   return (
     <Link
       className={cn(
-        "group flex min-w-0 items-center gap-2.5 rounded-full py-1 transition-colors",
-        isNext ? "ml-auto flex-row-reverse pl-3 text-right" : "pr-3"
+        "group flex min-w-0 items-center gap-2.5 py-1 transition-colors",
+        // Phones: a full-width row each, so long names have room.
+        "max-sm:w-full max-sm:rounded-xl max-sm:border max-sm:border-black/10 max-sm:bg-white/45 max-sm:px-4 max-sm:py-3",
+        isNext ? "flex-row-reverse text-right sm:ml-auto sm:pl-3" : "sm:pr-3"
       )}
       href={`/${profile.slug}`}
       rel={direction === "previous" ? "prev" : "next"}
@@ -31,7 +33,7 @@ const AdjacentLink = ({
             : "group-hover:-translate-x-0.5 motion-reduce:group-hover:translate-x-0"
         )}
       />
-      <span className="flex min-w-0 items-center gap-2.5">
+      <span className={cn("flex min-w-0 items-center gap-2.5", isNext && "flex-row-reverse")}>
         <ProfilePhoto
           className="size-8"
           initialClassName="text-sm"
@@ -57,7 +59,7 @@ const ProfileActions = ({
 }) => (
   <nav
     aria-label="More profiles"
-    className="flex w-full items-center justify-between gap-4"
+    className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
     data-print-hidden
   >
     {previous.slug && <AdjacentLink direction="previous" profile={previous} />}
