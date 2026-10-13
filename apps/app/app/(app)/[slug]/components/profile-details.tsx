@@ -27,6 +27,7 @@ import { CorrectionButton, RecordDetails } from "@/components/record-rail";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { HowWeVerify } from "@/components/verification";
+import { LINK_LABELS } from "@/lib/content/types";
 import type {
   Contribution,
   OrganizationRef,
@@ -438,9 +439,6 @@ export const ProfileMain = ({
   );
 };
 
-const chipClass =
-  "inline-flex max-w-full items-center gap-1.5 rounded-full border border-black/12 bg-white px-3 py-1.5 text-[13px]";
-
 const sourceRowClass =
   "flex min-w-0 items-start gap-2.5 rounded-lg border border-black/8 bg-white/55 px-3 py-2.5";
 
@@ -564,17 +562,28 @@ export const ProfileRail = ({
 
     {profile.links.length > 0 && (
       <Section title="Elsewhere">
-        <ul className="flex flex-wrap gap-1.5">
+        <ul className="flex flex-col gap-2">
           {profile.links.map((link) => (
-            <li className="max-w-full min-w-0" key={link.url}>
+            <li className="min-w-0" key={link.url}>
               <Link
-                className={cn(chipClass, "transition-colors hover:border-black/30")}
+                className={cn(
+                  sourceRowClass,
+                  "items-center transition-colors hover:border-black/20 hover:bg-white"
+                )}
                 href={link.url}
                 rel="noopener"
                 target="_blank"
               >
-                <ArrowUpRightIcon aria-hidden="true" className="size-3.5 shrink-0" />
-                <span className="truncate">{prettyUrl(link.url)}</span>
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="text-sm font-medium">{LINK_LABELS[link.type] ?? "Link"}</span>
+                  <span className="text-muted-foreground truncate text-xs">
+                    {prettyUrl(link.url)}
+                  </span>
+                </span>
+                <ArrowUpRightIcon
+                  aria-hidden="true"
+                  className="text-muted-foreground size-4 shrink-0"
+                />
               </Link>
             </li>
           ))}

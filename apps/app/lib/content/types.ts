@@ -278,3 +278,16 @@ export interface ProfilePage {
 
 export type Tag = ProfileTag;
 export type TagWithCount = ProfileTag & { profileCount: number };
+
+/** Display names for each link type. */
+export const LINK_LABELS: Record<LinkType, string> = {
+  article: "Article",
+  imdb: "IMDb",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  tiktok: "TikTok",
+  website: "Website",
+  wikipedia: "Wikipedia",
+  x: "X",
+  youtube: "YouTube",
+};

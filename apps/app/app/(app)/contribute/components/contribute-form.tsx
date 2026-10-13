@@ -39,7 +39,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { CONTRIBUTOR_ROLE_LABELS, CONTRIBUTOR_ROLES, LINK_TYPES } from "@/lib/content/types";
+import {
+  CONTRIBUTOR_ROLE_LABELS,
+  CONTRIBUTOR_ROLES,
+  LINK_LABELS,
+  LINK_TYPES,
+} from "@/lib/content/types";
 import type { SourceType, Tag } from "@/lib/content/types";
 import {
   crossFieldIssues,
@@ -113,18 +118,6 @@ const SOURCE_OPTIONS: { type: SourceType; label: string; placeholder: string }[]
   { label: "Personal knowledge", placeholder: "", type: "personal-knowledge" },
   { label: "Other", placeholder: "https://…", type: "other" },
 ];
-
-const LINK_LABELS: Record<LinkType, string> = {
-  article: "Article",
-  imdb: "IMDb",
-  instagram: "Instagram",
-  linkedin: "LinkedIn",
-  tiktok: "TikTok",
-  website: "Website",
-  wikipedia: "Wikipedia",
-  x: "X",
-  youtube: "YouTube",
-};
 
 const LINK_ITEMS = LINK_TYPES.map((type) => ({ label: LINK_LABELS[type], value: type }));
 

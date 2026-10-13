@@ -1,4 +1,5 @@
 import {
+  ArrowUpRightIcon,
   Building2Icon,
   CalendarIcon,
   GlobeIcon,
@@ -236,18 +237,6 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
           </ul>
         </Section>
       )}
-      {org.logoUrl && org.logoSource && (
-        <p className="text-muted-foreground text-xs [overflow-wrap:anywhere]">
-          Logo from{" "}
-          {URL.canParse(org.logoSource) ? (
-            <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
-              {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
-            </Link>
-          ) : (
-            org.logoSource
-          )}
-        </p>
-      )}
     </>
   );
 
@@ -256,13 +245,22 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
       {org.website && (
         <Section title="Website">
           <Link
-            className="inline-flex max-w-full items-center gap-1.5 self-start rounded-full border border-black/12 bg-white px-3 py-1.5 text-[13px] hover:border-black/30"
+            className="flex min-w-0 items-center gap-2.5 rounded-lg border border-black/8 bg-white/55 px-3 py-2.5 transition-colors hover:border-black/20 hover:bg-white"
             href={org.website}
             rel="noopener"
             target="_blank"
           >
-            <GlobeIcon aria-hidden="true" className="size-3.5 shrink-0" />
-            <span className="truncate">{prettyUrl(org.website)}</span>
+            <GlobeIcon aria-hidden="true" className="text-muted-foreground size-4 shrink-0" />
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="text-sm font-medium">Official website</span>
+              <span className="text-muted-foreground truncate text-xs">
+                {prettyUrl(org.website)}
+              </span>
+            </span>
+            <ArrowUpRightIcon
+              aria-hidden="true"
+              className="text-muted-foreground size-4 shrink-0"
+            />
           </Link>
         </Section>
       )}
@@ -282,6 +280,18 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
           items={[{ href: "/organizations", label: "Organizations" }, { label: org.name }]}
         />
         <RecordLayout main={main} permanentUrl={permanentUrl} rail={rail} />
+        {org.logoUrl && org.logoSource && (
+          <p className="text-muted-foreground text-xs [overflow-wrap:anywhere]">
+            Logo from{" "}
+            {URL.canParse(org.logoSource) ? (
+              <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
+                {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
+              </Link>
+            ) : (
+              org.logoSource
+            )}
+          </p>
+        )}
       </Container>
 
       <script

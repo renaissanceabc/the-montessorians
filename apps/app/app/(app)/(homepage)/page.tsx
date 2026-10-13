@@ -37,7 +37,7 @@ const Home = () => {
           action={`Browse all ${peopleCount}`}
           href="/discover"
           id="home-recent"
-          lead="The newest people in the directory."
+          lead="The newest alumni in the directory."
           shortAction={`All ${peopleCount}`}
           title="Recently added"
         />

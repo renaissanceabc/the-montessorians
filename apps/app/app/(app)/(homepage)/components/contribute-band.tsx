@@ -12,11 +12,10 @@ const ContributeBand = () => (
   >
     <div className="flex max-w-xl flex-col gap-2">
       <h2 className="type-section" id="home-contribute">
-        Know a Montessorian we&apos;re missing?
+        Know a Montessorian we’re missing?
       </h2>
       <p className="text-muted-foreground text-[15px] text-pretty">
-        Add someone you know, or yourself. A maintainer checks every source before it&apos;s
-        published.
+        Add someone you know, or yourself. A maintainer checks every source before it’s published.
       </p>
     </div>
 
