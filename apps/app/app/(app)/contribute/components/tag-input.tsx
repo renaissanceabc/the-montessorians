@@ -55,7 +55,7 @@ export const TagInput = ({
     <div className="relative">
       <div
         className={cn(
-          "border-input focus-within:border-ring focus-within:ring-ring/50 flex min-h-10 flex-wrap items-center gap-1 rounded-md border bg-white/80 px-2 py-1.5 shadow-xs transition-[color,box-shadow] focus-within:ring-3",
+          "border-input focus-within:border-ring focus-within:ring-ring/50 flex min-h-10 flex-wrap items-center gap-1 rounded-lg border bg-white/80 px-2 py-1.5 shadow-xs transition-[color,box-shadow] focus-within:ring-3",
           invalid && "border-destructive ring-destructive/20 ring-3"
         )}
       >

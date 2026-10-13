@@ -78,7 +78,7 @@ const TagsPanel = ({
       </div>
 
       <div className="px-4 pb-3">
-        <InputGroup className="h-10">
+        <InputGroup className="h-10 rounded-full">
           <InputGroupAddon>
             <SearchIcon />
           </InputGroupAddon>

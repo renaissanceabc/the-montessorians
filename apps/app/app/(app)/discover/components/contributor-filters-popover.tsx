@@ -134,7 +134,7 @@ export const ContributorFiltersPopover = ({
           <fieldset className="flex flex-col gap-2">
             <legend className="type-eyebrow mb-2">Affiliation</legend>
             {affiliationOptions.length > 6 && (
-              <InputGroup className="h-10">
+              <InputGroup className="h-10 rounded-full">
                 <InputGroupAddon>
                   <SearchIcon />
                 </InputGroupAddon>
