@@ -11,9 +11,9 @@ const COPIED_MS = 1800;
 /** Shared by the stacked icon and label layers of each state. */
 const SWAP =
   "[grid-area:1/1] transition-[opacity,scale,filter] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)]";
-const SWAP_IN = "opacity-100 scale-100 blur-0";
+const SWAP_IN = "opacity-100 scale-100 blur-[0px]";
 /** Reduced motion keeps the opacity crossfade and drops the scale and blur. */
-const SWAP_OUT = "opacity-0 scale-50 blur-[2px] motion-reduce:scale-100 motion-reduce:blur-0";
+const SWAP_OUT = "opacity-0 scale-50 blur-[2px] motion-reduce:scale-100 motion-reduce:blur-[0px]";
 
 /** Copies a record's permanent URI. */
 export const CiteButton = ({
