@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AnalyticsProvider } from "@montessorians/analytics/provider";
+import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 import { Suspense } from "react";
@@ -7,9 +8,15 @@ import { Suspense } from "react";
 import { DevTools } from "@/components/dev-tools";
 import { Toaster } from "@/components/ui/sonner";
 import { fonts } from "@/lib/fonts";
+import { feedAlternates } from "@/lib/metadata";
 
 import Footer from "../components/footer";
 import Header from "../components/header";
+
+// Pages built with createMetadata advertise the feed too; this covers the rest.
+export const metadata: Metadata = {
+  alternates: feedAlternates,
+};
 
 const RootLayout = ({
   children,

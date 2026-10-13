@@ -58,6 +58,15 @@ const creator = "Renaissance";
 const publisher = "Renaissance";
 const twitterHandle = "@renaissanceabc";
 
+/** The Atom feed of new profiles (app/feed.xml), advertised on every page. */
+export const feedAlternates = {
+  types: {
+    "application/atom+xml": [
+      { title: "The Montessorians: recently added", url: `${siteUrl}/feed.xml` },
+    ],
+  },
+} satisfies Metadata["alternates"];
+
 export const createMetadata = ({
   title,
   description,
@@ -67,6 +76,8 @@ export const createMetadata = ({
   const parsedTitle = `${title} | ${applicationName}`;
   const ogImage = image ?? `${siteUrl}/og.png`;
   const defaultMetadata: Metadata = {
+    // Pages that set their own `alternates` keep this: the merge below is deep.
+    alternates: feedAlternates,
     appleWebApp: {
       capable: true,
       statusBarStyle: "default",
