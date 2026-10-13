@@ -28,27 +28,31 @@ const About = () => {
 
         <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none">
           <p className="lead text-primary">
-            <strong className="text-primary">The Montessorians</strong> is the largest open
-            directory of people shaped by Montessori, and of the people who shaped it.
+            <strong className="text-primary">The Montessorians</strong> is the largest open source
+            dataset of Montessori alumni who’ve gone on to do great things, and of the people who
+            shaped Montessori itself.
           </p>
 
           <p>
-            Some went to a Montessori school as kids and grew up to found Google, win a Pulitzer, or
-            play cello for presidents. Others spent their careers on Montessori itself, starting
-            with Maria Montessori, who opened her first classroom in a Rome tenement in 1907. The
-            researchers, writers, and teacher trainers who carried her work forward are here too.
-          </p>
-
-          <p>
-            You can check everything we publish. Each person has a permanent ID and the sources
-            behind their entry, so a librarian, a researcher, or a curious parent can cite them with
-            confidence. Read{" "}
-            <Link className="underline" href="/about/editorial-policy">
-              how we decide who belongs here
+            The Montessorians is a project that aims to celebrate and document the achievements of
+            individuals who were influenced by Montessori. An alternative method to public school,
+            Montessori has led to extraordinary outcomes as evidenced by the many pioneers,
+            innovators, and trailblazers who we strive to chronicle on{" "}
+            <Link className="underline" href="/discover">
+              The Montessorians
             </Link>
-            , or{" "}
+            .
+          </p>
+
+          <p>
+            We also document the researchers, authors, and trainers behind the method, starting with
+            Maria Montessori herself. Every profile lists its sources (see our{" "}
+            <Link className="underline" href="/about/editorial-policy">
+              editorial policy
+            </Link>
+            ), and the full dataset is free to use through our{" "}
             <Link className="underline" href="/data">
-              download the whole dataset
+              Data &amp; API
             </Link>
             .
           </p>
@@ -122,14 +126,13 @@ const About = () => {
           </p>
 
           <p>
-            When we went looking for notable Montessori alumni, we found plenty of lists. Few cited
-            a source, and most copied each other. And no one was keeping track of the people behind
-            the method at all.
+            In our search for notable alumni who have been through alternative pathways to education
+            (such as Montessori), we found there was no comprehensive source of information.
           </p>
 
           <p>
-            So we’re building the first and largest open record of both, one you can cite, check,
-            and add to.
+            We hope to change that with the first and largest open source dataset of Montessori
+            alumni and contributors.
           </p>
         </div>
 
