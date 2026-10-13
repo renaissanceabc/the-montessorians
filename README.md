@@ -43,7 +43,9 @@ The site is fully static: it reads the YAML in `data/` at build time, so adding 
 bun install
 bun dev          # run the website locally
 bun run build    # production build (statically renders every profile)
-bun run validate # validate the dataset (schemas, ids, references, duplicates)
+bun run validate # validate the dataset (schemas, ids, references, tags, duplicates)
+bun run check    # lint and format check (Ultracite: oxlint + oxfmt)
+bun run verify:ui # smoke-test key pages at desktop and phone widths (needs a running dev server)
 bun run id:next  # print the next unused person id (add `-- org` for organizations)
 ```
 
@@ -86,9 +88,7 @@ bio: >-
   Yo-Yo Ma is an acclaimed American cellist known for his extraordinary technique and deep musicality. A cultural ambassador and humanitarian, he has performed around the world and founded the Silk Road Ensemble to foster cross-cultural collaboration through music.
 tags:
   - musician
-  - cellist
-  - performer
-  - cultural-ambassador
+  - activist
 education:
   - montessori
 education_notes: >-
