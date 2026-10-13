@@ -889,7 +889,9 @@ export const ContributeForm = ({
       {mode === "form" && !hasKind && <PickKindHint />}
 
       {mode === "form" && hasKind && (
-        <FieldGroup className="gap-6">
+        // @starting-style only applies when the group first mounts, so it eases
+        // in once after a kind is picked and never again on re-render.
+        <FieldGroup className="gap-6 transition-[opacity,translate] duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)] starting:translate-y-1.5 starting:opacity-0 motion-reduce:starting:translate-y-0">
           <Controller
             control={control}
             name="name"
