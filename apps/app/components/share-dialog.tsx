@@ -55,7 +55,7 @@ const ShareContent = ({
     const top = window.innerHeight / 2 - height / 2;
     const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`;
 
-    const text = `Did you know ${profile?.name} was a Montessorian?`;
+    const text = `${profile.name} on The Montessorians`;
 
     window.open(
       getShareUrl(platform, url, text),
