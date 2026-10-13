@@ -202,6 +202,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
             {attended.map(({ profile, ref }) => (
               <li key={`${profile.slug}-attended`}>
                 <ProfileListItem
+                  hideOrganization={org.slug}
                   detail={[ref.level && toTitleCase(ref.level), yearRange(ref)]
                     .filter(Boolean)
                     .join(" · ")}
@@ -219,6 +220,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
             {affiliated.map(({ profile, ref }) => (
               <li key={`${profile.slug}-${ref.role ?? ""}`}>
                 <ProfileListItem
+                  hideOrganization={org.slug}
                   detail={[ref.role, yearRange(ref)].filter(Boolean).join(" · ")}
                   profile={profile}
                 />
@@ -286,7 +288,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
             Source:{" "}
             {URL.canParse(org.logoSource) ? (
               <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
-                {prettyUrl(org.logoSource)}
+                {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
               </Link>
             ) : (
               org.logoSource
