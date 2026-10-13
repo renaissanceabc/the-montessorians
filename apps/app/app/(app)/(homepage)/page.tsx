@@ -50,7 +50,9 @@ const Home = () => {
         <ProfilesHomepageList profiles={profiles} />
       </Container>
 
-      <ContributorsBand contributors={contributors} />
+      <Container className="pb-14 lg:pb-24">
+        <ContributorsBand contributors={contributors} />
+      </Container>
 
       <Contribute />
     </>
