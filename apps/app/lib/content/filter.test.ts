@@ -98,9 +98,13 @@ describe("filterAndSortProfiles", () => {
     );
   });
 
-  test("lists pinned records first, alphabetically, by default", () => {
+  test("sorts by date added in either direction, ignoring pinned, with ties A–Z", () => {
     assert.deepEqual(
       filterAndSortProfiles(all, { kind: "contributor" }).map((p) => p.slug),
+      ["lillard", "maria", "mario"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles(all, { kind: "contributor", sortBy: "asc" }).map((p) => p.slug),
       ["maria", "mario", "lillard"]
     );
   });

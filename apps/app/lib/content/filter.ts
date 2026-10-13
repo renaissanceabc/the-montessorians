@@ -21,15 +21,9 @@ const sortProfiles = (
       const diff = a.contributions.length - b.contributions.length;
       return diff === 0 ? a.name.localeCompare(b.name) : diff * dir;
     }
-    // "latest" / "trending" → by when the profile was added, pinned records first
-    if (a.pinned !== b.pinned) {
-      return a.pinned ? -1 : 1;
-    }
-    if (a.pinned && b.pinned) {
-      return a.name.localeCompare(b.name);
-    }
+    // "latest" / "trending" → by when the profile was added, ties A–Z either way
     if (a.addedAt === b.addedAt) {
-      return a.name.localeCompare(b.name) * dir;
+      return a.name.localeCompare(b.name);
     }
     return (a.addedAt < b.addedAt ? -1 : 1) * dir;
   });
