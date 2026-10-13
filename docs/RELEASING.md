@@ -33,7 +33,7 @@ Cut every feature branch from `develop` and open every PR against it. Never comm
 | `version.yml` | push to `develop` | Opens/updates the Version Packages PR |
 | `promote.yml` | push to `develop` that changes `apps/app/package.json` | Opens/refreshes the `develop` → `main` promotion PR |
 | `release.yml` | push to `main` | Tag + GitHub release only |
-| `links.yml` | weekly | Opens an issue listing broken links in the dataset |
+| `links.yml` | weekly | Keeps one issue listing broken links in the dataset and docs, closing it when all pass |
 
 ## Gotchas
 

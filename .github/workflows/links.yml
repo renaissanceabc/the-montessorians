@@ -1,7 +1,8 @@
 name: Check dataset links
 
-# Link rot quietly erodes sources. Check every URL in the dataset weekly and open
-# an issue listing the broken ones.
+# Link rot quietly erodes sources. Check every URL in the dataset (sources,
+# links, contributions, organization websites), every contribution DOI, and
+# the docs weekly, and keep a single issue up to date with the broken ones.
 
 on:
   schedule:
@@ -12,6 +13,13 @@ permissions:
   contents: read
   issues: write
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  ISSUE_TITLE: Broken links in the dataset
+
 jobs:
   links:
     runs-on: ubuntu-latest
@@ -19,19 +27,58 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # Contributions record DOIs as bare identifiers; check them through the
+      # resolver, which is the link the site shows.
+      - name: List contribution DOIs as links
+        run: |
+          mkdir -p lychee
+          grep -rhoE '^[[:space:]]*doi:[[:space:]]*"?10\.[^" ]+' data \
+            | sed -E 's/^[[:space:]]*doi:[[:space:]]*"?/https:\/\/doi.org\//' \
+            | sort -u > lychee/doi-links.txt
+          echo "$(wc -l < lychee/doi-links.txt) DOIs"
+
+      - name: Restore lychee cache
+        uses: actions/cache@v4
+        with:
+          path: .lycheecache
+          key: lychee-${{ github.sha }}
+          restore-keys: lychee-
+
+      # Sites that block automated requests (403/999) or rate-limit them are
+      # excluded or accepted, so the issue lists real rot, not bot walls.
       - name: Check links
         id: lychee
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
-            --no-progress --max-concurrency 4 --accept 200..=299,403,429 --exclude "linkedin\\.com" --exclude "x\\.com" --exclude "instagram\\.com" --exclude "tiktok\\.com" "data/**/*.yaml"
+            --no-progress --cache --max-cache-age 3d --max-concurrency 4 --max-retries 2 --retry-wait-time 5 --timeout 30 --accept 200..=299,403,429 --exclude-all-private --exclude "^mailto:" --exclude "linkedin\\.com" --exclude "[/.]x\\.com(/|$)" --exclude "twitter\\.com" --exclude "instagram\\.com" --exclude "tiktok\\.com" --exclude "facebook\\.com" --exclude "imdb\\.com" --exclude "loc\\.gov" --exclude "hathitrust\\.org" --exclude "gallica\\.bnf\\.fr" --exclude "worldcat\\.org" --exclude "jstor\\.org" --exclude "researchgate\\.net" --exclude "pressreader\\.com" --exclude "example\\.(com|org)" "data/**/*.yaml" "lychee/doi-links.txt" "README.md" "CONTRIBUTING.md" "docs/**/*.md"
           output: ./lychee/out.md
           fail: false
 
-      - name: Open an issue for broken links
+      # One issue, updated in place: find the open one, if any.
+      - name: Find the open broken-links issue
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          number=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label links \
+            --search "in:title \"$ISSUE_TITLE\"" --json number,title \
+            --jq "map(select(.title == env.ISSUE_TITLE)) | .[0].number // empty")
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the issue
         if: steps.lychee.outputs.exit_code != 0
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: Broken links in the dataset
+          title: ${{ env.ISSUE_TITLE }}
           content-filepath: ./lychee/out.md
+          issue-number: ${{ steps.existing.outputs.number }}
           labels: data, links
+
+      - name: Close the issue once every link works
+        if: steps.lychee.outputs.exit_code == 0 && steps.existing.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue close "${{ steps.existing.outputs.number }}" --repo "$GITHUB_REPOSITORY" \
+            --comment "Every link passed the weekly check on $(date -u +%Y-%m-%d)."
