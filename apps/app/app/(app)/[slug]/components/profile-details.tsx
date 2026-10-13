@@ -39,6 +39,9 @@ import { cn, prettyUrl, toTitleCase } from "@/lib/utils";
 
 /** Contributions shown before "Show all". */
 const CONTRIBUTIONS_PREVIEW = 3;
+/** How many newly revealed contributions stagger in; the rest arrive together. */
+const REVEAL_STAGGER_ROWS = 8;
+const REVEAL_STAGGER_MS = 30;
 /** Co-authors named before "and N others". */
 const COAUTHORS_SHOWN = 2;
 
@@ -202,7 +205,7 @@ const ContributionsSection = ({
   return (
     <Section count={contributions.length} id="contributions" title="Contributions">
       <ul className="flex flex-col" id={listId}>
-        {visibleContributions.map((c) => {
+        {visibleContributions.map((c, i) => {
           const Icon = CONTRIBUTION_ICONS[c.type] ?? FileTextIcon;
           const withLine = coauthorLine(c.authors, name);
           const body = (
@@ -247,7 +250,20 @@ const ContributionsSection = ({
             </>
           );
           return (
-            <li className="border-b border-black/7" key={`${c.title}-${c.year ?? ""}`}>
+            <li
+              className={cn(
+                "border-b border-black/7",
+                // Only rows revealed by "Show all" mount later, so only they ease in.
+                i >= CONTRIBUTIONS_PREVIEW &&
+                  "transition-[opacity,translate] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] starting:translate-y-1 starting:opacity-0 motion-reduce:starting:translate-y-0"
+              )}
+              key={`${c.title}-${c.year ?? ""}`}
+              style={
+                i >= CONTRIBUTIONS_PREVIEW && i < CONTRIBUTIONS_PREVIEW + REVEAL_STAGGER_ROWS
+                  ? { transitionDelay: `${(i - CONTRIBUTIONS_PREVIEW) * REVEAL_STAGGER_MS}ms` }
+                  : undefined
+              }
+            >
               {c.href ? (
                 <Link
                   className="group flex items-start gap-2.5 py-2.5"

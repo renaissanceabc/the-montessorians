@@ -475,7 +475,10 @@ const FormFooter = ({
     )}
 
     {problem && (
-      <Alert variant="destructive">
+      <Alert
+        className="transition-[opacity,translate] duration-[180ms] ease-[cubic-bezier(0.23,1,0.32,1)] starting:translate-y-1 starting:opacity-0 motion-reduce:starting:translate-y-0"
+        variant="destructive"
+      >
         <AlertCircleIcon />
         <AlertTitle>{problem.title}</AlertTitle>
         <AlertDescription>
@@ -523,6 +526,9 @@ const LinksFieldSet = ({
   const linkValues = useWatch({ control, name: "links" });
   const usedLinkTypes = new Set(linkValues.map((link) => link.type));
   const unusedLinkTypes = LINK_TYPES.filter((type) => !usedLinkTypes.has(type));
+  // @starting-style only plays when a row mounts, so turning the entrance on after the
+  // first "Add another link" eases in appended rows and never the ones already there.
+  const [rowsEaseIn, setRowsEaseIn] = useState(false);
   const linkItemsFor = (current: LinkType) =>
     LINK_ITEMS.filter((item) => item.value === current || !usedLinkTypes.has(item.value));
   return (
@@ -535,7 +541,13 @@ const LinksFieldSet = ({
             key={row.id}
             name={`links.${i}.url`}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid || undefined}>
+              <Field
+                className={cn(
+                  rowsEaseIn &&
+                    "transition-[opacity,translate] duration-[180ms] ease-[cubic-bezier(0.23,1,0.32,1)] starting:-translate-y-1 starting:opacity-0 motion-reduce:starting:translate-y-0"
+                )}
+                data-invalid={fieldState.invalid || undefined}
+              >
                 <div className="flex gap-2">
                   <Controller
                     control={control}
@@ -590,7 +602,10 @@ const LinksFieldSet = ({
       {unusedLinkTypes.length > 0 && (
         <Button
           className="self-start"
-          onClick={() => links.append({ type: unusedLinkTypes[0], url: "" })}
+          onClick={() => {
+            setRowsEaseIn(true);
+            links.append({ type: unusedLinkTypes[0], url: "" });
+          }}
           size="sm"
           type="button"
           variant="ghost"
@@ -782,8 +797,8 @@ export const ContributeForm = ({
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-lg border border-black/10 bg-white/60 px-6 py-10 text-center">
-        <CheckCircle2Icon className="text-primary size-10" />
+      <div className="flex flex-col items-center gap-4 rounded-lg border border-black/10 bg-white/60 px-6 py-10 text-center transition-[opacity,scale] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] starting:scale-[0.97] starting:opacity-0 motion-reduce:starting:scale-100">
+        <CheckCircle2Icon className="text-primary size-10 transition-[opacity,scale] delay-80 duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] starting:scale-80 starting:opacity-0 motion-reduce:starting:scale-100" />
         <h2 className="type-section">Thank you!</h2>
         <p className="text-muted-foreground max-w-md text-sm">
           A maintainer will review the submission before it&apos;s published. You can follow along
