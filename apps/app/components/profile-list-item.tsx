@@ -1,4 +1,4 @@
-import { BadgeCheckIcon, Building2Icon, GraduationCapIcon, UserCheckIcon } from "lucide-react";
+import { BadgeCheckIcon, Building2Icon, GraduationCapIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -109,11 +109,7 @@ const ProfileListItem = ({
               className="inline-flex shrink-0 self-center"
               title={profile.verification === "verified" ? "Verified" : "Confirmed"}
             >
-              {profile.verification === "verified" ? (
-                <BadgeCheckIcon aria-hidden="true" className="fill-verified size-5 text-white" />
-              ) : (
-                <UserCheckIcon aria-hidden="true" className="text-verified size-5" />
-              )}
+              <BadgeCheckIcon aria-hidden="true" className="fill-verified size-5 text-white" />
               <span className="sr-only">
                 {profile.verification === "verified" ? "Verified" : "Confirmed"}
               </span>

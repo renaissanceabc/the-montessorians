@@ -1,20 +1,12 @@
 "use client";
 
-import { BadgeCheckIcon, InfoIcon, MessageCircleIcon, UserCheckIcon } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { BadgeCheckIcon, InfoIcon } from "lucide-react";
 import Link from "next/link";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Verification } from "@/lib/content/types";
 import { POLICY_HREF, VERIFICATION_COPY } from "@/lib/content/verification";
 import { cn } from "@/lib/utils";
-
-const VERIFICATION_ICONS: Record<Verification, LucideIcon> = {
-  confirmed: UserCheckIcon,
-  reported: MessageCircleIcon,
-  unverified: BadgeCheckIcon,
-  verified: BadgeCheckIcon,
-};
 
 /** The badge beside a person's name. */
 export const VerificationBadge = ({
@@ -29,7 +21,6 @@ export const VerificationBadge = ({
   }
   const copy = VERIFICATION_COPY[verification];
   const solid = verification === "verified" || verification === "confirmed";
-  const Icon = VERIFICATION_ICONS[verification];
 
   return (
     <Tooltip>
@@ -40,23 +31,14 @@ export const VerificationBadge = ({
             className={cn(
               "inline-flex shrink-0 items-center justify-center rounded-full transition-colors",
               solid
-                ? "size-8 transition-opacity hover:opacity-80"
+                ? "size-10 transition-opacity hover:opacity-80"
                 : "text-muted-foreground h-7 gap-1 border border-black/20 px-2.5 text-xs font-medium hover:border-black/40"
             )}
             href={href}
           />
         }
       >
-        {solid ? (
-          <Icon
-            className={cn(
-              "size-6",
-              verification === "verified" ? "fill-verified text-white" : "text-verified"
-            )}
-          />
-        ) : (
-          copy.label
-        )}
+        {solid ? <BadgeCheckIcon className="fill-verified size-8 text-white" /> : copy.label}
       </TooltipTrigger>
       <TooltipContent className="max-w-64">
         <p className="leading-snug text-pretty">
