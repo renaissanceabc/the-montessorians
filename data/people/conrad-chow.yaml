@@ -39,3 +39,6 @@ verification: verified
 schools:
   - organization: toronto-montessori-schools
     level: primary
+identifiers:
+  lcnaf: no2012137881
+  isni: "0000000384896926"

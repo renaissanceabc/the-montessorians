@@ -3,5 +3,11 @@ id: tmo000016
 name: Paint Branch Montessori School
 slug: paint-branch-montessori-school
 type: school
-location: Adelphi, Maryland, United States
+name_variants:
+  - PBMS
+description: >-
+  A Montessori school in Spencerville, Maryland, affiliated with the American Montessori Society. Earlier accounts,
+  including biographies of Sergey Brin, place it in Adelphi, Maryland.
+location: Spencerville, Maryland, United States
+website: https://www.pbmontessori.com
 logo_source: https://static.wixstatic.com/media/1a0da9_33c9ec81cfed4c90ab09edae9451377d~mv2.png

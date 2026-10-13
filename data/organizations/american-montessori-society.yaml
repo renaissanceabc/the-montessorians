@@ -4,7 +4,16 @@ name: American Montessori Society
 short_name: AMS
 slug: american-montessori-society
 type: association
+description: >-
+  A professional association for Montessori education in the United States, founded by Nancy McCormick Rambusch in 1960.
+  It accredits schools and teacher education programs.
 location: New York, United States
 founded: 1960
 website: https://amshq.org
 logo_source: https://amshq.org/wp-content/uploads/2024/10/AMS_Logo.svg
+identifiers:
+  lcnaf: n80113491
+  viaf: "145416855"
+  wikidata: Q4744458
+  ror: 04e82wg55
+  isni: 000000010699856X

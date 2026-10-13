@@ -3,5 +3,12 @@ id: tmo000009
 name: Clark Montessori High School
 slug: clark-montessori-high-school
 type: school
+description: >-
+  A public Montessori school for grades 7 to 12 in Cincinnati Public Schools, founded in 1994. It is described as the
+  first public Montessori high school in the United States.
 location: Cincinnati, Ohio, United States
+founded: 1994
+website: https://clark.cps-k12.org
 logo_source: https://resources.finalsite.net/images/v1706897916/cpsk12/wbmkcfa5yptgmihwcpgd/ClarkLogo-01.png
+identifiers:
+  wikidata: Q5127332

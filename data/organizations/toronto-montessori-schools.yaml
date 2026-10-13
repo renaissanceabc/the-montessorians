@@ -1,9 +1,17 @@
 ---
 id: tmo000019
-name: Toronto Montessori Schools
+name: Lauremont School
 slug: toronto-montessori-schools
 type: school
 name_variants:
+  - Toronto Montessori Schools
   - TMS
+description: >-
+  An independent school founded in 1961 by Helma Trass as Toronto Montessori Schools. It took the name Lauremont School
+  in September 2024.
 location: Richmond Hill, Ontario, Canada
+founded: 1961
+website: https://lauremontschool.ca
 logo_source: https://lauremontschool.ca/
+identifiers:
+  wikidata: Q7826445

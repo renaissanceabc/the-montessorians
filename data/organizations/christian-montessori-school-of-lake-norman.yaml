@@ -3,5 +3,13 @@ id: tmo000017
 name: Christian Montessori School of Lake Norman
 slug: christian-montessori-school-of-lake-norman
 type: school
+name_variants:
+  - Christian Montessori School at Lake Norman
+  - Charlotte Montessori School - Lake Norman
+description: >-
+  A Montessori school for infants through preschool, founded in 1995 by Dell and Sonya Curry as Charlotte Montessori
+  School - Lake Norman. It became a Christian Montessori school in 2004.
 location: Huntersville, North Carolina, United States
+founded: 1995
+website: https://christianmontessorischool.org
 logo_source: https://christianmontessorischool.org/wp-content/uploads/2021/07/cropped-site-icon.png

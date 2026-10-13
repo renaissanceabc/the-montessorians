@@ -3,5 +3,12 @@ id: tmo000007
 name: St. Mary of the Purification Montessori School
 slug: st-mary-of-the-purification-montessori-school
 type: school
+name_variants:
+  - Saint Mary of the Purification Montessori School
+description: >-
+  A Catholic school in Houston, founded as St. Mary of the Purification School in 1930. After a closure it reopened as a
+  Montessori school in 1980.
 location: Houston, Texas, United States
+founded: 1930
+website: https://www.smcshouston.org
 logo_source: https://files.ecatholic.com/32010/pictures/2022/5/logo.png
