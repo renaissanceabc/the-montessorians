@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
 
 import { ProfilePhoto } from "./profile-photo";
 
-/** Tags shown as badges on a card. */
+/** Tags shown as badges on a card: two on phones, three from md. */
 const TAGS_SHOWN = 3;
+const TAGS_SHOWN_PHONE = 2;
 
 const years = (profile: Profile) => {
   if (profile.birthYear && profile.deathYear) {
@@ -55,6 +56,8 @@ const ProfileListItem = ({
   const lifespan = years(profile);
   const works = profile.contributions.length;
   const tags = profile.tags.slice(0, TAGS_SHOWN).map((tag) => tag.label);
+  const moreOnPhone = profile.tags.length - TAGS_SHOWN_PHONE;
+  const moreFromMd = profile.tags.length - TAGS_SHOWN;
 
   const meta: { key: string; node: ReactNode }[] = [];
   if (orgs.length > 0) {
@@ -132,15 +135,31 @@ const ProfileListItem = ({
         )}
         {detail && <span className="type-meta">{detail}</span>}
         {tags.length > 0 && (
-          <span className="mt-1 flex flex-wrap gap-1">
-            {tags.map((tag) => (
+          // One row of badges, so cards keep the same height.
+          <span className="mt-1 flex min-w-0 items-center gap-1 overflow-hidden">
+            {tags.map((tag, i) => (
               <span
-                className="rounded-full bg-black/5 px-2 py-0.5 text-xs text-[#4A433D]"
+                className={cn(
+                  "min-w-0 truncate rounded-full bg-black/5 px-2 py-0.5 text-xs text-[#4A433D]",
+                  i >= TAGS_SHOWN_PHONE && "max-md:hidden"
+                )}
                 key={tag}
               >
                 {tag}
               </span>
             ))}
+            {moreOnPhone > 0 && (
+              <span className="type-meta shrink-0 text-xs tabular-nums md:hidden">
+                +{moreOnPhone}
+                <span className="sr-only"> more tags</span>
+              </span>
+            )}
+            {moreFromMd > 0 && (
+              <span className="type-meta hidden shrink-0 text-xs tabular-nums md:inline">
+                +{moreFromMd}
+                <span className="sr-only"> more tags</span>
+              </span>
+            )}
           </span>
         )}
       </span>
