@@ -3,25 +3,72 @@ import { checkBotId } from "botid/server";
 import { NextResponse } from "next/server";
 
 import { env } from "@/env";
+import {
+  BodyTooLargeError,
+  clientIp,
+  createRateLimiter,
+  readBodyWithLimit,
+  tooManyRequests,
+} from "@/lib/rate-limit";
 import { issueBody, issueTitle, submissionSchema } from "@/lib/submission";
 
 const REPO = "renaissanceabc/the-montessorians";
 
+/** A real submission is a few KB of JSON; anything near this is not one. */
+const MAX_BODY_BYTES = 32 * 1024;
+
+const SUBMISSIONS_PER_HOUR = 5;
+const HOUR_MS = 60 * 60 * 1000;
+
+// Per instance and best effort; the Vercel Firewall rule in docs/operations.md
+// enforces a limit across every instance.
+const limiter = createRateLimiter({ limit: SUBMISSIONS_PER_HOUR, windowMs: HOUR_MS });
+
+/** Parse and validate the raw body; invalid JSON fails validation like any bad shape. */
+const parseSubmission = (text: string) => {
+  let json = null;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    // Left as null, which the schema rejects.
+  }
+  return submissionSchema.safeParse(json);
+};
+
 /**
  * POST /api/submit
  *
- * Turns a contribute-form submission into a GitHub issue for
- * maintainers to review, so contributors don't need a GitHub account. Guarded by
- * Vercel BotID (and the Vercel firewall). Nothing is published until a
- * maintainer merges it.
+ * Turns a contribute-form submission into a GitHub issue for maintainers to
+ * review, so contributors don't need a GitHub account. Nothing is published
+ * until a maintainer merges it.
+ *
+ * Guarded by, in order: a per-IP rate limit (5 an hour, in memory per
+ * instance, backed by a Vercel Firewall rate-limit rule on this path; see
+ * docs/operations.md), Vercel BotID, and a 32 KB body cap applied before the
+ * body is parsed.
  */
 export const POST = async (request: Request) => {
+  const rate = limiter.check(clientIp(request));
+  if (!rate.allowed) {
+    return tooManyRequests(rate);
+  }
+
   const verification = await checkBotId();
   if (verification.isBot) {
     return NextResponse.json({ error: "Request blocked" }, { status: 403 });
   }
 
-  const parsed = submissionSchema.safeParse(await request.json().catch(() => null));
+  let text: string;
+  try {
+    text = await readBodyWithLimit(request, MAX_BODY_BYTES);
+  } catch (error) {
+    if (error instanceof BodyTooLargeError) {
+      return NextResponse.json({ error: "Submission is too large" }, { status: 413 });
+    }
+    return NextResponse.json({ error: "Could not read the submission" }, { status: 400 });
+  }
+
+  const parsed = parseSubmission(text);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid submission", issues: parsed.error.issues },
