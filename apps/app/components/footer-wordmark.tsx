@@ -35,7 +35,7 @@ export const FooterWordmark = () => {
   return (
     <Link
       aria-label="The Montessorians home"
-      className="group block overflow-hidden font-serif text-[min(14vw,10.8rem)] leading-[0.82] tracking-[-0.02em] whitespace-nowrap text-white/95 select-none"
+      className="group block overflow-hidden font-serif text-[min(14vw,10.8rem)] leading-[0.82] tracking-[-0.02em] whitespace-nowrap text-white/95 select-none focus-visible:-outline-offset-2"
       href="/"
       ref={ref}
     >

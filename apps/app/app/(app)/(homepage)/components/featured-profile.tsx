@@ -1,77 +1,66 @@
 import { ArrowRightIcon, StarsIcon } from "lucide-react";
 import Link from "next/link";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ProfilePhoto } from "@/components/profile-photo";
 import { Badge } from "@/components/ui/badge";
 import type { Profile } from "@/lib/content/types";
 
-const FeaturedProfile = ({ dailyProfile }: { dailyProfile: Profile | null }) => {
-  if (!dailyProfile) {
-    return (
-      <div className="flex flex-col items-center gap-4">
-        <h1 className="flex items-center gap-2 text-xs font-bold">
-          <StarsIcon className="h-4 w-4" />
-          Today&apos;s Montessorian
-        </h1>
+const ArchiveLink = () => (
+  <Link
+    className="text-muted-foreground flex flex-row items-center gap-1 text-xs hover:underline"
+    href="/archive"
+  >
+    See past Montessorians <ArrowRightIcon aria-hidden="true" className="size-3" />
+  </Link>
+);
 
-        <div className="flex max-w-md flex-col items-center gap-4 rounded-lg border border-black/20 bg-white/50 p-4 transition-colors sm:w-[320px] lg:w-[240px]">
-          <div className="flex flex-col items-center gap-2 text-center">
-            <span className="group-hover:text-primary font-serif text-2xl font-semibold">
-              Oops – no daily profile found!
-            </span>
-          </div>
-        </div>
+const FeaturedProfile = ({ dailyProfile }: { dailyProfile: Profile | null }) => (
+  <div className="flex w-full flex-col items-center gap-4 md:w-72 md:shrink-0">
+    <h2 className="type-eyebrow text-foreground flex items-center gap-2">
+      <StarsIcon aria-hidden="true" className="size-4" />
+      Today&apos;s Montessorian
+    </h2>
 
-        <Link
-          className="text-muted-foreground flex flex-row items-center gap-1 text-xs hover:underline"
-          href="/archive"
-        >
-          See past Montessorians <ArrowRightIcon className="h-3 w-3" />
-        </Link>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col items-center gap-4">
-      <h1 className="flex items-center gap-2 text-xs font-bold">
-        <StarsIcon className="h-4 w-4" />
-        Today&apos;s Montessorian
-      </h1>
-
+    {dailyProfile ? (
       <Link
-        className="group flex w-full max-w-md flex-col items-center gap-4 rounded-lg border border-black/10 bg-white/50 p-4 transition-colors hover:bg-stone-50 sm:w-[320px] lg:w-[240px]"
+        className="group flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-black/10 bg-white/50 p-5 transition-colors hover:bg-white"
         href={`/${dailyProfile.slug}`}
       >
-        <Avatar className="h-24 w-24 rounded-full lg:h-32 lg:w-32">
-          <AvatarImage alt={dailyProfile.name} src={dailyProfile.imageUrl ?? ""} />
-          <AvatarFallback className="font-serif text-4xl lg:text-5xl">
-            {dailyProfile.name.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        <ProfilePhoto
+          className="size-28 lg:size-32"
+          initialClassName="text-5xl"
+          name={dailyProfile.name}
+          preload
+          size={128}
+          src={dailyProfile.imageUrl}
+        />
 
-        <div className="flex flex-col items-center gap-2 text-center">
-          <span className="group-hover:text-primary font-serif text-2xl font-semibold">
+        <div className="flex min-w-0 flex-col items-center gap-2 text-center">
+          <span className="type-name group-hover:text-primary text-2xl transition-colors">
             {dailyProfile.name}
           </span>
-          <p className="text-muted-foreground text-sm">{dailyProfile.tagline}</p>
-          <div className="flex flex-wrap justify-center gap-1">
-            {dailyProfile.tags.slice(0, 3).map((tag) => (
-              <Badge className="text-xs" key={tag.slug} variant="outline">
-                {tag.label}
-              </Badge>
-            ))}
-          </div>
+          {dailyProfile.tagline && (
+            <p className="text-muted-foreground line-clamp-3 text-sm">{dailyProfile.tagline}</p>
+          )}
+          {dailyProfile.tags.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-1">
+              {dailyProfile.tags.slice(0, 3).map((tag) => (
+                <Badge className="text-xs" key={tag.slug} variant="outline">
+                  {tag.label}
+                </Badge>
+              ))}
+            </div>
+          )}
         </div>
       </Link>
+    ) : (
+      <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-black/20 bg-white/50 p-5 text-center">
+        <span className="type-name">No spotlight today</span>
+        <p className="text-muted-foreground text-sm">Check back tomorrow for a new Montessorian.</p>
+      </div>
+    )}
 
-      <Link
-        className="text-muted-foreground flex flex-row items-center gap-1 text-xs hover:underline"
-        href="/archive"
-      >
-        See past Montessorians <ArrowRightIcon className="h-3 w-3" />
-      </Link>
-    </div>
-  );
-};
+    <ArchiveLink />
+  </div>
+);
 export default FeaturedProfile;

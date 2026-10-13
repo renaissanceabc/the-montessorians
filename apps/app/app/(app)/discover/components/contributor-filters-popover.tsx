@@ -110,9 +110,7 @@ export const ContributorFiltersPopover = ({
 
       <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain p-4">
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">
-            Role
-          </legend>
+          <legend className="type-eyebrow mb-2">Role</legend>
           <div className="flex flex-wrap gap-1">
             {CONTRIBUTOR_ROLES.map((role) => {
               const on = draft.roles.includes(role);
@@ -134,9 +132,7 @@ export const ContributorFiltersPopover = ({
 
         {affiliationOptions.length > 0 && (
           <fieldset className="flex flex-col gap-2">
-            <legend className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">
-              Affiliation
-            </legend>
+            <legend className="type-eyebrow mb-2">Affiliation</legend>
             {affiliationOptions.length > 6 && (
               <InputGroup className="h-10">
                 <InputGroupAddon>
@@ -175,9 +171,7 @@ export const ContributorFiltersPopover = ({
         )}
 
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-muted-foreground mb-2 text-xs font-medium tracking-wider uppercase">
-            Documented contributions
-          </legend>
+          <legend className="type-eyebrow mb-2">Documented contributions</legend>
           <div className="flex gap-0.5 self-start rounded-full bg-black/5 p-0.5">
             {MIN_CONTRIBUTION_OPTIONS.map((min) => (
               <button

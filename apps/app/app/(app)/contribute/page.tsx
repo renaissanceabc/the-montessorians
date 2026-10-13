@@ -1,3 +1,4 @@
+import { Container } from "@/components/container";
 import {
   getAllOrganizations,
   getOrganizationMembers,
@@ -21,10 +22,10 @@ export const generateMetadata = () =>
   });
 
 const Contribute = () => (
-  <div className="container mx-auto max-w-3xl px-4 pt-12 pb-16 sm:px-6 lg:px-8">
-    <div className="mb-10 flex flex-col items-center gap-3 text-center">
-      <h1 className="font-serif text-4xl font-bold lg:text-5xl">Add a Montessorian</h1>
-      <p className="text-muted-foreground max-w-lg text-balance">
+  <Container className="pt-6 pb-16 lg:pt-8" size="reading">
+    <div className="mb-10 flex flex-col gap-2">
+      <h1 className="type-title">Add a Montessorian</h1>
+      <p className="type-lead max-w-lg">
         Fill in what you know. No account needed. We review every submission before it&apos;s
         published.
       </p>
@@ -40,6 +41,6 @@ const Contribute = () => (
       tagSuggestions={getAllTags().data}
       yamlReference={<SchemaReference />}
     />
-  </div>
+  </Container>
 );
 export default Contribute;

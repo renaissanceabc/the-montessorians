@@ -774,7 +774,7 @@ export const ContributeForm = ({
     return (
       <div className="flex flex-col items-center gap-4 rounded-lg border border-black/10 bg-white/60 px-6 py-10 text-center">
         <CheckCircle2Icon className="text-primary size-10" />
-        <h2 className="font-serif text-3xl font-semibold">Thank you!</h2>
+        <h2 className="type-section">Thank you!</h2>
         <p className="text-muted-foreground max-w-md text-sm">
           A maintainer will review the submission before it&apos;s published. You can follow along
           on GitHub.
@@ -1104,9 +1104,7 @@ export const ContributeForm = ({
           </FieldSet>
 
           <div aria-hidden="true" className="flex items-center gap-3 pt-2">
-            <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
-              Optional
-            </span>
+            <span className="type-eyebrow">Optional</span>
             <span className="h-px flex-1 bg-black/10" />
           </div>
 
