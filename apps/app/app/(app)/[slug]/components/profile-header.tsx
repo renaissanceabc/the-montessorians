@@ -45,11 +45,12 @@ export const ProfileHeader = ({ profile }: { profile: Profile }) => {
   const [shareOpen, setShareOpen] = useState(false);
 
   return (
-    <header className="flex w-full min-w-0 flex-col gap-5">
-      <div className="flex items-center gap-4 sm:gap-6">
+    <header className="flex w-full min-w-0 flex-col gap-5 max-sm:items-center max-sm:text-center">
+      {/* Phones: photo on its own row and the header centered; larger screens: photo beside the name. */}
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
         <ProfilePhoto
           alt={profile.name}
-          className="size-20 sm:size-32"
+          className="size-28 sm:size-32"
           initialClassName="text-4xl sm:text-6xl"
           name={profile.name}
           preload
@@ -58,7 +59,7 @@ export const ProfileHeader = ({ profile }: { profile: Profile }) => {
         />
 
         <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div className="flex min-w-0 items-center gap-2.5">
+          <div className="flex min-w-0 items-center gap-2.5 max-sm:justify-center">
             <h1 className="type-title min-w-0">{profile.name}</h1>
             <VerificationBadge verification={profile.verification} />
           </div>
@@ -66,7 +67,9 @@ export const ProfileHeader = ({ profile }: { profile: Profile }) => {
         </div>
       </div>
 
-      {profile.tagline && <p className="type-lead italic sm:hidden">{profile.tagline}</p>}
+      {profile.tagline && (
+        <p className="type-lead -mt-2 text-balance italic sm:hidden">{profile.tagline}</p>
+      )}
 
       <div className="flex w-fit max-w-full items-center gap-1 rounded-full border border-black/10 bg-white/60 py-1 pr-1 pl-4 text-sm text-[#4A433D]">
         <span className="type-eyebrow shrink-0">{kindLabel}</span>
