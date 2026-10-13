@@ -23,6 +23,7 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
       canonical: `${siteUrl}/tags/${tag.slug}`,
     },
     description: `Explore Montessorians tagged with "${tag.label}".`,
+    image: `${siteUrl}/api/og/tags/${tag.slug}.png`,
     title: tag.label,
   });
 };

@@ -64,6 +64,7 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
       types: { "application/ld+json": `${siteUrl}/data/${org.id}` },
     },
     description: org.description ?? `${org.name} on The Montessorians.`,
+    image: `${siteUrl}/api/og/organizations/${slug}.png`,
     title: org.name,
   });
 };
