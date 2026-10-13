@@ -8,7 +8,7 @@ The site has two public endpoints that do work per request:
 
 | Route | What it does | App limit |
 | --- | --- | --- |
-| `POST /api/submit` | Opens a GitHub issue from the contribute form | 5 an hour per IP, 32 KB body |
+| `POST /api/submit` | Opens a GitHub issue from the contribute form | 20 an hour per IP, 32 KB body |
 | `GET/POST /api/reconcile` | Reconciliation API for OpenRefine and similar clients | 120 requests a minute per IP, 50 queries a request |
 
 Both routes enforce those limits themselves, but only in memory: every serverless instance keeps its own counters, so a client spread across instances (or a cold start) gets more than the limit. The project has no shared store (no Upstash or Vercel KV), so the firewall is what enforces the limit across instances. Configure these two custom rules under **Project → Firewall → Custom rules** (or with the CLI below). The app limits stay as a backstop.
@@ -17,7 +17,7 @@ Both routes enforce those limits themselves, but only in memory: every serverles
 
 - **Name:** `Rate limit submissions`
 - **If:** Request Path **equals** `/api/submit` **and** Method **equals** `POST`
-- **Then:** Rate Limit, **Fixed window**, **3600 seconds**, **5 requests**, keyed by **IP**
+- **Then:** Rate Limit, **Fixed window**, **3600 seconds**, **20 requests**, keyed by **IP**
 - **Action when exceeded:** Rate limit (responds `429`), for the rest of the window
 
 ```sh
@@ -27,7 +27,7 @@ vercel firewall rules add "Rate limit submissions" \
   --action rate_limit \
   --rate-limit-algo fixed_window \
   --rate-limit-window 3600 \
-  --rate-limit-requests 5 \
+  --rate-limit-requests 20 \
   --rate-limit-keys ip \
   --rate-limit-action rate_limit
 ```

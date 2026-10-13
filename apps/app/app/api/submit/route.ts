@@ -17,7 +17,7 @@ const REPO = "renaissanceabc/the-montessorians";
 /** A real submission is a few KB of JSON; anything near this is not one. */
 const MAX_BODY_BYTES = 32 * 1024;
 
-const SUBMISSIONS_PER_HOUR = 5;
+const SUBMISSIONS_PER_HOUR = 20;
 const HOUR_MS = 60 * 60 * 1000;
 
 // Per instance and best effort; the Vercel Firewall rule in docs/operations.md
@@ -42,7 +42,7 @@ const parseSubmission = (text: string) => {
  * review, so contributors don't need a GitHub account. Nothing is published
  * until a maintainer merges it.
  *
- * Guarded by, in order: a per-IP rate limit (5 an hour, in memory per
+ * Guarded by, in order: a per-IP rate limit (20 an hour, in memory per
  * instance, backed by a Vercel Firewall rate-limit rule on this path; see
  * docs/operations.md), a 32 KB body cap enforced while reading (before any
  * parsing), and Vercel BotID.

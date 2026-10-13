@@ -2,6 +2,7 @@
 
 import {
   AlertCircleIcon,
+  ArrowUpRightIcon,
   BookOpenIcon,
   CheckCircle2Icon,
   GraduationCapIcon,
@@ -347,8 +348,9 @@ const problemFor = (status: number): ServerProblem => {
     }
     case 429: {
       return {
-        detail: "You can send a few per hour. Try again later, or open it on GitHub.",
-        title: "Too many submissions",
+        detail:
+          "You've hit the hourly limit for this form. Open it on GitHub instead; everything you entered is filled in.",
+        title: "That's a lot of submissions, thank you!",
       };
     }
     case 503: {
@@ -477,9 +479,16 @@ const FormFooter = ({
         <AlertTitle>{problem.title}</AlertTitle>
         <AlertDescription>
           <p>{problem.detail}</p>
-          <Link className="font-medium underline" href={githubUrl} target="_blank">
+          <Button
+            className="text-foreground mt-2 w-full no-underline sm:w-auto"
+            nativeButton={false}
+            render={<Link href={githubUrl} rel="noopener" target="_blank" />}
+            size="sm"
+            variant="outline"
+          >
             Open it on GitHub
-          </Link>
+            <ArrowUpRightIcon data-icon="inline-end" />
+          </Button>
         </AlertDescription>
       </Alert>
     )}
