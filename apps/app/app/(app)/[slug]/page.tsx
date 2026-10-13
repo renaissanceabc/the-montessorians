@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Container } from "@/components/container";
+import { RecordLayout } from "@/components/record-layout";
 import { Separator } from "@/components/ui/separator";
 import { contributionUrl, identifierEntries, idUrl, personJsonLd } from "@/lib/content/authority";
 import { getAllSlugs, getProfileWithAdjacent, getRelatedPeople } from "@/lib/content/profiles";
@@ -9,7 +11,7 @@ import { correctionUrl } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
 
 import ProfileActions from "./components/profile-actions";
-import ProfileDetails from "./components/profile-details";
+import { ProfileMain, ProfileRail } from "./components/profile-details";
 import { ProfileHeader } from "./components/profile-header";
 
 export const generateStaticParams = () => getAllSlugs().map((slug) => ({ slug }));
@@ -66,10 +68,13 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
   const permanentUrl = idUrl(profile.id);
   const jsonLd = personJsonLd(profile);
 
+  const correction = correctionUrl(profile);
+
   return (
     <>
-      <div className="container mx-auto flex max-w-3xl flex-col items-center gap-9 px-4 pt-8 pb-12 sm:px-8 lg:pt-0">
+      <Container className="flex flex-col gap-6 pt-2 pb-16 lg:pt-4">
         <Breadcrumbs
+          align="start"
           items={[
             { href: "/discover", label: "Directory" },
             isContributor
@@ -79,28 +84,36 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
           ]}
         />
 
-        <ProfileHeader
-          correctionUrl={correctionUrl(profile)}
+        <RecordLayout
+          main={
+            <>
+              <ProfileHeader profile={profile} />
+              <ProfileMain
+                contributions={contributions}
+                correctionUrl={correction}
+                profile={profile}
+              />
+            </>
+          }
           permanentUrl={permanentUrl}
-          profile={profile}
+          rail={
+            <ProfileRail
+              correctionUrl={correction}
+              identifiers={identifierEntries(profile.identifiers).map(({ label, value, url }) => ({
+                label,
+                url,
+                value,
+              }))}
+              permanentId={{ url: permanentUrl, value: profile.id }}
+              profile={profile}
+              related={getRelatedPeople(profile)}
+            />
+          }
         />
 
-        <ProfileDetails
-          contributions={contributions}
-          correctionUrl={correctionUrl(profile)}
-          identifiers={identifierEntries(profile.identifiers).map(({ label, value, url }) => ({
-            label,
-            url,
-            value,
-          }))}
-          permanentId={{ url: permanentUrl, value: profile.id }}
-          profile={profile}
-          related={getRelatedPeople(profile)}
-        />
-
-        <Separator className="bg-black/10" />
+        <Separator className="bg-black/10" data-print-hidden />
         <ProfileActions next={next} previous={previous} />
-      </div>
+      </Container>
 
       <script
         // oxlint-disable-next-line react/no-danger -- JSON-LD payload, with `<` escaped to prevent breaking out of the script tag

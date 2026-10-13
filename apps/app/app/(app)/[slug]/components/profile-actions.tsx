@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ProfilePhoto } from "@/components/profile-photo";
 import type { AdjacentRef, ProfilePage } from "@/lib/content/types";
 import { cn } from "@/lib/utils";
 
@@ -30,10 +30,13 @@ const AdjacentLink = ({
         )}
       />
       <span className="flex min-w-0 items-center gap-2.5">
-        <Avatar className="size-8 shrink-0 border border-black/10">
-          <AvatarImage alt="" src={profile.imageUrl ?? ""} />
-          <AvatarFallback className="font-serif text-sm">{profile.name.charAt(0)}</AvatarFallback>
-        </Avatar>
+        <ProfilePhoto
+          className="size-8"
+          initialClassName="text-sm"
+          name={profile.name}
+          size={32}
+          src={profile.imageUrl}
+        />
         <span className="flex min-w-0 flex-col">
           <span className="text-muted-foreground text-xs">{isNext ? "Next" : "Previous"}</span>
           <span className="truncate font-semibold group-hover:underline">{profile.name}</span>
@@ -50,7 +53,11 @@ const ProfileActions = ({
   previous: ProfilePage["previous"];
   next: ProfilePage["next"];
 }) => (
-  <nav aria-label="More profiles" className="flex w-full items-center justify-between gap-4">
+  <nav
+    aria-label="More profiles"
+    className="flex w-full items-center justify-between gap-4"
+    data-print-hidden
+  >
     {previous.slug && <AdjacentLink direction="previous" profile={previous} />}
     {next.slug && <AdjacentLink direction="next" profile={next} />}
   </nav>
