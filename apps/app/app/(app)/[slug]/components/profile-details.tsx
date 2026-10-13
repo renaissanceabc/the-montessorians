@@ -317,16 +317,15 @@ const BioAndTags = ({ profile }: { profile: Profile }) => {
     <div className="flex flex-col gap-4">
       {profile.bio && <p className="type-body">{profile.bio}</p>}
       {profile.tags.length > 0 && (
-        <ul aria-label="Tags" className="flex flex-wrap gap-1">
+        <ul aria-label="Tags" className="flex flex-wrap gap-1.5">
           {profile.tags.map((tag) => (
             <li key={tag.slug}>
-              <Badge
-                className="bg-white/50"
-                render={<Link href={`/tags/${tag.slug}`} />}
-                variant="outline"
+              <Link
+                className="inline-flex rounded-full bg-black/5 px-2.5 py-1 text-[13px] text-[#4A433D] transition-colors hover:bg-black/8"
+                href={`/tags/${tag.slug}`}
               >
                 {tag.label}
-              </Badge>
+              </Link>
             </li>
           ))}
         </ul>
