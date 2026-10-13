@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import Contribute from "@/components/contribute";
+import { getDirectoryCounts } from "@/lib/content/directory";
+import { getAllProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
 
@@ -9,108 +11,136 @@ export const generateMetadata = () =>
     alternates: {
       canonical: `${siteUrl}/about`,
     },
-    description: "About The Montessorians, an open source directory of Montessori alumni.",
+    description:
+      "About The Montessorians, an open directory and name authority for Montessori alumni and the people who shaped the field.",
     title: "About",
   });
 
-const About = () => (
-  <div className="container mx-auto max-w-3xl items-center justify-between gap-10 px-4 sm:px-6 lg:px-8">
-    <div className="w-full space-y-8 pt-12">
-      <h1 className="flex w-full justify-center font-serif text-4xl font-bold lg:text-5xl">
-        About us
-      </h1>
+const About = () => {
+  const counts = getDirectoryCounts();
+  const works = getAllProfiles().reduce((sum, p) => sum + p.contributions.length, 0);
+  return (
+    <div className="container mx-auto max-w-3xl items-center justify-between gap-10 px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-8 pt-12">
+        <h1 className="flex w-full justify-center font-serif text-4xl font-bold lg:text-5xl">
+          About us
+        </h1>
 
-      <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none">
-        <p className="lead text-primary">
-          <strong className="text-primary">The Montessorians</strong> is the largest open source
-          dataset of Montessori alumni who’ve gone on to do great things.
-        </p>
+        <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none">
+          <p className="lead text-primary">
+            <strong className="text-primary">The Montessorians</strong> is the largest open
+            directory of the people of Montessori: alumni who’ve gone on to do great things, and the
+            researchers, authors, founders, and trainers who shaped the field.
+          </p>
 
-        <p>
-          The Montessorians is a project that aims to celebrate and document the achievements of
-          individuals who were influenced by Montessori. An alternative method to public school,
-          Montessori has led to extraordinary outcomes as evidenced by the many pioneers,
-          innovators, and trailblazers who we strive to chronicle on{" "}
-          <Link className="underline" href="/discover">
-            The Montessorians
-          </Link>
-          .
-        </p>
+          <p>
+            We document two kinds of people. <strong>Alumni</strong> attended a Montessori school
+            and went on to remarkable lives, from famous figures to extraordinary everyday people.{" "}
+            <strong>Contributors</strong> shaped how Montessori is understood and practiced through
+            research, writing, and teacher training, from Maria Montessori herself to today’s
+            scholars. Someone can be both.
+          </p>
 
-        <p>
-          Created by{" "}
-          <Link className="underline" href="https://renaissance.education">
-            Renaissance
-          </Link>
-          , an education startup studio, The Montessorians is fully open source and
-          community-driven. It is open for contributions under a{" "}
-          <Link
-            className="underline"
-            href="https://github.com/renaissanceabc/the-montessorians/blob/main/LICENSE.md"
-          >
-            Creative Commons CC0 license
-          </Link>
-          .
-        </p>
+          <p>
+            Every person and organization has a permanent identifier and a cited source, so
+            libraries, researchers, and other projects can link to it. See the{" "}
+            <Link className="underline" href="/about/editorial-policy">
+              editorial policy
+            </Link>{" "}
+            for who we include and how we verify, and{" "}
+            <Link className="underline" href="/data">
+              Data &amp; API
+            </Link>{" "}
+            to use the data.
+          </p>
 
-        <h3>What is Montessori?</h3>
+          <p>
+            Today that’s <strong>{counts.all} people</strong> ({counts.alumni} alumni,{" "}
+            {counts.contributors} contributors) and{" "}
+            <strong>{counts.organizations} organizations</strong>, with{" "}
+            <strong>{works} documented works</strong>.
+          </p>
 
-        <p>
-          Pioneered by{" "}
-          <Link className="underline" href="https://en.wikipedia.org/wiki/Maria_Montessori">
-            Maria Montessori
-          </Link>
-          , the Montessori method is a progressive educational approach that emphasizes
-          children&apos;s natural interests and activities, rather than traditional teaching
-          methods. Montessori classrooms focus on hands-on learning and developing real-world
-          skills.
-        </p>
+          <p>
+            Created by{" "}
+            <Link className="underline" href="https://renaissance.education">
+              Renaissance
+            </Link>
+            , The Montessorians is open source and community-driven. The data is dedicated to the
+            public domain under{" "}
+            <Link
+              className="underline"
+              href="https://github.com/renaissanceabc/the-montessorians/blob/main/LICENSE.md"
+            >
+              CC0
+            </Link>
+            , and anyone can{" "}
+            <Link className="underline" href="/contribute">
+              suggest someone
+            </Link>
+            .
+          </p>
 
-        <p>
-          Notable features of the Montessori method include mixed-age classrooms, student freedom
-          (including their choice of activity), long blocks of uninterrupted work time, specially
-          trained teachers, and a prepared environment.
-        </p>
+          <h3>What is Montessori?</h3>
 
-        <blockquote className="border-l-primary">
-          “The greatest sign of success for a teacher is to be able to say, &quot;The children are
-          now working as if I did not exist.” – Maria Montessori
-        </blockquote>
+          <p>
+            Pioneered by{" "}
+            <Link className="underline" href="https://en.wikipedia.org/wiki/Maria_Montessori">
+              Maria Montessori
+            </Link>
+            , the Montessori method is a progressive educational approach that emphasizes
+            children&apos;s natural interests and activities, rather than traditional teaching
+            methods. Montessori classrooms focus on hands-on learning and developing real-world
+            skills.
+          </p>
 
-        <h3>Our Mission</h3>
+          <p>
+            Notable features of the Montessori method include mixed-age classrooms, student freedom
+            (including their choice of activity), long blocks of uninterrupted work time, specially
+            trained teachers, and a prepared environment.
+          </p>
 
-        <p>
-          Beyond spotlighting the achievements of Montessori alumni — which spans beyond famous
-          figures to include extraordinary everyday people — we hope to offer a greater
-          understanding of the potential of alternative education outside of the public school
-          system.
-        </p>
+          <blockquote className="border-l-primary">
+            “The greatest sign of success for a teacher is to be able to say, ‘The children are now
+            working as if I did not exist.’” – Maria Montessori
+          </blockquote>
 
-        <p>
-          Although we have transformed how we bank, shop, and work... school and education largely
-          remains the same as it did 150 years ago. And in today&apos;s fast-changing world that has
-          already been reshaped by the advent of AI, we need to rethink how we educate our children.
-        </p>
+          <h3>Our Mission</h3>
 
-        <p>
-          We believe this begins with choice and discovery. With an understanding of the options
-          available. With this, we can begin to make informed, intentional decisions around our
-          children&apos;s education.
-        </p>
+          <p>
+            Beyond spotlighting what Montessori alumni have done, we want to make the evidence and
+            thinking behind Montessori easier to find: who studied it, what they found, and where
+            it’s taught. Together, we hope that offers a clearer picture of what education outside
+            the conventional school system can do.
+          </p>
 
-        <p>
-          In our search for notable alumni who have been through alternative pathways to education
-          (such as Montessori), we found there was no comprehensive source of information.
-        </p>
+          <p>
+            Although we have transformed how we bank, shop, and work... school and education largely
+            remains the same as it did 150 years ago. And in today&apos;s fast-changing world that
+            has already been reshaped by the advent of AI, we need to rethink how we educate our
+            children.
+          </p>
 
-        <p>
-          We hope to change that with the first and largest open source dataset of Montessori
-          alumni.
-        </p>
+          <p>
+            We believe this begins with choice and discovery. With an understanding of the options
+            available. With this, we can begin to make informed, intentional decisions around our
+            children&apos;s education.
+          </p>
+
+          <p>
+            In our search for notable alumni, and for the people behind the method, we found no
+            single place that brought them together.
+          </p>
+
+          <p>
+            We’re building that: the first and largest open, citable record of the Montessori alumni
+            and contributors who’ve shaped the world, and the field itself.
+          </p>
+        </div>
+
+        <Contribute />
       </div>
-
-      <Contribute />
     </div>
-  </div>
-);
+  );
+};
 export default About;
