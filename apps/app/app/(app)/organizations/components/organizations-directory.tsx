@@ -84,17 +84,18 @@ export const OrganizationsDirectory = ({
     <DirectoryShell
       active="organizations"
       chips={
-        <>
+        // One scrolling row on phones, bleeding to the screen edges; wraps from sm.
+        <div className="flex w-full gap-1 max-sm:-mx-(--gutter) max-sm:w-[calc(100%+2*var(--gutter))] max-sm:overflow-x-auto max-sm:px-(--gutter) max-sm:[scrollbar-width:none] sm:flex-wrap max-sm:[&::-webkit-scrollbar]:hidden">
           {[{ label: "All types" }, ...TYPE_FILTERS].map((t) => {
             const on = t.label === "All types" ? typeFilter === null : typeFilter === t.label;
             return (
               <button
                 aria-pressed={on}
                 className={cn(
-                  "h-8 rounded-full border px-3 text-[13px] transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100",
+                  "h-8 shrink-0 rounded-full border px-3 text-[13px] whitespace-nowrap transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100",
                   on
                     ? "border-secondary bg-secondary text-secondary-foreground"
-                    : "border-black/12 bg-white/50 hover:border-black/30"
+                    : "text-foreground border-black/12 bg-white/50 hover:border-black/30"
                 )}
                 key={t.label}
                 onClick={() => setTypeFilter(t.label === "All types" ? null : t.label)}
@@ -104,7 +105,7 @@ export const OrganizationsDirectory = ({
               </button>
             );
           })}
-        </>
+        </div>
       }
       controls={
         <Select
