@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Container } from "@/components/container";
 import { createMetadata } from "@/lib/metadata";
 import { githubIssueUrl, REPO_URL } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
@@ -26,15 +27,15 @@ const SECTIONS = [
 const linkClass = "underline underline-offset-2";
 
 const Privacy = () => (
-  <div className="container mx-auto max-w-3xl px-4 pt-12 pb-16 sm:px-6 lg:px-8">
+  <Container className="pt-6 pb-16 lg:pt-8" size="reading">
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-3">
         <Breadcrumbs
           align="start"
           items={[{ href: "/about", label: "About" }, { label: "Privacy" }]}
         />
-        <h1 className="font-serif text-4xl font-bold lg:text-5xl">Privacy</h1>
-        <p className="text-muted-foreground text-lg">
+        <h1 className="type-title">Privacy</h1>
+        <p className="type-lead">
           The short version: there are no accounts, we don&apos;t sell or share data, and anything
           you submit becomes public.
         </p>
@@ -53,7 +54,7 @@ const Privacy = () => (
       </nav>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="contribute">
-        <h2 className="font-serif text-3xl font-semibold">Suggesting a profile</h2>
+        <h2 className="type-section">Suggesting a profile</h2>
         <p className="text-sm">
           The{" "}
           <Link className={linkClass} href="/contribute">
@@ -87,7 +88,7 @@ const Privacy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="analytics">
-        <h2 className="font-serif text-3xl font-semibold">Analytics</h2>
+        <h2 className="type-section">Analytics</h2>
         <p className="text-sm">
           We count visits to see which pages are useful. There are no accounts and no advertising,
           and we don&apos;t sell or share this data.
@@ -104,7 +105,7 @@ const Privacy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="errors">
-        <h2 className="font-serif text-3xl font-semibold">Error reports</h2>
+        <h2 className="type-section">Error reports</h2>
         <p className="text-sm">
           When error monitoring is switched on, crashes are reported to Sentry so we can fix them. A
           report includes the page, your browser, and what went wrong. Session replays attached to
@@ -113,7 +114,7 @@ const Privacy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="people">
-        <h2 className="font-serif text-3xl font-semibold">People in the directory</h2>
+        <h2 className="type-section">People in the directory</h2>
         <p className="text-sm">
           Profiles are built from published sources, as set out in the{" "}
           <Link className={linkClass} href="/about/editorial-policy">
@@ -136,7 +137,7 @@ const Privacy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="contact">
-        <h2 className="font-serif text-3xl font-semibold">Contact</h2>
+        <h2 className="type-section">Contact</h2>
         <p className="text-sm">
           For anything about privacy, open an issue on{" "}
           <Link className={linkClass} href={`${REPO_URL}/issues/new/choose`} target="_blank">
@@ -147,6 +148,6 @@ const Privacy = () => (
         </p>
       </section>
     </div>
-  </div>
+  </Container>
 );
 export default Privacy;

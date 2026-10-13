@@ -5,6 +5,7 @@ import { HomeIcon, RotateCcwIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 
+import { Container } from "@/components/container";
 import { Button } from "@/components/ui/button";
 
 interface ErrorPageProps {
@@ -23,39 +24,32 @@ const ErrorPage = ({ error, reset }: ErrorPageProps) => {
   }, [error]);
 
   return (
-    <div className="container mx-auto flex max-w-screen-md flex-row items-center justify-between gap-10 px-4 pt-8 pb-12 sm:px-8">
-      <div className="flex w-full flex-col items-center gap-6 text-center">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="font-serif text-5xl font-bold">Something went wrong</h1>
-          <p className="text-muted-foreground max-w-prose text-lg">
-            This page didn&apos;t load properly. Try again, and if it keeps happening, head back
-            home.
-          </p>
-          {error.digest && (
-            <p className="text-muted-foreground font-mono text-xs">
-              Error reference: {error.digest}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-3">
-          <Button className="shadow-none" onClick={reset} size="lg">
-            <RotateCcwIcon className="h-4 w-4" />
-            Try again
-          </Button>
-          <Button
-            className="shadow-none"
-            nativeButton={false}
-            render={<Link href="/" />}
-            size="lg"
-            variant="outline"
-          >
-            <HomeIcon className="h-4 w-4" />
-            Back to home
-          </Button>
-        </div>
+    <Container className="flex flex-col items-start gap-8 pt-6 pb-24 lg:pt-8" size="reading">
+      <div className="flex flex-col gap-3">
+        <h1 className="type-title">Something went wrong</h1>
+        <p className="type-lead">
+          This page didn&apos;t load properly. Try again, and if it keeps happening, head back home.
+        </p>
+        {error.digest && <p className="type-meta font-mono">Error reference: {error.digest}</p>}
       </div>
-    </div>
+
+      <div className="flex flex-wrap gap-3">
+        <Button className="shadow-none" onClick={reset} size="lg">
+          <RotateCcwIcon aria-hidden="true" className="size-4" />
+          Try again
+        </Button>
+        <Button
+          className="shadow-none"
+          nativeButton={false}
+          render={<Link href="/" />}
+          size="lg"
+          variant="outline"
+        >
+          <HomeIcon aria-hidden="true" className="size-4" />
+          Back to home
+        </Button>
+      </div>
+    </Container>
   );
 };
 export default ErrorPage;
