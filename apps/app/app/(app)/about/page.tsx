@@ -29,54 +29,49 @@ const About = () => {
         <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none">
           <p className="lead text-primary">
             <strong className="text-primary">The Montessorians</strong> is the largest open
-            directory of the people of Montessori: alumni who’ve gone on to do great things, and the
-            researchers, authors, founders, and trainers who shaped the field.
+            directory of people shaped by Montessori, and of the people who shaped it.
           </p>
 
           <p>
-            We document two kinds of people. <strong>Alumni</strong> attended a Montessori school
-            and went on to remarkable lives, from famous figures to extraordinary everyday people.{" "}
-            <strong>Contributors</strong> shaped how Montessori is understood and practiced through
-            research, writing, and teacher training, from Maria Montessori herself to today’s
-            scholars. Someone can be both.
+            Some went to a Montessori school as kids and grew up to found Google, win a Pulitzer, or
+            play cello for presidents. Others spent their careers on Montessori itself, starting
+            with Maria Montessori, who opened her first classroom in a Rome tenement in 1907. The
+            researchers, writers, and teacher trainers who carried her work forward are here too.
           </p>
 
           <p>
-            Every person and organization has a permanent identifier and a cited source, so
-            libraries, researchers, and other projects can link to it. See the{" "}
+            You can check everything we publish. Each person has a permanent ID and the sources
+            behind their entry, so a librarian, a researcher, or a curious parent can cite them with
+            confidence. Read{" "}
             <Link className="underline" href="/about/editorial-policy">
-              editorial policy
-            </Link>{" "}
-            for who we include and how we verify, and{" "}
+              how we decide who belongs here
+            </Link>
+            , or{" "}
             <Link className="underline" href="/data">
-              Data &amp; API
-            </Link>{" "}
-            to use the data.
+              download the whole dataset
+            </Link>
+            .
           </p>
 
           <p>
-            Today that’s <strong>{counts.all} people</strong> ({counts.alumni} alumni,{" "}
-            {counts.contributors} contributors) and{" "}
-            <strong>{counts.organizations} organizations</strong>, with{" "}
-            <strong>{works} documented works</strong>.
+            So far, that’s {counts.all} people, {counts.organizations} schools and organizations,
+            and {works} books, papers, and lectures.
           </p>
 
           <p>
-            Created by{" "}
             <Link className="underline" href="https://renaissance.education">
               Renaissance
-            </Link>
-            , The Montessorians is open source and community-driven. The data is dedicated to the
-            public domain under{" "}
+            </Link>{" "}
+            made The Montessorians, and it’s open source. The data is in the public domain under{" "}
             <Link
               className="underline"
               href="https://github.com/renaissanceabc/the-montessorians/blob/main/LICENSE.md"
             >
               CC0
             </Link>
-            , and anyone can{" "}
+            , so take it and build something. Know someone who belongs here?{" "}
             <Link className="underline" href="/contribute">
-              suggest someone
+              Add them
             </Link>
             .
           </p>
@@ -108,10 +103,9 @@ const About = () => {
           <h3>Our Mission</h3>
 
           <p>
-            Beyond spotlighting what Montessori alumni have done, we want to make the evidence and
-            thinking behind Montessori easier to find: who studied it, what they found, and where
-            it’s taught. Together, we hope that offers a clearer picture of what education outside
-            the conventional school system can do.
+            Montessori has been around for more than a century, yet most parents first hear about it
+            secondhand: a famous name, or a neighbor’s kid. We want to show where it leads, and
+            where its ideas come from.
           </p>
 
           <p>
@@ -128,13 +122,14 @@ const About = () => {
           </p>
 
           <p>
-            In our search for notable alumni, and for the people behind the method, we found no
-            single place that brought them together.
+            When we went looking for notable Montessori alumni, we found plenty of lists. Few cited
+            a source, and most copied each other. And no one was keeping track of the people behind
+            the method at all.
           </p>
 
           <p>
-            We’re building that: the first and largest open, citable record of the Montessori alumni
-            and contributors who’ve shaped the world, and the field itself.
+            So we’re building the first and largest open record of both, one you can cite, check,
+            and add to.
           </p>
         </div>
 
