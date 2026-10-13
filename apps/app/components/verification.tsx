@@ -40,14 +40,23 @@ export const VerificationBadge = ({
             className={cn(
               "inline-flex shrink-0 items-center justify-center rounded-full transition-colors",
               solid
-                ? "bg-secondary text-secondary-foreground hover:bg-secondary/85 size-8"
+                ? "size-8 transition-opacity hover:opacity-80"
                 : "text-muted-foreground h-7 gap-1 border border-black/20 px-2.5 text-xs font-medium hover:border-black/40"
             )}
             href={href}
           />
         }
       >
-        {solid ? <Icon className="size-[18px]" /> : copy.label}
+        {solid ? (
+          <Icon
+            className={cn(
+              "size-6",
+              verification === "verified" ? "fill-verified text-white" : "text-verified"
+            )}
+          />
+        ) : (
+          copy.label
+        )}
       </TooltipTrigger>
       <TooltipContent className="max-w-64">
         <p className="leading-snug text-pretty">
