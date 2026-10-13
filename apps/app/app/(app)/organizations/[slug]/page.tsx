@@ -19,6 +19,7 @@ import { Container } from "@/components/container";
 import { OrgLogo } from "@/components/org-logo";
 import ProfileListItem from "@/components/profile-list-item";
 import { RecordLayout } from "@/components/record-layout";
+import { ShareButton } from "@/components/share-button";
 import { identifierEntries, idUrl, organizationJsonLd } from "@/lib/content/authority";
 import {
   getAllOrganizations,
@@ -117,10 +118,11 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
 
   const main = (
     <>
-      <header className="flex w-full min-w-0 flex-col gap-5">
-        <div className="flex items-center gap-4 sm:gap-6">
+      <header className="flex w-full min-w-0 flex-col gap-5 max-sm:items-center max-sm:text-center">
+        {/* Phones: logo on its own row and the header centered, as on person profiles. */}
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
           <OrgLogo
-            className="size-20 rounded-2xl border border-black/10 sm:size-28"
+            className="size-28 rounded-2xl border border-black/10"
             icon={Icon}
             iconClassName="size-10 text-muted-foreground"
             logoUrl={org.logoUrl}
@@ -134,36 +136,41 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
           </h1>
         </div>
 
-        <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-[#4A433D] sm:w-fit sm:gap-x-0 sm:rounded-3xl sm:border sm:border-black/10 sm:bg-white/60 sm:px-4 sm:py-1.5">
-          <span className="type-eyebrow shrink-0 max-sm:basis-full">
-            {ORGANIZATION_TYPE_LABELS[org.type]}
-          </span>
-          {org.location && (
-            <>
-              <Dot />
-              <span className="inline-flex min-w-0 items-center gap-1" title={org.location}>
-                <MapPinIcon aria-hidden="true" className="size-3.5 shrink-0" />
-                <span className="truncate">{org.location}</span>
-              </span>
-            </>
-          )}
-          {org.founded && (
-            <>
-              <Dot />
-              <span className="inline-flex shrink-0 items-center gap-1">
-                <CalendarIcon aria-hidden="true" className="size-3.5 sm:hidden" />
-                Founded {org.founded}
-              </span>
-            </>
-          )}
-          <Dot />
-          <span
-            className="inline-flex shrink-0 items-center gap-1"
-            title={`${people} ${people === 1 ? "person" : "people"} in the directory`}
-          >
-            <UsersIcon aria-hidden="true" className="size-3.5" />
-            {people} {people === 1 ? "person" : "people"}
-          </span>
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-[#4A433D] max-sm:justify-center sm:w-fit sm:gap-x-0 sm:rounded-3xl sm:border sm:border-black/10 sm:bg-white/60 sm:px-4 sm:py-1.5">
+            <span className="type-eyebrow shrink-0 max-sm:basis-full">
+              {ORGANIZATION_TYPE_LABELS[org.type]}
+            </span>
+            {org.location && (
+              <>
+                <Dot />
+                <span className="inline-flex min-w-0 items-center gap-1" title={org.location}>
+                  <MapPinIcon aria-hidden="true" className="size-3.5 shrink-0" />
+                  <span className="truncate">{org.location}</span>
+                </span>
+              </>
+            )}
+            {org.founded && (
+              <>
+                <Dot />
+                <span className="inline-flex shrink-0 items-center gap-1">
+                  <CalendarIcon aria-hidden="true" className="size-3.5 sm:hidden" />
+                  Founded {org.founded}
+                </span>
+              </>
+            )}
+            <Dot />
+            <span
+              className="inline-flex shrink-0 items-center gap-1"
+              title={`${people} ${people === 1 ? "person" : "people"} in the directory`}
+            >
+              <UsersIcon aria-hidden="true" className="size-3.5" />
+              {people} {people === 1 ? "person" : "people"}
+            </span>
+          </div>
+          <ShareButton
+            target={{ kind: "organization", name: org.name, path: `/organizations/${org.slug}` }}
+          />
         </div>
       </header>
 
@@ -229,6 +236,18 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
           </ul>
         </Section>
       )}
+      {org.logoUrl && org.logoSource && (
+        <p className="text-muted-foreground text-xs [overflow-wrap:anywhere]">
+          Logo from{" "}
+          {URL.canParse(org.logoSource) ? (
+            <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
+              {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
+            </Link>
+          ) : (
+            org.logoSource
+          )}
+        </p>
+      )}
     </>
   );
 
@@ -282,21 +301,6 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
         </Section>
       )}
 
-      {org.logoUrl && org.logoSource && (
-        <Section title="Logo">
-          <p className="type-meta [overflow-wrap:anywhere]">
-            Source:{" "}
-            {URL.canParse(org.logoSource) ? (
-              <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
-                {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
-              </Link>
-            ) : (
-              org.logoSource
-            )}
-          </p>
-        </Section>
-      )}
-
       <Link
         className="inline-flex w-fit items-center gap-2 rounded-md border border-black/15 bg-white/60 px-3 py-2 text-sm font-medium transition-colors hover:border-black/30 hover:bg-white"
         data-print-hidden
@@ -312,7 +316,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
 
   return (
     <>
-      <Container className="flex flex-col gap-6 pt-2 pb-16 lg:pt-4">
+      <Container className="flex flex-col gap-6 pt-2 pb-16 max-sm:pb-24 lg:pt-4">
         <Breadcrumbs
           align="start"
           items={[{ href: "/organizations", label: "Organizations" }, { label: org.name }]}

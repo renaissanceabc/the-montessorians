@@ -21,23 +21,29 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import type { ProfilePage } from "@/lib/content/types";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
 import { addUtmParamsToUrl, getShareUrl } from "@/lib/url";
 import type { SHARE_CONFIG } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
 
+/** What's being shared: its display name and site path (e.g. "/maria-montessori"). */
+export interface ShareTarget {
+  name: string;
+  path: string;
+  kind: "profile" | "organization";
+}
+
 const ShareContent = ({
-  profile,
+  target,
   onOpenChange,
 }: {
-  profile: ProfilePage["profile"];
+  target: ShareTarget;
   onOpenChange: (open: boolean) => void;
 }) => {
-  const url = `${siteUrl}/${profile?.slug}`;
+  const url = `${siteUrl}${target.path}`;
 
   const decoratedUrl = addUtmParamsToUrl(url, {
-    campaign: "profile",
+    campaign: target.kind,
     medium: "social",
     source: "other",
   });
@@ -55,7 +61,7 @@ const ShareContent = ({
     const top = window.innerHeight / 2 - height / 2;
     const windowFeatures = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`;
 
-    const text = `${profile.name} on The Montessorians`;
+    const text = `${target.name} on The Montessorians`;
 
     window.open(
       getShareUrl(platform, url, text),
@@ -95,11 +101,11 @@ const ShareContent = ({
 export const ShareDialog = ({
   open,
   onOpenChange,
-  profile,
+  target,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  profile: ProfilePage["profile"];
+  target: ShareTarget;
 }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -108,10 +114,10 @@ export const ShareDialog = ({
       <Dialog onOpenChange={onOpenChange} open={open}>
         <DialogContent className="bg-white sm:max-w-[320px]">
           <DialogHeader>
-            <DialogTitle>Share this profile</DialogTitle>
-            <DialogDescription>Share this profile with your friends</DialogDescription>
+            <DialogTitle>Share this {target.kind}</DialogTitle>
+            <DialogDescription>Send {target.name} to someone</DialogDescription>
           </DialogHeader>
-          <ShareContent onOpenChange={onOpenChange} profile={profile} />
+          <ShareContent onOpenChange={onOpenChange} target={target} />
         </DialogContent>
       </Dialog>
     );
@@ -121,10 +127,10 @@ export const ShareDialog = ({
     <Drawer onOpenChange={onOpenChange} open={open}>
       <DrawerContent className="bg-white">
         <DrawerHeader>
-          <DrawerTitle>Share this profile</DrawerTitle>
-          <DrawerDescription>Share this profile with your friends</DrawerDescription>
+          <DrawerTitle>Share this {target.kind}</DrawerTitle>
+          <DrawerDescription>Send {target.name} to someone</DrawerDescription>
         </DrawerHeader>
-        <ShareContent onOpenChange={onOpenChange} profile={profile} />
+        <ShareContent onOpenChange={onOpenChange} target={target} />
         <DrawerFooter>
           <DrawerClose
             render={
