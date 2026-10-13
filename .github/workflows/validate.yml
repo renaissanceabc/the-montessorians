@@ -6,29 +6,31 @@ on:
 permissions:
   contents: read
 
+# A new push to the same PR cancels the run still in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
+    # Keeps the required check's name; oxfmt now owns YAML formatting.
     name: Run yamllint
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+      - uses: ./.github/actions/setup
 
-      - name: Install yamllint
-        run: pip install yamllint
-
-      - name: Run yamllint on data
-        run: yamllint data
+      - name: Check data formatting
+        run: bunx oxfmt --check "data/**/*.yaml"
 
   validate:
     name: Validate schema + image rules
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repo

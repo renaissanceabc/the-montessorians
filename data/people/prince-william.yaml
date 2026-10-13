@@ -10,9 +10,9 @@ bio: >-
   apparent to the British throne, he is known for his public service, advocacy for mental health, and leadership in
   environmental conservation.
 tags:
-  - royal
+  - royalty
   - environmentalist
-  - advocate
+  - activist
 education:
   - montessori
 education_notes: >-
@@ -29,6 +29,7 @@ identifiers:
   lcnaf: n83035580
   viaf: "232263808"
   wikidata: Q36812
+  isni: "0000000367648998"
 sources:
   - type: article
     url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries

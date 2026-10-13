@@ -9,14 +9,15 @@ bio: >-
   choice to families everywhere. Formerly the CMO at Treasure, she is now building initiatives like Atrium and
   Renaissance Educator to spotlight and scale alternative learning pathways for families around the world.
 tags:
-  - education
-  - founder
-  - creator
+  - educator
+  - entrepreneur
 education:
   - montessori
 education_notes: >-
   Sam Vuong attended The Montessori School of Sudbury in Ontario until grade 2. Her early Montessori experience laid the
   groundwork for a lifelong belief in learner-led exploration.
+schools:
+  - organization: montessori-school-of-sudbury
 notable_achievements:
   - Co-founder of Renaissance, a startup studio for education
   - Former Chief Marketing Officer at Treasure

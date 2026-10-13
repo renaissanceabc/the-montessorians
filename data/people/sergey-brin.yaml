@@ -10,9 +10,8 @@ bio: >-
   shaping the modern web, Brin helped develop Google's search engine and led innovation at Alphabet across a range of
   technologies including AI and wearable computing.
 tags:
-  - tech
-  - founder
-  - innovator
+  - technology
+  - entrepreneur
 education:
   - montessori
 education_notes: >-
@@ -35,6 +34,7 @@ identifiers:
   lcnaf: no2005073928
   viaf: "120111435"
   wikidata: Q92764
+  isni: "0000000078791368"
 sources:
   - type: article
     url: https://fortune.com/2023/11/14/the-geek-way-book-excerpt-larry-page-sergey-brin-jeff-bezos-montessori

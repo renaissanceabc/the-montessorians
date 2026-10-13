@@ -1,49 +1,63 @@
-import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import { ProfilePhoto } from "@/components/profile-photo";
+import { CONTRIBUTOR_ROLE_LABELS } from "@/lib/content/types";
 import type { Profile } from "@/lib/content/types";
 
-/** A small, secondary nod to the people who built the field. Alumni stay the headline. */
-export default function ContributorsBand({ contributors }: { contributors: Profile[] }) {
+import SectionHeader from "./section-header";
+
+/**
+ * A row of small portraits for the people who shaped the field. The photos
+ * stay smaller than the alumni cards' so alumni remain the focus. On phones
+ * the row scrolls sideways inside its own box, bleeding to the screen edges.
+ */
+const ContributorsBand = ({ contributors }: { contributors: Profile[] }) => {
   if (contributors.length === 0) {
     return null;
   }
 
   return (
-    <section className="container mx-auto max-w-screen-md px-4 pb-4 sm:px-8">
-      <div className="flex flex-col gap-4 rounded-lg border border-black/10 bg-white/45 p-6">
-        <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-baseline">
-          <div className="flex flex-col gap-0.5">
-            <h2 className="font-bold text-lg">The people who built the field</h2>
-            <p className="text-muted-foreground text-sm">
-              Trainers, researchers, and authors with documented contributions to Montessori.
-            </p>
-          </div>
-          <Link
-            className="flex shrink-0 flex-row items-center gap-1 font-semibold text-sm hover:underline"
-            href="/contributors"
-          >
-            Contributors <ArrowRightIcon className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {contributors.map((profile) => (
-            <Link
-              className="flex items-center gap-2 rounded-full border border-black/10 bg-white py-1 pr-3 pl-1 text-sm transition-colors hover:border-black/30"
-              href={`/${profile.slug}`}
-              key={profile.slug}
-            >
-              <Avatar className="size-7">
-                <AvatarImage alt="" src={profile.imageUrl ?? ""} />
-                <AvatarFallback className="font-serif text-sm">
-                  {profile.name.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              {profile.name}
-            </Link>
-          ))}
-        </div>
-      </div>
+    <section aria-labelledby="home-contributors" className="flex flex-col gap-6">
+      <SectionHeader
+        action="All contributors"
+        href="/contributors"
+        id="home-contributors"
+        lead="Researchers, authors, and trainers with documented contributions."
+        shortAction="All"
+        title="The people who shaped the field"
+      />
+      <ul className="flex gap-2 max-sm:-mx-(--gutter) max-sm:overflow-x-auto max-sm:px-(--gutter) max-sm:[scrollbar-width:none] sm:grid sm:grid-cols-3 sm:gap-y-6 md:grid-cols-6 max-sm:[&::-webkit-scrollbar]:hidden">
+        {contributors.map((profile) => {
+          const [role] = profile.roles;
+          return (
+            <li className="w-[84px] shrink-0 sm:w-auto" key={profile.slug}>
+              <Link
+                className="group flex flex-col items-center gap-2 rounded-xl p-1 text-center"
+                href={`/${profile.slug}`}
+              >
+                <ProfilePhoto
+                  className="size-14"
+                  initialClassName="text-2xl"
+                  name={profile.name}
+                  size={56}
+                  src={profile.imageUrl}
+                />
+                <span className="flex flex-col gap-0.5">
+                  <span className="text-foreground group-hover:text-primary text-sm leading-tight font-semibold text-balance transition-colors">
+                    {profile.name}
+                  </span>
+                  {role && (
+                    <span className="text-muted-foreground text-xs">
+                      {CONTRIBUTOR_ROLE_LABELS[role]}
+                    </span>
+                  )}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
-}
+};
+export default ContributorsBand;

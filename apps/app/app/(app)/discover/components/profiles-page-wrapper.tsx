@@ -1,11 +1,11 @@
 "use client";
 
-import { SearchIcon, XIcon } from "lucide-react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Input } from "@/components/ui/input";
+
+import { DirectoryShell, FilterChip } from "@/components/directory-shell";
+import type { DirectoryCounts, DirectoryTab } from "@/components/directory-shell";
 import {
   Select,
   SelectContent,
@@ -14,14 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { filterAndSortProfiles } from "@/lib/content/filter";
+import { CONTRIBUTOR_ROLE_LABELS } from "@/lib/content/types";
 import type { Profile, ProfileKind, Tag } from "@/lib/content/types";
-import { DEFAULT_PROFILES_FILTERS, type getProfilesOptions } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import {
-  type AffiliationOption,
-  type ContributorFilters,
-  ContributorFiltersPopover,
-} from "./contributor-filters-popover";
+import { DEFAULT_PROFILES_FILTERS } from "@/lib/types";
+import type { getProfilesOptions } from "@/lib/types";
+
+import { ContributorFiltersPopover } from "./contributor-filters-popover";
+import type { AffiliationOption, ContributorFilters } from "./contributor-filters-popover";
 import ProfilesList from "./profiles-list";
 import { TagsPopover } from "./tags-popover";
 
@@ -30,15 +29,15 @@ type SortBy = NonNullable<getProfilesOptions["sortBy"]>;
 
 // Single combined sort control: field + direction in one menu.
 const SORT_OPTIONS = [
-  { value: "latest-desc", label: "Recently added", orderBy: "latest", sortBy: "desc" },
-  { value: "latest-asc", label: "Oldest first", orderBy: "latest", sortBy: "asc" },
-  { value: "alphabetical-asc", label: "A–Z", orderBy: "alphabetical", sortBy: "asc" },
-  { value: "alphabetical-desc", label: "Z–A", orderBy: "alphabetical", sortBy: "desc" },
+  { label: "Recently added", orderBy: "latest", sortBy: "desc", value: "latest-desc" },
+  { label: "Oldest first", orderBy: "latest", sortBy: "asc", value: "latest-asc" },
+  { label: "A–Z", orderBy: "alphabetical", sortBy: "asc", value: "alphabetical-asc" },
+  { label: "Z–A", orderBy: "alphabetical", sortBy: "desc", value: "alphabetical-desc" },
   {
-    value: "contributions-desc",
     label: "Most contributions",
     orderBy: "contributions",
     sortBy: "desc",
+    value: "contributions-desc",
   },
 ] as const satisfies readonly {
   value: string;
@@ -49,51 +48,67 @@ const SORT_OPTIONS = [
 
 type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
-const COLLECTIONS = [
-  { kind: "alum", label: "Alumni", href: "/discover" },
-  { kind: "contributor", label: "Contributors", href: "/contributors" },
-] as const;
+const PATHS: Record<"all" | ProfileKind, string> = {
+  all: "/discover",
+  alum: "/alumni",
+  contributor: "/contributors",
+};
+
+const TABS_BY_KIND: Record<"all" | ProfileKind, DirectoryTab> = {
+  all: "all",
+  alum: "alumni",
+  contributor: "contributors",
+};
+
+const NO_AFFILIATIONS: AffiliationOption[] = [];
 
 const splitList = (value: string | null) => (value ?? "").split(",").filter(Boolean);
 
-export function ProfilesPageWrapper({
+export const ProfilesPageWrapper = ({
   profiles,
   tags: availableTags,
-  kind = "alum",
-  affiliationOptions = [],
+  kind,
+  counts,
+  affiliationOptions = NO_AFFILIATIONS,
 }: {
   profiles: Profile[];
   tags: Tag[];
+  /** Omit for the "All" view */
   kind?: ProfileKind;
+  counts: DirectoryCounts;
   affiliationOptions?: AffiliationOption[];
-}) {
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isContributors = kind === "contributor";
-  const basePath = isContributors ? "/contributors" : "/discover";
+  const basePath = PATHS[kind ?? "all"];
 
   // Initial filter state comes from the URL so deep links work on a static page.
   const [search, setSearch] = useState(searchParams.get("q") ?? "");
+  // SAFETY: DEFAULT_PROFILES_FILTERS always sets orderBy and sortBy. An unrecognized URL
+  // value matches no SORT_OPTIONS entry and filterAndSortProfiles falls back to its default order.
   const [orderBy, setOrderBy] = useState<OrderBy>(
     (searchParams.get("orderBy") as OrderBy) || (DEFAULT_PROFILES_FILTERS.orderBy as OrderBy)
   );
+  // SAFETY: DEFAULT_PROFILES_FILTERS always sets orderBy and sortBy. An unrecognized URL
+  // value matches no SORT_OPTIONS entry and filterAndSortProfiles falls back to its default order.
   const [sortBy, setSortBy] = useState<SortBy>(
     (searchParams.get("sortBy") as SortBy) || (DEFAULT_PROFILES_FILTERS.sortBy as SortBy)
   );
   const [tags, setTags] = useState(searchParams.get("tags") ?? "");
   const [contributorFilters, setContributorFilters] = useState<ContributorFilters>({
-    roles: splitList(searchParams.get("roles")),
-    organizations: splitList(searchParams.get("orgs")),
     minContributions: Number(searchParams.get("min") ?? 0) || 0,
+    organizations: splitList(searchParams.get("orgs")),
+    roles: splitList(searchParams.get("roles")),
   });
-  const [debouncedSearch] = useDebounce(search, 400);
+  const [debouncedSearch] = useDebounce(search, 300);
 
   const sortOptions = SORT_OPTIONS.filter((o) => isContributors || o.orderBy !== "contributions");
   const sortValue: SortValue =
     sortOptions.find((o) => o.orderBy === orderBy && o.sortBy === sortBy)?.value ??
     SORT_OPTIONS[0].value;
 
-  const handleSortChange = (value: string) => {
+  const handleSortChange = (value: string | null) => {
     const option = SORT_OPTIONS.find((o) => o.value === value);
     if (option) {
       setOrderBy(option.orderBy);
@@ -104,14 +119,14 @@ export function ProfilesPageWrapper({
   const filtered = useMemo(
     () =>
       filterAndSortProfiles(profiles, {
-        orderBy,
-        sortBy,
         kind,
-        search: debouncedSearch || undefined,
-        tags: isContributors ? undefined : tags || undefined,
-        roles: isContributors ? contributorFilters.roles.join(",") : undefined,
-        organizations: isContributors ? contributorFilters.organizations.join(",") : undefined,
         minContributions: isContributors ? contributorFilters.minContributions : undefined,
+        orderBy,
+        organizations: isContributors ? contributorFilters.organizations.join(",") : undefined,
+        roles: isContributors ? contributorFilters.roles.join(",") : undefined,
+        search: debouncedSearch || undefined,
+        sortBy,
+        tags: isContributors ? undefined : tags || undefined,
       }),
     [profiles, orderBy, sortBy, kind, debouncedSearch, tags, isContributors, contributorFilters]
   );
@@ -119,12 +134,22 @@ export function ProfilesPageWrapper({
   // Sync filter state to URL without triggering a server re-render
   useEffect(() => {
     const params = new URLSearchParams();
-    if (debouncedSearch) params.set("q", debouncedSearch);
-    if (orderBy !== DEFAULT_PROFILES_FILTERS.orderBy) params.set("orderBy", orderBy ?? "");
-    if (sortBy !== DEFAULT_PROFILES_FILTERS.sortBy) params.set("sortBy", sortBy ?? "");
-    if (!isContributors && tags) params.set("tags", tags);
+    if (debouncedSearch) {
+      params.set("q", debouncedSearch);
+    }
+    if (orderBy !== DEFAULT_PROFILES_FILTERS.orderBy) {
+      params.set("orderBy", orderBy ?? "");
+    }
+    if (sortBy !== DEFAULT_PROFILES_FILTERS.sortBy) {
+      params.set("sortBy", sortBy ?? "");
+    }
+    if (!isContributors && tags) {
+      params.set("tags", tags);
+    }
     if (isContributors) {
-      if (contributorFilters.roles.length) params.set("roles", contributorFilters.roles.join(","));
+      if (contributorFilters.roles.length) {
+        params.set("roles", contributorFilters.roles.join(","));
+      }
       if (contributorFilters.organizations.length) {
         params.set("orgs", contributorFilters.organizations.join(","));
       }
@@ -145,86 +170,110 @@ export function ProfilesPageWrapper({
     router,
   ]);
 
+  const tagSlugs = splitList(tags);
+  const tagLabel = (slug: string) => availableTags.find((t) => t.slug === slug)?.label ?? slug;
+  const orgName = (slug: string) => affiliationOptions.find((o) => o.slug === slug)?.name ?? slug;
+  const chips = isContributors
+    ? [
+        ...contributorFilters.roles.map((role) => ({
+          handleRemove: () =>
+            setContributorFilters((f) => ({ ...f, roles: f.roles.filter((r) => r !== role) })),
+          key: `role-${role}`,
+          // SAFETY: roles come from the URL; an unknown one indexes to undefined and falls
+          // back to the raw value.
+          label: CONTRIBUTOR_ROLE_LABELS[role as keyof typeof CONTRIBUTOR_ROLE_LABELS] ?? role,
+        })),
+        ...contributorFilters.organizations.map((slug) => ({
+          handleRemove: () =>
+            setContributorFilters((f) => ({
+              ...f,
+              organizations: f.organizations.filter((o) => o !== slug),
+            })),
+          key: `org-${slug}`,
+          label: orgName(slug),
+        })),
+        ...(contributorFilters.minContributions
+          ? [
+              {
+                handleRemove: () => setContributorFilters((f) => ({ ...f, minContributions: 0 })),
+                key: "min",
+                label: `${contributorFilters.minContributions}+ contributions`,
+              },
+            ]
+          : []),
+      ]
+    : tagSlugs.map((slug) => ({
+        handleRemove: () => setTags(tagSlugs.filter((t) => t !== slug).join(",")),
+        key: `tag-${slug}`,
+        label: tagLabel(slug),
+      }));
+
+  const clearAll = () => {
+    setTags("");
+    setContributorFilters({ minContributions: 0, organizations: [], roles: [] });
+  };
+
+  const activeTab = TABS_BY_KIND[kind ?? "all"];
+  const total = counts[activeTab];
+  const noun = kind === "contributor" ? "contributors" : "Montessorians";
+
   return (
-    <div className="container mx-auto max-w-screen-md items-center justify-between gap-10 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full space-y-8">
-        <h1 className="flex w-full justify-center font-bold font-serif text-4xl lg:text-5xl">
-          Explore the directory
-        </h1>
-
-        <nav
-          aria-label="Collections"
-          className="flex justify-center gap-7 border-black/10 border-b"
-        >
-          {COLLECTIONS.map((collection) => (
-            <Link
-              aria-current={collection.kind === kind ? "page" : undefined}
-              className={cn(
-                "-mb-px border-b-2 px-0.5 pb-2.5 text-base transition-colors",
-                collection.kind === kind
-                  ? "border-foreground font-semibold"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              )}
-              href={collection.href}
-              key={collection.kind}
+    <DirectoryShell
+      active={activeTab}
+      chips={
+        chips.length > 0 ? (
+          <>
+            {chips.map((chip) => (
+              <FilterChip key={chip.key} label={chip.label} onRemove={chip.handleRemove} />
+            ))}
+            <button
+              className="text-muted-foreground hover:text-foreground px-1.5 py-0.5 text-xs underline"
+              onClick={clearAll}
+              type="button"
             >
-              {collection.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row">
-          <div className="relative flex w-full flex-row items-center gap-2 sm:w-auto">
-            <Input
-              className="w-full rounded-full border border-black/10 bg-white pl-10 text-sm shadow-none transition-colors sm:w-[260px]"
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={
-                isContributors ? "Search for a contributor" : "Search for a Montessorian"
-              }
-              value={search}
+              Clear all
+            </button>
+          </>
+        ) : undefined
+      }
+      controls={
+        <>
+          {isContributors ? (
+            <ContributorFiltersPopover
+              affiliationOptions={affiliationOptions}
+              applied={contributorFilters}
+              onApply={setContributorFilters}
             />
-            <SearchIcon className="absolute left-3 size-4" />
-            {search && (
-              <XIcon
-                className="absolute right-3 size-4 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
-                onClick={() => setSearch("")}
-              />
-            )}
-          </div>
-
-          <div className="flex flex-row items-center gap-1">
-            {isContributors ? (
-              <ContributorFiltersPopover
-                affiliationOptions={affiliationOptions}
-                applied={contributorFilters}
-                onApply={setContributorFilters}
-              />
-            ) : (
-              <TagsPopover
-                availableTags={availableTags}
-                initialTags={tags}
-                onApplyTags={(tagSlugs) => setTags(tagSlugs)}
-              />
-            )}
-
-            <Select onValueChange={handleSortChange} value={sortValue}>
-              <SelectTrigger className="border-black/10 bg-white shadow-none transition-colors hover:border-black/50 data-[state=open]:bg-white">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-
-              <SelectContent>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <ProfilesList hasSearch={Boolean(debouncedSearch)} profiles={filtered} />
-      </div>
-    </div>
+          ) : (
+            <TagsPopover
+              availableTags={availableTags}
+              initialTags={tags}
+              onApplyTags={(next) => setTags(next)}
+            />
+          )}
+          <Select items={sortOptions} onValueChange={handleSortChange} value={sortValue}>
+            <SelectTrigger
+              aria-label="Sort"
+              className="h-9 border-transparent bg-transparent shadow-none hover:bg-black/5 data-popup-open:bg-black/5"
+            >
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
+      }
+      counts={counts}
+      onSearch={setSearch}
+      search={search}
+      searchPlaceholder={`Search ${total} ${noun}…`}
+    >
+      <ProfilesList hasSearch={Boolean(debouncedSearch)} profiles={filtered} />
+    </DirectoryShell>
   );
-}
+};

@@ -10,10 +10,8 @@ bio: >-
   Pulitzer Prize for Fiction in 2015. His writing is celebrated for its lyrical prose, sweeping scope, and emotional
   depth, often weaving history, science, and humanity into intricate, unforgettable narratives.
 tags:
-  - author
   - writer
-  - pulitzer-prize-winner
-  - historical-fiction
+  - award-winner
 education:
   - montessori
 education_notes: >-
@@ -42,3 +40,4 @@ identifiers:
   lcnaf: n2001038314
   viaf: "79550093"
   wikidata: Q2754186
+  isni: "0000000114758160"

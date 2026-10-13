@@ -10,9 +10,7 @@ bio: >-
   shooter in NBA history. A two-time MVP and multiple-time NBA champion, Curry revolutionized the game with his
   three-point shooting and dynamic playmaking.
 tags:
-  - basketball
   - athlete
-  - nba
 education:
   - montessori
 education_notes: >-
@@ -31,6 +29,7 @@ identifiers:
   lcnaf: no2014060072
   viaf: "308698264"
   wikidata: Q352159
+  isni: "0000000434305881"
 sources:
   - type: article
     url: https://www.gospelherald.com/news/nba-mvp-stephen-curry-shining-example-success-christian-montessori-school-system

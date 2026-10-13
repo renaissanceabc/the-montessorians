@@ -1,38 +1,67 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": ["**/.env.*local", "tsconfig.json"],
   "ui": "tui",
   "envMode": "loose",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        ".react-email/**",
-        "**/generated/**",
-        "**/dist/**",
-        "**/drizzle/**"
+      // The app generates its content from the dataset at the repo root, so the
+      // dataset must be part of the cache key or data-only changes would replay a
+      // stale build.
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/data/**",
+        "$TURBO_ROOT$/images/**",
+        "$TURBO_ROOT$/*.schema.json",
+        "!.next/**",
+        "!public/images/**",
+        "!public/logos/**",
+        "!lib/content/*.generated.json"
+      ],
+      "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
+      // Values inlined into the build; listed so they're part of the cache key.
+      "env": [
+        "NEXT_PUBLIC_*",
+        "VERCEL",
+        "VERCEL_ENV",
+        "VERCEL_URL",
+        "VERCEL_PROJECT_PRODUCTION_URL",
+        "PORTLESS_URL",
+        "PORT",
+        "ANALYZE",
+        "SENTRY_ORG",
+        "SENTRY_PROJECT",
+        "BETTERSTACK_API_KEY",
+        "BETTERSTACK_URL"
       ]
     },
-    "//apps/email#build": {
-      "dependsOn": ["^build"],
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
       "inputs": [
-        "apps/email/package.json",
-        "apps/email/tsconfig.json",
-        "packages/email/templates/**",
-        "packages/email/package.json"
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/data/**",
+        "$TURBO_ROOT$/*.schema.json",
+        "!.next/**",
+        "!lib/content/*.generated.json"
       ],
-      "outputs": ["apps/email/.react-email/**"]
+      "outputs": []
+    },
+    "test": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/data/**",
+        "$TURBO_ROOT$/*.schema.json",
+        "!.next/**",
+        "!lib/content/*.generated.json"
+      ],
+      "outputs": []
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "clean": {
-      "cache": false
-    },
-    "//#clean": {
       "cache": false
     }
   }

@@ -19,11 +19,82 @@ bio: >-
   work around the world.
 tags:
   - educator
+  - writer
 montessori_notes: Worked alongside Maria Montessori and co-founded the Association Montessori Internationale.
 affiliations:
   - organization: association-montessori-internationale
     role: Co-founder
     from: 1929
+contributions:
+  - title: The Human Tendencies and Montessori Education
+    type: lecture
+    year: 1966
+    venue: Association Montessori Internationale
+    url: https://openlibrary.org/books/OL19103342M
+  - title: Dr. Maria Montessori and the Child
+    type: article
+    year: 1994
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ485376
+  - title: Respect This House
+    type: article
+    year: 1998
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ565561
+  - title: The Botanical Cards
+    type: article
+    year: 1998
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ565562
+  - title: The Impact of India
+    type: article
+    year: 1998
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ565563
+  - title: Montessori and the Deeper Freedom
+    type: article
+    year: 1998
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ565566
+    authors:
+      - Mario M. Montessori
+      - Claude A. Claremont
+  - title:
+      The Child Before Seven Years of Age; The Child After Seven Years of Age; and What Children Taught Dr. Montessori
+    type: lecture
+    year: 1998
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ565567
+    authors:
+      - Mario M. Montessori
+      - Renilde Montessori
+  - title: Spiritual Outlook and the Child
+    type: article
+    year: 1998
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ565568
+    authors:
+      - Mario M. Montessori
+      - Renilde Montessori
+  - title: A Letter From Mr. Mario M. Montessori
+    type: other
+    year: 1998
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ565569
+  - title: Dr. Montessori's Approach to Language in the Second Phase of the Child's Development
+    type: article
+    year: 2001
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ639696
+  - title: "Exercises of Practical Life: 3 to 6 Compared to 6 to 12"
+    type: lecture
+    year: 2013
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ1077968
+  - title: "Interpreting Montessori: A Selection of Writings by Mario M. Montessori"
+    type: book
+    venue: Montessori-Pierson Publishing Company
+    url: https://montessori-pierson.com/products/interpreting-montessori-a-selection-of-writings-by-mario-m-montessori-vol-26
 sources:
   - type: authority
     url: https://id.loc.gov/authorities/names/n78061985.html
@@ -37,3 +108,8 @@ identifiers:
   viaf: "12564714"
   wikidata: Q3293508
   isni: "0000000110388983"
+image_credit: Photographer unknown
+related:
+  - person: maria-montessori
+    relation: parent
+    source: https://id.loc.gov/authorities/names/n78061985.html

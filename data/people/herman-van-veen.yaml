@@ -9,10 +9,9 @@ bio: >-
   Herman van Veen is a Dutch stage performer, actor, musician, and author. He is best known for creating the animated
   character Alfred J. Kwak and has had a prolific career in music and theater, performing internationally.
 tags:
-  - singer
-  - songwriter
+  - musician
   - actor
-  - author
+  - writer
   - theater
 education:
   - montessori
@@ -29,6 +28,8 @@ identifiers:
   lcnaf: n79021356
   viaf: "64202830"
   wikidata: Q503717
+  isni: "0000000120272888"
+image_credit: Photo by Mark Kohn
 sources:
   - type: wikipedia
     url: https://de.wikipedia.org/wiki/Herman_van_Veen

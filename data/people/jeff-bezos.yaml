@@ -10,10 +10,8 @@ bio: >-
   leadership, Amazon transformed global commerce, cloud computing, and logistics, becoming one of the world's most
   valuable companies.
 tags:
-  - founder
   - entrepreneur
-  - tech
-  - innovator
+  - technology
 education:
   - montessori
 education_notes: >-
@@ -47,3 +45,4 @@ identifiers:
   lcnaf: n99280137
   viaf: "1808007"
   wikidata: Q312556
+  isni: "0000000109483211"

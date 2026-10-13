@@ -11,23 +11,23 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-import yaml from "js-yaml";
 
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+import { load } from "js-yaml";
+
+const ROOT = path.join(import.meta.dirname, "..");
 const isOrg = process.argv.includes("org");
 const [dir, prefix, width] = isOrg ? ["data/organizations", "tmo", 6] : ["data/people", "tm", 7];
-const pattern = new RegExp(`^${prefix}(\\d{${width}})$`);
+const pattern = new RegExp(`^${prefix}(\\d{${width}})$`, "u");
 
 const used = [];
 const fullDir = path.join(ROOT, dir);
 for (const file of fs.existsSync(fullDir) ? fs.readdirSync(fullDir) : []) {
   if (file.endsWith(".yaml")) {
-    used.push(yaml.load(fs.readFileSync(path.join(fullDir, file), "utf8"))?.id);
+    used.push(load(fs.readFileSync(path.join(fullDir, file), "utf-8"))?.id);
   }
 }
-for (const change of yaml.load(
-  fs.readFileSync(path.join(ROOT, "data", "authority", "changes.yaml"), "utf8")
+for (const change of load(
+  fs.readFileSync(path.join(ROOT, "data", "authority", "changes.yaml"), "utf-8")
 ) ?? []) {
   used.push(change.id);
 }

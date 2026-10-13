@@ -1,5 +1,6 @@
 export const initializeSentry = async () => {
-  if (!process.env.VERCEL) {
+  // Off unless a DSN is configured (e.g. local dev).
+  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) {
     return;
   }
 

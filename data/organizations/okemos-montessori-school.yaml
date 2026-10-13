@@ -1,8 +1,16 @@
 ---
 id: tmo000012
-name: Okemos Montessori School
+name: Montessori Radmoor
 slug: okemos-montessori-school
 type: school
 name_variants:
-  - Montessori Radmoor
+  - Montessori Radmoor School
+  - Okemos Montessori School
+description: >-
+  A Montessori school for children from 18 months through sixth grade, founded in 1968 by seven local families. It
+  opened as the Children's House in rented space at Okemos Community Church and moved to its Mount Hope Road campus in
+  1976.
 location: Okemos, Michigan, United States
+founded: 1968
+website: https://www.montessoriradmoor.org
+logo_source: https://www.montessoriradmoor.org/wp-content/uploads/2021/08/Logo_MontessoriRadmoor_2018_NoTag-CMYK.png

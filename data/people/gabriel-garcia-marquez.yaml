@@ -12,9 +12,8 @@ bio: >-
   masterpiece of world literature. In 1982, he was awarded the Nobel Prize in Literature for his rich and imaginative
   storytelling that wove the fantastic with the political and personal.
 tags:
-  - author
-  - novelist
-  - nobel-prize-winner
+  - writer
+  - award-winner
   - journalist
 education:
   - montessori
@@ -49,3 +48,4 @@ identifiers:
   lcnaf: n79063441
   viaf: "54147956"
   wikidata: Q5878
+  snac: w63x8wzd

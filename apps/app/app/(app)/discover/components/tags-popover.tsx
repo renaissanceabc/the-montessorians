@@ -1,10 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
+
 import type { Tag } from "@/lib/content/types";
+
 import { TagsPopoverContent } from "./tags-popover-content";
 
-export function TagsPopover({
+/** The tags named in a comma-separated slug list, in that order (unknown slugs skipped). */
+const matchTags = (availableTags: Tag[], tagSlugs: string) => {
+  const tagMap = new Map(availableTags.map((tag) => [tag.slug, tag]));
+  return tagSlugs
+    .split(",")
+    .filter(Boolean)
+    .map((slug) => tagMap.get(slug))
+    .filter((tag): tag is Tag => !!tag);
+};
+
+export const TagsPopover = ({
   initialTags,
   onApplyTags,
   availableTags,
@@ -12,21 +24,24 @@ export function TagsPopover({
   initialTags: string;
   onApplyTags: (tagSlugs: string) => void;
   availableTags: Tag[];
-}) {
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-  const [appliedTags, setAppliedTags] = useState<Tag[]>([]);
+}) => {
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(() =>
+    matchTags(availableTags, initialTags)
+  );
+  const [appliedTags, setAppliedTags] = useState<Tag[]>(() =>
+    matchTags(availableTags, initialTags)
+  );
   const [open, setOpen] = useState(false);
 
-  const tagSlugs = useMemo(() => initialTags.split(",").filter(Boolean), [initialTags]);
-
-  useEffect(() => {
-    const tagMap = new Map(availableTags.map((tag) => [tag.slug, tag]));
-    const matchingTags = tagSlugs
-      .map((slug) => tagMap.get(slug))
-      .filter((tag): tag is Tag => !!tag);
+  // Re-sync both selections when the props change (adjusting state while rendering
+  // instead of in an effect).
+  const [syncedWith, setSyncedWith] = useState({ availableTags, initialTags });
+  if (syncedWith.availableTags !== availableTags || syncedWith.initialTags !== initialTags) {
+    setSyncedWith({ availableTags, initialTags });
+    const matchingTags = matchTags(availableTags, initialTags);
     setSelectedTags(matchingTags);
     setAppliedTags(matchingTags);
-  }, [availableTags, tagSlugs]);
+  }
 
   return (
     <TagsPopoverContent
@@ -43,4 +58,4 @@ export function TagsPopover({
       }}
     />
   );
-}
+};

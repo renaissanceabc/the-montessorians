@@ -1,5 +1,5 @@
 {
-  "name": "@repo/observability",
+  "name": "@montessorians/observability",
   "version": "0.2.0",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@montessorians/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:"
   }

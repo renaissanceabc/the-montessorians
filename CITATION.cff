@@ -2,9 +2,7 @@ cff-version: 1.2.0
 message: "If you use this dataset, please cite it as below."
 title: "The Montessorians"
 abstract: >-
-  An open directory and name authority for Montessori alumni and for the trainers, teacher-scholars, researchers,
-  authors, and philosophers who shaped the Montessori field, with permanent identifiers and links to other authority
-  files.
+  An open directory and name authority for Montessori alumni and for the trainers, teacher-scholars, researchers, authors, and philosophers who shaped the Montessori field, with permanent identifiers and links to other authority files.
 type: dataset
 authors:
   - name: "Renaissance"

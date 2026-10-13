@@ -14,9 +14,8 @@ bio: >-
   photographer, and author, leaving an enduring legacy in entertainment and culture.
 tags:
   - actor
-  - performer
-  - author
-  - photographer
+  - writer
+  - artist
   - filmmaker
 education:
   - montessori
@@ -29,4 +28,6 @@ identifiers:
   lcnaf: n82115477
   viaf: "6283699"
   wikidata: Q102813
+image_credit:
+  Publicity photo for The Magnificent Seven (1960), photographer unknown, via Wikimedia Commons (public domain)
 verification: unverified

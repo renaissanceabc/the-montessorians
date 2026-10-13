@@ -52,8 +52,7 @@ body:
     attributes:
       label: Source
       description: >-
-        A link showing they attended Montessori (alumni) or documenting their contribution (contributors). For
-        personal knowledge, tell us how you know them.
+        A link showing they attended Montessori (alumni) or documenting their contribution (contributors). For personal knowledge, tell us how you know them.
     validations:
       required: true
   - type: textarea

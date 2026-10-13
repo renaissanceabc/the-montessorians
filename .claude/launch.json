@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "cd apps/app && bun run dev:port"],
+      "port": 3010
+    }
+  ]
+}

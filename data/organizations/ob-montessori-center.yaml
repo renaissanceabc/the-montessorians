@@ -3,4 +3,16 @@ id: tmo000013
 name: O.B. Montessori Center
 slug: ob-montessori-center
 type: school
+name_variants:
+  - Operation Brotherhood Montessori Center
+description: >-
+  A Montessori school founded in 1966 by Preciosa Soliven under Operation Brotherhood International. It has campuses in
+  San Juan, Quezon City, Manila, Las Piñas, and Angeles.
 location: San Juan, Philippines
+founded: 1966
+website: https://obmontessori.edu.ph
+logo_source: https://images.squarespace-cdn.com/content/v1/664c7ae50eea9c731b37e817/ef78a8f2-4613-429f-afdb-2f11cf3d7ba4/favicon.ico
+identifiers:
+  lcnaf: no2002024506
+  viaf: "141054939"
+  wikidata: Q7096852

@@ -11,9 +11,8 @@ bio: >-
   positions at The Royal Conservatory of Music's Taylor Academy and the University of Toronto, and is recognized for his
   pedagogical insights, partly inspired by his early Montessori education.
 tags:
-  - violinist
+  - musician
   - educator
-  - classical-musician
 education:
   - montessori
 education_notes: >-
@@ -40,3 +39,6 @@ verification: verified
 schools:
   - organization: toronto-montessori-schools
     level: primary
+identifiers:
+  lcnaf: no2012137881
+  isni: "0000000384896926"

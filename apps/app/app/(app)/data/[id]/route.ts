@@ -7,28 +7,27 @@ import { getAllProfiles } from "@/lib/content/profiles";
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return [...getAllProfiles().map((p) => p.id), ...getAllOrganizations().map((o) => o.id)].map(
-    (id) => ({ id })
-  );
-}
+export const generateStaticParams = () =>
+  [...getAllProfiles().map((p) => p.id), ...getAllOrganizations().map((o) => o.id)].map((id) => ({
+    id,
+  }));
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export const GET = async (_request: Request, { params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const resolved = resolveId(id);
-  const body =
-    resolved?.kind === "person"
-      ? personJsonLd(resolved.profile)
-      : resolved?.kind === "organization"
-        ? organizationJsonLd(resolved.organization)
-        : null;
+  let body: ReturnType<typeof personJsonLd> | ReturnType<typeof organizationJsonLd> | null = null;
+  if (resolved?.kind === "person") {
+    body = personJsonLd(resolved.profile);
+  } else if (resolved?.kind === "organization") {
+    body = organizationJsonLd(resolved.organization);
+  }
   if (!body) {
     return new Response(null, { status: 404 });
   }
   return new Response(JSON.stringify(body, null, 2), {
     headers: {
-      "Content-Type": "application/ld+json; charset=utf-8",
       "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/ld+json; charset=utf-8",
     },
   });
-}
+};

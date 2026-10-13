@@ -11,8 +11,8 @@ bio: >-
   awards for her performances.
 tags:
   - actor
-  - singer
-  - television-presenter
+  - musician
+  - television
 education:
   - montessori
 education_notes: >-
@@ -28,6 +28,8 @@ identifiers:
   lcnaf: no2003056555
   viaf: "118979992"
   wikidata: Q62510
+  isni: "0000000114634643"
+image_credit: Photo by Harald Krichel, via Wikimedia Commons (CC BY-SA 4.0)
 sources:
   - type: wikipedia
     url: https://de.wikipedia.org/wiki/Heike_Makatsch

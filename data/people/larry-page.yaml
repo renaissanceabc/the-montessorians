@@ -9,10 +9,8 @@ bio: >-
   Larry Page is a computer scientist and entrepreneur best known as the co-founder of Google. Alongside Sergey Brin, he
   developed the PageRank algorithm that revolutionized internet search and helped shape the digital information era.
 tags:
-  - tech
-  - founder
+  - technology
   - entrepreneur
-  - innovator
 education:
   - montessori
 education_notes: >-
@@ -44,3 +42,4 @@ identifiers:
   lcnaf: n2005086596
   viaf: "35624513"
   wikidata: Q4934
+  isni: "0000000430764124"

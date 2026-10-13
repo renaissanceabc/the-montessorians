@@ -10,9 +10,9 @@ bio: >-
   Princess Diana. He served in the British Army and co-founded the Invictus Games. In recent years, he has become a
   vocal advocate for mental health and veterans' affairs.
 tags:
-  - royal
-  - veteran
-  - advocate
+  - royalty
+  - military
+  - activist
 education:
   - montessori
 education_notes: >-
@@ -29,6 +29,7 @@ identifiers:
   lcnaf: n00140230
   viaf: "102307639"
   wikidata: Q152316
+  isni: "0000000368065479"
 sources:
   - type: article
     url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries

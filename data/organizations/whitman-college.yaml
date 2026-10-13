@@ -3,5 +3,16 @@ id: tmo000004
 name: Whitman College
 slug: whitman-college
 type: university
+name_variants:
+  - Whitman Seminary
+description: A private liberal arts college in Walla Walla, Washington, founded in 1859 as Whitman Seminary.
 location: Walla Walla, Washington, United States
+founded: 1859
 website: https://www.whitman.edu
+logo_source: https://www.whitman.edu/images/global/logos/wc-primary-black-rgb.svg
+identifiers:
+  lcnaf: n88030122
+  viaf: "132365684"
+  wikidata: Q7996607
+  ror: 05axv8155
+  isni: "0000000121605920"

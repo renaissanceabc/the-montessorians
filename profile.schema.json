@@ -5,7 +5,11 @@
   "type": "object",
   "required": ["id", "name", "slug", "tagline", "tags"],
   "definitions": {
-    "year": { "type": "integer", "minimum": 1000, "maximum": 2100 },
+    "year": {
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 2100
+    },
     "orgRef": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$",
@@ -28,10 +32,23 @@
       "description": "The slug of the person, used in the URL. May change; the id may not."
     },
     "kind": {
-      "type": "string",
-      "enum": ["alum", "contributor"],
-      "default": "alum",
-      "description": "alum: attended Montessori. contributor: contributed to the field (training, practice, scholarship, writing, philosophy) with documented contributions."
+      "description": "alum: attended Montessori. contributor: contributed to the field with documented contributions. Use a list for someone who is both.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["alum", "contributor"]
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["alum", "contributor"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      ],
+      "default": "alum"
     },
     "roles": {
       "type": "array",
@@ -61,10 +78,16 @@
     "name_variants": {
       "type": "array",
       "description": "Other forms of the name, including other scripts",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "birth_year": { "$ref": "#/definitions/year" },
-    "death_year": { "$ref": "#/definitions/year" },
+    "birth_year": {
+      "$ref": "#/definitions/year"
+    },
+    "death_year": {
+      "$ref": "#/definitions/year"
+    },
     "tagline": {
       "type": "string",
       "maxLength": 100,
@@ -77,7 +100,9 @@
     },
     "tags": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "education": {
       "type": "array",
@@ -99,19 +124,19 @@
         "type": "object",
         "required": ["organization"],
         "properties": {
-          "organization": { "$ref": "#/definitions/orgRef" },
+          "organization": {
+            "$ref": "#/definitions/orgRef"
+          },
           "level": {
             "type": "string",
-            "enum": [
-              "infant-toddler",
-              "primary",
-              "elementary",
-              "adolescent",
-              "secondary"
-            ]
+            "enum": ["infant-toddler", "primary", "elementary", "adolescent", "secondary"]
           },
-          "from": { "$ref": "#/definitions/year" },
-          "to": { "$ref": "#/definitions/year" }
+          "from": {
+            "$ref": "#/definitions/year"
+          },
+          "to": {
+            "$ref": "#/definitions/year"
+          }
         },
         "additionalProperties": false
       }
@@ -128,10 +153,18 @@
         "type": "object",
         "required": ["organization"],
         "properties": {
-          "organization": { "$ref": "#/definitions/orgRef" },
-          "role": { "type": "string" },
-          "from": { "$ref": "#/definitions/year" },
-          "to": { "$ref": "#/definitions/year" }
+          "organization": {
+            "$ref": "#/definitions/orgRef"
+          },
+          "role": {
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/definitions/year"
+          },
+          "to": {
+            "$ref": "#/definitions/year"
+          }
         },
         "additionalProperties": false
       }
@@ -143,27 +176,39 @@
         "type": "object",
         "required": ["title", "type"],
         "properties": {
-          "title": { "type": "string" },
+          "title": {
+            "type": "string"
+          },
           "type": {
             "type": "string",
-            "enum": [
-              "book",
-              "article",
-              "chapter",
-              "lecture",
-              "training-program",
-              "media",
-              "other"
-            ]
+            "enum": ["book", "article", "chapter", "lecture", "training-program", "media", "other"]
           },
-          "year": { "$ref": "#/definitions/year" },
+          "year": {
+            "$ref": "#/definitions/year"
+          },
           "venue": {
             "type": "string",
             "description": "Publisher, journal, or institution"
           },
-          "doi": { "type": "string", "pattern": "^10\\.\\d{4,9}/\\S+$" },
-          "isbn": { "type": "string", "pattern": "^(97[89])?\\d{9}[\\dX]$" },
-          "url": { "type": "string", "format": "uri" }
+          "doi": {
+            "type": "string",
+            "pattern": "^10\\.\\d{4,9}/\\S+$"
+          },
+          "isbn": {
+            "type": "string",
+            "pattern": "^(97[89])?\\d{9}[\\dX]$"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "authors": {
+            "type": "array",
+            "description": "All authors in publication order, including this person",
+            "items": {
+              "type": "string"
+            }
+          }
         },
         "additionalProperties": false
       }
@@ -171,12 +216,16 @@
     "notable_achievements": {
       "type": "array",
       "description": "Notable achievements or accomplishments of the person",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "quotes": {
       "type": "array",
       "description": "Quotes from the person regarding their education",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "sources": {
       "type": "array",
@@ -197,8 +246,13 @@
               "other"
             ]
           },
-          "url": { "type": "string", "format": "uri" },
-          "note": { "type": "string" }
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "note": {
+            "type": "string"
+          }
         },
         "additionalProperties": false
       }
@@ -218,15 +272,30 @@
       "type": "object",
       "description": "The same person in other authority files",
       "properties": {
-        "lcnaf": { "type": "string", "pattern": "^n[a-z]?[0-9]{8,10}$" },
-        "viaf": { "type": "string", "pattern": "^[0-9]+$" },
-        "wikidata": { "type": "string", "pattern": "^Q[0-9]+$" },
+        "lcnaf": {
+          "type": "string",
+          "pattern": "^n[a-z]?[0-9]{8,10}$"
+        },
+        "viaf": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "wikidata": {
+          "type": "string",
+          "pattern": "^Q[0-9]+$"
+        },
         "orcid": {
           "type": "string",
           "pattern": "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
         },
-        "isni": { "type": "string", "pattern": "^[0-9]{15}[0-9X]$" },
-        "snac": { "type": "string", "pattern": "^[0-9a-z]+$" }
+        "isni": {
+          "type": "string",
+          "pattern": "^[0-9]{15}[0-9X]$"
+        },
+        "snac": {
+          "type": "string",
+          "pattern": "^[0-9a-z]+$"
+        }
       },
       "additionalProperties": false
     },
@@ -237,8 +306,13 @@
         "type": "object",
         "required": ["label", "url"],
         "properties": {
-          "label": { "type": "string" },
-          "url": { "type": "string", "format": "uri" }
+          "label": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
         },
         "additionalProperties": false
       }
@@ -277,12 +351,45 @@
         },
         "additionalProperties": false
       }
+    },
+    "related": {
+      "type": "array",
+      "description": "People this person is related to. Only one side needs to record it; the inverse is filled in automatically. Co-authors are derived from shared contributions.",
+      "items": {
+        "type": "object",
+        "required": ["person", "relation"],
+        "properties": {
+          "person": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Slug of the related person"
+          },
+          "relation": {
+            "type": "string",
+            "enum": [
+              "parent",
+              "child",
+              "sibling",
+              "spouse",
+              "trained_by",
+              "trained",
+              "advisor",
+              "advisee",
+              "colleague"
+            ],
+            "description": "How the related person relates to this one, e.g. parent: they are this person's parent"
+          },
+          "source": {
+            "type": "string",
+            "format": "uri"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
-  "if": {
-    "properties": { "kind": { "const": "contributor" } },
-    "required": ["kind"]
-  },
-  "then": { "required": ["roles"] },
   "additionalProperties": false
 }

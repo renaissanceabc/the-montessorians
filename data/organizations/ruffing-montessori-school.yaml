@@ -3,4 +3,12 @@ id: tmo000006
 name: Ruffing Montessori School
 slug: ruffing-montessori-school
 type: school
+name_variants:
+  - Cleveland Montessori School
+description: >-
+  A Montessori school for children from 18 months through eighth grade. It opened in 1961 as Cleveland Montessori School
+  and was renamed for early supporters Mary and Jim Ruffing in 1969.
 location: Cleveland Heights, Ohio, United States
+founded: 1961
+website: https://www.ruffingmontessori.net
+logo_source: https://resources.finalsite.net/images/v1660913976/ruffingmontessorinet/na1tc4i1exhl8hsdtvns/RuffingMontessoriSchool.svg

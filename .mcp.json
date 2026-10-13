@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "agentation": {
+      "command": "bunx",
+      "args": ["agentation-mcp", "server"]
+    }
+  }
+}

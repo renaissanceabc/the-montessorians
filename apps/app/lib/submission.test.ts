@@ -1,14 +1,22 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import yaml from "js-yaml";
-import { submissionSchema, submissionToYaml, yamlToSubmission } from "./submission";
+
+import { load } from "js-yaml";
+
+import {
+  newOrganizations,
+  submissionSchema,
+  submissionToYaml,
+  yamlToSubmission,
+} from "./submission";
+import type { YamlMap } from "./submission";
 
 const alum = {
-  kind: "alum",
+  kinds: ["alum"],
   name: "Jane Doe",
+  sources: [{ type: "article", url: "https://example.com/jane" }],
   tagline: "Engineer and author",
   tags: ["Engineer", "author"],
-  sources: [{ type: "article", url: "https://example.com/jane" }],
 };
 
 describe("submission", () => {
@@ -21,16 +29,16 @@ describe("submission", () => {
     assert.equal(
       submissionSchema.safeParse({
         ...alum,
-        sources: [{ type: "personal-knowledge", note: "Classmate" }],
+        sources: [{ note: "Classmate", type: "personal-knowledge" }],
       }).success,
       true
     );
   });
 
   test("contributors need a role", () => {
-    assert.equal(submissionSchema.safeParse({ ...alum, kind: "contributor" }).success, false);
+    assert.equal(submissionSchema.safeParse({ ...alum, kinds: ["contributor"] }).success, false);
     assert.equal(
-      submissionSchema.safeParse({ ...alum, kind: "contributor", roles: ["author"] }).success,
+      submissionSchema.safeParse({ ...alum, kinds: ["contributor"], roles: ["author"] }).success,
       true
     );
   });
@@ -38,10 +46,37 @@ describe("submission", () => {
   test("renders profile YAML with a slug and slugged tags, and parses it back", () => {
     const parsed = submissionSchema.parse(alum);
     const text = submissionToYaml(parsed);
-    const doc = yaml.load(text) as Record<string, unknown>;
+    // SAFETY: submissionToYaml always renders a mapping of plain YAML values.
+    const doc = load(text) as YamlMap;
     assert.equal(doc.slug, "jane-doe");
     assert.deepEqual(doc.tags, ["engineer", "author"]);
     assert.equal(doc.id, null);
     assert.equal(submissionSchema.safeParse(yamlToSubmission(text)).success, true);
+  });
+
+  test("someone who is both gets a kind list, and new organizations are flagged", () => {
+    const parsed = submissionSchema.parse({
+      ...alum,
+      affiliations: [
+        { name: "Example Training Center" },
+        { name: "AMI", organization: "association-montessori-internationale" },
+      ],
+      kinds: ["alum", "contributor"],
+      roles: ["trainer"],
+    });
+    // SAFETY: submissionToYaml always renders a mapping of plain YAML values.
+    const doc = load(submissionToYaml(parsed)) as YamlMap;
+    assert.deepEqual(doc.kind, ["alum", "contributor"]);
+    assert.deepEqual(doc.affiliations, [
+      { organization: "example-training-center" },
+      { organization: "association-montessori-internationale" },
+    ]);
+    assert.deepEqual(newOrganizations(parsed), ["Example Training Center"]);
+
+    // YAML mode round-trips: known slugs stay linked, unknown ones become new organizations.
+    const known = new Map([["association-montessori-internationale", "AMI"]]);
+    const again = submissionSchema.parse(yamlToSubmission(submissionToYaml(parsed), known));
+    assert.deepEqual(newOrganizations(again), ["Example Training Center"]);
+    assert.equal(again.affiliations?.[1].organization, "association-montessori-internationale");
   });
 });

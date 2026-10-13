@@ -13,12 +13,9 @@ bio: >-
   Kentucky, 2008). He is currently preparing an edited volume of the religious writings of American philosopher Charles
   S. Peirce.
 tags:
-  - philosophy
-  - classics
-  - environmental-studies
-  - sustainability
-  - academia
-  - research
+  - philosopher
+  - environmentalist
+  - researcher
 education:
   - montessori
 education_notes: >-
@@ -38,3 +35,6 @@ sources:
   - type: personal-knowledge
     note: Submitted to The Montessorians and confirmed by the maintainers
 verification: confirmed
+identifiers:
+  lcnaf: n2005081597
+  isni: "0000000073684379"

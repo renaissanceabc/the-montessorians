@@ -1,48 +1,51 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+
+import { Container } from "@/components/container";
 import { getTagsWithCounts } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { DEFAULT_TAGS_FILTERS } from "@/lib/types";
 import { siteUrl } from "@/lib/utils";
 
-export const generateMetadata = () => {
-  return createMetadata({
-    title: "Tags",
-    description:
-      "Browse Montessorians by tag. Explore categories like entrepreneurs, educators, activists, and more.",
+export const generateMetadata = () =>
+  createMetadata({
     alternates: {
       canonical: `${siteUrl}/tags`,
     },
+    description:
+      "Browse Montessorians by tag. Explore categories like entrepreneurs, educators, activists, and more.",
+    title: "Tags",
   });
-};
 
-export default function TagsPage() {
+const TagsPage = () => {
   const { data: tags } = getTagsWithCounts(DEFAULT_TAGS_FILTERS);
 
   return (
-    <div className="container mx-auto max-w-screen-md items-center justify-between gap-10 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full space-y-8">
-        <h1 className="flex w-full justify-center font-bold font-serif text-4xl lg:text-5xl">
-          Tags
-        </h1>
+    <Container className="flex flex-col gap-8 pt-6 pb-16 lg:pt-8">
+      <div className="flex max-w-2xl flex-col gap-2">
+        <h1 className="type-title">Tags</h1>
+        <p className="type-lead">Browse Montessorians by what they do.</p>
+      </div>
 
-        <div className="flex flex-wrap justify-center gap-1">
-          {tags.length === 0 && <p className="text-muted-foreground">No tags found.</p>}
+      {tags.length === 0 ? (
+        <p className="text-muted-foreground">No tags found.</p>
+      ) : (
+        <ul className="flex flex-wrap gap-1.5">
           {tags.map((tag) => (
-            <Link href={`/tags/${tag.slug}`} key={tag.slug}>
-              <Badge
-                className="group cursor-pointer bg-white/50 px-3 py-1.5 text-sm transition-colors hover:bg-primary hover:text-primary-foreground"
-                variant="outline"
+            <li key={tag.slug}>
+              <Link
+                className="group hover:bg-primary hover:text-primary-foreground inline-flex h-8 items-center rounded-full border border-black/12 bg-white/50 px-3 text-sm transition-[color,background-color,border-color,scale] duration-150 ease-out hover:border-transparent active:scale-[0.97] motion-reduce:active:scale-100"
+                href={`/tags/${tag.slug}`}
               >
                 {tag.label}
-                <span className="ml-1.5 text-muted-foreground group-hover:text-primary-foreground">
+                <span className="text-muted-foreground group-hover:text-primary-foreground ml-1.5 tabular-nums">
                   {tag.profileCount}
                 </span>
-              </Badge>
-            </Link>
+              </Link>
+            </li>
           ))}
-        </div>
-      </div>
-    </div>
+        </ul>
+      )}
+    </Container>
   );
-}
+};
+export default TagsPage;

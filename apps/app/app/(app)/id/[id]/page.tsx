@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
+
+import { Container } from "@/components/container";
 import { getChanges, pathForResolved, resolveId } from "@/lib/content/authority";
 import { getAllOrganizations } from "@/lib/content/organizations";
 import { getAllProfiles } from "@/lib/content/profiles";
@@ -9,7 +11,7 @@ import { createMetadata } from "@/lib/metadata";
 // redirected (308) by next.config before reaching this page; it renders the
 // notice for withdrawn records, and redirects as a fallback in development.
 
-export function generateStaticParams() {
+export const generateStaticParams = () => {
   const ids = [
     ...getAllProfiles().map((p) => p.id),
     ...getAllOrganizations().map((o) => o.id),
@@ -18,20 +20,20 @@ export function generateStaticParams() {
       .map((c) => c.id),
   ];
   return ids.map((id) => ({ id }));
-}
+};
 
 export const dynamicParams = false;
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+export const generateMetadata = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   return createMetadata({
-    title: `Record ${id}`,
     description: `Permanent identifier ${id} in The Montessorians.`,
-    robots: { index: false, follow: true },
+    robots: { follow: true, index: false },
+    title: `Record ${id}`,
   });
-}
+};
 
-export default async function IdPage({ params }: { params: Promise<{ id: string }> }) {
+const IdPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const resolved = resolveId(id);
   const path = pathForResolved(resolved);
@@ -46,12 +48,10 @@ export default async function IdPage({ params }: { params: Promise<{ id: string 
 
   const { change } = resolved;
   return (
-    <div className="container mx-auto flex max-w-xl flex-col items-center gap-4 px-4 py-24 text-center">
-      <p className="font-mono text-muted-foreground text-sm">{id}</p>
-      <h1 className="font-semibold font-serif text-4xl">
-        {change.name ?? "This record"} was withdrawn
-      </h1>
-      <p className="text-muted-foreground">
+    <Container className="flex flex-col items-start gap-4 pt-6 pb-24 lg:pt-8" size="reading">
+      <p className="text-muted-foreground font-mono text-sm">{id}</p>
+      <h1 className="type-title">{change.name ?? "This record"} was withdrawn</h1>
+      <p className="type-lead">
         Withdrawn on {change.date}
         {change.reason ? `: ${change.reason}` : "."} The identifier stays reserved and will not be
         reused.
@@ -59,6 +59,7 @@ export default async function IdPage({ params }: { params: Promise<{ id: string 
       <Link className="text-sm underline" href="/discover">
         Explore the directory
       </Link>
-    </div>
+    </Container>
   );
-}
+};
+export default IdPage;

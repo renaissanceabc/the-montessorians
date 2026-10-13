@@ -1,5 +1,5 @@
 {
-  "name": "@repo/analytics",
+  "name": "@montessorians/analytics",
   "version": "0.2.0",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@montessorians/typescript-config": "workspace:*",
     "@types/node": "catalog:"
   }
 }

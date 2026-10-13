@@ -14,8 +14,6 @@ bio: >-
 tags:
   - entrepreneur
   - marketing
-  - brand-strategy
-  - social-media
 education:
   - montessori
 education_notes: >-
@@ -36,3 +34,5 @@ sources:
   - type: personal-knowledge
     note: Submitted to The Montessorians and confirmed by the maintainers
 verification: confirmed
+schools:
+  - organization: montessori-school-of-sudbury

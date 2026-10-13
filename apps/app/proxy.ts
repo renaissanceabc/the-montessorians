@@ -13,15 +13,15 @@ const blockedPaths = [
   "info.php",
 ];
 
-export function proxy(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+export const proxy = (request: NextRequest) => {
+  const { pathname } = request.nextUrl;
 
   if (blockedPaths.some((path) => pathname.includes(path))) {
     return new NextResponse("Blocked", { status: 403 });
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
   // matcher tells Next.js which routes to run the proxy on. This runs the

@@ -24,13 +24,13 @@ export const CONTRIBUTOR_ROLES = [
   "philosopher",
 ] as const;
 export const CONTRIBUTOR_ROLE_LABELS: Record<(typeof CONTRIBUTOR_ROLES)[number], string> = {
-  founder: "Founder",
-  trainer: "Trainer",
-  practitioner: "Practitioner",
-  "teacher-scholar": "Teacher-scholar",
-  researcher: "Researcher",
   author: "Author",
+  founder: "Founder",
   philosopher: "Philosopher",
+  practitioner: "Practitioner",
+  researcher: "Researcher",
+  "teacher-scholar": "Teacher-scholar",
+  trainer: "Trainer",
 };
 export const SOURCE_TYPES = [
   "wikipedia",
@@ -70,59 +70,99 @@ export type OrganizationType = (typeof ORGANIZATION_TYPES)[number];
 export type Verification = "verified" | "reported" | "confirmed" | "unverified";
 export type RecordStatus = "provisional" | "reviewed";
 
-export type ProfileLink = {
+export interface ProfileLink {
   url: string;
   type: LinkType;
-};
+}
 
-export type ProfileTag = {
+export interface ProfileTag {
   slug: string;
   label: string;
-};
+}
 
-export type Source = {
+export interface Source {
   type: SourceType;
   url?: string;
   note?: string;
-};
+}
 
-export type Contribution = {
+export interface Contribution {
   title: string;
+  /** All authors in publication order, including the profile's own person */
+  authors?: string[];
   type: ContributionType;
   year?: number;
   venue?: string;
   doi?: string;
   isbn?: string;
   url?: string;
-};
+}
 
-export type OrganizationRef = {
+export interface OrganizationRef {
   organization: string;
   /** Resolved at build time by scripts/generate-content.mjs */
   organizationName?: string;
+  organizationShortName?: string;
+  organizationLogoUrl?: string;
+  organizationNameVariants?: string[];
   role?: string;
   level?: string;
   from?: number;
   to?: number;
-};
+}
 
-export type PersonIdentifiers = {
+export interface PersonIdentifiers {
   lcnaf?: string;
   viaf?: string;
   wikidata?: string;
   orcid?: string;
   isni?: string;
   snac?: string;
-};
+}
 
-export type GlossaryCitation = { label: string; url: string };
+export interface GlossaryCitation {
+  label: string;
+  url: string;
+}
+
+export const RELATIONS = [
+  "parent",
+  "child",
+  "sibling",
+  "spouse",
+  "trained_by",
+  "trained",
+  "advisor",
+  "advisee",
+  "colleague",
+] as const;
+export type Relation = (typeof RELATIONS)[number] | "coauthor";
+
+/** As recorded in YAML: how `person` relates to the record's own person. */
+export interface RawRelated {
+  person: string;
+  relation: (typeof RELATIONS)[number];
+  source?: string;
+  note?: string;
+}
+
+/** Resolved for display: both sides of every relationship, plus derived co-authors. */
+export interface RelatedPerson {
+  slug: string;
+  name: string;
+  imageUrl: string | null;
+  relation: Relation;
+  /** Shared contributions, for co-authors */
+  count?: number;
+  source?: string;
+}
 
 /** Shape of a single record in `profiles.generated.json` (tags are raw slugs). */
-export type RawProfile = {
+export interface RawProfile {
   id: string;
   slug: string;
   name: string;
-  kind?: ProfileKind;
+  kind?: ProfileKind | ProfileKind[];
   roles?: ContributorRole[];
   pinned?: boolean;
   nameAuthorized?: string;
@@ -145,18 +185,22 @@ export type RawProfile = {
   status?: RecordStatus;
   identifiers?: PersonIdentifiers;
   glossaryCitations?: GlossaryCitation[];
+  related?: RawRelated[];
   imageCredit?: string;
   links?: ProfileLink[];
   imageUrl: string | null;
   addedAt: string;
-};
+}
 
 /** Enriched profile used throughout the UI (tags resolved to {slug,label}). */
-export type Profile = {
+export interface Profile {
   id: string;
   slug: string;
   name: string;
+  /** Primary collection: contributor if the person is one, otherwise alum */
   kind: ProfileKind;
+  /** Every collection the person belongs to (someone can be both) */
+  kinds: ProfileKind[];
   roles: ContributorRole[];
   pinned: boolean;
   nameAuthorized: string | null;
@@ -178,23 +222,28 @@ export type Profile = {
   status: RecordStatus;
   identifiers: PersonIdentifiers;
   glossaryCitations: GlossaryCitation[];
+  related: RawRelated[];
   imageCredit: string | null;
   imageUrl: string | null;
   tags: ProfileTag[];
   links: ProfileLink[];
   addedAt: string;
-};
+}
 
-export type Organization = {
+export interface Organization {
   id: string;
   slug: string;
   name: string;
+  shortName?: string;
   type: OrganizationType;
   nameVariants?: string[];
   description?: string;
   location?: string;
   founded?: number;
   website?: string;
+  logoSource?: string;
+  /** Resolved at build time from images/organizations/ */
+  logoUrl?: string | null;
   parent?: string;
   identifiers?: {
     lcnaf?: string;
@@ -203,9 +252,9 @@ export type Organization = {
     ror?: string;
     isni?: string;
   };
-};
+}
 
-export type AuthorityChange = {
+export interface AuthorityChange {
   id: string;
   action: "merged" | "withdrawn" | "renamed";
   slug: string;
@@ -213,17 +262,32 @@ export type AuthorityChange = {
   replacedBy?: string;
   date: string;
   reason?: string;
-};
+}
 
 export type PastProfile = Profile & { featuredDate: string };
 
-export type AdjacentRef = { slug: string; name: string } | { slug: null; name: null };
+export type AdjacentRef =
+  | { slug: string; name: string; imageUrl: string | null }
+  | { slug: null; name: null; imageUrl: null };
 
-export type ProfilePage = {
+export interface ProfilePage {
   profile: Profile;
   previous: AdjacentRef;
   next: AdjacentRef;
-};
+}
 
 export type Tag = ProfileTag;
 export type TagWithCount = ProfileTag & { profileCount: number };
+
+/** Display names for each link type. */
+export const LINK_LABELS: Record<LinkType, string> = {
+  article: "Article",
+  imdb: "IMDb",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  tiktok: "TikTok",
+  website: "Website",
+  wikipedia: "Wikipedia",
+  x: "X",
+  youtube: "YouTube",
+};

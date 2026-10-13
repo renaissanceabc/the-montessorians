@@ -11,12 +11,14 @@ bio: >-
   of relativity. He made significant contributions to the field of quantum gravity and was a professor at Syracuse
   University.
 tags:
-  - physicist
-  - academic
+  - scientist
+  - researcher
 education:
   - montessori
 education_notes: >-
   Peter Bergmann attended one of the earliest Montessori schools, which was run by his mother.
+schools:
+  - organization: emmy-bergmann-montessori-kinderhaus
 notable_achievements:
   - Collaborated with Albert Einstein
   - Contributions to quantum gravity
@@ -28,6 +30,7 @@ identifiers:
   lcnaf: n50007489
   viaf: "59214970"
   wikidata: Q96809
+  isni: "0000000117655116"
 sources:
   - type: wikipedia
     url: https://de.wikipedia.org/wiki/Peter_Bergmann_(Physiker)

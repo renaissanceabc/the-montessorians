@@ -1,23 +1,24 @@
-import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Container } from "@/components/container";
+import { RecordLayout } from "@/components/record-layout";
 import { Separator } from "@/components/ui/separator";
 import { contributionUrl, identifierEntries, idUrl, personJsonLd } from "@/lib/content/authority";
-import { getOrganizationBySlug } from "@/lib/content/organizations";
-import { getAllSlugs, getProfileWithAdjacent } from "@/lib/content/profiles";
+import { getAllSlugs, getProfileWithAdjacent, getRelatedPeople } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { correctionUrl } from "@/lib/url";
-import { siteUrl, toTitleCase } from "@/lib/utils";
-import ProfileActions from "./components/profile-actions";
-import ProfileDetails, { type OrganizationLabel } from "./components/profile-details";
+import { siteUrl } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
-}
+import ProfileActions from "./components/profile-actions";
+import { ProfileMain, ProfileRail } from "./components/profile-details";
+import { ProfileHeader } from "./components/profile-header";
+
+export const generateStaticParams = () => getAllSlugs().map((slug) => ({ slug }));
 
 export const dynamicParams = false;
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export const generateMetadata = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
   const data = getProfileWithAdjacent(slug);
 
@@ -26,23 +27,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return createMetadata({
-    title: data.profile.name,
-    description: data.profile.tagline || "",
-    image: `${siteUrl}/api/og/${slug}.png`,
     alternates: {
       canonical: `${siteUrl}/${slug}`,
       types: {
         "application/ld+json": `${siteUrl}/data/${data.profile.id}`,
       },
     },
+    description: data.profile.tagline || "",
+    image: `${siteUrl}/api/og/${slug}.png`,
     other: {
       // The permanent identifier, for citation managers and crawlers.
       "dc.identifier": idUrl(data.profile.id),
     },
+    title: data.profile.name,
   });
-}
+};
 
-export default async function ProfilePage(props: { params: Promise<{ slug: string }> }) {
+const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
   const { slug } = await props.params;
   const data = getProfileWithAdjacent(slug);
 
@@ -53,59 +54,76 @@ export default async function ProfilePage(props: { params: Promise<{ slug: strin
   const { profile, previous, next } = data;
   const isContributor = profile.kind === "contributor";
 
-  const organizations: Record<string, OrganizationLabel> = {};
-  for (const ref of [...profile.schools, ...profile.affiliations]) {
-    const org = getOrganizationBySlug(ref.organization);
-    if (org) {
-      organizations[org.slug] = { slug: org.slug, name: org.name };
+  const contributions = profile.contributions.map((c) => {
+    const href = contributionUrl(c);
+    let host: string | null = null;
+    try {
+      host = href ? new URL(href).hostname.replace(/^www\./u, "") : null;
+    } catch {
+      host = null;
     }
-  }
+    return { ...c, host, href };
+  });
 
-  const contributions = profile.contributions.map((c) => ({
-    title: c.title,
-    meta: [c.venue ?? (c.type === "book" ? "Book" : toTitleCase(c.type)), c.year]
-      .filter(Boolean)
-      .join(", "),
-    url: contributionUrl(c),
-  }));
-
+  const permanentUrl = idUrl(profile.id);
   const jsonLd = personJsonLd(profile);
+
+  const correction = correctionUrl(profile);
 
   return (
     <>
-      <div className="container mx-auto flex max-w-3xl flex-row items-center justify-between gap-10 px-4 pt-8 pb-12 sm:px-8 lg:pt-0">
-        <div className="grid w-full items-center justify-items-center gap-10">
-          <Link
-            className="flex flex-row items-center gap-2 text-muted-foreground text-sm hover:underline"
-            href={isContributor ? "/contributors" : "/discover"}
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            {isContributor ? "Back to Contributors" : "Back to Montessorians"}
-          </Link>
+      <Container className="flex flex-col gap-6 pt-2 pb-16 max-sm:pb-24 lg:pt-4">
+        <Breadcrumbs
+          align="start"
+          items={[
+            { href: "/discover", label: "Directory" },
+            isContributor
+              ? { href: "/contributors", label: "Contributors" }
+              : { href: "/alumni", label: "Alumni" },
+            { label: profile.name },
+          ]}
+        />
 
-          <ProfileDetails
-            contributions={contributions}
-            correctionUrl={correctionUrl(profile)}
-            identifiers={identifierEntries(profile.identifiers).map(({ label, value, url }) => ({
-              label,
-              value,
-              url,
-            }))}
-            organizations={organizations}
-            permanentUrl={idUrl(profile.id)}
-            profile={profile}
-          />
+        <RecordLayout
+          main={
+            <>
+              <ProfileHeader profile={profile} />
+              <ProfileMain
+                contributions={contributions}
+                correctionUrl={correction}
+                profile={profile}
+              />
+            </>
+          }
+          permanentUrl={permanentUrl}
+          rail={
+            <ProfileRail
+              correctionUrl={correction}
+              identifiers={identifierEntries(profile.identifiers).map(({ label, value, url }) => ({
+                label,
+                url,
+                value,
+              }))}
+              permanentId={{ url: permanentUrl, value: profile.id }}
+              profile={profile}
+              related={getRelatedPeople(profile)}
+            />
+          }
+        />
 
-          <Separator className="bg-black/10" />
-          <ProfileActions next={next} previous={previous} />
-        </div>
-      </div>
+        {profile.imageCredit && (
+          <p className="text-muted-foreground text-xs">{profile.imageCredit}</p>
+        )}
+        <Separator className="bg-black/10" data-print-hidden />
+        <ProfileActions next={next} previous={previous} />
+      </Container>
 
       <script
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD payload, with `<` escaped to prevent breaking out of the script tag
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        // oxlint-disable-next-line react/no-danger -- JSON-LD payload, with `<` escaped to prevent breaking out of the script tag
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replaceAll("<", "\\u003c") }}
         type="application/ld+json"
       />
     </>
   );
-}
+};
+export default ProfilePage;

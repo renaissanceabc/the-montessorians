@@ -10,13 +10,13 @@ const posthogHost = z.string().min(1).url();
 export const keys = () =>
   createEnv({
     client: {
-      NEXT_PUBLIC_POSTHOG_KEY: onVercel ? posthogKey : posthogKey.optional(),
-      NEXT_PUBLIC_POSTHOG_HOST: onVercel ? posthogHost : posthogHost.optional(),
       NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().min(1).startsWith("G-").optional(),
+      NEXT_PUBLIC_POSTHOG_HOST: onVercel ? posthogHost : posthogHost.optional(),
+      NEXT_PUBLIC_POSTHOG_KEY: onVercel ? posthogKey : posthogKey.optional(),
     },
     runtimeEnv: {
-      NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
-      NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
       NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+      NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+      NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     },
   });
