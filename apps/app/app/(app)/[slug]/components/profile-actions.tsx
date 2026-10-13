@@ -25,7 +25,7 @@ const AdjacentLink = ({
     >
       <Arrow
         className={cn(
-          "text-muted-foreground group-hover:text-foreground size-4 shrink-0 transition-[color,transform] motion-reduce:transition-colors",
+          "text-muted-foreground group-hover:text-foreground size-4 shrink-0 transition-[color,translate] motion-reduce:transition-colors",
           isNext
             ? "group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0"
             : "group-hover:-translate-x-0.5 motion-reduce:group-hover:translate-x-0"
