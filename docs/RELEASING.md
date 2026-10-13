@@ -48,8 +48,8 @@ Two repository rulesets enforce the model (Settings → Rules → Rulesets):
 
 | Ruleset | Merge method | Required checks | Other rules |
 | --- | --- | --- | --- |
-| `develop` | squash only | `Run yamllint`, `Validate schema + image rules`, `Require changeset` | No deletion, no force push, linear history, resolved threads |
-| `main` | merge commit only | `Run yamllint`, `Validate schema + image rules`, `Vercel` (up to date) | No deletion, no force push |
+| `develop` | squash only | `Run yamllint` (oxfmt on `data/`), `Validate schema + image rules`, `Require changeset` | No deletion, no force push, linear history, resolved threads |
+| `main` | merge commit only | `Run yamllint` (oxfmt on `data/`), `Validate schema + image rules`, `Vercel` (up to date) | No deletion, no force push |
 
 Rebase merging is disabled for the repository, and merged branches are deleted automatically. Admins can bypass a ruleset only through a pull request, never by pushing directly.
 

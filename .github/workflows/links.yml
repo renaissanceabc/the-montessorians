@@ -23,6 +23,7 @@ env:
 jobs:
   links:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -68,12 +69,18 @@ jobs:
 
       - name: Open or update the issue
         if: steps.lychee.outputs.exit_code != 0
-        uses: peter-evans/create-issue-from-file@v5
-        with:
-          title: ${{ env.ISSUE_TITLE }}
-          content-filepath: ./lychee/out.md
-          issue-number: ${{ steps.existing.outputs.number }}
-          labels: data, links
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ steps.existing.outputs.number }}
+        run: |
+          if [ -n "$NUMBER" ]; then
+            gh issue edit "$NUMBER" --repo "$GITHUB_REPOSITORY" --body-file lychee/out.md
+          else
+            gh label create data --repo "$GITHUB_REPOSITORY" --force
+            gh label create links --repo "$GITHUB_REPOSITORY" --force
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$ISSUE_TITLE" \
+              --body-file lychee/out.md --label data --label links
+          fi
 
       - name: Close the issue once every link works
         if: steps.lychee.outputs.exit_code == 0 && steps.existing.outputs.number != ''
