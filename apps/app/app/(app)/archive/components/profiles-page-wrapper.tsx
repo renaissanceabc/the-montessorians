@@ -1,3 +1,4 @@
+import { Container } from "@/components/container";
 import Contribute from "@/components/contribute";
 import type { PastProfile } from "@/lib/content/types";
 
@@ -5,15 +6,14 @@ import PastProfilesList from "./past-profiles-list";
 
 export const PastProfilesPageWrapper = ({ profiles }: { profiles: PastProfile[] }) => (
   <>
-    <div className="container mx-auto max-w-screen-md items-center justify-between gap-10 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full space-y-8">
-        <h1 className="flex w-full justify-center font-serif text-4xl font-bold lg:text-5xl">
-          Spotlight Archive
-        </h1>
-
-        <PastProfilesList profiles={profiles} />
+    <Container className="flex flex-col gap-8 pt-6 pb-12 lg:pt-8">
+      <div className="flex max-w-2xl flex-col gap-2">
+        <h1 className="type-title">Spotlight archive</h1>
+        <p className="type-lead">The Montessorians featured on the home page, day by day.</p>
       </div>
-    </div>
+
+      <PastProfilesList profiles={profiles} />
+    </Container>
 
     <Contribute />
   </>

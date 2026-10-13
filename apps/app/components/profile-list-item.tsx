@@ -1,11 +1,14 @@
-import { BookOpenIcon, Building2Icon, GraduationCapIcon } from "lucide-react";
+import { Building2Icon, GraduationCapIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 import type { OrganizationRef, Profile } from "@/lib/content/types";
+import { cn } from "@/lib/utils";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Badge } from "./ui/badge";
+import { ProfilePhoto } from "./profile-photo";
+
+/** Tags named in a card's meta line. */
+const TAGS_SHOWN = 2;
 
 const years = (profile: Profile) => {
   if (profile.birthYear && profile.deathYear) {
@@ -20,86 +23,106 @@ const years = (profile: Profile) => {
 const orgLabel = (ref: OrganizationRef) =>
   ref.organizationShortName ?? ref.organizationName ?? ref.organization;
 
+const Dot = () => (
+  <span aria-hidden="true" className="text-black/25">
+    ·
+  </span>
+);
+
+/**
+ * A person as a card: photo, name and years, tagline, and one meta line
+ * (organization · works · tags). Used in every directory grid and list.
+ */
 const ProfileListItem = ({
   profile,
   detail,
+  className,
 }: {
   profile: Profile;
   /** Context for where it's listed, e.g. their level or role at an organization */
   detail?: ReactNode;
+  className?: string;
 }) => {
   const isContributor = profile.kinds.includes("contributor");
   const orgs = isContributor ? profile.affiliations : profile.schools;
   const OrgIcon = isContributor ? Building2Icon : GraduationCapIcon;
   const lifespan = years(profile);
+  const works = profile.contributions.length;
+  const tags = profile.tags.slice(0, TAGS_SHOWN).map((tag) => tag.label);
+
+  const meta: { key: string; node: ReactNode }[] = [];
+  if (orgs.length > 0) {
+    meta.push({
+      key: "org",
+      node: (
+        <span
+          className="inline-flex min-w-0 items-center gap-1.5"
+          title={orgs.map((o) => o.organizationName ?? o.organization).join(", ")}
+        >
+          <OrgIcon aria-hidden="true" className="size-3.5 shrink-0" />
+          <span className="truncate">{orgLabel(orgs[0])}</span>
+          {orgs.length > 1 && <span className="shrink-0">+{orgs.length - 1}</span>}
+        </span>
+      ),
+    });
+  }
+  if (isContributor && works > 0) {
+    meta.push({
+      key: "works",
+      node: (
+        <span className="shrink-0 tabular-nums">
+          {works} {works === 1 ? "work" : "works"}
+        </span>
+      ),
+    });
+  }
+  if (tags.length > 0) {
+    meta.push({ key: "tags", node: <span className="truncate">{tags.join(", ")}</span> });
+  }
 
   return (
     <Link
-      className="group flex gap-4 rounded-lg border border-transparent p-4 transition-all duration-150 hover:border-black/10 hover:bg-white"
+      className={cn(
+        "group flex h-full min-w-0 gap-4 rounded-xl border border-black/8 bg-white/45 p-4 transition-colors duration-150 hover:border-black/15 hover:bg-white",
+        className
+      )}
       href={`/${profile.slug}`}
-      key={profile.slug}
     >
-      <Avatar className="h-16 w-16 sm:h-24 sm:w-24">
-        <AvatarImage alt={profile.name} src={profile.imageUrl ?? ""} />
-        <AvatarFallback className="font-serif text-2xl">{profile.name.charAt(0)}</AvatarFallback>
-      </Avatar>
+      <ProfilePhoto
+        className="size-[72px]"
+        initialClassName="text-3xl"
+        name={profile.name}
+        size={72}
+        src={profile.imageUrl}
+      />
 
-      <div className="flex w-full min-w-0 flex-col gap-2.5">
-        <div className="flex w-full flex-col gap-1">
-          <p className="flex flex-wrap items-baseline gap-x-2">
-            <span className="group-hover:text-primary font-serif text-2xl font-semibold">
-              {profile.name}
+      <span className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="flex flex-wrap items-baseline gap-x-2">
+          <span className="type-name group-hover:text-primary min-w-0 transition-colors">
+            {profile.name}
+          </span>
+          {lifespan && <span className="type-meta tabular-nums">{lifespan}</span>}
+          {profile.verification === "unverified" && (
+            <span className="type-meta" title="No reliable source yet">
+              Unverified
             </span>
-            {lifespan && (
-              <span className="text-muted-foreground text-xs tabular-nums">{lifespan}</span>
-            )}
-            {profile.verification === "unverified" && (
-              <span className="text-muted-foreground text-xs" title="No reliable source yet">
-                Unverified
+          )}
+        </span>
+        {profile.tagline && (
+          <span className="line-clamp-2 text-sm text-[#4A433D]">{profile.tagline}</span>
+        )}
+        {meta.length > 0 && (
+          <span className="type-meta mt-0.5 flex min-w-0 items-center gap-1.5 overflow-hidden whitespace-nowrap">
+            {meta.map((item, i) => (
+              <span className="flex min-w-0 items-center gap-1.5" key={item.key}>
+                {i > 0 && <Dot />}
+                {item.node}
               </span>
-            )}
-          </p>
-          {profile.tagline && (
-            <p className="text-muted-foreground text-xs sm:text-sm">{profile.tagline}</p>
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs text-[#4A433D]">
-          {orgs.length > 0 && (
-            <span
-              className="inline-flex min-w-0 items-center gap-1.5"
-              title={orgs.map((o) => o.organizationName ?? o.organization).join(", ")}
-            >
-              <OrgIcon className="size-3.5 shrink-0" />
-              <span className="max-w-48 truncate">{orgLabel(orgs[0])}</span>
-              {orgs.length > 1 && (
-                <span className="rounded-full bg-black/7 px-1.5 text-[11px]">
-                  +{orgs.length - 1}
-                </span>
-              )}
-            </span>
-          )}
-          {isContributor && profile.contributions.length > 0 && (
-            <span
-              className="inline-flex items-center gap-1.5"
-              title={`${profile.contributions.length} documented contribution${profile.contributions.length === 1 ? "" : "s"}`}
-            >
-              <BookOpenIcon className="size-3.5" />
-              {profile.contributions.length}
-            </span>
-          )}
-          {profile.tags.length > 0 && (
-            <span className="flex flex-wrap gap-1">
-              {profile.tags.slice(0, 3).map((tag) => (
-                <Badge className="flex bg-white/50 text-xs" key={tag.slug} variant="outline">
-                  {tag.label}
-                </Badge>
-              ))}
-            </span>
-          )}
-        </div>
-        {detail && <p className="text-muted-foreground text-xs">{detail}</p>}
-      </div>
+            ))}
+          </span>
+        )}
+        {detail && <span className="type-meta">{detail}</span>}
+      </span>
     </Link>
   );
 };

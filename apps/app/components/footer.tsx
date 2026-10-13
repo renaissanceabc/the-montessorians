@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { REPO_URL } from "@/lib/url";
 
+import { Container } from "./container";
 import { FooterWordmark } from "./footer-wordmark";
 
 const GROUPS = [
@@ -40,19 +41,20 @@ const GROUPS = [
 const isExternal = (href: string) => href.startsWith("http");
 
 const Footer = () => (
-  <footer className="bg-primary flex w-full flex-col overflow-hidden text-white">
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pt-14 sm:px-10 lg:px-14">
+  <footer
+    className="bg-primary flex w-full flex-col overflow-hidden text-white [&_a:focus-visible]:outline-white"
+    data-print-hidden
+  >
+    <Container className="flex flex-col gap-12 pt-14">
       <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-        <p className="max-w-sm font-serif text-[26px] leading-tight text-white/90">
+        <p className="type-section max-w-sm font-normal text-white/90">
           People shaped by Montessori, <em>and the people who shaped it.</em>
         </p>
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-12 lg:gap-x-16">
           {GROUPS.map((group) => (
             <nav aria-label={group.title} className="flex flex-col gap-3" key={group.title}>
-              <span className="text-[11px] font-semibold tracking-[0.12em] text-white/50 uppercase">
-                {group.title}
-              </span>
+              <span className="type-eyebrow text-white/60">{group.title}</span>
               {group.links.map((link) => (
                 <Link
                   className="w-fit text-sm text-white/75 transition-colors hover:text-white hover:underline"
@@ -82,7 +84,7 @@ const Footer = () => (
       </div>
 
       <FooterWordmark />
-    </div>
+    </Container>
   </footer>
 );
 

@@ -18,11 +18,20 @@ const RootLayout = ({
 }>) => (
   <html lang="en">
     <body className={`${fonts} bg-background antialiased`}>
+      <a
+        className="bg-primary text-primary-foreground fixed top-3 left-3 z-200 -translate-y-24 rounded-full px-4 py-2 text-sm font-semibold transition-transform focus-visible:translate-y-0"
+        data-print-hidden
+        href="#main"
+      >
+        Skip to content
+      </a>
       <NuqsAdapter>
         <Suspense fallback={null}>
           <AnalyticsProvider>
             <Header />
-            <main>{children}</main>
+            <main className="scroll-mt-24 focus:outline-none" id="main" tabIndex={-1}>
+              {children}
+            </main>
             <Footer />
             <Toaster richColors />
             <DevTools />

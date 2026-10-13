@@ -4,6 +4,8 @@ import {
   GraduationCapIcon,
   LandmarkIcon,
   MapPinIcon,
+  PencilIcon,
+  UserPlusIcon,
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -12,8 +14,10 @@ import type { ReactNode } from "react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CiteButton } from "@/components/cite-button";
+import { Container } from "@/components/container";
 import { OrgLogo } from "@/components/org-logo";
 import ProfileListItem from "@/components/profile-list-item";
+import { RecordLayout } from "@/components/record-layout";
 import { identifierEntries, idUrl, organizationJsonLd } from "@/lib/content/authority";
 import {
   getAllOrganizations,
@@ -73,13 +77,19 @@ const Section = ({
   count?: number;
   children: ReactNode;
 }) => (
-  <section className="flex w-full flex-col gap-2">
-    <h2 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+  <section className="flex w-full min-w-0 flex-col gap-2.5">
+    <h2 className="type-eyebrow">
       {title}
       {count !== undefined && <span className="font-normal"> · {count}</span>}
     </h2>
     {children}
   </section>
+);
+
+const Dot = () => (
+  <span aria-hidden="true" className="px-1 text-black/25">
+    ·
+  </span>
 );
 
 const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
@@ -96,151 +106,209 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
   const parent = org.parent ? getOrganizationBySlug(org.parent) : null;
   const identifiers = identifierEntries(org.identifiers);
   const Icon = TYPE_ICONS[org.type] ?? Building2Icon;
+  const permanentUrl = idUrl(org.id);
   const correction = githubIssueUrl("04_correction.yml", {
     record: org.id,
     title: `Correction: ${org.name} (${org.id})`,
   });
 
-  return (
+  const main = (
     <>
-      <div className="container mx-auto flex max-w-3xl flex-col items-center gap-9 px-4 pt-8 pb-12 sm:px-8 lg:pt-0">
-        <Breadcrumbs
-          items={[{ href: "/organizations", label: "Organizations" }, { label: org.name }]}
-        />
-
-        <div className="flex w-full min-w-0 flex-col items-center gap-4 text-center">
+      <header className="flex w-full min-w-0 flex-col gap-5">
+        <div className="flex items-center gap-4 sm:gap-6">
           <OrgLogo
-            className="size-24 rounded-2xl border border-black/10"
+            className="size-20 rounded-2xl border border-black/10 sm:size-28"
             icon={Icon}
             iconClassName="size-10 text-muted-foreground"
             logoUrl={org.logoUrl}
+            size={112}
           />
-          <h1 className="font-serif text-4xl font-semibold">
+          <h1 className="type-title min-w-0">
             {org.name}
             {org.shortName && (
               <span className="text-muted-foreground font-normal"> ({org.shortName})</span>
             )}
           </h1>
-          <div className="flex max-w-full items-center justify-center gap-1 rounded-full border border-black/10 bg-white/60 py-1 pr-1 pl-4 text-sm text-[#4A433D]">
-            <span className="text-muted-foreground shrink-0 text-[11px] font-semibold tracking-wider uppercase">
-              {ORGANIZATION_TYPE_LABELS[org.type]}
-            </span>
-            {org.location && (
-              <>
-                <span aria-hidden="true" className="px-1 text-black/25">
-                  ·
-                </span>
-                <span className="inline-flex min-w-0 items-center gap-1" title={org.location}>
-                  <MapPinIcon className="size-3.5 shrink-0" />
-                  <span className="truncate">{org.location}</span>
-                </span>
-              </>
-            )}
-            {org.founded && (
-              <span className="hidden shrink-0 sm:contents">
-                <span aria-hidden="true" className="px-1 text-black/25">
-                  ·
-                </span>
-                <span>Founded {org.founded}</span>
-              </span>
-            )}
-            <span aria-hidden="true" className="px-1 text-black/25">
-              ·
-            </span>
-            <span
-              className="inline-flex shrink-0 items-center gap-1 pr-1"
-              title={`${people} ${people === 1 ? "person" : "people"} in the directory`}
-            >
-              <UsersIcon className="size-3.5" />
-              {people}
-            </span>
-            <span aria-hidden="true" className="mx-1 h-4 w-px shrink-0 bg-black/12" />
-            <CiteButton url={idUrl(org.id)} />
-          </div>
         </div>
 
-        {org.description && <p className="w-full text-base">{org.description}</p>}
+        <div className="flex w-fit max-w-full flex-wrap items-center gap-y-1 rounded-3xl border border-black/10 bg-white/60 px-4 py-1.5 text-sm text-[#4A433D]">
+          <span className="type-eyebrow shrink-0">{ORGANIZATION_TYPE_LABELS[org.type]}</span>
+          {org.location && (
+            <>
+              <Dot />
+              <span className="inline-flex min-w-0 items-center gap-1" title={org.location}>
+                <MapPinIcon aria-hidden="true" className="size-3.5 shrink-0" />
+                <span className="truncate">{org.location}</span>
+              </span>
+            </>
+          )}
+          {org.founded && (
+            <>
+              <Dot />
+              <span className="shrink-0">Founded {org.founded}</span>
+            </>
+          )}
+          <Dot />
+          <span
+            className="inline-flex shrink-0 items-center gap-1"
+            title={`${people} ${people === 1 ? "person" : "people"} in the directory`}
+          >
+            <UsersIcon aria-hidden="true" className="size-3.5" />
+            {people} {people === 1 ? "person" : "people"}
+          </span>
+        </div>
+      </header>
 
-        {parent && (
-          <p className="w-full text-sm">
-            Part of{" "}
-            <Link className="hover:text-primary underline" href={`/organizations/${parent.slug}`}>
-              {parent.name}
-            </Link>
+      {(org.description || parent) && (
+        <div className="flex flex-col gap-3">
+          {org.description && <p className="type-body">{org.description}</p>}
+          {parent && (
+            <p className="text-sm">
+              Part of{" "}
+              <Link className="hover:text-primary underline" href={`/organizations/${parent.slug}`}>
+                {parent.name}
+              </Link>
+            </p>
+          )}
+        </div>
+      )}
+
+      {people === 0 && (
+        <div
+          className="flex flex-col items-start gap-3 rounded-xl border border-dashed border-black/20 p-5 text-sm"
+          data-print-hidden
+        >
+          <p className="text-muted-foreground">
+            No one in the directory is linked to {org.name} yet.
           </p>
-        )}
+          <Link className="inline-flex items-center gap-2 font-medium underline" href="/contribute">
+            <UserPlusIcon aria-hidden="true" className="size-4" />
+            Add a Montessorian
+          </Link>
+        </div>
+      )}
 
-        {attended.length > 0 && (
-          <Section count={attended.length} title="Alumni">
+      {attended.length > 0 && (
+        <Section count={attended.length} title="Alumni">
+          <ul className="flex flex-col gap-2">
             {attended.map(({ profile, ref }) => (
-              <ProfileListItem
-                detail={[ref.level && toTitleCase(ref.level), yearRange(ref)]
-                  .filter(Boolean)
-                  .join(" · ")}
-                key={`${profile.slug}-attended`}
-                profile={profile}
-              />
+              <li key={`${profile.slug}-attended`}>
+                <ProfileListItem
+                  detail={[ref.level && toTitleCase(ref.level), yearRange(ref)]
+                    .filter(Boolean)
+                    .join(" · ")}
+                  profile={profile}
+                />
+              </li>
             ))}
-          </Section>
-        )}
+          </ul>
+        </Section>
+      )}
 
-        {affiliated.length > 0 && (
-          <Section count={affiliated.length} title="Affiliated people">
+      {affiliated.length > 0 && (
+        <Section count={affiliated.length} title="Affiliated people">
+          <ul className="flex flex-col gap-2">
             {affiliated.map(({ profile, ref }) => (
-              <ProfileListItem
-                detail={[ref.role, yearRange(ref)].filter(Boolean).join(" · ")}
-                key={`${profile.slug}-${ref.role ?? ""}`}
-                profile={profile}
-              />
+              <li key={`${profile.slug}-${ref.role ?? ""}`}>
+                <ProfileListItem
+                  detail={[ref.role, yearRange(ref)].filter(Boolean).join(" · ")}
+                  profile={profile}
+                />
+              </li>
             ))}
-          </Section>
-        )}
+          </ul>
+        </Section>
+      )}
+    </>
+  );
 
-        <section className="flex w-full flex-col gap-2.5 border-t border-black/10 pt-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
-              Identifiers
-            </h2>
-            <Link
-              className="text-muted-foreground text-xs hover:underline"
-              href={correction}
-              target="_blank"
-            >
-              Suggest a correction
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
+  const rail = (
+    <aside aria-label="About this record" className="flex min-w-0 flex-col gap-8">
+      <Section title="Cite">
+        <p className="font-mono text-xs break-all text-[#4A433D]">
+          {permanentUrl.replace(/^https?:\/\//u, "")}
+        </p>
+        <CiteButton className="self-start" label="Copy permanent link" url={permanentUrl} />
+      </Section>
+
+      <Section title="Identifiers">
+        <ul className="flex flex-wrap gap-1.5">
+          <li>
             <Link
               className="bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs"
-              href={idUrl(org.id)}
+              href={permanentUrl}
             >
               <span className="opacity-75">The Montessorians</span>
               <span className="font-mono">{org.id}</span>
             </Link>
-            {org.website && (
+          </li>
+          {identifiers.map((identifier) => (
+            <li className="min-w-0" key={identifier.scheme}>
               <Link
-                className="inline-flex items-center gap-1.5 rounded-md border border-black/12 bg-white px-2.5 py-1.5 text-xs hover:border-black/30"
-                href={org.website}
-                target="_blank"
-              >
-                <GlobeIcon className="size-3.5" />
-                {prettyUrl(org.website)}
-              </Link>
-            )}
-            {identifiers.map((identifier) => (
-              <Link
-                className="inline-flex items-center gap-1.5 rounded-md border border-black/12 bg-white px-2.5 py-1.5 text-xs hover:border-black/30"
+                className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-black/12 bg-white px-2.5 py-1.5 text-xs hover:border-black/30"
                 href={identifier.url}
-                key={identifier.scheme}
+                rel="noopener"
                 target="_blank"
               >
-                <span className="text-muted-foreground">{identifier.label}</span>
-                <span className="font-mono">{identifier.value}</span>
+                <span className="text-muted-foreground shrink-0">{identifier.label}</span>
+                <span className="truncate font-mono">{identifier.value}</span>
               </Link>
-            ))}
-          </div>
-        </section>
-      </div>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      {org.website && (
+        <Section title="Website">
+          <Link
+            className="inline-flex max-w-full items-center gap-1.5 self-start rounded-full border border-black/12 bg-white px-3 py-1.5 text-[13px] hover:border-black/30"
+            href={org.website}
+            rel="noopener"
+            target="_blank"
+          >
+            <GlobeIcon aria-hidden="true" className="size-3.5 shrink-0" />
+            <span className="truncate">{prettyUrl(org.website)}</span>
+          </Link>
+        </Section>
+      )}
+
+      {org.logoUrl && org.logoSource && (
+        <Section title="Logo">
+          <p className="type-meta [overflow-wrap:anywhere]">
+            Source:{" "}
+            {URL.canParse(org.logoSource) ? (
+              <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
+                {prettyUrl(org.logoSource)}
+              </Link>
+            ) : (
+              org.logoSource
+            )}
+          </p>
+        </Section>
+      )}
+
+      <Link
+        className="inline-flex w-fit items-center gap-2 rounded-md border border-black/15 bg-white/60 px-3 py-2 text-sm font-medium transition-colors hover:border-black/30 hover:bg-white"
+        data-print-hidden
+        href={correction}
+        rel="noopener"
+        target="_blank"
+      >
+        <PencilIcon aria-hidden="true" className="text-muted-foreground size-3.5" />
+        Suggest a correction
+      </Link>
+    </aside>
+  );
+
+  return (
+    <>
+      <Container className="flex flex-col gap-6 pt-2 pb-16 lg:pt-4">
+        <Breadcrumbs
+          align="start"
+          items={[{ href: "/organizations", label: "Organizations" }, { label: org.name }]}
+        />
+        <RecordLayout main={main} permanentUrl={permanentUrl} rail={rail} />
+      </Container>
 
       <script
         // oxlint-disable-next-line react/no-danger -- JSON-LD payload, with `<` escaped to prevent breaking out of the script tag

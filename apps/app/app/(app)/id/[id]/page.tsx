@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 
+import { Container } from "@/components/container";
 import { getChanges, pathForResolved, resolveId } from "@/lib/content/authority";
 import { getAllOrganizations } from "@/lib/content/organizations";
 import { getAllProfiles } from "@/lib/content/profiles";
@@ -47,12 +48,10 @@ const IdPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { change } = resolved;
   return (
-    <div className="container mx-auto flex max-w-xl flex-col items-center gap-4 px-4 py-24 text-center">
+    <Container className="flex flex-col items-start gap-4 pt-6 pb-24 lg:pt-8" size="reading">
       <p className="text-muted-foreground font-mono text-sm">{id}</p>
-      <h1 className="font-serif text-4xl font-semibold">
-        {change.name ?? "This record"} was withdrawn
-      </h1>
-      <p className="text-muted-foreground">
+      <h1 className="type-title">{change.name ?? "This record"} was withdrawn</h1>
+      <p className="type-lead">
         Withdrawn on {change.date}
         {change.reason ? `: ${change.reason}` : "."} The identifier stays reserved and will not be
         reused.
@@ -60,7 +59,7 @@ const IdPage = async ({ params }: { params: Promise<{ id: string }> }) => {
       <Link className="text-sm underline" href="/discover">
         Explore the directory
       </Link>
-    </div>
+    </Container>
   );
 };
 export default IdPage;

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Container } from "@/components/container";
 import Contribute from "@/components/contribute";
 import { getDirectoryCounts } from "@/lib/content/directory";
 import { getAllProfiles } from "@/lib/content/profiles";
@@ -20,13 +21,11 @@ const About = () => {
   const counts = getDirectoryCounts();
   const works = getAllProfiles().reduce((sum, p) => sum + p.contributions.length, 0);
   return (
-    <div className="container mx-auto max-w-3xl items-center justify-between gap-10 px-4 sm:px-6 lg:px-8">
-      <div className="w-full space-y-8 pt-12">
-        <h1 className="flex w-full justify-center font-serif text-4xl font-bold lg:text-5xl">
-          About us
-        </h1>
+    <>
+      <Container className="flex flex-col gap-8 pt-6 pb-12 lg:pt-8" size="reading">
+        <h1 className="type-title">About us</h1>
 
-        <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none">
+        <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none max-w-none">
           <p className="lead text-primary">
             <strong className="text-primary">The Montessorians</strong> is the largest open
             directory of people shaped by Montessori, and of the people who shaped it.
@@ -134,10 +133,10 @@ const About = () => {
             alumni and contributors.
           </p>
         </div>
+      </Container>
 
-        <Contribute />
-      </div>
-    </div>
+      <Contribute size="reading" />
+    </>
   );
 };
 export default About;

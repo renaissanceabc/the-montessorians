@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Container } from "@/components/container";
 import type { Verification } from "@/lib/content/types";
 import { VERIFICATION_COPY } from "@/lib/content/verification";
 import { createMetadata } from "@/lib/metadata";
@@ -32,15 +33,15 @@ const SECTIONS = [
 const VERIFICATION_KEYS = Object.keys(VERIFICATION_COPY) as Verification[];
 
 const EditorialPolicy = () => (
-  <div className="container mx-auto max-w-3xl px-4 pt-12 pb-16 sm:px-6 lg:px-8">
+  <Container className="pt-6 pb-16 lg:pt-8" size="reading">
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-3">
         <Breadcrumbs
           align="start"
           items={[{ href: "/about", label: "About" }, { label: "Editorial policy" }]}
         />
-        <h1 className="font-serif text-4xl font-bold lg:text-5xl">Editorial policy</h1>
-        <p className="text-muted-foreground text-lg">
+        <h1 className="type-title">Editorial policy</h1>
+        <p className="type-lead">
           Who we include, what counts as evidence, and how records are corrected.
         </p>
       </div>
@@ -58,12 +59,10 @@ const EditorialPolicy = () => (
       </nav>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="who">
-        <h2 className="font-serif text-3xl font-semibold">Who we include</h2>
+        <h2 className="type-section">Who we include</h2>
         <div className="grid gap-2.5 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5 rounded-xl border border-black/10 bg-white/55 p-4">
-            <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
-              Alumni
-            </span>
+            <span className="type-eyebrow">Alumni</span>
             <p className="text-sm">
               People who attended a Montessori school or program, at any age, and went on to do
               great things. Parents, guides, and supporters aren&apos;t alumni, though they may be
@@ -71,9 +70,7 @@ const EditorialPolicy = () => (
             </p>
           </div>
           <div className="flex flex-col gap-1.5 rounded-xl border border-black/10 bg-white/55 p-4">
-            <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
-              Contributors
-            </span>
+            <span className="type-eyebrow">Contributors</span>
             <p className="text-sm">
               People whose research, scholarship, or published work shaped Montessori pedagogy or
               the field: researchers, philosophers, authors, founders, and trainers. Teaching alone
@@ -85,7 +82,7 @@ const EditorialPolicy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="evidence">
-        <h2 className="font-serif text-3xl font-semibold">What counts as evidence</h2>
+        <h2 className="type-section">What counts as evidence</h2>
         <ol className="list-decimal space-y-1.5 pl-5 text-sm">
           <li>Library authority records and the person&apos;s own publications</li>
           <li>
@@ -102,7 +99,7 @@ const EditorialPolicy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="verification">
-        <h2 className="font-serif text-3xl font-semibold">Verification</h2>
+        <h2 className="type-section">Verification</h2>
         <dl className="overflow-hidden rounded-xl border border-black/10 bg-white/55">
           {VERIFICATION_KEYS.map((key) => (
             <div
@@ -117,7 +114,7 @@ const EditorialPolicy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="corrections">
-        <h2 className="font-serif text-3xl font-semibold">Corrections and removals</h2>
+        <h2 className="type-section">Corrections and removals</h2>
         <ul className="list-disc space-y-1.5 pl-5 text-sm">
           <li>
             <b>Corrections</b> are made directly in the record.
@@ -141,7 +138,7 @@ const EditorialPolicy = () => (
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="photos">
-        <h2 className="font-serif text-3xl font-semibold">Photos</h2>
+        <h2 className="type-section">Photos</h2>
         <p className="text-sm">
           The data is dedicated to the public domain under CC0, but profile photos come from many
           places and keep their original terms. Credits appear on each profile where we know them;
@@ -157,6 +154,6 @@ const EditorialPolicy = () => (
         .
       </p>
     </div>
-  </div>
+  </Container>
 );
 export default EditorialPolicy;

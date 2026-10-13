@@ -6,6 +6,8 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
+import { Container } from "./container";
+
 export type DirectoryTab = "all" | "alumni" | "contributors" | "organizations";
 
 export type DirectoryCounts = Record<DirectoryTab, number>;
@@ -17,10 +19,18 @@ const TABS: { id: DirectoryTab; label: string; short?: string; href: string }[] 
   { href: "/organizations", id: "organizations", label: "Organizations", short: "Orgs" },
 ];
 
+const SUBTITLES: Record<DirectoryTab, string> = {
+  all: "Montessori alumni who went on to do great things, and the people who shaped the field.",
+  alumni: "People who went to a Montessori school and went on to do great things.",
+  contributors:
+    "Trainers, researchers, authors, and philosophers with documented contributions to Montessori.",
+  organizations: "Schools, training centers, universities, and associations.",
+};
+
 /**
- * The shared top of every directory view: a search-first header, the
- * All / Alumni / Contributors / Organizations tabs, quiet filter and sort
- * controls, and removable chips for whatever filters are applied.
+ * The shared top of every directory view: the title and a search box on one
+ * row, the All / Alumni / Contributors / Organizations tabs with quiet filter
+ * and sort controls, and removable chips for whatever filters are applied.
  */
 export const DirectoryShell = ({
   active,
@@ -41,15 +51,21 @@ export const DirectoryShell = ({
   chips?: ReactNode;
   children: ReactNode;
 }) => (
-  <div className="container mx-auto max-w-3xl px-4 pt-12 pb-16 sm:px-6 lg:px-8">
+  <Container className="pt-6 pb-16 lg:pt-8">
     <div className="flex w-full flex-col gap-5">
-      <div className="flex flex-col items-center gap-4">
-        <h1 className="font-serif text-4xl font-bold lg:text-5xl">Explore the directory</h1>
-        <label className="relative flex w-full items-center">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+        <div className="flex max-w-2xl flex-col gap-2">
+          <h1 className="type-title">Explore the directory</h1>
+          <p className="type-lead">{SUBTITLES[active]}</p>
+        </div>
+        <label className="relative flex w-full shrink-0 items-center lg:w-sm">
           <span className="sr-only">{searchPlaceholder}</span>
-          <SearchIcon className="text-muted-foreground pointer-events-none absolute left-4 size-4" />
+          <SearchIcon
+            aria-hidden="true"
+            className="text-muted-foreground pointer-events-none absolute left-4 size-4"
+          />
           <input
-            className="placeholder:text-muted-foreground h-12 w-full rounded-full border border-black/12 bg-white pr-11 pl-11 text-base shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-colors outline-none focus-visible:border-black/30"
+            className="placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-ring/25 h-12 w-full rounded-full border border-black/12 bg-white pr-11 pl-11 text-base shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-[border-color,box-shadow] outline-none focus-visible:ring-4"
             onChange={(e) => onSearch(e.target.value)}
             placeholder={searchPlaceholder}
             type="search"
@@ -77,7 +93,7 @@ export const DirectoryShell = ({
             <Link
               aria-current={tab.id === active ? "page" : undefined}
               className={cn(
-                "shrink-0 border-b-2 pb-2.5 text-[15px] transition-colors",
+                "shrink-0 border-b-2 pb-2.5 text-[15px] transition-colors focus-visible:-outline-offset-2",
                 tab.id === active
                   ? "border-foreground font-semibold"
                   : "text-muted-foreground hover:text-foreground border-transparent"
@@ -95,7 +111,7 @@ export const DirectoryShell = ({
               )}{" "}
               <span
                 className={cn(
-                  "text-xs",
+                  "text-xs tabular-nums",
                   tab.id === active ? "text-muted-foreground font-normal" : ""
                 )}
               >
@@ -114,6 +130,7 @@ export const DirectoryShell = ({
               "max-sm:fixed max-sm:bottom-[calc(1rem+env(safe-area-inset-bottom))] max-sm:left-1/2 max-sm:z-40 max-sm:-translate-x-1/2 max-sm:rounded-full max-sm:bg-white/95 max-sm:p-1 max-sm:shadow-[0_8px_30px_rgba(0,0,0,0.12)] max-sm:ring-1 max-sm:ring-black/10 max-sm:backdrop-blur",
               "max-sm:*:rounded-full"
             )}
+            data-print-hidden
             role="toolbar"
           >
             {controls}
@@ -126,16 +143,16 @@ export const DirectoryShell = ({
       {/* Room for the floating toolbar on phones */}
       <div className={cn(controls && "max-sm:pb-20")}>{children}</div>
     </div>
-  </div>
+  </Container>
 );
 
 /** A removable chip for an applied filter. */
 export const FilterChip = ({ label, onRemove }: { label: string; onRemove: () => void }) => (
-  <span className="bg-secondary text-secondary-foreground inline-flex items-center gap-1 rounded-full py-0.5 pr-1 pl-2.5 text-xs">
-    {label}
+  <span className="bg-secondary text-secondary-foreground inline-flex max-w-full items-center gap-1 rounded-full py-0.5 pr-1 pl-2.5 text-xs">
+    <span className="truncate">{label}</span>
     <button
       aria-label={`Remove ${label}`}
-      className="flex size-5 items-center justify-center rounded-full hover:bg-white/15"
+      className="flex size-5 shrink-0 items-center justify-center rounded-full hover:bg-white/15"
       onClick={onRemove}
       type="button"
     >
