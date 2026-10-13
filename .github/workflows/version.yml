@@ -3,6 +3,8 @@ name: Version
 on:
   push:
     branches: [develop]
+  # Manual run, for when a push event is dropped.
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
