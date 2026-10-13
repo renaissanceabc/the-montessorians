@@ -3,7 +3,15 @@ import { siteUrl } from "@/lib/utils";
 import rawChanges from "./changes.generated.json";
 import { getOrganizationById, getOrganizationBySlug } from "./organizations";
 import { getProfileById } from "./profiles";
-import type { AuthorityChange, ContributionType, Organization, Profile } from "./types";
+import { CONTRIBUTOR_ROLE_LABELS } from "./types";
+import type {
+  AuthorityChange,
+  Contribution,
+  ContributionType,
+  Organization,
+  Profile,
+  ProfileLink,
+} from "./types";
 
 // Everything that turns a record into a citable authority entry: permanent
 // ids, the merge/withdrawal log, external identifier URIs, and JSON-LD.
@@ -135,78 +143,138 @@ export const contributionUrl = (c: Profile["contributions"][number]): string | n
   return null;
 };
 
+/** `undefined` for an empty list, so JSON-LD omits the property instead of emitting `[]`. */
+const nonEmpty = <T>(list: T[]): T[] | undefined => (list.length > 0 ? list : undefined);
+
+const absoluteUrl = (pathOrUrl: string) =>
+  pathOrUrl.startsWith("http") ? pathOrUrl : `${siteUrl}${pathOrUrl}`;
+
+const SCHEMA_ORGANIZATION_TYPES = {
+  association: "Organization",
+  other: "Organization",
+  publisher: "Organization",
+  "research-center": "ResearchOrganization",
+  school: "EducationalOrganization",
+  "training-center": "EducationalOrganization",
+  university: "CollegeOrUniversity",
+} satisfies Record<Organization["type"], string>;
+
+// Lectures have no schema.org type with an author (Event has performers), so
+// they stay generic creative works.
 const SCHEMA_CONTRIBUTION_TYPES = {
   article: "ScholarlyArticle",
   book: "Book",
   chapter: "Chapter",
-  lecture: "Event",
+  lecture: "CreativeWork",
   media: "CreativeWork",
   other: "CreativeWork",
   "training-program": "Course",
 } satisfies Record<ContributionType, string>;
 
-/** schema.org JSON-LD for an organization. */
-export const organizationJsonLd = (org: Organization) => ({
-  "@context": "https://schema.org",
-  "@id": idUrl(org.id),
-  "@type":
-    org.type === "school" || org.type === "university" ? "EducationalOrganization" : "Organization",
-  alternateName: org.nameVariants,
-  description: org.description,
-  foundingDate: org.founded ? String(org.founded) : undefined,
-  identifier: org.id,
-  location: org.location,
-  name: org.name,
-  parentOrganization: org.parent
-    ? { "@id": idUrl(getOrganizationBySlug(org.parent)?.id ?? org.parent) }
-    : undefined,
-  sameAs: [
-    ...identifierEntries(org.identifiers).map((e) => e.url),
-    ...(org.website ? [org.website] : []),
-  ],
-  url: `${siteUrl}/organizations/${org.slug}`,
+/** Link types that identify the person (sameAs); the rest are pages about them. */
+const IDENTITY_LINK_TYPES = new Set<ProfileLink["type"]>([
+  "wikipedia",
+  "website",
+  "linkedin",
+  "x",
+  "tiktok",
+  "instagram",
+  "youtube",
+  "imdb",
+]);
+
+/** A reference to an organization record, typed so it stands alone. */
+const organizationRefNode = (slug: string) => {
+  const org = getOrganizationBySlug(slug);
+  return org
+    ? { "@id": idUrl(org.id), "@type": SCHEMA_ORGANIZATION_TYPES[org.type], name: org.name }
+    : { "@type": "Organization", name: slug };
+};
+
+/** Where a contribution appeared: the journal, the book, or the publisher. */
+const venueNode = (c: Contribution) => {
+  if (!c.venue) {
+    return {};
+  }
+  if (c.type === "article") {
+    return { isPartOf: { "@type": "Periodical", name: c.venue } };
+  }
+  if (c.type === "chapter") {
+    return { isPartOf: { "@type": "Book", name: c.venue } };
+  }
+  return { publisher: { "@type": "Organization", name: c.venue } };
+};
+
+const contributionNode = (c: Contribution) => ({
+  ...venueNode(c),
+  "@type": SCHEMA_CONTRIBUTION_TYPES[c.type] ?? "CreativeWork",
+  datePublished: c.year ? String(c.year) : undefined,
+  identifier: c.doi ? { "@type": "PropertyValue", propertyID: "DOI", value: c.doi } : undefined,
+  isbn: c.isbn,
+  name: c.title,
+  url: contributionUrl(c) ?? undefined,
 });
+
+/** schema.org JSON-LD for an organization. */
+export const organizationJsonLd = (org: Organization) => {
+  const url = `${siteUrl}/organizations/${org.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@id": idUrl(org.id),
+    "@type": SCHEMA_ORGANIZATION_TYPES[org.type],
+    alternateName: nonEmpty(
+      [org.shortName, ...(org.nameVariants ?? [])].filter((n): n is string => Boolean(n))
+    ),
+    description: org.description,
+    foundingDate: org.founded ? String(org.founded) : undefined,
+    identifier: org.id,
+    location: org.location,
+    logo: org.logoUrl ? absoluteUrl(org.logoUrl) : undefined,
+    mainEntityOfPage: url,
+    name: org.name,
+    parentOrganization: org.parent ? organizationRefNode(org.parent) : undefined,
+    sameAs: nonEmpty([
+      ...identifierEntries(org.identifiers).map((e) => e.url),
+      ...(org.website ? [org.website] : []),
+    ]),
+    url,
+  };
+};
 
 /** schema.org JSON-LD for a person, linked to other authority files. */
 export const personJsonLd = (profile: Profile) => {
-  const orgNode = (slug: string) => {
-    const org = getOrganizationBySlug(slug);
-    return org ? { "@id": idUrl(org.id), name: org.name } : { name: slug };
-  };
+  const url = `${siteUrl}/${profile.slug}`;
+  const aboutPages = profile.links.filter((l) => !IDENTITY_LINK_TYPES.has(l.type));
   return {
     "@context": "https://schema.org",
     "@id": idUrl(profile.id),
-    "@type": "Person",
-    affiliation:
-      profile.affiliations.length > 0
-        ? profile.affiliations.map((a) => orgNode(a.organization))
+    // Their own works: the person is each work's author.
+    "@reverse":
+      profile.contributions.length > 0
+        ? { author: profile.contributions.map(contributionNode) }
         : undefined,
-    alternateName: [profile.nameAuthorized, ...profile.nameVariants].filter(Boolean),
-    alumniOf:
-      profile.schools.length > 0 ? profile.schools.map((s) => orgNode(s.organization)) : undefined,
+    "@type": "Person",
+    affiliation: nonEmpty(profile.affiliations.map((a) => organizationRefNode(a.organization))),
+    alternateName: nonEmpty(
+      [...new Set([profile.nameAuthorized, ...profile.nameVariants])].filter(
+        (n): n is string => Boolean(n) && n !== profile.name
+      )
+    ),
+    alumniOf: nonEmpty(profile.schools.map((s) => organizationRefNode(s.organization))),
     birthDate: profile.birthYear ? String(profile.birthYear) : undefined,
-    dateModified: profile.addedAt,
     deathDate: profile.deathYear ? String(profile.deathYear) : undefined,
     description: profile.tagline || profile.bio || undefined,
     identifier: profile.id,
-    image: profile.imageUrl ? `${siteUrl}/api/og/${profile.slug}.png` : undefined,
-    jobTitle: profile.roles.length > 0 ? profile.roles : undefined,
+    image: profile.imageUrl ? absoluteUrl(profile.imageUrl) : undefined,
+    jobTitle: nonEmpty(profile.roles.map((r) => CONTRIBUTOR_ROLE_LABELS[r])),
+    mainEntityOfPage: url,
     name: profile.name,
-    sameAs: [
+    sameAs: nonEmpty([
       ...identifierEntries(profile.identifiers).map((e) => e.url),
-      ...profile.links.map((l) => l.url),
-    ],
-    subjectOf:
-      profile.contributions.length > 0
-        ? profile.contributions.map((c) => ({
-            "@type": SCHEMA_CONTRIBUTION_TYPES[c.type] ?? "CreativeWork",
-            datePublished: c.year ? String(c.year) : undefined,
-            isbn: c.isbn,
-            name: c.title,
-            publisher: c.venue,
-            url: contributionUrl(c) ?? undefined,
-          }))
-        : undefined,
-    url: `${siteUrl}/${profile.slug}`,
+      ...profile.links.filter((l) => IDENTITY_LINK_TYPES.has(l.type)).map((l) => l.url),
+    ]),
+    // Articles and pages about them.
+    subjectOf: nonEmpty(aboutPages.map((l) => ({ "@type": "CreativeWork", url: l.url }))),
+    url,
   };
 };
