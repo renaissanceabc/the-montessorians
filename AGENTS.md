@@ -19,6 +19,7 @@ Every change that affects what the site renders gets checked in a real browser w
 - `web-design-guidelines`, `emil-design-eng`, `mobile-native`, `break-ui`: UI review, polish, phone behavior, and worst-case data.
 - `animate`, `review-animations`, `animation-performance`: motion.
 - `writing-guidelines`: site copy and docs.
+- `vercel-optimize`: cost and performance of the deployed site, from real Vercel metrics.
 - `ultracite`: lint and format.
 
 ## Ground rules
