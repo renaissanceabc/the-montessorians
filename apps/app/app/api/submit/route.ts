@@ -44,18 +44,13 @@ const parseSubmission = (text: string) => {
  *
  * Guarded by, in order: a per-IP rate limit (5 an hour, in memory per
  * instance, backed by a Vercel Firewall rate-limit rule on this path; see
- * docs/operations.md), Vercel BotID, and a 32 KB body cap applied before the
- * body is parsed.
+ * docs/operations.md), a 32 KB body cap enforced while reading (before any
+ * parsing), and Vercel BotID.
  */
 export const POST = async (request: Request) => {
   const rate = limiter.check(clientIp(request));
   if (!rate.allowed) {
     return tooManyRequests(rate);
-  }
-
-  const verification = await checkBotId();
-  if (verification.isBot) {
-    return NextResponse.json({ error: "Request blocked" }, { status: 403 });
   }
 
   let text: string;
@@ -66,6 +61,12 @@ export const POST = async (request: Request) => {
       return NextResponse.json({ error: "Submission is too large" }, { status: 413 });
     }
     return NextResponse.json({ error: "Could not read the submission" }, { status: 400 });
+  }
+
+  // BotID reads only the request headers, so the body can be read first.
+  const verification = await checkBotId();
+  if (verification.isBot) {
+    return NextResponse.json({ error: "Request blocked" }, { status: 403 });
   }
 
   const parsed = parseSubmission(text);
