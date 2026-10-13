@@ -1,6 +1,12 @@
 "use client";
 
-import { BookOpenIcon, Building2Icon, GraduationCapIcon, ShareIcon } from "lucide-react";
+import {
+  BookOpenIcon,
+  Building2Icon,
+  CalendarIcon,
+  GraduationCapIcon,
+  ShareIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -14,10 +20,10 @@ const yearRange = (from?: number, to?: number) => {
     return from === to ? `${from}` : `${from}–${to}`;
   }
   if (from) {
-    return `${from}–`;
+    return `Since ${from}`;
   }
   if (to) {
-    return `–${to}`;
+    return `Until ${to}`;
   }
   return "";
 };
@@ -25,15 +31,17 @@ const yearRange = (from?: number, to?: number) => {
 const orgLabel = (ref: OrganizationRef) =>
   ref.organizationShortName ?? ref.organizationName ?? ref.organization;
 
+// Separators only inside the single-line pill; on phones the facts wrap freely.
 const Divider = () => (
-  <span aria-hidden="true" className="px-1 text-black/25">
+  <span aria-hidden="true" className="px-1 text-black/25 max-sm:hidden">
     ·
   </span>
 );
 
 /**
  * The profile header: photo beside the name with its verification badge, the
- * tagline, and one pill of facts with a share button.
+ * tagline, the facts (a pill on larger screens), and a share button that floats
+ * at the bottom on phones.
  */
 export const ProfileHeader = ({ profile }: { profile: Profile }) => {
   const isContributor = profile.kinds.includes("contributor");
@@ -71,64 +79,73 @@ export const ProfileHeader = ({ profile }: { profile: Profile }) => {
         <p className="type-lead -mt-2 text-balance italic sm:hidden">{profile.tagline}</p>
       )}
 
-      <div className="flex w-fit max-w-full items-center gap-1 rounded-full border border-black/10 bg-white/60 py-1 pr-1 pl-4 text-sm text-[#4A433D]">
-        <span className="type-eyebrow shrink-0">{kindLabel}</span>
+      <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+        {/* Phones: unboxed facts that wrap, nothing cut off; larger screens: one pill. */}
+        <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-[#4A433D] max-sm:justify-center sm:w-fit sm:gap-x-0 sm:rounded-3xl sm:border sm:border-black/10 sm:bg-white/60 sm:px-4 sm:py-1.5">
+          <span className="type-eyebrow shrink-0 max-sm:basis-full">{kindLabel}</span>
 
-        {org && (
-          <>
-            <Divider />
-            <Link
-              className="inline-flex min-w-0 items-center gap-1.5 hover:underline"
-              href={`/organizations/${org.organization}`}
-              title={[org.organizationName, yearRange(org.from, org.to)].filter(Boolean).join(", ")}
-            >
-              {org === school ? (
-                <GraduationCapIcon aria-hidden="true" className="size-3.5 shrink-0" />
-              ) : (
-                <Building2Icon aria-hidden="true" className="size-3.5 shrink-0" />
-              )}
-              <span className="truncate">{orgLabel(org)}</span>
-              {extraOrgs > 0 && (
-                <span className="shrink-0 rounded-full bg-black/7 px-1.5 text-[11px]">
-                  +{extraOrgs}
-                </span>
-              )}
-            </Link>
-          </>
-        )}
+          {org && (
+            <>
+              <Divider />
+              <Link
+                className="inline-flex min-w-0 items-center gap-1.5 hover:underline"
+                href={`/organizations/${org.organization}`}
+                title={org.organizationName ?? org.organization}
+              >
+                {org === school ? (
+                  <GraduationCapIcon aria-hidden="true" className="size-3.5 shrink-0" />
+                ) : (
+                  <Building2Icon aria-hidden="true" className="size-3.5 shrink-0" />
+                )}
+                <span>{orgLabel(org)}</span>
+                {extraOrgs > 0 && (
+                  <span className="shrink-0 rounded-full bg-black/7 px-1.5 text-[11px]">
+                    +{extraOrgs}
+                  </span>
+                )}
+              </Link>
+            </>
+          )}
 
-        {!isContributor && school && (school.from || school.to) && (
-          <>
-            <Divider />
-            <span className="shrink-0 tabular-nums">{yearRange(school.from, school.to)}</span>
-          </>
-        )}
+          {!isContributor && school && (school.from || school.to) && (
+            <>
+              <Divider />
+              <span className="inline-flex shrink-0 items-center gap-1.5 tabular-nums">
+                <CalendarIcon aria-hidden="true" className="size-3.5 sm:hidden" />
+                {yearRange(school.from, school.to)}
+              </span>
+            </>
+          )}
 
-        {isContributor && profile.contributions.length > 0 && (
-          <>
-            <Divider />
-            <a
-              className="inline-flex shrink-0 items-center gap-1 hover:underline"
-              href="#contributions"
-              title={`${profile.contributions.length} documented contribution${profile.contributions.length === 1 ? "" : "s"}`}
-            >
-              <BookOpenIcon aria-hidden="true" className="size-3.5" />
-              {profile.contributions.length}
-            </a>
-          </>
-        )}
+          {isContributor && profile.contributions.length > 0 && (
+            <>
+              <Divider />
+              <a
+                className="inline-flex shrink-0 items-center gap-1.5 hover:underline"
+                href="#contributions"
+              >
+                <BookOpenIcon aria-hidden="true" className="size-3.5" />
+                {profile.contributions.length}{" "}
+                {profile.contributions.length === 1 ? "work" : "works"}
+              </a>
+            </>
+          )}
+        </div>
 
-        <span aria-hidden="true" className="mx-1 h-4 w-px shrink-0 bg-black/12" data-print-hidden />
-
-        <button
-          aria-label="Share this profile"
-          className="flex size-8 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-black/6"
+        {/* Share: floating at the bottom on phones (like the directory's filter bar); inline otherwise. */}
+        <div
+          className="max-sm:fixed max-sm:bottom-[calc(1rem+env(safe-area-inset-bottom))] max-sm:left-1/2 max-sm:z-40 max-sm:-translate-x-1/2 max-sm:rounded-full max-sm:bg-white/95 max-sm:p-1 max-sm:shadow-[0_8px_30px_rgba(0,0,0,0.12)] max-sm:ring-1 max-sm:ring-black/10"
           data-print-hidden
-          onClick={() => setShareOpen(true)}
-          type="button"
         >
-          <ShareIcon aria-hidden="true" className="size-4" />
-        </button>
+          <button
+            className="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium transition-[background-color,scale] duration-150 ease-out hover:bg-black/6 active:scale-[0.97] motion-reduce:active:scale-100 sm:h-8 sm:border sm:border-black/10 sm:bg-white/60 sm:px-3"
+            onClick={() => setShareOpen(true)}
+            type="button"
+          >
+            <ShareIcon aria-hidden="true" className="size-4" />
+            Share
+          </button>
+        </div>
         <ShareDialog onOpenChange={setShareOpen} open={shareOpen} profile={profile} />
       </div>
 

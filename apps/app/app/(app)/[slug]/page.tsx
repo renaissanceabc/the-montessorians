@@ -72,7 +72,7 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
 
   return (
     <>
-      <Container className="flex flex-col gap-6 pt-2 pb-16 lg:pt-4">
+      <Container className="flex flex-col gap-6 pt-2 pb-16 max-sm:pb-24 lg:pt-4">
         <Breadcrumbs
           align="start"
           items={[
