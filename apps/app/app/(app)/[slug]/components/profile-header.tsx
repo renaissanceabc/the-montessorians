@@ -148,8 +148,6 @@ export const ProfileHeader = ({ profile }: { profile: Profile }) => {
         </div>
         <ShareDialog onOpenChange={setShareOpen} open={shareOpen} profile={profile} />
       </div>
-
-      {profile.imageCredit && <p className="type-meta">{profile.imageCredit}</p>}
     </header>
   );
 };

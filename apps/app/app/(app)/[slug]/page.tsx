@@ -111,6 +111,9 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
           }
         />
 
+        {profile.imageCredit && (
+          <p className="text-muted-foreground text-xs">{profile.imageCredit}</p>
+        )}
         <Separator className="bg-black/10" data-print-hidden />
         <ProfileActions next={next} previous={previous} />
       </Container>
