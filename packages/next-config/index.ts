@@ -23,8 +23,9 @@ export const resolveSiteUrl = () => {
   );
 };
 
-const devOrigins = [hostnameFromUrl(process.env.PORTLESS_URL)].filter((host): host is string =>
-  Boolean(host)
+// Dev only: the portless URL, plus Tailscale hostnames so `tailscale serve` works on a phone.
+const devOrigins = [hostnameFromUrl(process.env.PORTLESS_URL), "**.ts.net"].filter(
+  (host): host is string => Boolean(host)
 );
 
 const isDev = process.env.NODE_ENV === "development";
