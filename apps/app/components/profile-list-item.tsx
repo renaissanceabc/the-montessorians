@@ -83,7 +83,7 @@ const ProfileListItem = ({
   return (
     <Link
       className={cn(
-        "group flex h-full min-w-0 gap-4 rounded-xl border border-black/8 bg-white/45 p-4 transition-colors duration-150 hover:border-black/15 hover:bg-white",
+        "group flex h-full min-w-0 gap-4 rounded-xl border border-black/8 bg-white/45 p-4 transition-[color,background-color,border-color,scale] duration-150 ease-out hover:border-black/15 hover:bg-white active:scale-[0.985] motion-reduce:active:scale-100",
         className
       )}
       href={`/${profile.slug}`}

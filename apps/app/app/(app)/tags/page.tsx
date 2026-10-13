@@ -33,7 +33,7 @@ const TagsPage = () => {
           {tags.map((tag) => (
             <li key={tag.slug}>
               <Link
-                className="group hover:bg-primary hover:text-primary-foreground inline-flex h-8 items-center rounded-full border border-black/12 bg-white/50 px-3 text-sm transition-colors hover:border-transparent"
+                className="group hover:bg-primary hover:text-primary-foreground inline-flex h-8 items-center rounded-full border border-black/12 bg-white/50 px-3 text-sm transition-[color,background-color,border-color,scale] duration-150 ease-out hover:border-transparent active:scale-[0.97] motion-reduce:active:scale-100"
                 href={`/tags/${tag.slug}`}
               >
                 {tag.label}

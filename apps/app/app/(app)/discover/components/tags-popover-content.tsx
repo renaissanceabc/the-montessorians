@@ -100,7 +100,7 @@ const TagsPanel = ({
                 <button
                   aria-pressed={on}
                   className={cn(
-                    "inline-flex h-8 items-center gap-1 rounded-full border px-3 text-[13px] transition-colors",
+                    "inline-flex h-8 items-center gap-1 rounded-full border px-3 text-[13px] transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100",
                     on
                       ? "border-secondary bg-secondary text-secondary-foreground"
                       : "border-black/12 bg-white/60 hover:border-black/40"

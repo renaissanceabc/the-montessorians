@@ -91,7 +91,7 @@ export const OrganizationsDirectory = ({
               <button
                 aria-pressed={on}
                 className={cn(
-                  "h-8 rounded-full border px-3 text-[13px] transition-colors",
+                  "h-8 rounded-full border px-3 text-[13px] transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100",
                   on
                     ? "border-secondary bg-secondary text-secondary-foreground"
                     : "border-black/12 bg-white/50 hover:border-black/30"
@@ -142,7 +142,7 @@ export const OrganizationsDirectory = ({
             return (
               <li className="min-w-0" key={org.slug}>
                 <Link
-                  className="group flex h-full min-w-0 items-start gap-4 rounded-xl border border-black/8 bg-white/45 p-4 transition-colors hover:border-black/15 hover:bg-white"
+                  className="group flex h-full min-w-0 items-start gap-4 rounded-xl border border-black/8 bg-white/45 p-4 transition-[color,background-color,border-color,scale] duration-150 ease-out hover:border-black/15 hover:bg-white active:scale-[0.985] motion-reduce:active:scale-100"
                   href={`/organizations/${org.slug}`}
                 >
                   <OrgLogo

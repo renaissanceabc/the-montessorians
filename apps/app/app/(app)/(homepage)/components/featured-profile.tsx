@@ -23,7 +23,7 @@ const FeaturedProfile = ({ dailyProfile }: { dailyProfile: Profile | null }) => 
 
     {dailyProfile ? (
       <Link
-        className="group flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-black/10 bg-white/50 p-5 transition-colors hover:bg-white"
+        className="group flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-black/10 bg-white/50 p-5 transition-[color,background-color,border-color,scale] duration-150 ease-out hover:bg-white active:scale-[0.985] motion-reduce:active:scale-100"
         href={`/${dailyProfile.slug}`}
       >
         <ProfilePhoto

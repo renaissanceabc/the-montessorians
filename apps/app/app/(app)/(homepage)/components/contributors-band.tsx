@@ -32,7 +32,7 @@ const ContributorsBand = ({ contributors }: { contributors: Profile[] }) => {
           {contributors.map((profile) => (
             <li className="min-w-0" key={profile.slug}>
               <Link
-                className="flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white py-1 pr-3 pl-1 text-sm transition-colors hover:border-black/30"
+                className="flex max-w-full items-center gap-2 rounded-full border border-black/10 bg-white py-1 pr-3 pl-1 text-sm transition-[color,background-color,border-color,scale] duration-150 ease-out hover:border-black/30 active:scale-[0.97] motion-reduce:active:scale-100"
                 href={`/${profile.slug}`}
               >
                 <ProfilePhoto

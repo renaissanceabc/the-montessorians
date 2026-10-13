@@ -54,7 +54,7 @@ const Header = () => {
               </Link>
             ))}
             <Link
-              className="hidden rounded-md border border-black/20 px-3 py-1.5 text-base font-semibold transition-colors hover:border-black/50 hover:bg-white/50 sm:flex"
+              className="hidden rounded-md border border-black/20 px-3 py-1.5 text-base font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out hover:border-black/50 hover:bg-white/50 active:scale-[0.97] motion-reduce:active:scale-100 sm:flex"
               href="/contribute"
             >
               Contribute
