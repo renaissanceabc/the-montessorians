@@ -26,7 +26,10 @@ const escapeXml = (s: string) => s.replaceAll(/[&<>"']/gu, (c) => XML_ESCAPES.ge
  */
 export const GET = () => {
   const profiles = getAllProfiles()
-    .toSorted((a, b) => b.addedAt.localeCompare(a.addedAt) || a.name.localeCompare(b.name))
+    // Dates carry different UTC offsets, so compare instants, not strings.
+    .toSorted(
+      (a, b) => Date.parse(b.addedAt) - Date.parse(a.addedAt) || a.name.localeCompare(b.name)
+    )
     .slice(0, FEED_SIZE);
   const updated = profiles[0]?.addedAt ?? new Date(0).toISOString();
 
