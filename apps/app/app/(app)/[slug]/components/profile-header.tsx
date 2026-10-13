@@ -41,6 +41,9 @@ export const ProfileHeader = ({ profile }: { profile: Profile }) => {
   const [affiliation] = profile.affiliations;
   const org = isContributor ? affiliation : (school ?? affiliation);
   const extraOrgs = isContributor ? profile.affiliations.length - 1 : 0;
+  const lastSpace = profile.name.lastIndexOf(" ");
+  const leadingWords = profile.name.slice(0, lastSpace + 1);
+  const lastWord = profile.name.slice(lastSpace + 1);
 
   return (
     <header className="flex w-full min-w-0 flex-col gap-5 max-sm:items-center max-sm:text-center">
@@ -57,10 +60,22 @@ export const ProfileHeader = ({ profile }: { profile: Profile }) => {
         />
 
         <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div className="flex min-w-0 items-center gap-2.5 max-sm:justify-center">
-            <h1 className="type-title min-w-0">{profile.name}</h1>
-            <VerificationBadge verification={profile.verification} />
-          </div>
+          <h1 className="type-title min-w-0">
+            {leadingWords}
+            {/* The seal sits in the text flow and never wraps away from the last word. */}
+            <span className="whitespace-nowrap">
+              {lastWord}
+              {profile.verification && (
+                <>
+                  {" "}
+                  <VerificationBadge
+                    className="relative -top-[0.08em] align-middle"
+                    verification={profile.verification}
+                  />
+                </>
+              )}
+            </span>
+          </h1>
           {profile.tagline && <p className="type-lead hidden italic sm:block">{profile.tagline}</p>}
         </div>
       </div>

@@ -13,7 +13,6 @@ import {
   MessageCircleIcon,
   MicIcon,
   NewspaperIcon,
-  PencilIcon,
   PresentationIcon,
   TrophyIcon,
   UsersIcon,
@@ -22,9 +21,9 @@ import Link from "next/link";
 import { useId, useState } from "react";
 import type { ReactNode } from "react";
 
-import { CiteButton } from "@/components/cite-button";
 import { OrgLogo } from "@/components/org-logo";
 import { ProfilePhoto } from "@/components/profile-photo";
+import { CorrectionButton, RecordDetails } from "@/components/record-rail";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { HowWeVerify } from "@/components/verification";
@@ -318,16 +317,15 @@ const BioAndTags = ({ profile }: { profile: Profile }) => {
     <div className="flex flex-col gap-4">
       {profile.bio && <p className="type-body">{profile.bio}</p>}
       {profile.tags.length > 0 && (
-        <ul aria-label="Tags" className="flex flex-wrap gap-1">
+        <ul aria-label="Tags" className="flex flex-wrap gap-1.5">
           {profile.tags.map((tag) => (
             <li key={tag.slug}>
-              <Badge
-                className="bg-white/50"
-                render={<Link href={`/tags/${tag.slug}`} />}
-                variant="outline"
+              <Link
+                className="inline-flex rounded-full bg-black/5 px-2.5 py-1 text-[13px] text-[#4A433D] transition-colors hover:bg-black/8"
+                href={`/tags/${tag.slug}`}
               >
                 {tag.label}
-              </Badge>
+              </Link>
             </li>
           ))}
         </ul>
@@ -443,10 +441,45 @@ export const ProfileMain = ({
 const chipClass =
   "inline-flex max-w-full items-center gap-1.5 rounded-full border border-black/12 bg-white px-3 py-1.5 text-[13px]";
 
+const sourceRowClass =
+  "flex min-w-0 items-start gap-2.5 rounded-lg border border-black/8 bg-white/55 px-3 py-2.5";
+
+const SourceRow = ({ source }: { source: Source }) => {
+  const Icon = SOURCE_ICONS[source.type] ?? LinkIcon;
+  const label = SOURCE_LABELS[source.type];
+  const host = source.url ? prettyUrl(source.url).split("/")[0] : null;
+  const body = (
+    <>
+      <Icon aria-label={label} className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
+      <span className="flex min-w-0 flex-col gap-0.5">
+        <span className="line-clamp-2 text-[13px] leading-snug font-medium">
+          {source.note ?? label}
+        </span>
+        <span className="text-muted-foreground truncate text-xs">{host ?? label}</span>
+      </span>
+    </>
+  );
+  return source.url ? (
+    <Link
+      className={cn(sourceRowClass, "transition-colors hover:border-black/20 hover:bg-white")}
+      href={source.url}
+      rel="noopener"
+      target="_blank"
+      title={source.note}
+    >
+      {body}
+    </Link>
+  ) : (
+    <div className={sourceRowClass} title={source.note}>
+      {body}
+    </div>
+  );
+};
+
 /**
- * The right rail of a profile (below the main column on smaller screens): how
- * to cite the record, its identifiers, sources, links, related people, and a
- * way to suggest a correction.
+ * The right rail of a profile (below the main column on smaller screens): its
+ * sources, related people, links elsewhere, the record's permanent link and
+ * identifiers, and a way to suggest a correction.
  */
 export const ProfileRail = ({
   profile,
@@ -462,110 +495,12 @@ export const ProfileRail = ({
   correctionUrl: string;
 }) => (
   <aside aria-label="About this record" className="flex min-w-0 flex-col gap-8">
-    <Section title="Cite">
-      <p className="font-mono text-xs break-all text-[#4A433D]">
-        {permanentId.url.replace(/^https?:\/\//u, "")}
-      </p>
-      <CiteButton className="self-start" label="Copy permanent link" url={permanentId.url} />
-    </Section>
-
-    <Section title="Identifiers">
-      <ul className="flex flex-wrap gap-1.5">
-        <li>
-          <Link
-            className="bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs"
-            href={permanentId.url}
-          >
-            <span className="opacity-75">The Montessorians</span>
-            <span className="font-mono">{permanentId.value}</span>
-          </Link>
-        </li>
-        {identifiers.map((identifier) => (
-          <li className="min-w-0" key={identifier.label}>
-            <Link
-              className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-black/12 bg-white px-2.5 py-1.5 text-xs transition-colors hover:border-black/30"
-              href={identifier.url}
-              rel="noopener"
-              target="_blank"
-            >
-              <span className="text-muted-foreground shrink-0">{identifier.label}</span>
-              <span className="truncate font-mono">{identifier.value}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {profile.glossaryCitations.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-          <span className="text-muted-foreground text-xs">Cited in the Montessori Glossary:</span>
-          {profile.glossaryCitations.map((citation) => (
-            <Badge
-              className="bg-white"
-              key={citation.url}
-              render={<Link href={citation.url} rel="noopener" target="_blank" />}
-              variant="outline"
-            >
-              {citation.label}
-            </Badge>
-          ))}
-        </div>
-      )}
-    </Section>
-
     {profile.sources.length > 0 && (
       <Section count={profile.sources.length} id="sources" info={<HowWeVerify />} title="Sources">
-        <ul className="flex flex-wrap gap-1.5">
-          {profile.sources.map((source) => {
-            const Icon = SOURCE_ICONS[source.type] ?? LinkIcon;
-            const host = source.url ? prettyUrl(source.url).split("/")[0] : null;
-            const chip = (
-              <>
-                <Icon aria-hidden="true" className="size-3.5 shrink-0" />
-                <span className="truncate">
-                  {[SOURCE_LABELS[source.type], host].filter(Boolean).join(" · ")}
-                </span>
-              </>
-            );
-            return (
-              <li
-                className="max-w-full min-w-0"
-                key={`${source.type}-${source.url ?? source.note}`}
-              >
-                {source.url ? (
-                  <Link
-                    className={cn(chipClass, "transition-colors hover:border-black/30")}
-                    href={source.url}
-                    rel="noopener"
-                    target="_blank"
-                    title={source.note}
-                  >
-                    {chip}
-                  </Link>
-                ) : (
-                  <span className={chipClass} title={source.note}>
-                    {chip}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </Section>
-    )}
-
-    {profile.links.length > 0 && (
-      <Section title="Links">
-        <ul className="flex flex-wrap gap-1.5">
-          {profile.links.map((link) => (
-            <li className="max-w-full min-w-0" key={link.url}>
-              <Link
-                className={cn(chipClass, "transition-colors hover:border-black/30")}
-                href={link.url}
-                rel="noopener"
-                target="_blank"
-              >
-                <ArrowUpRightIcon aria-hidden="true" className="size-3.5 shrink-0" />
-                <span className="truncate">{prettyUrl(link.url)}</span>
-              </Link>
+        <ul className="flex flex-col gap-1.5">
+          {profile.sources.map((source) => (
+            <li className="min-w-0" key={`${source.type}-${source.url ?? source.note}`}>
+              <SourceRow source={source} />
             </li>
           ))}
         </ul>
@@ -627,15 +562,50 @@ export const ProfileRail = ({
       </Section>
     )}
 
-    <Link
-      className="inline-flex w-fit items-center gap-2 rounded-md border border-black/15 bg-white/60 px-3 py-2 text-sm font-medium transition-colors hover:border-black/30 hover:bg-white"
-      data-print-hidden
-      href={correctionUrl}
-      rel="noopener"
-      target="_blank"
-    >
-      <PencilIcon aria-hidden="true" className="text-muted-foreground size-3.5" />
-      Suggest a correction
-    </Link>
+    {profile.links.length > 0 && (
+      <Section title="Elsewhere">
+        <ul className="flex flex-wrap gap-1.5">
+          {profile.links.map((link) => (
+            <li className="max-w-full min-w-0" key={link.url}>
+              <Link
+                className={cn(chipClass, "transition-colors hover:border-black/30")}
+                href={link.url}
+                rel="noopener"
+                target="_blank"
+              >
+                <ArrowUpRightIcon aria-hidden="true" className="size-3.5 shrink-0" />
+                <span className="truncate">{prettyUrl(link.url)}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )}
+
+    <div className="flex flex-col gap-3">
+      <RecordDetails
+        id={permanentId.value}
+        identifiers={identifiers}
+        permanentUrl={permanentId.url}
+      >
+        {profile.glossaryCitations.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-black/7 pt-3">
+            <span className="text-muted-foreground text-xs">Cited in the Montessori Glossary:</span>
+            {profile.glossaryCitations.map((citation) => (
+              <Badge
+                className="bg-white"
+                key={citation.url}
+                render={<Link href={citation.url} rel="noopener" target="_blank" />}
+                variant="outline"
+              >
+                {citation.label}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </RecordDetails>
+
+      <CorrectionButton href={correctionUrl} />
+    </div>
   </aside>
 );

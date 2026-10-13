@@ -5,7 +5,6 @@ import {
   GraduationCapIcon,
   LandmarkIcon,
   MapPinIcon,
-  PencilIcon,
   UserPlusIcon,
   UsersIcon,
 } from "lucide-react";
@@ -14,13 +13,14 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { CiteButton } from "@/components/cite-button";
 import { Container } from "@/components/container";
 import { OrgLogo } from "@/components/org-logo";
 import ProfileListItem from "@/components/profile-list-item";
 import { RecordLayout } from "@/components/record-layout";
+import { CorrectionButton, RecordDetails } from "@/components/record-rail";
 import { ShareButton } from "@/components/share-button";
 import { identifierEntries, idUrl, organizationJsonLd } from "@/lib/content/authority";
+import { formatLocation } from "@/lib/content/location";
 import {
   getAllOrganizations,
   getOrganizationBySlug,
@@ -146,7 +146,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                 <Dot />
                 <span className="inline-flex min-w-0 items-center gap-1" title={org.location}>
                   <MapPinIcon aria-hidden="true" className="size-3.5 shrink-0" />
-                  <span className="truncate">{org.location}</span>
+                  <span className="truncate">{formatLocation(org.location)}</span>
                 </span>
               </>
             )}
@@ -253,40 +253,6 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
 
   const rail = (
     <aside aria-label="About this record" className="flex min-w-0 flex-col gap-8">
-      <Section title="Cite">
-        <p className="font-mono text-xs break-all text-[#4A433D]">
-          {permanentUrl.replace(/^https?:\/\//u, "")}
-        </p>
-        <CiteButton className="self-start" label="Copy permanent link" url={permanentUrl} />
-      </Section>
-
-      <Section title="Identifiers">
-        <ul className="flex flex-wrap gap-1.5">
-          <li>
-            <Link
-              className="bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs"
-              href={permanentUrl}
-            >
-              <span className="opacity-75">The Montessorians</span>
-              <span className="font-mono">{org.id}</span>
-            </Link>
-          </li>
-          {identifiers.map((identifier) => (
-            <li className="min-w-0" key={identifier.scheme}>
-              <Link
-                className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-black/12 bg-white px-2.5 py-1.5 text-xs hover:border-black/30"
-                href={identifier.url}
-                rel="noopener"
-                target="_blank"
-              >
-                <span className="text-muted-foreground shrink-0">{identifier.label}</span>
-                <span className="truncate font-mono">{identifier.value}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
       {org.website && (
         <Section title="Website">
           <Link
@@ -301,16 +267,10 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
         </Section>
       )}
 
-      <Link
-        className="inline-flex w-fit items-center gap-2 rounded-md border border-black/15 bg-white/60 px-3 py-2 text-sm font-medium transition-colors hover:border-black/30 hover:bg-white"
-        data-print-hidden
-        href={correction}
-        rel="noopener"
-        target="_blank"
-      >
-        <PencilIcon aria-hidden="true" className="text-muted-foreground size-3.5" />
-        Suggest a correction
-      </Link>
+      <div className="flex flex-col gap-3">
+        <RecordDetails id={org.id} identifiers={identifiers} permanentUrl={permanentUrl} />
+        <CorrectionButton href={correction} />
+      </div>
     </aside>
   );
 
