@@ -1,25 +1,22 @@
-import { Geist, Geist_Mono, Instrument_Serif, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 
 const geistSans = Geist({
+  subsets: ["latin"],
   variable: "--font-geist-sans",
-  subsets: ["latin"],
 });
 
+// Only used for small identifier labels, so it isn't worth a preload.
 const geistMono = Geist_Mono({
+  preload: false,
+  subsets: ["latin"],
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair-display",
-  subsets: ["latin"],
 });
 
 const instrumentSerif = Instrument_Serif({
-  weight: ["400"],
   style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
   subsets: ["latin"],
+  variable: "--font-instrument-serif",
+  weight: ["400"],
 });
 
-export const fonts = `${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${playfairDisplay.variable}`;
+export const fonts = `${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable}`;

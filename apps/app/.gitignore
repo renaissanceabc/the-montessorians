@@ -5,5 +5,6 @@
 .sentryclirc
 
 # generated content (built from /data by scripts/generate-content.mjs)
-/lib/content/profiles.generated.json
+/lib/content/*.generated.json
 /public/images
+/public/logos

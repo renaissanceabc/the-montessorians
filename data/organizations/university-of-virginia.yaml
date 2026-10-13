@@ -1,0 +1,18 @@
+---
+id: tmo000003
+name: University of Virginia
+slug: university-of-virginia
+type: university
+name_variants:
+  - UVA
+description: A public research university in Charlottesville, Virginia, founded by Thomas Jefferson in 1819.
+location: Charlottesville, Virginia, United States
+founded: 1819
+website: https://www.virginia.edu
+logo_source: https://commons.wikimedia.org/wiki/File:University_of_Virginia_Rotunda_logo.svg
+identifiers:
+  lcnaf: n79053979
+  viaf: "126085929"
+  wikidata: Q213439
+  ror: 0153tk833
+  isni: "0000000122897275"

@@ -6,41 +6,42 @@ on:
 permissions:
   contents: read
 
+# A new push to the same PR cancels the run still in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
+    # Keeps the required check's name; oxfmt now owns YAML formatting.
     name: Run yamllint
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+      - uses: ./.github/actions/setup
 
-      - name: Install yamllint
-        run: pip install yamllint
-
-      - name: Run yamllint on data
-        run: yamllint data
+      - name: Check data formatting
+        run: bunx oxfmt --check "data/**/*.yaml"
 
   validate:
     name: Validate schema + image rules
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.3.11"
+          # Full history so the validator can compare ids against the base branch.
+          fetch-depth: 0
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - uses: ./.github/actions/setup
 
-      - name: Validate YAML against JSON Schema and image rules
+      - name: Validate YAML against JSON Schema, ids, references, and image rules
         run: bun run validate
+        env:
+          BASE_REF: origin/${{ github.base_ref }}

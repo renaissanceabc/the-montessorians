@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+
 import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
 import { toTitleCase } from "@/lib/utils";
 
 export const dynamic = "force-static";
 
-export function GET() {
+export const GET = () => {
   const allProfiles = getAllProfiles();
   const allTags = getAllTags({ sortBy: "asc" }).data;
 
@@ -24,9 +25,17 @@ export function GET() {
         ? `**Links**:\n${p.links.map((l) => `- [${toTitleCase(l.type)}](${l.url})`).join("\n")}`
         : "";
 
+      const sourcesSection = p.sources.length
+        ? `**Sources**:\n${p.sources.map((s) => `- ${s.note ?? s.type}${s.url ? ` (${s.url})` : ""}`).join("\n")}`
+        : "";
+
       return `### ${p.name}
 
 **URL**: https://www.themontessorians.xyz/${p.slug}
+
+**Permanent ID**: https://www.themontessorians.xyz/id/${p.id}
+
+**Kind**: ${p.kind === "contributor" ? `Contributor (${p.roles.map(toTitleCase).join(", ")})` : "Montessori alum"}
 
 **Tagline**: ${p.tagline ?? "—"}
 
@@ -41,6 +50,8 @@ export function GET() {
 ${achievements}
 
 ${quotes}
+
+${sourcesSection}
 
 ${linksSection}
 `;
@@ -133,7 +144,7 @@ obligation with respect to this CC0 or use of the Work.
 
   const markdown = `# The Montessorians
 
-The largest open source dataset of Montessori alumni. Daily spotlight and a growing directory of Montessorians who've gone on to do great things. The dataset goes beyond prominent famous individuals and historical figures to include everyday people.
+The largest open source dataset of Montessori alumni, and an open name authority for the people who shaped the Montessori field. Daily spotlight and a growing directory of Montessorians who've gone on to do great things. The dataset goes beyond prominent famous individuals and historical figures to include everyday people.
 
 > [!TIP]
 > The abridged version can be found at https://www.themontessorians.xyz/llms.txt
@@ -142,12 +153,16 @@ The largest open source dataset of Montessori alumni. Daily spotlight and a grow
 
 - [About](https://www.themontessorians.xyz/about)
 - [Discover](https://www.themontessorians.xyz/discover)
+- [Contributors](https://www.themontessorians.xyz/contributors)
+- [Organizations](https://www.themontessorians.xyz/organizations)
 - [Archive](https://www.themontessorians.xyz/archive)
+- [Data & API](https://www.themontessorians.xyz/data)
 
 ---
 
 ## Open Source
 
+- [Add a Montessorian](https://www.themontessorians.xyz/contribute)
 - [Contribute on GitHub](https://github.com/renaissanceabc/the-montessorians)
 
 ---
@@ -174,4 +189,4 @@ ${license}
       "Content-Type": "text/plain; charset=utf-8",
     },
   });
-}
+};

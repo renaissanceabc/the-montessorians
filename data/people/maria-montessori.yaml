@@ -1,0 +1,231 @@
+---
+id: tm0000067
+name: Maria Montessori
+slug: maria-montessori
+kind: contributor
+roles:
+  - founder
+  - author
+pinned: true
+name_authorized: Montessori, Maria, 1870-1952
+birth_year: 1870
+death_year: 1952
+tagline: Physician and educator who created the Montessori method
+bio: >-
+  Maria Montessori was an Italian physician and educator who developed the Montessori method of education. After opening
+  her first Casa dei Bambini in Rome in 1907, she wrote widely on children's development, including The Montessori
+  Method, The Secret of Childhood, and The Absorbent Mind. In 1929 she founded the Association Montessori Internationale
+  with her son Mario to carry her work forward.
+tags:
+  - physician
+  - educator
+  - writer
+montessori_notes: Created the Montessori method and founded the Association Montessori Internationale.
+affiliations:
+  - organization: association-montessori-internationale
+    role: Founder
+    from: 1929
+contributions:
+  - title: Caratteri fisici delle giovani donne del Lazio
+    type: other
+    year: 1905
+    url: https://openlibrary.org/books/OL61029369M
+  - title: Il metodo della pedagogia scientifica applicato all'educazione infantile nelle case dei bambini
+    type: book
+    year: 1909
+    url: https://openlibrary.org/works/OL22982339W
+  - title: L'antropologia pedagogica
+    type: book
+    year: 1910
+    venue: Francesco Vallardi
+    url: https://openlibrary.org/works/OL1542645W
+  - title: La morale sessuale nell'educazione
+    type: other
+    year: 1911
+    venue: Vita Letteraria
+    url: https://archive.org/details/cf-99000360358-images
+  - title: The Montessori Method
+    type: book
+    year: 1912
+    url: https://www.gutenberg.org/ebooks/39863
+  - title: The 1913 Rome Lectures
+    type: lecture
+    year: 1913
+    url: https://archive.org/details/1913-lecture-manuscript
+  - title: Dr. Montessori's Own Handbook
+    type: book
+    year: 1914
+    url: https://www.gutenberg.org/ebooks/29635
+  - title: My System of Education
+    type: lecture
+    year: 1915
+    venue: The House of Childhood
+    url: https://archive.org/details/mysystemofeducat00montrich
+  - title: L'autoeducazione nelle scuole elementari
+    type: book
+    year: 1916
+    venue: P. Maglione e C. Strini
+    url: https://archive.org/details/lautoeducazionen00montuoft
+  - title: I bambini viventi nella Chiesa
+    type: book
+    year: 1922
+    venue: Alberto Morano
+    url: https://openlibrary.org/works/OL1542649W
+  - title: Das Kind in der Familie
+    type: book
+    year: 1928
+    venue: Arbeitsgemeinschaft der Montessorischule
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: The Mass Explained to Children
+    type: book
+    year: 1932
+    venue: Sheed & Ward
+    url: https://openlibrary.org/works/OL1542648W
+  - title: La paix et l'éducation
+    type: book
+    year: 1932
+    venue: Bureau international d'éducation
+    url: https://openlibrary.org/works/OL1542604W
+  - title: La vita in Cristo
+    type: book
+    year: 1932
+    venue: Tipografia Feyri
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: Ideas generales sobre mi método
+    type: book
+    year: 1932
+    venue: Revista de Pedagogía
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: Psico-aritmética
+    type: book
+    year: 1934
+    url: https://archive.org/details/psicoaritmetica-maria-montessori
+  - title: Psico-geometría
+    type: book
+    year: 1934
+    url: https://archive.org/details/montessori-psico-geometria
+  - title: The Secret of Childhood
+    type: book
+    year: 1936
+    url: https://www.wikidata.org/wiki/Q106254567
+  - title: Les étapes de l'éducation
+    type: book
+    year: 1936
+    venue: Desclée de Brouwer
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: Botschaft Dr. Maria Montessoris
+    type: article
+    year: 1939
+    doi: 10.5169/seals-313701
+  - title: God en het kind
+    type: book
+    year: 1939
+    venue: Association Montessori Internationale
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: The 'Erdkinder' and the Functions of the University
+    type: book
+    year: 1939
+    venue: Association Montessori Internationale
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: The Child
+    type: book
+    year: 1941
+    venue: The Theosophical Society
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: Reconstruction in Education
+    type: book
+    year: 1942
+    venue: The Theosophical Society
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: Education for a New World
+    type: book
+    year: 1946
+    venue: Kalakshetra Publications
+    url: https://openlibrary.org/works/OL1542646W
+  - title: The Discovery of the Child
+    type: book
+    year: 1948
+    venue: Kalakshetra Publications
+    url: https://openlibrary.org/works/OL11378810W
+  - title: To Educate the Human Potential
+    type: book
+    year: 1948
+    venue: Kalakshetra Publications
+    url: https://openlibrary.org/works/OL1542656W
+  - title: De l'enfant à l'adolescent
+    type: book
+    year: 1948
+    venue: Desclée de Brouwer
+    url: https://ci.nii.ac.jp/ncid/BA09931595
+  - title: What You Should Know About Your Child
+    type: book
+    year: 1948
+    venue: Kalakshetra Publications
+    url: https://openlibrary.org/works/OL1542630W
+  - title: Child Training
+    type: book
+    year: 1948
+    venue: Kalakshetra Publications
+    url: https://archives.montessori-ami.org/publications/books-and-writings/publishing-history
+  - title: The Absorbent Mind
+    type: book
+    year: 1949
+    url: https://www.wikidata.org/wiki/Q138413751
+  - title: Formazione dell'uomo
+    type: book
+    year: 1949
+    venue: Garzanti
+    url: https://openlibrary.org/works/OL1542655W
+  - title: Educazione e pace
+    type: book
+    year: 1949
+    venue: Garzanti
+    url: https://openlibrary.org/works/OL1542588W
+  - title: Nursery Schools and Cultural Environment
+    type: article
+    year: 1952
+    venue: Journal of the American Medical Women's Association
+    url: https://pubmed.ncbi.nlm.nih.gov/12980866/
+  - title: "The Child, Society and the World: Unpublished Speeches and Writings"
+    type: book
+    year: 1989
+    venue: Clio Press
+    isbn: "9781851091126"
+  - title: The California Lectures of Maria Montessori, 1915
+    type: book
+    year: 1997
+    venue: Clio Press
+    isbn: "9781851092963"
+  - title: The 1946 London Lectures
+    type: lecture
+    year: 2012
+    venue: Montessori-Pierson Publishing Company
+    isbn: "9789079506002"
+  - title: Dio e il bambino e altri scritti inediti
+    type: book
+    year: 2013
+    venue: Editrice La Scuola
+    isbn: "9788835033264"
+  - title: "Maria Montessori Speaks to Parents: A Selection of Articles"
+    type: book
+    year: 2017
+    venue: Montessori-Pierson Publishing Company
+    url: https://www.nienhuis.com/product/maria-montessori-speaks-to-parents/500_544000
+sources:
+  - type: authority
+    url: https://id.loc.gov/authorities/names/n79064558.html
+    note: Library of Congress name authority record
+  - type: article
+    url: https://montessori-ami.org/resource-library/facts/timeline-maria-montessoris-life
+    note: AMI's timeline of Maria Montessori's life
+verification: verified
+identifiers:
+  lcnaf: n79064558
+  viaf: "99929837"
+  wikidata: Q131117
+  isni: "0000000121450228"
+  snac: w6jb70hm
+image_credit: Photographer unknown, Nationaal Archief, via Wikimedia Commons (public domain)
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Maria_Montessori

@@ -1,13 +1,15 @@
 import { captureException } from "@sentry/nextjs";
+
 import { log } from "./log";
 
+// oxlint-disable-next-line anti-slop/no-unknown-parameters -- receives raw `catch` bindings and error-boundary values, which the language types as unknown; this is the boundary that turns them into a message.
 export const parseError = (error: unknown): string => {
   let message = "An error occurred";
 
   if (error instanceof Error) {
-    message = error.message;
-  } else if (error && typeof error === "object" && "message" in error) {
-    message = error.message as string;
+    ({ message } = error);
+  } else if (error instanceof Object && "message" in error) {
+    message = String(error.message);
   } else {
     message = String(error);
   }
@@ -16,7 +18,6 @@ export const parseError = (error: unknown): string => {
     captureException(error);
     log.error(`Parsing error: ${message}`);
   } catch (newError) {
-    // biome-ignore lint/suspicious/noConsole: Need console here
     console.error("Error parsing error:", newError);
   }
 

@@ -1,0 +1,86 @@
+name: Promote
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - apps/app/package.json
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  promote:
+    name: Open promotion PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Open or refresh develop → main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          git fetch origin main
+
+          develop_version=$(jq -r .version apps/app/package.json)
+          main_version=$(git show origin/main:apps/app/package.json | jq -r '.version // "0.0.0"')
+
+          if [ "$develop_version" = "$main_version" ]; then
+            echo "develop and main are both at $develop_version — nothing to promote."
+            exit 0
+          fi
+
+          title="chore: promote develop to main (v${develop_version})"
+
+          git show HEAD:apps/app/CHANGELOG.md > changelog.md 2>/dev/null || : > changelog.md
+          awk -v heading="## ${develop_version}" '
+            $0 == heading { found = 1; next }
+            found && /^## / { exit }
+            found
+          ' changelog.md > release-notes.md
+
+          {
+            echo "Promotes \`develop\` to \`main\` for **v${develop_version}**. Version Packages was merged into \`develop\` first, so \`apps/app/package.json\` is already at ${develop_version} and the pending changesets are consumed — \`release.yml\` will tag \`v${develop_version}\` and cut the release from \`apps/app/CHANGELOG.md\`."
+            echo
+            echo "Opened automatically by \`promote.yml\` when the version bump landed on \`develop\`."
+            echo
+            echo "## What ships"
+            echo
+            if [ -s release-notes.md ]; then
+              cat release-notes.md
+            else
+              echo "_No changelog entry found for ${develop_version}._"
+            fi
+            echo
+            echo "## Notes"
+            echo
+            echo "**Merge this with a merge commit, never a squash.** The PR exists to keep \`develop\` and \`main\` identical; squashing rewrites the commits and diverges the branches."
+          } > pr-body.md
+
+          existing=$(gh pr list --base main --head develop --state open --json number,url --jq '.[0] // empty')
+
+          if [ -n "$existing" ]; then
+            number=$(echo "$existing" | jq -r .number)
+            url=$(echo "$existing" | jq -r .url)
+            gh pr edit "$number" --title "$title" --body-file pr-body.md
+            echo "Refreshed existing promotion PR #$number → $url"
+            exit 0
+          fi
+
+          url=$(gh pr create \
+            --base main \
+            --head develop \
+            --title "$title" \
+            --body-file pr-body.md)
+          echo "Opened promotion PR → $url"

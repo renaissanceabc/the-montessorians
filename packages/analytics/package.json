@@ -1,6 +1,6 @@
 {
-  "name": "@repo/analytics",
-  "version": "0.0.0",
+  "name": "@montessorians/analytics",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -17,7 +17,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@montessorians/typescript-config": "workspace:*",
     "@types/node": "catalog:"
   }
 }

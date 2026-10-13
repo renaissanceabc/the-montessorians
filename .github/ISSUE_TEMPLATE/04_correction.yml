@@ -1,0 +1,32 @@
+name: Correction or removal
+description: Something on a profile is wrong, out of date, or should be removed
+title: "Correction: "
+labels: ["correction"]
+assignees: ["karelvuong"]
+body:
+  - type: input
+    id: record
+    attributes:
+      label: Record id or page
+      description: The id (e.g. tm0000050) or the profile's address
+    validations:
+      required: true
+  - type: dropdown
+    id: request
+    attributes:
+      label: What would you like us to do?
+      options:
+        - Fix something that's wrong
+        - Add missing information
+        - Merge a duplicate
+        - Credit or remove a photo
+        - Remove this record
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What should change, and a source if you have one. If this is your own profile, say so.
+    validations:
+      required: true

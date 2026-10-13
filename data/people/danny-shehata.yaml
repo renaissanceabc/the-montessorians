@@ -1,0 +1,29 @@
+---
+id: tm0000052
+name: Danny Shehata
+slug: danny-shehata
+name_authorized: Shehata, Danny
+tagline: Resident Physician, Family Medicine at SIHF Healthcare
+bio: >-
+  Danny Shehata, MD, is a resident physician specializing in Family Medicine. Danny Shehata earned his medical degree
+  from the Royal College of Surgeons in Ireland. He is currently completing his post-graduate training as part of the
+  Family Medicine Residency Program at the Southern Illinois University (SIU) School of Medicine, affiliated with SIHF
+  Healthcare.
+tags:
+  - physician
+education:
+  - montessori
+education_notes: >-
+  Attended The Montessori School of Sudbury until Grade 3.
+notable_achievements:
+  - Accepted into the SIU Alton Family Medicine Residency Program
+  - Providing patient care as a resident physician at SIHF Healthcare
+links:
+  - type: website
+    url: https://www.sihf.org/provider/777-danny-shehata
+sources:
+  - type: personal-knowledge
+    note: Submitted to The Montessorians and confirmed by the maintainers
+verification: confirmed
+schools:
+  - organization: montessori-school-of-sudbury

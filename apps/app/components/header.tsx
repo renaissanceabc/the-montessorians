@@ -1,16 +1,18 @@
 "use client";
 
-import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GitHubIcon } from "@/components/icons";
+
+import { cn } from "@/lib/utils";
+
+import { Container } from "./container";
 
 const links = [
   { href: "/discover", label: "Discover" },
   { href: "/about", label: "About" },
 ];
 
-export default function Header() {
+const Header = () => {
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -21,44 +23,47 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="sticky top-2 z-100 w-full px-3 sm:top-4 sm:my-4 sm:px-4 lg:top-8 lg:my-8 lg:px-8">
-      <div
-        className={clsx(
-          "container mx-auto flex max-w-screen-md flex-row items-center justify-between gap-3 rounded-full border border-transparent px-6 py-3 backdrop-blur-lg transition-colors duration-300 sm:gap-4 sm:py-4 lg:px-8 lg:py-6",
-          {
-            "bg-black/7": isSticky,
-            "bg-transparent": !isSticky,
-          }
-        )}
-      >
-        <Link
-          className="font-semibold font-serif text-2xl transition-colors hover:text-primary md:text-3xl lg:text-4xl"
-          href="/"
+    <header
+      className="sticky top-2 z-100 my-2 w-full sm:top-4 sm:my-4 lg:top-8 lg:my-8"
+      data-print-hidden
+    >
+      <Container>
+        {/* The pill reaches past the content edge by its own padding, so the logo
+            and the links sit exactly on the page's content edge. */}
+        <div
+          className={cn(
+            "-mx-3 flex flex-row items-center justify-between gap-3 rounded-full px-3 py-3 transition-colors duration-200 ease-out sm:-mx-5 sm:gap-4 sm:px-5 sm:py-4 lg:-mx-8 lg:px-8 lg:py-6",
+            isSticky ? "bg-black/7 backdrop-blur-md" : "bg-transparent"
+          )}
         >
-          the montessorians
-        </Link>
-
-        <div className="flex h-5 items-center gap-3 sm:gap-4 lg:gap-6">
-          {links.map((link) => (
-            <Link
-              className="flex flex-row items-center gap-2 font-semibold text-sm transition-colors hover:underline sm:text-base"
-              href={link.href}
-              key={link.label}
-            >
-              {link.label}
-            </Link>
-          ))}
           <Link
-            className="hidden flex-row items-center gap-2 font-semibold text-base transition-colors hover:underline sm:flex"
-            href="https://github.com/renaissanceabc/the-montessorians"
-            rel="noopener noreferrer"
-            target="_blank"
+            className="hover:text-primary min-w-0 font-serif text-[clamp(1rem,5.8vw,1.5rem)] font-semibold whitespace-nowrap transition-colors md:text-3xl lg:text-4xl"
+            href="/"
           >
-            <GitHubIcon className="h-4 w-4" />
-            Contribute
+            the montessorians
           </Link>
+
+          <nav aria-label="Main" className="flex h-5 shrink-0 items-center gap-3 sm:gap-4 lg:gap-6">
+            {links.map((link) => (
+              <Link
+                className="flex flex-row items-center gap-2 text-sm font-semibold transition-colors hover:underline sm:text-base"
+                href={link.href}
+                key={link.label}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              className="hidden rounded-md border border-black/20 px-3 py-1.5 text-base font-semibold transition-[color,background-color,border-color,scale] duration-150 ease-out hover:border-black/50 hover:bg-white/50 active:scale-[0.97] motion-reduce:active:scale-100 sm:flex"
+              href="/contribute"
+            >
+              Contribute
+            </Link>
+          </nav>
         </div>
-      </div>
+      </Container>
     </header>
   );
-}
+};
+
+export default Header;

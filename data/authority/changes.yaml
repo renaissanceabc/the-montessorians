@@ -1,0 +1,33 @@
+# Changes to records that would otherwise break an identifier.
+#
+# An id is never deleted or reused. When a record is merged into another or
+# withdrawn, add an entry here in the same pull request that removes its YAML
+# file. The site keeps /id/<id> and the old /<slug> working:
+#
+#   - merged: both redirect permanently to the surviving record
+#   - withdrawn: /id/<id> shows a short "withdrawn" notice
+#   - renamed: the old slug redirects to the record's current slug
+#
+# Fields:
+#   id:          the affected record's id (tm0000000 or tmo000000)
+#   action:      merged | withdrawn | renamed
+#   slug:        the slug the record had (renamed: the old slug)
+#   name:        the name the record had (merged / withdrawn only)
+#   replaced_by: id of the surviving record (merged only)
+#   date:        YYYY-MM-DD
+#   reason:      one line, public
+#
+# Example:
+#   - id: tm0000042
+#     action: merged
+#     slug: jane-q-doe
+#     name: Jane Q. Doe
+#     replaced_by: tm0000017
+#     date: 2026-10-12
+#     reason: Duplicate of Jane Doe
+
+- id: tm0000043
+  action: renamed
+  slug: sarah-gilbert
+  date: 2026-10-12
+  reason: Corrected spelling of her name (Sara, not Sarah)

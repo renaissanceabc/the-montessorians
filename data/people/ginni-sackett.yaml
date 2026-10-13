@@ -1,0 +1,56 @@
+---
+id: tm0000072
+name: Ginni Sackett
+slug: ginni-sackett
+kind: contributor
+roles:
+  - trainer
+name_authorized: Sackett, Ginni
+tagline: AMI trainer and former Director of Pedagogy at the Association Montessori Internationale
+bio: >-
+  Ginni Sackett is an AMI trainer, consultant, and examiner at the 3–6 level. She was 3–6 Director of Training at
+  Montessori Northwest in Portland, Oregon, until 2017, and served as AMI's Director of Pedagogy from 2018 to 2021.
+tags:
+  - educator
+  - writer
+montessori_notes: Trains Montessori teachers for the 3–6 age range.
+affiliations:
+  - organization: association-montessori-internationale
+    role: Director of Pedagogy
+    from: 2018
+    to: 2021
+  - organization: montessori-northwest
+    role: 3–6 Director of Training
+    to: 2017
+contributions:
+  - title: Literary Approaches for the Child under Six
+    type: article
+    year: 2001
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ639695
+  - title: '"The Lines That Make the Clouds": The Essence of the Mathematical Mind in the First Six Years of Life'
+    type: article
+    year: 2014
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ1183197
+  - title: "Grace and Courtesy: Empowering Children, Liberating Adults"
+    type: article
+    year: 2015
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ1077947
+  - title: "The Scientist in the Classroom: The Montessori Teacher as Scientist"
+    type: article
+    year: 2016
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ1112257
+  - title: "The Scientist in the Casa: The Child as Scientist in the Making"
+    type: article
+    year: 2016
+    venue: NAMTA Journal
+    url: https://eric.ed.gov/?id=EJ1112220
+sources:
+  - type: article
+    url: https://www.amiusa.org/pedagogical-articles-by-ami-trainers
+    note: AMI/USA biography of AMI trainers
+verification: verified
+image_credit: Photo courtesy of the Greenspring Montessori Center

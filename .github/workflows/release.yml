@@ -1,0 +1,55 @@
+name: Release
+
+# Tags and releases every version that reaches main. Each GitHub release is
+# also archived by Zenodo (see .zenodo.json), which mints a DOI for that
+# version of the dataset.
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Tag and release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tag and release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          version=$(git show "$GITHUB_SHA:apps/app/package.json" | jq -r '.version')
+          tag="v$version"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            echo "$tag is already released."
+            exit 0
+          fi
+
+          git show "$GITHUB_SHA:apps/app/CHANGELOG.md" > changelog.md 2>/dev/null || : > changelog.md
+
+          awk -v heading="## $version" '
+            $0 == heading { found = 1; next }
+            found && /^## / { exit }
+            found
+          ' changelog.md > release-notes.md
+
+          git tag "$tag" "$GITHUB_SHA"
+          git push origin "refs/tags/$tag"
+
+          if [ -s release-notes.md ]; then
+            gh release create "$tag" --title "$tag" --notes-file release-notes.md
+          else
+            gh release create "$tag" --generate-notes
+          fi

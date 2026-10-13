@@ -1,0 +1,95 @@
+# Controlled vocabulary for profile tags. Profiles may only use these slugs.
+# `aliases` are retired tags: their /tags/<alias> pages redirect here.
+# Retired with no replacement: performer (folded into actor or musician), icon, cultural-icon, cultural-ambassador, public-figure, historical-figure, holocaust-survivor, canadian, mit, knowledge, student, patent-holder, social-commentator.
+
+- slug: activist
+  label: Activist
+  aliases: [advocate, community-builder, food-activist, health-advocate, humanitarian, organizer]
+- slug: actor
+  label: Actor
+  aliases: [actress, child-star, comedian, voice-actor]
+- slug: artist
+  label: Artist
+  aliases: [architect, designer, photographer, visionary]
+- slug: athlete
+  label: Athlete
+  aliases: [all-american, basketball, nba, ncaa-champion]
+- slug: award-winner
+  label: Award Winner
+  aliases: [nobel-prize-winner, pulitzer-prize-winner]
+- slug: chef
+  label: Chef
+  aliases: [culinary-icon]
+- slug: educator
+  label: Educator
+  aliases: [education, education-advocate, lecturer, montessori-leader, school-founder, trainer]
+- slug: entrepreneur
+  label: Entrepreneur
+  aliases: [creator, founder, innovator, social-entrepreneur]
+- slug: environmentalist
+  label: Environmentalist
+  aliases: [environmental-studies, sustainability]
+- slug: executive
+  label: Executive
+  aliases: [management-consultant]
+- slug: fashion
+  label: Fashion
+  aliases: [fashion-designer, fashion-influencer, interior-designer]
+- slug: filmmaker
+  label: Filmmaker
+  aliases: [director, indie-film, producer, screenwriter]
+- slug: investor
+  label: Investor
+- slug: journalist
+  label: Journalist
+  aliases: [editor, publisher]
+- slug: magician
+  label: Magician
+  aliases: [endurance, illusionist, stunt-artist]
+- slug: marketing
+  label: Marketing
+  aliases: [brand-strategy, content-creator, social-media]
+- slug: military
+  label: Military
+  aliases: [veteran]
+- slug: musician
+  label: Musician
+  aliases: [cellist, classical, classical-musician, singer, songwriter, violinist]
+- slug: philanthropist
+  label: Philanthropist
+- slug: philosopher
+  label: Philosopher
+  aliases: [classics, philosophy, theorist]
+- slug: physician
+  label: Physician
+  aliases: [doctor, family-medicine, health-expert, pediatrician]
+- slug: psychologist
+  label: Psychologist
+  aliases: [child-development, counselor]
+- slug: public-service
+  label: Public Service
+  aliases: [first-lady, government, international-relations, policy-advisor, political-figure, public-affairs]
+- slug: researcher
+  label: Researcher
+  aliases: [academia, academic, professor, research]
+- slug: royalty
+  label: Royalty
+  aliases: [heir, royal]
+- slug: scientist
+  label: Scientist
+  aliases: [linguist, physicist, physics, stem]
+- slug: speaker
+  label: Speaker
+  aliases: [spiritual-teacher]
+- slug: technology
+  label: Technology
+  aliases: [ai, crypto, defense-technology, game-designer, gaming, internet, tech, web3, wikipedia]
+- slug: television
+  label: Television
+  aliases: [television-presenter, tv-host, tv-personality]
+- slug: theater
+  label: Theater
+  aliases: [broadway]
+- slug: writer
+  label: Writer
+  aliases: [author, columnist, diarist, historical-fiction, novelist]

@@ -1,14 +1,92 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Polymath Profile",
+  "title": "Montessorian Profile",
+  "description": "A person record in The Montessorians name authority. See docs/authority.md and docs/editorial-policy.md.",
   "type": "object",
-  "required": ["name", "slug", "tagline", "tags"],
+  "required": ["id", "name", "slug", "tagline", "tags"],
+  "definitions": {
+    "year": {
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 2100
+    },
+    "orgRef": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "The slug of an organization in /organizations"
+    }
+  },
   "properties": {
-    "name": { "type": "string", "description": "The full name of the person" },
+    "id": {
+      "type": "string",
+      "pattern": "^tm[0-9]{7}$",
+      "description": "Permanent identifier (e.g. tm0000001). Never changes and is never reused. Get the next one with `bun run id:next`."
+    },
+    "name": {
+      "type": "string",
+      "description": "The full name of the person, as it is displayed"
+    },
     "slug": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$",
-      "description": "The slug of the person, used to identify the person in the URL"
+      "description": "The slug of the person, used in the URL. May change; the id may not."
+    },
+    "kind": {
+      "description": "alum: attended Montessori. contributor: contributed to the field with documented contributions. Use a list for someone who is both.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["alum", "contributor"]
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["alum", "contributor"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      ],
+      "default": "alum"
+    },
+    "roles": {
+      "type": "array",
+      "description": "Contributor roles. Required when kind is contributor.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "founder",
+          "trainer",
+          "practitioner",
+          "teacher-scholar",
+          "researcher",
+          "author",
+          "philosopher"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "pinned": {
+      "type": "boolean",
+      "description": "Listed first in its collection by default (e.g. Maria Montessori)"
+    },
+    "name_authorized": {
+      "type": "string",
+      "description": "Authorized heading, inverted, following LCNAF where one exists (e.g. \"Lillard, Angeline Stoll\")"
+    },
+    "name_variants": {
+      "type": "array",
+      "description": "Other forms of the name, including other scripts",
+      "items": {
+        "type": "string"
+      }
+    },
+    "birth_year": {
+      "$ref": "#/definitions/year"
+    },
+    "death_year": {
+      "$ref": "#/definitions/year"
     },
     "tagline": {
       "type": "string",
@@ -22,7 +100,9 @@
     },
     "tags": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "education": {
       "type": "array",
@@ -37,15 +117,209 @@
       "maxLength": 1000,
       "description": "Additional notes about the person's education"
     },
+    "schools": {
+      "type": "array",
+      "description": "Montessori schools the person attended",
+      "items": {
+        "type": "object",
+        "required": ["organization"],
+        "properties": {
+          "organization": {
+            "$ref": "#/definitions/orgRef"
+          },
+          "level": {
+            "type": "string",
+            "enum": ["infant-toddler", "primary", "elementary", "adolescent", "secondary"]
+          },
+          "from": {
+            "$ref": "#/definitions/year"
+          },
+          "to": {
+            "$ref": "#/definitions/year"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "montessori_notes": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "How a contributor contributes to Montessori"
+    },
+    "affiliations": {
+      "type": "array",
+      "description": "Schools, universities, training centers, and organizations the person is or was affiliated with",
+      "items": {
+        "type": "object",
+        "required": ["organization"],
+        "properties": {
+          "organization": {
+            "$ref": "#/definitions/orgRef"
+          },
+          "role": {
+            "type": "string"
+          },
+          "from": {
+            "$ref": "#/definitions/year"
+          },
+          "to": {
+            "$ref": "#/definitions/year"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "contributions": {
+      "type": "array",
+      "description": "Documented contributions: publications, research outputs, training programs, and other works",
+      "items": {
+        "type": "object",
+        "required": ["title", "type"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["book", "article", "chapter", "lecture", "training-program", "media", "other"]
+          },
+          "year": {
+            "$ref": "#/definitions/year"
+          },
+          "venue": {
+            "type": "string",
+            "description": "Publisher, journal, or institution"
+          },
+          "doi": {
+            "type": "string",
+            "pattern": "^10\\.\\d{4,9}/\\S+$"
+          },
+          "isbn": {
+            "type": "string",
+            "pattern": "^(97[89])?\\d{9}[\\dX]$"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "authors": {
+            "type": "array",
+            "description": "All authors in publication order, including this person",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
     "notable_achievements": {
       "type": "array",
       "description": "Notable achievements or accomplishments of the person",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "quotes": {
       "type": "array",
       "description": "Quotes from the person regarding their education",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "Evidence for the person's connection to Montessori",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "wikipedia",
+              "article",
+              "social",
+              "publication",
+              "authority",
+              "personal-knowledge",
+              "other"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "verification": {
+      "type": "string",
+      "enum": ["verified", "reported", "confirmed", "unverified"],
+      "description": "verified: backed by a published source. reported: from personal knowledge. confirmed: confirmed directly by the person or by the maintainers. unverified: listed, but no reliable source yet."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["provisional", "reviewed"],
+      "default": "provisional",
+      "description": "Editorial status of the record"
+    },
+    "identifiers": {
+      "type": "object",
+      "description": "The same person in other authority files",
+      "properties": {
+        "lcnaf": {
+          "type": "string",
+          "pattern": "^n[a-z]?[0-9]{8,10}$"
+        },
+        "viaf": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "wikidata": {
+          "type": "string",
+          "pattern": "^Q[0-9]+$"
+        },
+        "orcid": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+        },
+        "isni": {
+          "type": "string",
+          "pattern": "^[0-9]{15}[0-9X]$"
+        },
+        "snac": {
+          "type": "string",
+          "pattern": "^[0-9a-z]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "glossary_citations": {
+      "type": "array",
+      "description": "Montessori Glossary terms whose notes cite this person",
+      "items": {
+        "type": "object",
+        "required": ["label", "url"],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "image_credit": {
+      "type": "string",
+      "description": "Who took the profile photo and where it came from (e.g. \"Photo by Jane Doe, via Wikimedia Commons\")"
     },
     "links": {
       "type": "array",
@@ -61,8 +335,56 @@
           },
           "type": {
             "type": "string",
-            "enum": ["wikipedia", "website", "linkedin", "x", "instagram", "tiktok", "article", "youtube", "imdb"],
+            "enum": [
+              "wikipedia",
+              "website",
+              "linkedin",
+              "x",
+              "instagram",
+              "tiktok",
+              "article",
+              "youtube",
+              "imdb"
+            ],
             "description": "The type of link"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "related": {
+      "type": "array",
+      "description": "People this person is related to. Only one side needs to record it; the inverse is filled in automatically. Co-authors are derived from shared contributions.",
+      "items": {
+        "type": "object",
+        "required": ["person", "relation"],
+        "properties": {
+          "person": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Slug of the related person"
+          },
+          "relation": {
+            "type": "string",
+            "enum": [
+              "parent",
+              "child",
+              "sibling",
+              "spouse",
+              "trained_by",
+              "trained",
+              "advisor",
+              "advisee",
+              "colleague"
+            ],
+            "description": "How the related person relates to this one, e.g. parent: they are this person's parent"
+          },
+          "source": {
+            "type": "string",
+            "format": "uri"
+          },
+          "note": {
+            "type": "string"
           }
         },
         "additionalProperties": false

@@ -1,0 +1,51 @@
+---
+id: tm0000041
+name: Prince William
+slug: prince-william
+name_authorized: William, Prince of Wales, 1982-
+birth_year: 1982
+tagline: Heir apparent to the British throne and advocate for conservation and mental health
+bio: >-
+  Prince William, Prince of Wales, is the eldest son of King Charles III and the late Princess Diana. As the heir
+  apparent to the British throne, he is known for his public service, advocacy for mental health, and leadership in
+  environmental conservation.
+tags:
+  - royalty
+  - environmentalist
+  - activist
+education:
+  - montessori
+education_notes: >-
+  Prince William attended a Montessori nursery school in London. His mother, Princess Diana, was a Montessori assistant
+  and proponent of the method's emphasis on independent exploration and emotional development.
+notable_achievements:
+  - Founder of the Earthshot Prize for climate innovation
+  - Senior royal and first in line to the throne
+  - Advocate for mental health and youth wellbeing
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/William,_Prince_of_Wales
+identifiers:
+  lcnaf: n83035580
+  viaf: "232263808"
+  wikidata: Q36812
+  isni: "0000000367648998"
+sources:
+  - type: article
+    url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries
+    note: Reports William and Harry were taught at a Montessori nursery at Mrs Mynors School in west London
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Prince_William,_Prince_of_Wales
+    note: Says he started at Jane Mynors' nursery school in London (does not call it Montessori)
+  - type: article
+    url: https://www.pressreader.com/uk/scottish-daily-mail/20160107/281483570366710
+    note: Daily Mail describes Mrs Mynors' Nursery School, which he started in 1985, as a Montessori
+  - type: article
+    url: https://www.hellomagazine.com/royalty/20220824149141/princess-diana-changed-education-royal-family/
+    note: Diana chose Montessori-style schooling for her sons
+verification: verified
+schools:
+  - organization: mrs-mynors-nursery-school
+    level: primary
+    from: 1985
+    to: 1987

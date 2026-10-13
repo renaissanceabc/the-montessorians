@@ -1,30 +1,34 @@
 import Link from "next/link";
+
+import { Container } from "@/components/container";
 import Contribute from "@/components/contribute";
+import { getDirectoryCounts } from "@/lib/content/directory";
+import { getAllProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
 
-export const generateMetadata = () => {
-  return createMetadata({
-    title: "About",
-    description: "About The Montessorians, an open source directory of Montessori alumni.",
+export const generateMetadata = () =>
+  createMetadata({
     alternates: {
       canonical: `${siteUrl}/about`,
     },
+    description:
+      "About The Montessorians, an open directory and name authority for Montessori alumni and the people who shaped the field.",
+    title: "About",
   });
-};
 
-export default function About() {
+const About = () => {
+  const counts = getDirectoryCounts();
+  const works = getAllProfiles().reduce((sum, p) => sum + p.contributions.length, 0);
   return (
-    <div className="container mx-auto max-w-3xl items-center justify-between gap-10 px-4 sm:px-6 lg:px-8">
-      <div className="w-full space-y-8 pt-12">
-        <h1 className="flex w-full justify-center font-bold font-serif text-4xl lg:text-5xl">
-          About us
-        </h1>
+    <>
+      <Container className="flex flex-col gap-8 pt-6 pb-12 lg:pt-8" size="reading">
+        <h1 className="type-title">About us</h1>
 
-        <div className="prose prose-stone">
+        <div className="prose prose-stone prose-code:before:content-none prose-code:after:content-none max-w-none">
           <p className="lead text-primary">
-            <strong className="text-primary">The Montessorians</strong> is the largest open source
-            dataset of Montessori alumni who've gone on to do great things.
+            <strong className="text-primary">The Montessorians</strong> is the largest open
+            directory of people shaped by Montessori, and of the people who shaped it.
           </p>
 
           <p>
@@ -39,31 +43,52 @@ export default function About() {
           </p>
 
           <p>
-            Created by{" "}
-            <Link className="underline" href="https://renaissance.education">
-              Renaissance
+            We also document the researchers, authors, and trainers behind the method, starting with
+            Maria Montessori herself. Every profile lists its sources (see our{" "}
+            <Link className="underline" href="/about/editorial-policy">
+              editorial policy
             </Link>
-            , an education startup studio, The Montessorians is fully open source and
-            community-driven. It is open for contributions under a{" "}
-            <Link
-              className="underline"
-              href="https://github.com/renaissanceabc/the-montessorians/blob/main/LICENSE.md"
-            >
-              Creative Commons CC0 license
+            ), and the full dataset is free to use through our{" "}
+            <Link className="underline" href="/data">
+              Data &amp; API
             </Link>
             .
           </p>
 
-          <h3>What is Montessori?</h3>
+          <p>
+            So far, that’s {counts.all} people, {counts.organizations} schools and organizations,
+            and {works} books, papers, and lectures.
+          </p>
+
+          <p>
+            <Link className="underline" href="https://renaissance.education">
+              Renaissance
+            </Link>{" "}
+            made The Montessorians, and it’s open source. The data is in the public domain under{" "}
+            <Link
+              className="underline"
+              href="https://github.com/renaissanceabc/the-montessorians/blob/main/LICENSE.md"
+            >
+              CC0
+            </Link>
+            , so take it and build something. Know someone who belongs here?{" "}
+            <Link className="underline" href="/contribute">
+              Add them
+            </Link>
+            .
+          </p>
+
+          <h2>What is Montessori?</h2>
 
           <p>
             Pioneered by{" "}
             <Link className="underline" href="https://en.wikipedia.org/wiki/Maria_Montessori">
               Maria Montessori
             </Link>
-            , the Montessori method is a progressive educational approach that emphasizes children's
-            natural interests and activities, rather than traditional teaching methods. Montessori
-            classrooms focus on hands-on learning and developing real-world skills.
+            , the Montessori method is a progressive educational approach that emphasizes
+            children&apos;s natural interests and activities, rather than traditional teaching
+            methods. Montessori classrooms focus on hands-on learning and developing real-world
+            skills.
           </p>
 
           <p>
@@ -73,30 +98,29 @@ export default function About() {
           </p>
 
           <blockquote className="border-l-primary">
-            “The greatest sign of success for a teacher is to be able to say, "The children are now
-            working as if I did not exist.” – Maria Montessori
+            “The greatest sign of success for a teacher is to be able to say, ‘The children are now
+            working as if I did not exist.’” – Maria Montessori
           </blockquote>
 
-          <h3>Our Mission</h3>
+          <h2>Our Mission</h2>
 
           <p>
-            Beyond spotlighting the achievements of Montessori alumni — which spans beyond famous
-            figures to include extraordinary everyday people — we hope to offer a greater
-            understanding of the potential of alternative education outside of the public school
-            system.
+            Montessori has been around for more than a century, yet most parents first hear about it
+            secondhand: a famous name, or a neighbor’s kid. We want to show where it leads, and
+            where its ideas come from.
           </p>
 
           <p>
             Although we have transformed how we bank, shop, and work... school and education largely
-            remains the same as it did 150 years ago. And in today's fast-changing world that has
-            already been reshaped by the advent of AI, we need to rethink how we educate our
+            remains the same as it did 150 years ago. And in today&apos;s fast-changing world that
+            has already been reshaped by the advent of AI, we need to rethink how we educate our
             children.
           </p>
 
           <p>
             We believe this begins with choice and discovery. With an understanding of the options
             available. With this, we can begin to make informed, intentional decisions around our
-            children's education.
+            children&apos;s education.
           </p>
 
           <p>
@@ -106,12 +130,13 @@ export default function About() {
 
           <p>
             We hope to change that with the first and largest open source dataset of Montessori
-            alumni.
+            alumni and contributors.
           </p>
         </div>
+      </Container>
 
-        <Contribute />
-      </div>
-    </div>
+      <Contribute size="reading" />
+    </>
   );
-}
+};
+export default About;

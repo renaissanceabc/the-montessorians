@@ -1,0 +1,35 @@
+id: tm0000061
+name: Kaliroe Pappas
+slug: kaliroe-pappas
+name_authorized: Pappas, Kaliroe
+tagline: PhD Candidate in Particle Physics at MIT
+bio: >-
+  Kaliroe Pappas is currently a PhD candidate in Particle Physics at the Massachusetts Institute of Technology (MIT).
+tags:
+  - scientist
+  - researcher
+education:
+  - montessori
+education_notes: >-
+  Kaliroe Pappas completed her early education journey, from Early Childhood through 8th grade, at Chiaravalle
+  Montessori (Class of 2011), which she states helped nurture her passion for math and science.
+notable_achievements:
+  - PhD Candidate in Particle Physics at MIT
+  - Conducted research in cosmology and black holes
+  - Successfully completed a “chalk talk” at MIT demonstrating depth of knowledge
+links:
+  - type: website
+    url: https://www.chiaravalle.org/community/alumni/kaliroe
+schools:
+  - organization: chiaravalle-montessori
+    to: 2011
+sources:
+  - type: other
+    url: https://www.chiaravalle.org/community/alumni/kaliroe
+    note: "School alumni profile: attended Chiaravalle Montessori from early childhood through 8th grade, class of 2011"
+  - type: other
+    url: https://www.chiaravalle.org/community/alumni
+    note: Chiaravalle alumni page features her story, class of 2011
+identifiers:
+  orcid: 0000-0003-4250-6766
+verification: verified

@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+/**
+ * Prints the next unused permanent id.
+ *
+ *   bun run id:next          → next person id (tm0000067)
+ *   bun run id:next -- org   → next organization id (tmo000004)
+ *
+ * Ids recorded in data/authority/changes.yaml count as used: an id is never reused.
+ */
+
+import fs from "node:fs";
+import path from "node:path";
+
+import { load } from "js-yaml";
+
+const ROOT = path.join(import.meta.dirname, "..");
+const isOrg = process.argv.includes("org");
+const [dir, prefix, width] = isOrg ? ["data/organizations", "tmo", 6] : ["data/people", "tm", 7];
+const pattern = new RegExp(`^${prefix}(\\d{${width}})$`, "u");
+
+const used = [];
+const fullDir = path.join(ROOT, dir);
+for (const file of fs.existsSync(fullDir) ? fs.readdirSync(fullDir) : []) {
+  if (file.endsWith(".yaml")) {
+    used.push(load(fs.readFileSync(path.join(fullDir, file), "utf-8"))?.id);
+  }
+}
+for (const change of load(
+  fs.readFileSync(path.join(ROOT, "data", "authority", "changes.yaml"), "utf-8")
+) ?? []) {
+  used.push(change.id);
+}
+
+const max = Math.max(0, ...used.map((id) => Number(pattern.exec(id ?? "")?.[1] ?? 0)));
+console.log(`${prefix}${String(max + 1).padStart(width, "0")}`);

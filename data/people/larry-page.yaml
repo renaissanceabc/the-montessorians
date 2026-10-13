@@ -1,0 +1,45 @@
+---
+id: tm0000030
+name: Larry Page
+slug: larry-page
+name_authorized: Page, Larry
+birth_year: 1973
+tagline: Co-founder of Google and pioneer of the modern web
+bio: >-
+  Larry Page is a computer scientist and entrepreneur best known as the co-founder of Google. Alongside Sergey Brin, he
+  developed the PageRank algorithm that revolutionized internet search and helped shape the digital information era.
+tags:
+  - technology
+  - entrepreneur
+education:
+  - montessori
+education_notes: >-
+  Larry Page attended a Montessori school and often credits it with inspiring his creativity, curiosity, and
+  self-direction as a learner.
+notable_achievements:
+  - Co-founder of Google and Alphabet Inc.
+  - Creator of the PageRank algorithm
+  - One of the most influential tech leaders of the 21st century
+quotes:
+  - "We both went to Montessori school, and I think it was part of that training … of being self-motivated, questioning
+    what's going on in the world, doing things a little bit different."
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Larry_Page
+schools:
+  - organization: okemos-montessori-school
+    from: 1975
+    to: 1979
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Larry_Page
+    note: Says he attended Okemos Montessori School (now Montessori Radmoor) from ages two to seven, 1975-1979
+  - type: article
+    url: https://fortune.com/2023/11/14/the-geek-way-book-excerpt-larry-page-sergey-brin-jeff-bezos-montessori
+    note: Book excerpt recounts Page telling Barbara Walters in 2004 that he and Brin both went to Montessori
+verification: verified
+identifiers:
+  lcnaf: n2005086596
+  viaf: "35624513"
+  wikidata: Q4934
+  isni: "0000000430764124"
