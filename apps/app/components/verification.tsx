@@ -12,9 +12,11 @@ import { cn } from "@/lib/utils";
 export const VerificationBadge = ({
   verification,
   href = "#sources",
+  className,
 }: {
   verification: Verification | null;
   href?: string;
+  className?: string;
 }) => {
   if (!verification) {
     return null;
@@ -29,10 +31,11 @@ export const VerificationBadge = ({
           <Link
             aria-label={`${copy.label}: ${copy.description}`}
             className={cn(
-              "inline-flex shrink-0 items-center justify-center rounded-full transition-colors",
+              "inline-flex shrink-0 items-center justify-center rounded-full font-sans tracking-normal transition-colors",
               solid
                 ? "size-10 transition-opacity hover:opacity-80"
-                : "text-muted-foreground h-7 gap-1 border border-black/20 px-2.5 text-xs font-medium hover:border-black/40"
+                : "text-muted-foreground h-7 gap-1 border border-black/20 px-2.5 text-xs font-medium hover:border-black/40",
+              className
             )}
             href={href}
           />
