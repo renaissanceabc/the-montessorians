@@ -78,7 +78,7 @@ const About = () => {
             .
           </p>
 
-          <h3>What is Montessori?</h3>
+          <h2>What is Montessori?</h2>
 
           <p>
             Pioneered by{" "}
@@ -102,7 +102,7 @@ const About = () => {
             working as if I did not exist.’” – Maria Montessori
           </blockquote>
 
-          <h3>Our Mission</h3>
+          <h2>Our Mission</h2>
 
           <p>
             Montessori has been around for more than a century, yet most parents first hear about it

@@ -862,6 +862,7 @@ export const ContributeForm = ({
                         </FieldContent>
                         <Checkbox
                           aria-invalid={fieldState.invalid || undefined}
+                          aria-label={label}
                           checked={on}
                           className={cn(on && "text-secondary! border-white! bg-white!")}
                           id={i === 0 ? fieldId("kinds") : undefined}

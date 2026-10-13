@@ -55,7 +55,7 @@ const Footer = () => (
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-12 lg:gap-x-16">
           {GROUPS.map((group) => (
             <nav aria-label={group.title} className="flex flex-col gap-3" key={group.title}>
-              <span className="type-eyebrow text-white/60">{group.title}</span>
+              <span className="type-eyebrow text-white/70">{group.title}</span>
               {group.links.map((link) => (
                 <Link
                   className="w-fit text-sm text-white/75 transition-colors hover:text-white hover:underline"
@@ -71,7 +71,7 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 border-t border-white/14 pt-5 text-[13px] text-white/60 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-2 border-t border-white/14 pt-5 text-[13px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
         <span>Data dedicated to the public domain (CC0). Code open source.</span>
         <Link
           className="inline-flex w-fit items-center gap-1.5 text-white/75 transition-colors hover:text-white"
