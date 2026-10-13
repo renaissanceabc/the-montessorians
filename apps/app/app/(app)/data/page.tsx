@@ -63,7 +63,9 @@ const Data = () => {
             <Link href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</Link>.
           </p>
 
-          <h3>Permanent identifiers</h3>
+          <h3 className="scroll-mt-28" id="permanent-identifiers">
+            Permanent identifiers
+          </h3>
           <p>
             Every record has an identifier that never changes and is never reused, even if the
             person&apos;s name or page address changes. Cite records by their URI:
@@ -95,7 +97,9 @@ const Data = () => {
             published from <Link href={`${REPO_URL}/releases`}>GitHub releases</Link>.
           </p>
 
-          <h3>Reconciliation API</h3>
+          <h3 className="scroll-mt-28" id="reconciliation-api">
+            Reconciliation API
+          </h3>
           <p>
             Match your own list of names against this dataset with any client that speaks the{" "}
             <Link href="https://www.w3.org/community/reports/reconciliation/CG-FINAL-specs-0.2-20230410/">
