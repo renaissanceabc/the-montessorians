@@ -4,7 +4,6 @@ import { BadgeCheckIcon, InfoIcon, MessageCircleIcon, UserCheckIcon } from "luci
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Verification } from "@/lib/content/types";
 import { POLICY_HREF, VERIFICATION_COPY } from "@/lib/content/verification";
@@ -59,39 +58,25 @@ export const VerificationBadge = ({
   );
 };
 
-/** The (i) beside "Sources": explains all four states, links to the policy. */
+/**
+ * The (i) beside "Sources": a link to the editorial policy, with a one-line hint on
+ * hover and focus. The link itself stays reachable by touch and keyboard.
+ */
 export const HowWeVerify = () => (
-  <Popover>
-    <PopoverTrigger
+  <Tooltip>
+    <TooltipTrigger
       render={
-        <button
-          aria-label="How we verify"
-          className="text-muted-foreground hover:text-foreground flex size-6 items-center justify-center rounded-full transition-colors hover:bg-black/5 data-popup-open:bg-black/5"
-          type="button"
+        <Link
+          aria-label="How we verify profiles: read the editorial policy"
+          className="text-muted-foreground hover:text-foreground flex size-6 items-center justify-center rounded-full transition-colors hover:bg-black/5"
+          href={POLICY_HREF}
         />
       }
     >
-      <InfoIcon className="size-3.5" />
-    </PopoverTrigger>
-    <PopoverContent align="start" className="flex w-80 flex-col gap-3 text-sm">
-      <p className="font-semibold">How we verify</p>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-2.5 gap-y-2">
-        {
-          // SAFETY: VERIFICATION_COPY is typed Record<Verification, ...>, so its own keys are exactly the Verification values.
-          (Object.keys(VERIFICATION_COPY) as Verification[]).map((key) => (
-            <div className="contents" key={key}>
-              <dt className="font-medium">{VERIFICATION_COPY[key].label}</dt>
-              <dd className="text-muted-foreground">{VERIFICATION_COPY[key].description}</dd>
-            </div>
-          ))
-        }
-      </dl>
-      <p className="text-muted-foreground text-xs">
-        Unsourced &quot;famous alumni&quot; lists don&apos;t count. Every profile can be corrected.
-      </p>
-      <Link className="text-sm font-semibold hover:underline" href={POLICY_HREF}>
-        Read the full policy →
-      </Link>
-    </PopoverContent>
-  </Popover>
+      <InfoIcon aria-hidden="true" className="size-3.5" />
+    </TooltipTrigger>
+    <TooltipContent className="max-w-64">
+      <p className="leading-snug text-pretty">How we verify profiles: read the editorial policy.</p>
+    </TooltipContent>
+  </Tooltip>
 );
