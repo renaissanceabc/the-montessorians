@@ -1,60 +1,58 @@
-import { ArrowRightIcon, StarsIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 import { ProfilePhoto } from "@/components/profile-photo";
-import { Badge } from "@/components/ui/badge";
 import type { Profile } from "@/lib/content/types";
+
+const CARD = "flex w-full flex-col items-center rounded-2xl border border-black/8 bg-white/55 p-7";
 
 const ArchiveLink = () => (
   <Link
-    className="text-muted-foreground flex flex-row items-center gap-1 text-xs hover:underline"
+    className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs hover:underline"
     href="/archive"
   >
     See past Montessorians <ArrowRightIcon aria-hidden="true" className="size-3" />
   </Link>
 );
 
+/** "Today's Montessorian": the daily alumni spotlight beside the hero. */
 const FeaturedProfile = ({ dailyProfile }: { dailyProfile: Profile | null }) => (
-  <div className="flex w-full flex-col items-center gap-4 md:w-72 md:shrink-0">
-    <h2 className="type-eyebrow text-foreground flex items-center gap-2">
-      <StarsIcon aria-hidden="true" className="size-4" />
-      Today&apos;s Montessorian
-    </h2>
-
+  <div className="flex w-full flex-col items-center gap-3 max-lg:mx-auto max-lg:max-w-[400px]">
     {dailyProfile ? (
       <Link
-        className="group flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-black/10 bg-white/50 p-5 transition-[color,background-color,border-color,scale] duration-150 ease-out hover:bg-white active:scale-[0.985] motion-reduce:active:scale-100"
+        aria-labelledby="todays-montessorian"
+        className={`${CARD} group gap-4 text-center transition-[background-color,border-color,scale] duration-150 ease-out hover:border-black/15 hover:bg-white active:scale-[0.985] motion-reduce:active:scale-100`}
         href={`/${dailyProfile.slug}`}
       >
+        <span className="type-eyebrow" id="todays-montessorian">
+          Today&apos;s Montessorian
+          <span className="sr-only">: {dailyProfile.name}</span>
+        </span>
         <ProfilePhoto
-          className="size-28 lg:size-32"
-          initialClassName="text-5xl"
+          className="size-28 lg:size-40"
+          initialClassName="text-5xl lg:text-6xl"
           name={dailyProfile.name}
           preload
-          size={128}
+          size={160}
           src={dailyProfile.imageUrl}
         />
-
-        <div className="flex min-w-0 flex-col items-center gap-2 text-center">
-          <span className="type-name group-hover:text-primary text-2xl transition-colors">
+        <span className="flex min-w-0 flex-col items-center gap-2">
+          <span className="type-name group-hover:text-primary text-[1.75rem] transition-colors">
             {dailyProfile.name}
           </span>
           {dailyProfile.tagline && (
-            <p className="text-muted-foreground line-clamp-3 text-sm">{dailyProfile.tagline}</p>
+            <span className="line-clamp-3 text-[15px] text-pretty text-[#4A433D]">
+              {dailyProfile.tagline}
+            </span>
           )}
-          {dailyProfile.tags.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-1">
-              {dailyProfile.tags.slice(0, 3).map((tag) => (
-                <Badge className="text-xs" key={tag.slug} variant="outline">
-                  {tag.label}
-                </Badge>
-              ))}
-            </div>
-          )}
-        </div>
+        </span>
+        <span className="text-primary flex items-center gap-1 text-sm font-semibold group-hover:underline">
+          Read the profile <ArrowRightIcon aria-hidden="true" className="size-4" />
+        </span>
       </Link>
     ) : (
-      <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-xl border border-black/20 bg-white/50 p-5 text-center">
+      <div className={`${CARD} gap-3 text-center`}>
+        <span className="type-eyebrow">Today&apos;s Montessorian</span>
         <span className="type-name">No spotlight today</span>
         <p className="text-muted-foreground text-sm">Check back tomorrow for a new Montessorian.</p>
       </div>

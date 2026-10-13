@@ -31,7 +31,9 @@ const Home = () => {
 
   return (
     <>
-      <Hero dailyProfile={dailyProfile} />
+      <Container className="pt-8 lg:pt-16">
+        <Hero dailyProfile={dailyProfile} />
+      </Container>
 
       <Container as="section" className="flex flex-col gap-5 py-12">
         <div className="flex flex-row items-end justify-between gap-4">
