@@ -37,4 +37,10 @@ identifiers:
   wikidata: Q84238
   isni: "000000012117813X"
   snac: w6fn1x56
+sources:
+  - type: article
+    url: https://web.archive.org/web/20220706131115/https://www.drucker.institute/thedx/was-drucker-a-montessori-mafioso/
+    note: >-
+      Drucker Institute (2011) says it doesn't believe he attended a Montessori school; he went to Vienna's Schwarzwald
+      School as a boy
 verification: unverified
