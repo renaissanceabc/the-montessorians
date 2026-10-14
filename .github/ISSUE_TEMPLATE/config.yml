@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Add a Montessorian without a GitHub account
+    url: https://themontessorians.xyz/contribute
+    about: The form on the site opens the request for you.
+  - name: Editorial policy
+    url: https://themontessorians.xyz/about/editorial-policy
+    about: Who we include, what counts as evidence, and how verification works.

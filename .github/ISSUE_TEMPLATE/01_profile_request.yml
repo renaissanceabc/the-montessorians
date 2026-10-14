@@ -1,5 +1,5 @@
 name: New profile request
-description: Suggest a Montessori alum or someone who contributed to the field
+description: Suggest a Montessori alum or someone who shaped the field
 title: "New profile: "
 labels: ["profile-request"]
 assignees: ["karelvuong"]
@@ -7,10 +7,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting a Montessorian! You can also use the form at
-        https://themontessorians.xyz/contribute, which doesn't need a GitHub account.
-        See the [editorial policy](https://github.com/renaissanceabc/the-montessorians/blob/main/docs/editorial-policy.md)
-        for who we include and what counts as evidence.
+        No GitHub account? Use the [form on the site](https://themontessorians.xyz/contribute) instead.
+        We include people with a source we can check; the [editorial policy](https://themontessorians.xyz/about/editorial-policy) explains what counts.
   - type: dropdown
     id: kind
     attributes:
@@ -18,6 +16,7 @@ body:
       options:
         - Attended Montessori
         - Contributed to the field
+        - Both
     validations:
       required: true
   - type: input
@@ -30,21 +29,33 @@ body:
     id: tagline
     attributes:
       label: Tagline
-      description: A short description, under 100 characters, no period at the end
+      description: What they're known for, under 100 characters, no period at the end
     validations:
       required: true
   - type: input
     id: tags
     attributes:
       label: Tags
-      description: Comma separated, e.g. musician, cellist. Contributors — include roles (trainer, practitioner-scholar, researcher, author, philosopher).
+      description: Comma separated, from the [tag list](https://themontessorians.xyz/tags), e.g. musician, entrepreneur
     validations:
       required: true
   - type: input
+    id: roles
+    attributes:
+      label: Roles (contributors only)
+      description: Comma separated. founder, trainer, practitioner-scholar, researcher, author, or philosopher
+  - type: dropdown
     id: source_type
     attributes:
       label: Source type
-      description: wikipedia, article, social, publication, personal-knowledge, or other
+      options:
+        - wikipedia
+        - article
+        - social
+        - publication
+        - authority
+        - personal-knowledge
+        - other
     validations:
       required: true
   - type: textarea
@@ -52,12 +63,12 @@ body:
     attributes:
       label: Source
       description: >-
-        A link showing they attended Montessori (alumni) or documenting their contribution (contributors). For personal knowledge, tell us how you know them.
+        A link showing they attended Montessori, or documenting their contribution to the field. For personal knowledge, say how you know them.
     validations:
       required: true
   - type: textarea
     id: profile
     attributes:
       label: Anything else (optional)
-      description: Bio, school, notable achievements or contributions, links — or a full profile in YAML.
+      description: Bio, schools, achievements, works, links, or a full profile in YAML
       render: yaml

@@ -1,0 +1,18 @@
+name: Idea
+description: Suggest a feature or improvement
+labels: ["enhancement"]
+assignees: ["karelvuong"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem?
+      description: What are you trying to do, and what gets in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?
+    validations:
+      required: true
