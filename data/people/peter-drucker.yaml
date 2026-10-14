@@ -2,7 +2,10 @@
 id: tm0000038
 name: Peter Drucker
 slug: peter-drucker
-name_authorized: Drucker, Peter F. (Peter Ferdinand)
+name_authorized: Drucker, Peter F. (Peter Ferdinand), 1909-2005
+name_variants:
+  - Peter F. Drucker
+  - Peter Ferdinand Drucker
 birth_year: 1909
 death_year: 2005
 tagline: Visionary thinker who laid the foundation for modern management
@@ -32,4 +35,6 @@ identifiers:
   lcnaf: n79149070
   viaf: "2469565"
   wikidata: Q84238
+  isni: "000000012117813X"
+  snac: w6fn1x56
 verification: unverified

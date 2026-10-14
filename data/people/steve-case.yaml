@@ -2,7 +2,10 @@
 id: tm0000047
 name: Steve Case
 slug: steve-case
-name_authorized: Case, Steve
+name_authorized: Case, Steve, 1958-
+name_variants:
+  - Stephen McConnell Case
+  - Stephen M. Case
 birth_year: 1958
 tagline: Co-founder of AOL and internet pioneer
 bio: >-

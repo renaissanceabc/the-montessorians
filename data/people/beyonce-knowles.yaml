@@ -2,7 +2,10 @@
 id: tm0000006
 name: Beyoncé Knowles
 slug: beyonce-knowles
-name_authorized: Knowles, Beyoncé Giselle
+name_authorized: Beyoncé, 1981-
+name_variants:
+  - Beyoncé
+  - Beyoncé Giselle Knowles Carter
 birth_year: 1981
 tagline: Global music icon and business mogul redefining modern pop culture
 bio: >-

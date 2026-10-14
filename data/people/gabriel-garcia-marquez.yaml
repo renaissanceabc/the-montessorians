@@ -2,7 +2,9 @@
 id: tm0000013
 name: Gabriel García Márquez
 slug: gabriel-garcia-marquez
-name_authorized: García Márquez, Gabriel
+name_authorized: García Márquez, Gabriel, 1927-2014
+name_variants:
+  - Gabo
 birth_year: 1927
 death_year: 2014
 tagline: Nobel Prize-winning author who pioneered magical realism

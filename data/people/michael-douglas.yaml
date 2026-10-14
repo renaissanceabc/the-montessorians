@@ -2,7 +2,9 @@
 id: tm0000034
 name: Michael Douglas
 slug: michael-douglas
-name_authorized: Douglas, Michael
+name_authorized: Douglas, Michael, 1944-
+name_variants:
+  - Michael Kirk Douglas
 birth_year: 1944
 tagline: Award-winning actor and producer known for iconic roles in film and television
 bio: >-
@@ -36,4 +38,6 @@ identifiers:
   lcnaf: n85376869
   viaf: "84033248"
   wikidata: Q119798
+  isni: "0000000109201157"
+  snac: w69p3wvm
 verification: unverified

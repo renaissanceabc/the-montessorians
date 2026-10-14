@@ -2,7 +2,7 @@
 id: tm0000048
 name: Taylor Swift
 slug: taylor-swift
-name_authorized: Swift, Taylor
+name_authorized: Swift, Taylor, 1989-
 birth_year: 1989
 tagline: Global pop icon and award-winning singer-songwriter
 bio: >-
@@ -38,3 +38,4 @@ identifiers:
   viaf: "88580701"
   wikidata: Q26876
   isni: "0000000078519858"
+  snac: w6jv0hk7

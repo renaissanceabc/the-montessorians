@@ -2,7 +2,9 @@
 id: tm0000025
 name: John Cusack
 slug: john-cusack
-name_authorized: Cusack, John
+name_authorized: Cusack, John, 1966-
+name_variants:
+  - John Paul Cusack
 birth_year: 1966
 tagline: Actor and screenwriter known for iconic roles in cult classics
 bio: >-
@@ -26,4 +28,6 @@ identifiers:
   lcnaf: n95111489
   viaf: "85338940"
   wikidata: Q106175
+  isni: "0000000121420651"
+  snac: w6fn3tt7
 verification: unverified

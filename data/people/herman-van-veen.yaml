@@ -2,7 +2,9 @@
 id: tm0000018
 name: Herman van Veen
 slug: herman-van-veen
-name_authorized: Veen, Herman van
+name_authorized: Veen, Herman van, 1945-
+name_variants:
+  - Hermannus Jantinus van Veen
 birth_year: 1945
 tagline: Dutch singer-songwriter, actor, and creator of "Alfred J. Kwak"
 bio: >-

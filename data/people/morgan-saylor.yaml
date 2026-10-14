@@ -2,7 +2,9 @@
 id: tm0000035
 name: Morgan Saylor
 slug: morgan-saylor
-name_authorized: Saylor, Morgan
+name_authorized: Saylor, Morgan, 1994-
+name_variants:
+  - Morgan Frances Saylor
 birth_year: 1994
 tagline: Actress best known for her breakout role in "Homeland"
 bio: >-

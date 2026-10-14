@@ -2,7 +2,7 @@
 id: tm0000016
 name: Helen Hunt
 slug: helen-hunt
-name_authorized: Hunt, Helen
+name_authorized: Hunt, Helen, 1963-
 birth_year: 1963
 tagline: Emmy and Oscar-winning actress known for range and emotional depth
 bio: >-
@@ -30,5 +30,7 @@ identifiers:
   lcnaf: no96009636
   viaf: "85594182"
   wikidata: Q170574
+  isni: "0000000119853634"
+  snac: w63v0chn
 image_credit: Photo by John Russo/Contour RA
 verification: unverified
