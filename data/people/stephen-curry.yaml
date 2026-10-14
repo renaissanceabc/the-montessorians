@@ -1,0 +1,43 @@
+---
+id: tm0000046
+name: Stephen Curry
+slug: stephen-curry
+name_authorized: Curry, Stephen
+birth_year: 1988
+tagline: NBA superstar known for transforming the modern game
+bio: >-
+  Stephen Curry is a professional basketball player for the Golden State Warriors and widely regarded as the greatest
+  shooter in NBA history. A two-time MVP and multiple-time NBA champion, Curry revolutionized the game with his
+  three-point shooting and dynamic playmaking.
+tags:
+  - athlete
+education:
+  - montessori
+education_notes: >-
+  Stephen Curry attended a Montessori school, and his mother was a Montessori teacher. His family credits the method
+  with shaping his focus and creativity.
+notable_achievements:
+  - Four-time NBA Champion
+  - Two-time NBA MVP
+  - All-time leader in 3-point field goals
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Stephen_Curry
+schools:
+  - organization: christian-montessori-school-of-lake-norman
+identifiers:
+  lcnaf: no2014060072
+  viaf: "308698264"
+  wikidata: Q352159
+  isni: "0000000434305881"
+sources:
+  - type: article
+    url: https://www.gospelherald.com/news/nba-mvp-stephen-curry-shining-example-success-christian-montessori-school-system
+    note: Reports Curry attended the Christian Montessori school his mother founded and credited it in a 2013 AMS video
+  - type: other
+    url: https://www.mslf.org/famous-montessori-students
+    note: Montessori school page quotes Curry saying Montessori gave him confidence at a young age
+  - type: other
+    url: https://firststatemontessori.org/living-montessori-stephen-curry-family/
+    note: Describes the 2013 American Montessori Society video with the Curry family
+verification: verified

@@ -1,0 +1,47 @@
+---
+id: tm0000012
+name: Friedensreich Hundertwasser
+slug: friedensreich-hundertwasser
+name_authorized: Hundertwasser, Friedensreich
+birth_year: 1928
+death_year: 2000
+tagline: Visionary artist and architect who rejected straight lines and embraced nature
+bio: >-
+  Friedensreich Hundertwasser was a Viennese painter, architect, and environmentalist known for his colorful, organic
+  forms and bold rejection of symmetry and straight lines. His works often integrated natural elements and emphasized
+  ecological harmony, challenging traditional design principles and inspiring a movement toward more human-centered,
+  sustainable architecture.
+tags:
+  - artist
+  - environmentalist
+education:
+  - montessori
+education_notes: >-
+  Hundertwasser attended a Montessori school in Vienna, which likely influenced his deep respect for individuality,
+  freedom of expression, and the natural world—hallmarks of his artistic and architectural philosophy.
+notable_achievements:
+  - Creator of the Hundertwasserhaus in Vienna
+  - Pioneer of ecological building and green roof design
+  - Renowned for his vibrant, nature-inspired art and architecture
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Friedensreich_Hundertwasser
+  - type: website
+    url: https://www.hundertwasser.com/
+sources:
+  - type: other
+    url: https://hundertwasser.com/en/biography
+    note: >-
+      Official biography: in 1936 attended the Montessori School in Vienna for one year; report praised his sense of
+      colour and form
+  - type: other
+    url: https://emuseum.mcmaster.ca/emuseum/people/1461/hundertwasser-friedensreich
+    note: "McMaster Museum biography: attended the Montessori School in Vienna for one year in 1936"
+verification: verified
+identifiers:
+  lcnaf: n50036736
+  viaf: "12426797"
+  wikidata: Q151836
+  isni: "0000000108707869"
+  snac: w6572v71
+image_credit: Photo by Hannes Grobe, via Wikimedia Commons (CC BY-SA 2.5)

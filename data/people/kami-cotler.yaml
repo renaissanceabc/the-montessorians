@@ -1,0 +1,29 @@
+---
+id: tm0000028
+name: Kami Cotler
+slug: kami-cotler
+name_authorized: Cotler, Kami
+birth_year: 1965
+tagline: Actress and educator best known as Elizabeth Walton on "The Waltons"
+bio: >-
+  Kami Cotler is an American actress and educator who played the youngest Walton child, Elizabeth, on the long-running
+  television series "The Waltons." After her acting career, she became a school administrator and advocate for
+  progressive education.
+tags:
+  - actor
+  - educator
+education:
+  - montessori
+education_notes: >-
+  Kami Cotler attended a Montessori school, which supported her early development and creative expression.
+notable_achievements:
+  - Starred in "The Waltons"
+  - School administrator and educational leader
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Kami_Cotler
+identifiers:
+  lcnaf: no2010127737
+  viaf: "135286283"
+  wikidata: Q525401
+verification: unverified

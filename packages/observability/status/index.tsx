@@ -24,6 +24,8 @@ export const Status = async () => {
       throw new Error("Failed to fetch status");
     }
 
+    // SAFETY: Better Stack's documented /api/v2/monitors payload; a body that
+    // doesn't match throws below and falls back to "Unable to fetch status".
     const { data } = (await response.json()) as BetterStackResponse;
 
     const status =
@@ -46,7 +48,7 @@ export const Status = async () => {
 
   return (
     <a
-      className="flex items-center gap-3 font-medium text-sm"
+      className="flex items-center gap-3 text-sm font-medium"
       href={url}
       rel="noreferrer"
       target="_blank"

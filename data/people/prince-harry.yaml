@@ -1,0 +1,50 @@
+---
+id: tm0000040
+name: Prince Harry
+slug: prince-harry
+name_authorized: Harry, Prince, Duke of Sussex, 1984-
+birth_year: 1984
+tagline: British royal, veteran, and advocate for mental health and veterans' issues
+bio: >-
+  Prince Harry, Duke of Sussex, is a member of the British royal family and the younger son of King Charles III and
+  Princess Diana. He served in the British Army and co-founded the Invictus Games. In recent years, he has become a
+  vocal advocate for mental health and veterans' affairs.
+tags:
+  - royalty
+  - military
+  - activist
+education:
+  - montessori
+education_notes: >-
+  Prince Harry attended a Montessori nursery school during his early childhood. His mother, Princess Diana, worked as a
+  Montessori assistant and was a strong supporter of the method.
+notable_achievements:
+  - Co-founder of the Invictus Games
+  - Advocate for mental health through the Archewell Foundation
+  - Former Captain in the British Army
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Prince_Harry,_Duke_of_Sussex
+identifiers:
+  lcnaf: n00140230
+  viaf: "102307639"
+  wikidata: Q152316
+  isni: "0000000368065479"
+sources:
+  - type: article
+    url: https://www.itv.com/news/2016-01-24/prince-george-effect-sparks-surge-of-interest-in-montessori-nurseries
+    note: Reports William and Harry were taught at a Montessori nursery at Mrs Mynors School in west London
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Prince_Harry,_Duke_of_Sussex
+    note: Says he began at Jane Mynors' nursery school in London (does not call it Montessori)
+  - type: article
+    url: https://www.pressreader.com/uk/scottish-daily-mail/20160107/281483570366710
+    note: Daily Mail describes Mrs Mynors' Nursery School as a Montessori
+  - type: article
+    url: https://www.hellomagazine.com/royalty/20220824149141/princess-diana-changed-education-royal-family/
+    note: Shows his first day at Mrs Mynors' in 1987
+verification: verified
+schools:
+  - organization: mrs-mynors-nursery-school
+    level: primary
+    from: 1987

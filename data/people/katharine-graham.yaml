@@ -1,0 +1,43 @@
+---
+id: tm0000029
+name: Katharine Graham
+slug: katharine-graham
+name_authorized: Graham, Katharine
+birth_year: 1917
+death_year: 2001
+tagline: Pioneering journalist and Pulitzer-winning publisher of The Washington Post
+bio: >-
+  Katharine Graham was the publisher of The Washington Post during the Watergate scandal and the Pentagon Papers,
+  becoming the first female CEO of a Fortune 500 company. Her memoir won the Pulitzer Prize for Biography and cemented
+  her legacy as a trailblazer in journalism and leadership.
+tags:
+  - journalist
+  - writer
+  - award-winner
+education:
+  - montessori
+education_notes: >-
+  Katharine Graham attended a Montessori school, where she developed confidence and intellectual independence early on.
+notable_achievements:
+  - Publisher during the Watergate investigation
+  - Pulitzer Prize-winning author of "Personal History"
+  - First female CEO of a Fortune 500 company
+quotes:
+  - "The Montessori method—learning by doing—once again became my stock in trade..."
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Katharine_Graham
+identifiers:
+  lcnaf: n79109289
+  viaf: "115577779"
+  wikidata: Q435203
+  isni: "0000000114555435"
+image_credit: Photographer unknown, Anefo, Nationaal Archief, via Wikimedia Commons (CC0)
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Katharine_Graham
+    note: Says she attended a Montessori school until fourth grade, then enrolled at The Potomac School
+  - type: other
+    url: http://msmv.org/discover/noted-alumni
+    note: Quotes her memoir Personal History (1997) on her Montessori schooling
+verification: verified

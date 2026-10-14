@@ -1,68 +1,92 @@
+import { ArrowUpRightIcon } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 
-const links = [
+import { REPO_URL } from "@/lib/url";
+
+import { Container } from "./container";
+import { FooterWordmark } from "./footer-wordmark";
+
+const GROUPS = [
   {
-    label: "Discover",
-    href: "/discover",
+    links: [
+      { href: "/discover", label: "Discover" },
+      { href: "/alumni", label: "Alumni" },
+      { href: "/contributors", label: "Contributors" },
+      { href: "/organizations", label: "Organizations" },
+      { href: "/tags", label: "Tags" },
+      { href: "/archive", label: "Archive" },
+    ],
+    title: "Explore",
   },
   {
-    label: "Archive",
-    href: "/archive",
+    links: [
+      { href: "/contribute", label: "Add a Montessorian" },
+      { href: `${REPO_URL}/issues/new/choose`, label: "Suggest a correction" },
+      { href: "/about/editorial-policy", label: "Editorial policy" },
+      { href: REPO_URL, label: "GitHub" },
+    ],
+    title: "Contribute",
   },
   {
-    label: "Tags",
-    href: "/tags",
-  },
-  {
-    label: "About",
-    href: "/about",
+    links: [
+      { href: "/data", label: "Data & API" },
+      { href: "/data#permanent-identifiers", label: "Permanent IDs" },
+      { href: "/data#reconciliation-api", label: "Reconciliation API" },
+      { href: "/about", label: "About" },
+      { href: "/privacy", label: "Privacy" },
+    ],
+    title: "Data",
   },
 ];
 
-export default function Footer() {
-  return (
-    <footer className="flex w-full flex-col bg-primary">
-      <div className="container mx-auto flex max-w-3xl flex-col gap-6 p-16">
-        <div className="flex flex-col items-center justify-between gap-10 sm:flex-row sm:gap-2">
-          <div className="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left">
-            <div className="flex flex-col gap-2">
-              <Link
-                className="font-semibold font-serif text-3xl text-white transition-colors lg:text-4xl"
-                href="/"
-              >
-                the montessorians
-              </Link>
+const isExternal = (href: string) => href.startsWith("http");
 
-              <p className="text-sm text-white/60">Discover extraordinary Montessori alumni</p>
-            </div>
+const Footer = () => (
+  <footer
+    className="bg-primary flex w-full flex-col overflow-hidden text-white [&_a:focus-visible]:outline-white"
+    data-print-hidden
+  >
+    <Container className="flex flex-col gap-12 pt-14">
+      <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+        <p className="type-section max-w-sm font-normal text-white/90">
+          People shaped by Montessori, and the people who shaped it.
+        </p>
 
-            <Badge
-              asChild
-              className="flex gap-2 border border-white/20 bg-white/10 text-primary-foreground transition-colors duration-150 [a&]:hover:border-white/25 [a&]:hover:bg-white/18"
-            >
-              <Link
-                href="https://renaissance.education?utm_source=the_montessorians&utm_medium=footer"
-                target="_blank"
-              >
-                Made by Renaissance
-              </Link>
-            </Badge>
-          </div>
-
-          <div className="flex flex-col items-center gap-3 sm:items-end sm:gap-2">
-            {links.map((link) => (
-              <Link
-                className="text-sm text-white/75 transition-colors hover:text-white hover:underline"
-                href={link.href}
-                key={link.href}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-x-12 lg:gap-x-16">
+          {GROUPS.map((group) => (
+            <nav aria-label={group.title} className="flex flex-col gap-3" key={group.title}>
+              <span className="type-eyebrow text-white/70">{group.title}</span>
+              {group.links.map((link) => (
+                <Link
+                  className="w-fit text-sm text-white/75 transition-colors hover:text-white hover:underline"
+                  href={link.href}
+                  key={link.href}
+                  {...(isExternal(link.href) ? { rel: "noopener", target: "_blank" } : {})}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          ))}
         </div>
       </div>
-    </footer>
-  );
-}
+
+      <div className="flex flex-col gap-2 border-t border-white/14 pt-5 text-[13px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
+        <span>Data dedicated to the public domain (CC0). Code open source.</span>
+        <Link
+          className="inline-flex w-fit items-center gap-1.5 text-white/75 transition-colors hover:text-white"
+          href="https://renaissance.education?utm_source=the_montessorians&utm_medium=footer"
+          rel="noopener"
+          target="_blank"
+        >
+          Made by Renaissance
+          <ArrowUpRightIcon className="size-3" />
+        </Link>
+      </div>
+
+      <FooterWordmark />
+    </Container>
+  </footer>
+);
+
+export default Footer;

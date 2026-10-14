@@ -1,0 +1,35 @@
+name: Setup
+description: Install Bun and the workspace dependencies.
+
+inputs:
+  bun-version:
+    description: Bun version to install.
+    required: false
+    default: "1.3.11"
+  node-version:
+    description: Node version to install.
+    required: false
+    default: "22"
+
+runs:
+  using: composite
+  steps:
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: ${{ inputs.bun-version }}
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    # Bun's global package cache, keyed on the lockfile, so installs are mostly copies.
+    - name: Cache Bun packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+        restore-keys: bun-${{ runner.os }}-
+
+    - name: Install dependencies
+      shell: bash
+      run: bun install --frozen-lockfile

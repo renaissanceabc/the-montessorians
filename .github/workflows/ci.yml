@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+  # Lets the job request a GitHub OIDC token for the Vercel Remote Cache.
+  id-token: write
+
+# A new push to the same PR cancels the run still in progress; pushes to
+# develop/main always finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Vercel Remote Cache over OIDC (no stored token): see the "Connect Vercel
+  # Remote Cache" step. Fork PRs can't get an OIDC token and use only the local
+  # cache. PRs read the remote cache; only pushes to develop/main write to it, so
+  # a PR can't poison what later runs replay.
+  TURBO_CACHE: ${{ github.event_name == 'push' && 'local:rw,remote:rw' || 'local:rw,remote:r' }}
+  TURBO_TELEMETRY_DISABLED: 1
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  checks:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      # Exchanges the job's GitHub OIDC token for a short-lived, cache-only turbo
+      # token (revoked when the job ends). Needs the TURBO_TEAM repo variable and a
+      # Turborepo CLI OIDC policy on the Vercel team. Never fails the job.
+      - name: Connect Vercel Remote Cache
+        if: vars.TURBO_TEAM != '' && !github.event.pull_request.head.repo.fork
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@49d7b1b46ba4c9251e1977986bfe18336feabc8f # v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
+
+      # Turbo's local cache: unchanged packages replay instead of re-running.
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo/cache
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      # Next.js's incremental build cache, for the builds turbo can't skip.
+      - name: Cache Next.js
+        uses: actions/cache@v4
+        with:
+          path: apps/app/.next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('bun.lock') }}-${{ hashFiles('apps/app/**/*.ts', 'apps/app/**/*.tsx', 'packages/**/*.ts') }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('bun.lock') }}-
+
+      - name: Lint
+        run: bun run check
+
+      - name: Typecheck, test, and build
+        run: bunx turbo run typecheck test build --output-logs=errors-only

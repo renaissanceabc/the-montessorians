@@ -1,131 +1,422 @@
 #!/usr/bin/env node
 
+/**
+ * Validates the dataset: every profile and organization against its schema,
+ * plus the cross-record rules that make it a name authority (unique permanent
+ * ids, no id ever disappearing without a changes.yaml entry, references that
+ * resolve, likely duplicates).
+ *
+ * Set BASE_REF (e.g. BASE_REF=origin/main) to also check that no id present on
+ * that ref was removed without being recorded in data/authority/changes.yaml.
+ */
+
+import { execFileSync } from "node:child_process";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
-import yaml from "js-yaml";
-import crypto from "node:crypto";
+import { load } from "js-yaml";
 
-// Resolve __dirname in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = import.meta.dirname;
+const ROOT = path.join(__dirname, "..");
+const dataDir = path.join(ROOT, "data", "people");
+const orgDir = path.join(ROOT, "data", "organizations");
+const imageDir = path.join(ROOT, "images");
+const changesPath = path.join(ROOT, "data", "authority", "changes.yaml");
+const tagsPath = path.join(ROOT, "data", "authority", "tags.yaml");
+const checksumPath = path.join(ROOT, ".checksums.json");
 
-// Set up AJV with formats
-const ajv = new Ajv({
-  allErrors: true,
-  strict: false,
-  validateFormats: "fast"
-});
+const ajv = new Ajv({ allErrors: true, strict: false, validateFormats: "fast" });
 addFormats(ajv);
 
-// Load schema
-const schema = JSON.parse(fs.readFileSync(path.join(__dirname, "../profile.schema.json"), "utf8"));
-const validate = ajv.compile(schema);
+const profileSchemaText = fs.readFileSync(path.join(ROOT, "profile.schema.json"), "utf-8");
+const orgSchemaText = fs.readFileSync(path.join(ROOT, "organization.schema.json"), "utf-8");
+const validateProfile = ajv.compile(JSON.parse(profileSchemaText));
+const validateOrg = ajv.compile(JSON.parse(orgSchemaText));
 
-// Directories
-const dataDir = path.join(__dirname, "../data");
-const imageDir = path.join(__dirname, "../images");
+const yamlFiles = (dir) =>
+  fs.existsSync(dir)
+    ? fs
+        .readdirSync(dir)
+        .filter((f) => f.endsWith(".yaml"))
+        .toSorted()
+    : [];
 
-// Get YAML files
-const files = fs.readdirSync(dataDir).filter((f) => f.endsWith(".yaml"));
+const sha = (content) => crypto.createHash("sha256").update(content).digest("hex");
 
-// Load checksum cache
-const checksumPath = path.join(__dirname, "../.checksums.json");
-let checksumCache = {};
+// Per-file checks are cached by content (+ schema), cross-record checks always run.
+const checksumCache = new Map();
 if (fs.existsSync(checksumPath)) {
-  const content = fs.readFileSync(checksumPath, "utf8").trim();
+  const content = fs.readFileSync(checksumPath, "utf-8").trim();
   if (content) {
-    checksumCache = JSON.parse(content);
+    for (const [file, checksum] of Object.entries(JSON.parse(content))) {
+      checksumCache.set(file, checksum);
+    }
   }
 }
 
-function computeChecksum(content) {
-  return crypto.createHash("sha256").update(content).digest("hex");
+const reports = new Map();
+const warnings = [];
+const report = (file, message) => {
+  if (!reports.has(file)) {
+    reports.set(file, []);
+  }
+  reports.get(file).push(`- ${message}`);
+};
+
+const schemaErrors = (validate, doc) => {
+  if (validate(doc)) {
+    return [];
+  }
+  return (validate.errors ?? []).map((err) => `${err.instancePath || "(root)"}: ${err.message}`);
+};
+
+// --- Organizations -----------------------------------------------------------
+
+// Logos are optional: images/organizations/<slug>.svg or .png. SVGs are served
+// from the site's origin, so they must be static images.
+const logoDir = path.join(imageDir, "organizations");
+const UNSAFE_SVG = [/<script/iu, /\son[a-z]+\s*=/iu, /javascript:/iu, /<foreignObject/iu];
+const logoErrors = (slug) => {
+  if (!slug || !fs.existsSync(logoDir)) {
+    return [];
+  }
+  const files = fs.readdirSync(logoDir).filter((name) => name.split(".")[0] === slug);
+  const errors = [];
+  for (const name of files) {
+    if (!/\.(?:svg|png)$/u.test(name)) {
+      errors.push(`Logo must be .svg or .png: images/organizations/${name}`);
+    } else if (name.endsWith(".svg")) {
+      const svg = fs.readFileSync(path.join(logoDir, name), "utf-8");
+      if (UNSAFE_SVG.some((re) => re.test(svg))) {
+        errors.push(`Logo SVG contains scripts or event handlers: images/organizations/${name}`);
+      }
+    }
+  }
+  if (files.length > 1) {
+    errors.push(`More than one logo for "${slug}": ${files.join(", ")}`);
+  }
+  return errors;
+};
+
+const orgs = [];
+for (const file of yamlFiles(orgDir)) {
+  const doc = load(fs.readFileSync(path.join(orgDir, file), "utf-8"));
+  const label = `data/organizations/${file}`;
+  for (const message of schemaErrors(validateOrg, doc)) {
+    report(label, message);
+  }
+  if (doc?.slug && `${doc.slug}.yaml` !== file) {
+    report(label, `slug "${doc.slug}" does not match filename`);
+  }
+  for (const message of logoErrors(doc?.slug)) {
+    report(label, message);
+  }
+  orgs.push({ doc, file: label });
 }
+const orgSlugs = new Set(orgs.map((o) => o.doc?.slug));
 
-let totalChecked = 0;
-let totalValid = 0;
-let totalSkipped = 0;
-const invalidReports = [];
+// --- Profiles ----------------------------------------------------------------
 
-for (const file of files) {
-  totalChecked++;
+const profiles = [];
+let skipped = 0;
+for (const file of yamlFiles(dataDir)) {
   const filePath = path.join(dataDir, file);
-  const fileContent = fs.readFileSync(filePath, "utf8");
-  const doc = yaml.load(fileContent);
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  const doc = load(fileContent);
+  const label = `data/people/${file}`;
+  profiles.push({ doc, file: label });
 
-  const slug = doc.slug;
-  const expectedImagePath = path.join(imageDir, `${slug}.jpg`);
-  const imageContent = fs.existsSync(expectedImagePath) ? fs.readFileSync(expectedImagePath) : "";
-
-  const currentChecksum = computeChecksum(fileContent + imageContent);
-
-  if (checksumCache[file] === currentChecksum) {
-    totalSkipped++;
+  const slug = doc?.slug;
+  const imagePath = path.join(imageDir, `${slug}.jpg`);
+  const imageContent = fs.existsSync(imagePath) ? fs.readFileSync(imagePath) : "";
+  const checksum = sha(profileSchemaText + fileContent + imageContent);
+  if (checksumCache.get(file) === checksum) {
+    skipped += 1;
     continue;
   }
 
-  const valid = validate(doc);
-  const errors = [];
+  const errorsBefore = reports.get(label)?.length ?? 0;
 
-  if (!valid) {
-    for (const err of validate.errors ?? []) {
-      const loc = err.instancePath || "(root)";
-      errors.push(`- ${loc}: ${err.message}`);
+  for (const message of schemaErrors(validateProfile, doc)) {
+    report(label, message);
+  }
+  if (slug && `${slug}.yaml` !== file) {
+    report(label, `slug "${slug}" does not match filename`);
+  }
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this validator is the parse boundary: the raw YAML tagline may not be a string, and only strings get the period check.
+  if (typeof doc?.tagline === "string" && doc.tagline.trim().endsWith(".")) {
+    report(label, "/tagline: Tagline should not end with a period");
+  }
+  if (doc?.birth_year && doc?.death_year && doc.birth_year > doc.death_year) {
+    report(label, "birth_year is after death_year");
+  }
+  const kinds = [doc?.kind ?? "alum"].flat();
+  if (kinds.includes("contributor")) {
+    if (!doc.roles?.length) {
+      report(label, "contributors need at least one role");
+    }
+    if (!(doc.contributions?.length || doc.sources?.length)) {
+      report(label, "contributors need at least one documented contribution or source");
+    }
+  }
+  if (doc?.verification === "verified" && !doc.sources?.some((s) => s.url)) {
+    report(label, 'verification "verified" needs a source with a url');
+  }
+
+  // Images are optional, but must be .jpg when present.
+  if (!fs.existsSync(imagePath)) {
+    const alt = [".jpeg", ".png", ".webp", ".gif", ".tiff", ".heic", ".heif", ".avif"]
+      .map((ext) => `${slug}${ext}`)
+      .find((name) => fs.existsSync(path.join(imageDir, name)));
+    if (alt) {
+      report(label, `Image found but not in .jpg format: ${alt}`);
     }
   }
 
-  // Tagline checks
-  if (typeof doc.tagline === "string") {
-    const tagline = doc.tagline.trim();
-    if (tagline.endsWith(".")) {
-      errors.push(`- /tagline: Tagline should not end with a period`);
-    }
-  }
-  // Image checks
-  const hasCorrectImage = fs.existsSync(expectedImagePath);
-  const allImageFormats = [".jpeg", ".png", ".webp", ".gif", ".tiff", ".heic", ".heif", ".avif"];
-  const altImagePath = allImageFormats
-    .map((ext) => path.join(imageDir, `${slug}${ext}`))
-    .find((altPath) => fs.existsSync(altPath));
-
-  if (!hasCorrectImage) {
-    if (altImagePath) {
-      errors.push(`- Image found but not in .jpg format: ${path.basename(altImagePath)}`);
-    } else {
-      errors.push(`- Missing required image: /images/${slug}.jpg`);
-    }
-  }
-
-  if (errors.length > 0) {
-    invalidReports.push({ file, errors });
-  } else {
-    checksumCache[file] = currentChecksum;
-    totalValid++;
+  if ((reports.get(label)?.length ?? 0) === errorsBefore) {
+    checksumCache.set(file, checksum);
   }
 }
 
-// Save updated checksums (even if no errors)
+// --- Cross-record rules ------------------------------------------------------
+
+// Tags come from a controlled vocabulary (data/authority/tags.yaml). Checked
+// here, not per file, so editing the vocabulary re-checks every profile.
+const vocabulary = load(fs.readFileSync(tagsPath, "utf-8")) ?? [];
+const tagSlugs = new Set();
+const tagAliases = new Map();
+for (const entry of Array.isArray(vocabulary) ? vocabulary : []) {
+  if (!entry?.slug || !entry?.label) {
+    report("data/authority/tags.yaml", "every tag needs a slug and a label");
+    continue;
+  }
+  if (tagSlugs.has(entry.slug) || tagAliases.has(entry.slug)) {
+    report("data/authority/tags.yaml", `tag "${entry.slug}" is listed twice`);
+  }
+  tagSlugs.add(entry.slug);
+  for (const alias of entry.aliases ?? []) {
+    if (tagSlugs.has(alias) || tagAliases.has(alias)) {
+      report("data/authority/tags.yaml", `alias "${alias}" is already a tag or alias`);
+    }
+    tagAliases.set(alias, entry.slug);
+  }
+}
+for (const { file, doc } of profiles) {
+  for (const tag of doc?.tags ?? []) {
+    if (!tagSlugs.has(tag)) {
+      const replacement = tagAliases.get(tag);
+      report(
+        file,
+        replacement
+          ? `tag "${tag}" is retired; use "${replacement}"`
+          : `unknown tag "${tag}" (add it to data/authority/tags.yaml first)`
+      );
+    }
+  }
+}
+
+const changes = load(fs.readFileSync(changesPath, "utf-8")) ?? [];
+if (!Array.isArray(changes)) {
+  report("data/authority/changes.yaml", "must be a list");
+}
+
+const records = [...profiles, ...orgs];
+const liveIds = new Map();
+const liveSlugs = new Map();
+for (const { file, doc } of records) {
+  if (!doc?.id) {
+    continue;
+  }
+  if (liveIds.has(doc.id)) {
+    report(file, `id ${doc.id} is also used by ${liveIds.get(doc.id)}`);
+  }
+  liveIds.set(doc.id, file);
+}
+for (const { file, doc } of profiles) {
+  if (doc?.slug && liveSlugs.has(doc.slug)) {
+    report(file, `slug ${doc.slug} is also used by ${liveSlugs.get(doc.slug)}`);
+  }
+  liveSlugs.set(doc?.slug, file);
+}
+
+for (const { file, doc } of profiles) {
+  for (const ref of [...(doc?.schools ?? []), ...(doc?.affiliations ?? [])]) {
+    if (!orgSlugs.has(ref.organization)) {
+      report(
+        file,
+        `unknown organization "${ref.organization}" (add data/organizations/${ref.organization}.yaml)`
+      );
+    }
+  }
+}
+const profileSlugs = new Set(profiles.map((p) => p.doc?.slug));
+for (const { file, doc } of profiles) {
+  for (const rel of doc?.related ?? []) {
+    if (!profileSlugs.has(rel.person)) {
+      report(file, `related person "${rel.person}" does not exist`);
+    }
+    if (rel.person === doc.slug) {
+      report(file, "a person can't be related to themselves");
+    }
+  }
+}
+for (const { file, doc } of orgs) {
+  if (doc?.parent && !orgSlugs.has(doc.parent)) {
+    report(file, `unknown parent organization "${doc.parent}"`);
+  }
+}
+
+const changedIds = new Set();
+for (const [i, change] of (Array.isArray(changes) ? changes : []).entries()) {
+  const where = `data/authority/changes.yaml[${i}]`;
+  if (!/^tmo?[0-9]{6,7}$/u.test(change?.id ?? "")) {
+    report(where, "id is missing or malformed");
+    continue;
+  }
+  if (!["merged", "withdrawn", "renamed"].includes(change.action)) {
+    report(where, "action must be merged, withdrawn, or renamed");
+  }
+  // YAML parses an unquoted YYYY-MM-DD as a Date.
+  const date =
+    change.date instanceof Date
+      ? change.date.toISOString().slice(0, 10)
+      : String(change.date ?? "");
+  if (!(change.slug && /^\d{4}-\d{2}-\d{2}$/u.test(date))) {
+    report(where, "slug and date (YYYY-MM-DD) are required");
+  }
+  if (change.action === "renamed") {
+    if (!liveIds.has(change.id)) {
+      report(where, `renamed record ${change.id} does not exist`);
+    }
+    if (liveSlugs.has(change.slug)) {
+      report(where, `old slug ${change.slug} is in use by a live record`);
+    }
+    continue;
+  }
+  changedIds.add(change.id);
+  if (liveIds.has(change.id)) {
+    report(where, `${change.id} is ${change.action} but still exists in ${liveIds.get(change.id)}`);
+  }
+  if (change.action === "merged" && !liveIds.has(change.replaced_by)) {
+    report(where, `replaced_by ${change.replaced_by} is not a live record`);
+  }
+}
+
+// Ids are permanent: anything present on the base ref must still exist or be recorded.
+if (process.env.BASE_REF) {
+  const ref = process.env.BASE_REF;
+  const git = (...args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf-8" });
+  // Both layouts: the base ref may predate the move to data/people and data/organizations.
+  for (const dir of ["data", "organizations", "data/people", "data/organizations"]) {
+    let listing = "";
+    try {
+      listing = git("ls-tree", "--name-only", `${ref}:${dir}`);
+    } catch {
+      continue;
+    }
+    for (const name of listing.split("\n").filter((n) => n.endsWith(".yaml"))) {
+      const doc = load(git("show", `${ref}:${dir}/${name}`));
+      if (doc?.id && !liveIds.has(doc.id) && !changedIds.has(doc.id)) {
+        report(
+          `${dir}/${name}`,
+          `id ${doc.id} existed on ${ref} but was removed without a data/authority/changes.yaml entry`
+        );
+      }
+    }
+  }
+}
+
+// Likely duplicates: same normalized name (error) or very similar names (warning).
+const normalize = (s) =>
+  s
+    .normalize("NFKD")
+    .replaceAll(/[̀-ͯ]/gu, "")
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9 ]/gu, "")
+    .replaceAll(/\s+/gu, " ")
+    .trim();
+// Levenshtein similarity in [0, 1].
+const similarity = (a, b) => {
+  const m = a.length;
+  const n = b.length;
+  const d = Array.from({ length: m + 1 }, (_, i) => [i, ...Array.from({ length: n }, () => 0)]);
+  for (let j = 1; j <= n; j += 1) {
+    d[0][j] = j;
+  }
+  for (let i = 1; i <= m; i += 1) {
+    for (let j = 1; j <= n; j += 1) {
+      d[i][j] = Math.min(
+        d[i - 1][j] + 1,
+        d[i][j - 1] + 1,
+        d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  return 1 - d[m][n] / Math.max(m, n, 1);
+};
+const distinct = new Set(
+  (load(fs.readFileSync(path.join(ROOT, "data", "authority", "distinct.yaml"), "utf-8")) ?? []).map(
+    (pair) => [...pair].toSorted().join("|")
+  )
+);
+const slugOf = (file) => path.basename(file, ".yaml");
+const names = profiles.flatMap(({ file, doc }) =>
+  [doc?.name, ...(doc?.name_variants ?? [])]
+    .filter(Boolean)
+    .map((n) => ({ file, name: normalize(n) }))
+);
+for (let i = 0; i < names.length; i += 1) {
+  for (let j = i + 1; j < names.length; j += 1) {
+    const a = names[i];
+    const b = names[j];
+    if (a.file === b.file) {
+      continue;
+    }
+    if (a.name === b.name) {
+      report(a.file, `possible duplicate of ${b.file} ("${a.name}")`);
+    } else if (
+      similarity(a.name, b.name) >= 0.9 &&
+      !distinct.has([slugOf(a.file), slugOf(b.file)].toSorted().join("|"))
+    ) {
+      warnings.push(
+        `${a.file} and ${b.file} have very similar names — check they are different people`
+      );
+    }
+  }
+}
+
+// --- Output ------------------------------------------------------------------
+
+// Never cache a file that failed a cross-record check.
+for (const file of reports.keys()) {
+  checksumCache.delete(file.replace(/^data\/people\//u, ""));
+}
 fs.writeFileSync(
   checksumPath,
-  JSON.stringify(Object.fromEntries(Object.entries(checksumCache).sort(([a], [b]) => a.localeCompare(b))), null, 2)
+  `${JSON.stringify(Object.fromEntries([...checksumCache].toSorted(([a], [b]) => a.localeCompare(b))), null, 2)}\n`
 );
 
-// Summary output
-console.log(`${totalChecked} profiles found`);
-console.log(`- ${invalidReports.length} invalid`);
-console.log(`- ${totalValid} validated`);
-console.log(`- ${totalSkipped} skipped (already validated)`);
+console.log(`${profiles.length} profiles, ${orgs.length} organizations found`);
+console.log(`- ${reports.size} with errors`);
+console.log(`- ${skipped} profiles skipped by the per-file cache (cross-record checks always run)`);
 
-if (invalidReports.length > 0) {
+if (warnings.length > 0) {
+  console.log("\n⚠ Warnings:");
+  for (const warning of new Set(warnings)) {
+    console.log(`  - ${warning}`);
+  }
+}
+
+if (reports.size > 0) {
   console.log("\n❌ Invalid:");
-  invalidReports.forEach((report, index) => {
-    console.log(`${index + 1}. ${report.file}`);
-    for (const err of report.errors) {
+  for (const [index, [file, errors]] of [...reports].entries()) {
+    console.log(`${index + 1}. ${file}`);
+    for (const err of errors) {
       console.log(`  ${err}`);
     }
-  });
+  }
   process.exit(1);
 }

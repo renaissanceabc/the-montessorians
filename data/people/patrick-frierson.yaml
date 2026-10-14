@@ -1,0 +1,113 @@
+---
+id: tm0000071
+name: Patrick Frierson
+slug: patrick-frierson
+kind: contributor
+roles:
+  - philosopher
+  - author
+name_authorized: Frierson, Patrick R., 1974-
+name_variants:
+  - Patrick R. Frierson
+birth_year: 1974
+tagline: Philosopher writing on the moral philosophy and epistemology of Maria Montessori
+bio: >-
+  Patrick R. Frierson is the Paul Pigott and William M. Allen Professor of Philosophy at Whitman College. A scholar of
+  Kant, he has written extensively on the philosophy of Maria Montessori, including The Moral Philosophy of Maria
+  Montessori and Maria Montessori's Philosophy: Following the Child.
+tags:
+  - philosopher
+  - writer
+montessori_notes: Writes on Maria Montessori as a philosopher, including her ethics, epistemology, and metaphysics.
+affiliations:
+  - organization: whitman-college
+    role: Paul Pigott and William M. Allen Professor of Philosophy
+contributions:
+  - title: Freedom and Anthropology in Kant's Moral Philosophy
+    type: book
+    year: 2003
+    venue: Cambridge University Press
+    isbn: "9780521824002"
+  - title: Maria Montessori's Epistemology
+    type: article
+    year: 2014
+    venue: British Journal for the History of Philosophy
+    doi: 10.1080/09608788.2014.960794
+    authors:
+      - Patrick R. Frierson
+  - title: The Virtue Epistemology of Maria Montessori
+    type: article
+    year: 2015
+    venue: Australasian Journal of Philosophy
+    doi: 10.1080/00048402.2015.1036895
+  - title: Maria Montessori’s Philosophy of Experimental Psychology
+    type: article
+    year: 2015
+    venue: "HOPOS: The Journal of the International Society for the History of Philosophy of Science"
+    doi: 10.1086/682395
+  - title:
+      "Making Room for Children's Autonomy: Maria Montessori's Case for Seeing Children's Incapacity for Autonomy as an
+      External Failing"
+    type: article
+    year: 2015
+    venue: Journal of Philosophy of Education
+    doi: 10.1111/1467-9752.12134
+  - title: Maria Montessori's metaphysics of life
+    type: article
+    year: 2018
+    venue: European Journal of Philosophy
+    doi: 10.1111/ejop.12326
+    authors:
+      - Patrick Frierson
+  - title: "Situationism and intellectual virtue: a Montessori perspective"
+    type: article
+    year: 2019
+    venue: Synthese
+    doi: 10.1007/s11229-019-02332-4
+  - title: "Intellectual Agency and Virtue Epistemology: A Montessori Perspective"
+    type: book
+    year: 2020
+    venue: Bloomsbury
+    doi: 10.5040/9781350018853
+  - title: Discipline and the cultivation of autonomy in Immanuel Kant and Maria Montessori
+    type: article
+    year: 2021
+    venue: Journal of Philosophy of Education
+    doi: 10.1111/1467-9752.12599
+  - title: "The Moral Philosophy of Maria Montessori: Agency and the Structure of Ethical Life"
+    type: book
+    year: 2022
+    venue: Bloomsbury Academic
+    isbn: "9781350176379"
+  - title: The Philosophy of Maria Montessori
+    type: chapter
+    year: 2023
+    venue: The Bloomsbury Handbook of Montessori Education
+    doi: 10.5040/9781350275638.ch-4
+  - title: "Maria Montessori's Philosophy: Following the Child"
+    type: book
+    year: 2025
+    venue: Oxford University Press
+    doi: 10.1093/9780191979668.001.0001
+  - title: "Montessori, math, and materials: a case of extended cognition"
+    type: article
+    year: 2025
+    venue: Synthese
+    doi: 10.1007/s11229-025-05014-6
+    authors:
+      - Patrick R. Frierson
+      - Laura Desiree Di Paolo
+sources:
+  - type: authority
+    url: https://id.loc.gov/authorities/names/n2002112177.html
+    note: Library of Congress name authority record
+  - type: other
+    url: https://www.whitman.edu/academics/majors-and-programs/philosophy/faculty/patrick-frierson
+    note: Whitman College faculty page
+verification: verified
+identifiers:
+  lcnaf: n2002112177
+  viaf: "119242469"
+  wikidata: Q112466307
+  isni: "0000000110860395"
+image_credit: Photo by Kimberly Teske Fetrow, courtesy of Whitman College

@@ -1,0 +1,43 @@
+---
+id: tm0000015
+name: Heike Makatsch
+slug: heike-makatsch
+name_authorized: Makatsch, Heike
+birth_year: 1971
+tagline: German actress and singer known for "Love Actually" and "Resident Evil"
+bio: >-
+  Heike Makatsch is a German actress and singer who gained international recognition for her roles in "Love Actually"
+  and "Resident Evil." She began her career as a television presenter before transitioning into acting, earning several
+  awards for her performances.
+tags:
+  - actor
+  - musician
+  - television
+education:
+  - montessori
+education_notes: >-
+  Heike Makatsch attended a Montessori primary school in Düsseldorf, Germany.
+notable_achievements:
+  - Bavarian Film Award for Best New Actress
+  - Bambi Award for Best Actress
+  - Roles in international films such as "Love Actually" and "Resident Evil"
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Heike_Makatsch
+identifiers:
+  lcnaf: no2003056555
+  viaf: "118979992"
+  wikidata: Q62510
+  isni: "0000000114634643"
+image_credit: Photo by Harald Krichel, via Wikimedia Commons (CC BY-SA 4.0)
+sources:
+  - type: wikipedia
+    url: https://de.wikipedia.org/wiki/Heike_Makatsch
+    note: German Wikipedia says she attended the Montessori primary school, then the Max-Planck-Gymnasium in Düsseldorf
+  - type: other
+    url: https://last.fm/de/music/Heike+Makatsch/+wiki
+    note: Bio says she attended the Montessori-Grundschule am Farnweg in Düsseldorf
+  - type: publication
+    url: https://www.munzinger.de/register/portrait/biographien/Heike%20Makatsch/00/22285
+    note: "Munzinger biography: Montessori primary school, then Max-Planck-Gymnasium in Düsseldorf"
+verification: verified

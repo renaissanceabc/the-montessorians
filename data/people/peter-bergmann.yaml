@@ -1,0 +1,44 @@
+---
+id: tm0000037
+name: Peter Bergmann
+slug: peter-bergmann
+name_authorized: Bergmann, Peter G. (Peter Gabriel)
+birth_year: 1915
+death_year: 2002
+tagline: Theoretical physicist and assistant to Albert Einstein
+bio: >-
+  Peter Bergmann was a German-American theoretical physicist who collaborated with Albert Einstein on the general theory
+  of relativity. He made significant contributions to the field of quantum gravity and was a professor at Syracuse
+  University.
+tags:
+  - scientist
+  - researcher
+education:
+  - montessori
+education_notes: >-
+  Peter Bergmann attended one of the earliest Montessori schools, which was run by his mother.
+schools:
+  - organization: emmy-bergmann-montessori-kinderhaus
+notable_achievements:
+  - Collaborated with Albert Einstein
+  - Contributions to quantum gravity
+  - Professor at Syracuse University
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Peter_Bergmann
+identifiers:
+  lcnaf: n50007489
+  viaf: "59214970"
+  wikidata: Q96809
+  isni: "0000000117655116"
+sources:
+  - type: wikipedia
+    url: https://de.wikipedia.org/wiki/Peter_Bergmann_(Physiker)
+    note: Says he attended a Freiburg Montessori school started by his mother
+  - type: publication
+    url: https://arxiv.org/pdf/physics/0608067
+    note: "Salisbury (2006): his mother founded an early Montessori school in Freiburg, which he attended"
+  - type: wikipedia
+    url: https://de.wikipedia.org/wiki/Emmy_Bergmann
+    note: His mother's Montessori Kinderhaus in Freiburg included her son Peter
+verification: verified

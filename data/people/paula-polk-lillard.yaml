@@ -1,0 +1,52 @@
+---
+id: tm0000070
+name: Paula Polk Lillard
+slug: paula-polk-lillard
+kind: contributor
+roles:
+  - author
+name_authorized: Lillard, Paula Polk
+birth_year: 1931
+tagline: Author of widely read books on Montessori education for parents and teachers
+bio: >-
+  Paula Polk Lillard is the author of several widely read books on Montessori education, including Montessori: A Modern
+  Approach, Montessori Today, and Montessori from the Start.
+tags:
+  - writer
+  - educator
+montessori_notes: Writes about Montessori education for parents and teachers.
+contributions:
+  - title: "Montessori: A Modern Approach"
+    type: book
+    year: 1972
+    venue: Schocken Books
+    url: https://openlibrary.org/works/OL2626991W
+  - title: "Children Learning: A Teacher's Classroom Diary"
+    type: book
+    year: 1980
+    venue: Schocken Books
+    isbn: "0805237453"
+  - title: Montessori Today
+    type: book
+    year: 1996
+    venue: Schocken Books
+    isbn: "9780805240993"
+  - title: Montessori from the Start
+    type: book
+    year: 2003
+    venue: Schocken Books
+    isbn: "9780805211122"
+    authors:
+      - Paula Polk Lillard
+      - Lynn Lillard Jessen
+sources:
+  - type: authority
+    url: https://id.loc.gov/authorities/names/n80046540.html
+    note: Library of Congress name authority record
+verification: verified
+identifiers:
+  lcnaf: n80046540
+  viaf: "1307113"
+  wikidata: Q106106156
+  isni: "0000000081913047"
+image_credit: Photo courtesy of Forest Bluff School

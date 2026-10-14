@@ -1,0 +1,42 @@
+---
+id: tm0000022
+name: Jeremy Allaire
+slug: jeremy-allaire
+name_authorized: Allaire, Jeremy
+birth_year: 1971
+tagline: Tech entrepreneur and founder of Brightcove and Circle
+bio: >-
+  Jeremy Allaire is an American technologist and entrepreneur known for founding Brightcove, a leading online video
+  platform, and Circle, a global financial technology firm. He has been a prominent advocate for the adoption of digital
+  currencies and blockchain technology.
+tags:
+  - technology
+  - entrepreneur
+  - investor
+education:
+  - montessori
+education_notes: >-
+  Jeremy Allaire attended a Montessori school during his early education, which he credits for fostering his creativity
+  and independent thinking.
+notable_achievements:
+  - Founder of Brightcove
+  - Co-founder and CEO of Circle
+  - Advocate for digital currency adoption
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jeremy_Allaire
+  - type: website
+    url: https://www.circle.com/en/about
+identifiers:
+  wikidata: Q6181059
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Jeremy_Allaire
+    note: Says he was educated in the Montessori tradition, citing his 2011 NYT Corner Office interview with Adam Bryant
+  - type: other
+    url: https://businessabc.net/wiki/jeremy-allaire
+    note: Profile says he was educated in the Montessori tradition, crediting it with self-direction and collaboration
+  - type: other
+    url: https://riverstonemontessori.com/montessori-education-billionaire-graduates/
+    note: Summarizes his 2011 New York Times interview about his Montessori schooling
+verification: verified

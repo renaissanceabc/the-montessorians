@@ -1,0 +1,33 @@
+---
+id: tm0000033
+name: Melissa Gilbert
+slug: melissa-gilbert
+name_authorized: Gilbert, Melissa
+birth_year: 1964
+tagline: Actress best known as Laura Ingalls Wilder on "Little House on the Prairie"
+bio: >-
+  Melissa Gilbert is an American actress and former president of the Screen Actors Guild. She gained fame as a child
+  playing Laura Ingalls Wilder on the beloved television series "Little House on the Prairie."
+tags:
+  - actor
+  - activist
+education:
+  - montessori
+education_notes: >-
+  Melissa Gilbert attended a Montessori school in the United States during her early years.
+notable_achievements:
+  - Starred as Laura Ingalls Wilder on "Little House on the Prairie"
+  - President of the Screen Actors Guild
+  - Author of several memoirs
+links:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Melissa_Gilbert
+identifiers:
+  lcnaf: no96013709
+  viaf: "34047906"
+  wikidata: Q230929
+verification: unverified
+sources:
+  - type: other
+    url: https://woodlandhill.org/who-we-are/our-alumni/famous-alumni
+    note: Montessori school's promotional list names 'Melissa and Sarah Gilbert' among those who attended Montessori
