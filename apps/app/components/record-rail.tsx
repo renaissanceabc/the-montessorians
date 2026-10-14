@@ -2,7 +2,8 @@ import { ChevronDownIcon, PencilIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { CopyLinkButton } from "@/components/copy-link-button";
+import { CopyButton } from "@/components/copy-button";
+import { formatCitation } from "@/lib/citation";
 
 export interface RecordIdentifier {
   label: string;
@@ -15,14 +16,17 @@ interface RecordProps {
   id: string;
   /** Its permanent link, https://…/id/tm0000067 */
   permanentUrl: string;
+  /** The name to cite it by: the authorized form where there is one */
+  heading: string;
   /** Identifiers in other authorities */
   identifiers: RecordIdentifier[];
   /** Anything else about the record, under the identifiers */
   children?: ReactNode;
 }
 
-/** The permanent link (host truncated, id kept), a copy button, and the identifiers. */
-const RecordContent = ({ id, permanentUrl, identifiers, children }: RecordProps) => {
+/** The permanent link (host truncated, id kept), a copy button, the identifiers, and a citation. */
+const RecordContent = ({ id, permanentUrl, heading, identifiers, children }: RecordProps) => {
+  const citation = formatCitation({ heading, id, permanentUrl });
   const display = permanentUrl.replace(/^https?:\/\//u, "");
   const tail = `/id/${id}`;
   const host = display.endsWith(tail) ? display.slice(0, -tail.length) : display;
@@ -37,7 +41,7 @@ const RecordContent = ({ id, permanentUrl, identifiers, children }: RecordProps)
           <span className="truncate">{host}</span>
           {host !== display && <span className="shrink-0">{tail}</span>}
         </Link>
-        <CopyLinkButton className="-mr-1.5" url={permanentUrl} />
+        <CopyButton className="-mr-1.5" label="permanent link" text={permanentUrl} />
       </div>
       {identifiers.length > 0 && (
         <dl aria-label="Identifiers" className="flex flex-col border-t border-black/7 pt-2 text-xs">
@@ -62,6 +66,13 @@ const RecordContent = ({ id, permanentUrl, identifiers, children }: RecordProps)
           ))}
         </dl>
       )}
+      <div className="flex min-w-0 items-start gap-1 border-t border-black/7 pt-2">
+        <p className="min-w-0 flex-1 text-xs break-words text-[#4A433D]">
+          <span className="text-muted-foreground">Cite as </span>
+          {citation}
+        </p>
+        <CopyButton citation className="-mt-1.5 -mr-1.5" label="citation" text={citation} />
+      </div>
       {children}
     </div>
   );

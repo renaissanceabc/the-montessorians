@@ -1,11 +1,74 @@
-import { identifierEntries, idUrl, organizationJsonLd, personJsonLd } from "./authority";
+import { siteUrl as origin } from "@/lib/utils";
+
+import {
+  DATASET_ID,
+  identifierEntries,
+  idUrl,
+  LICENSE_URL,
+  organizationJsonLd,
+  personJsonLd,
+} from "./authority";
 import { getAllOrganizations } from "./organizations";
 import { getAllProfiles } from "./profiles";
 import type { Profile } from "./types";
 
 // Bulk exports of the dataset, served from /data/*.
 
-const LICENSE = "https://creativecommons.org/publicdomain/zero/1.0/";
+const LICENSE = LICENSE_URL;
+
+export const DOWNLOADS = [
+  {
+    format: "application/json",
+    href: "/data/people.json",
+    label: "People (JSON)",
+    note: "Every field, plus each record's permanent URI",
+  },
+  {
+    format: "application/ld+json",
+    href: "/data/people.jsonld",
+    label: "People and organizations (JSON-LD)",
+    note: "schema.org, with sameAs links to other authorities",
+  },
+  {
+    format: "text/csv",
+    href: "/data/people.csv",
+    label: "People (CSV)",
+    note: "One row per person, for spreadsheets and OpenRefine",
+  },
+  {
+    format: "application/json",
+    href: "/data/organizations.json",
+    label: "Organizations (JSON)",
+    note: "Schools, training centers, universities, associations",
+  },
+  {
+    format: "application/json",
+    href: "/data/changes.json",
+    label: "Changes (JSON)",
+    note: "Merged, withdrawn, and renamed records",
+  },
+] as const;
+
+/** schema.org Dataset describing the whole authority file, for /data and data catalogs. */
+export const datasetJsonLd = () => ({
+  "@context": "https://schema.org",
+  "@id": DATASET_ID,
+  "@type": "Dataset",
+  creator: { "@type": "Organization", name: "Renaissance", url: "https://renaissance.education" },
+  description:
+    "An open name authority for Montessori alumni and contributors to the Montessori field, with permanent identifiers and links to LCNAF, VIAF, Wikidata, ORCID, ISNI, SNAC, and ROR.",
+  distribution: DOWNLOADS.map((d) => ({
+    "@type": "DataDownload",
+    contentUrl: `${origin}${d.href}`,
+    encodingFormat: d.format,
+    name: d.label,
+  })),
+  isAccessibleForFree: true,
+  keywords: ["Montessori", "education", "name authority", "linked open data"],
+  license: LICENSE_URL,
+  name: "The Montessorians",
+  url: `${origin}/data`,
+});
 
 /** A plain-JSON person record: the YAML fields plus the permanent URI. */
 export const personRecord = (profile: Profile) => ({
@@ -20,17 +83,18 @@ export const peopleJson = () => ({
   people: getAllProfiles().map(personRecord),
 });
 
+/** A node for a shared `@graph`, which carries the context once. */
+const withoutContext = <T extends { "@context": unknown }>(full: T) => {
+  const { "@context": _, ...node } = full;
+  return node;
+};
+
 export const peopleJsonLd = () => ({
   "@context": "https://schema.org",
   "@graph": [
-    ...getAllProfiles().map((p) => {
-      const { "@context": _, ...node } = personJsonLd(p);
-      return node;
-    }),
-    ...getAllOrganizations().map((o) => {
-      const { "@context": _, ...node } = organizationJsonLd(o);
-      return node;
-    }),
+    withoutContext(datasetJsonLd()),
+    ...getAllProfiles().map((p) => withoutContext(personJsonLd(p))),
+    ...getAllOrganizations().map((o) => withoutContext(organizationJsonLd(o))),
   ],
 });
 

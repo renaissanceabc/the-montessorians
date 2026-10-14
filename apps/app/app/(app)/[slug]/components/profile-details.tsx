@@ -593,6 +593,7 @@ export const ProfileRail = ({
 
     <div className="flex flex-col gap-3">
       <RecordDetails
+        heading={profile.nameAuthorized ?? profile.name}
         id={permanentId.value}
         identifiers={identifiers}
         permanentUrl={permanentId.url}

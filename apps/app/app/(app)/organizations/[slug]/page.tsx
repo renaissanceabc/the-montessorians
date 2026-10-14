@@ -29,6 +29,7 @@ import {
   ORGANIZATION_TYPE_LABELS,
 } from "@/lib/content/organizations";
 import type { OrganizationRef, OrganizationType } from "@/lib/content/types";
+import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
 import { githubIssueUrl } from "@/lib/url";
 import { prettyUrl, siteUrl, toTitleCase } from "@/lib/utils";
@@ -68,6 +69,14 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
     },
     description: org.description ?? `${org.name} on The Montessorians.`,
     image: `${siteUrl}/api/og/organizations/${slug}.png`,
+    // Spread into a plain object: Next types `other` with an index signature.
+    other: {
+      ...dublinCoreMeta({
+        dates: org.recordDates,
+        permanentUrl: idUrl(org.id),
+        title: org.name,
+      }),
+    },
     title: org.name,
   });
 };
@@ -266,7 +275,12 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
       )}
 
       <div className="flex flex-col gap-3">
-        <RecordDetails id={org.id} identifiers={identifiers} permanentUrl={permanentUrl} />
+        <RecordDetails
+          heading={org.name}
+          id={org.id}
+          identifiers={identifiers}
+          permanentUrl={permanentUrl}
+        />
         <CorrectionButton href={correction} />
       </div>
     </aside>

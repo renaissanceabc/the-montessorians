@@ -12,23 +12,23 @@ A draft for [Wikidata:Property proposal/Authority control](https://www.wikidata.
 
 **Domain**: human (Q5); organization (Q43229)
 
-**Allowed values**: `tmo?\d{6,7}` (people: `tm` + 7 digits; organizations: `tmo` + 6 digits)
+**Allowed values**: `tm\d{7}|tmo\d{6}` (people: `tm` + 7 digits; organizations: `tmo` + 6 digits)
 
 **Example 1**: Maria Montessori (Q131117) → `tm0000067`
 
 **Example 2**: Angeline Stoll Lillard (Q28458519) → `tm0000069`
 
-**Example 3**: Association Montessori Internationale → `tmo000001`
+**Example 3**: Association Montessori Internationale (Q2867275) → `tmo000001`
 
 **Source**: https://www.themontessorians.xyz/data
 
 **Formatter URL**: `https://www.themontessorians.xyz/id/$1`
 
-**Formatter URI for RDF resource**: `https://www.themontessorians.xyz/id/$1`
+**Formatter URI for RDF resource**: `https://www.themontessorians.xyz/id/$1` (requests for `application/ld+json` get a 303 to the record's schema.org JSON-LD at `/data/$1`)
 
 **Expected completeness**: eventually complete (every record in the dataset that has a Wikidata item)
 
-**Number of IDs in source**: about 72 people and 18 organizations at the time of writing, growing
+**Number of IDs in source**: 72 people and 23 organizations as of October 2026, growing
 
 **Robot and gadget jobs**: a Mix'n'match catalog can be created from `https://www.themontessorians.xyz/data/people.csv` (columns `id`, `name`, `tagline`, `wikidata`). Records that already list a Wikidata QID can be added directly.
 

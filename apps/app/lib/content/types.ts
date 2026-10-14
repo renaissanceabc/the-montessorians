@@ -68,6 +68,12 @@ export type OrganizationType = (typeof ORGANIZATION_TYPES)[number];
 export type Verification = "verified" | "reported" | "confirmed" | "unverified";
 export type RecordStatus = "provisional" | "reviewed";
 
+/** ISO timestamps of the commits that created and last changed a record file. */
+export interface RecordDates {
+  created: string;
+  modified: string;
+}
+
 export interface ProfileLink {
   url: string;
   type: LinkType;
@@ -188,6 +194,7 @@ export interface RawProfile {
   links?: ProfileLink[];
   imageUrl: string | null;
   addedAt: string;
+  recordDates: RecordDates | null;
 }
 
 /** Enriched profile used throughout the UI (tags resolved to {slug,label}). */
@@ -226,6 +233,8 @@ export interface Profile {
   tags: ProfileTag[];
   links: ProfileLink[];
   addedAt: string;
+  /** When the record was first committed and last changed (null without full git history) */
+  recordDates: RecordDates | null;
 }
 
 export interface Organization {
@@ -250,6 +259,8 @@ export interface Organization {
     ror?: string;
     isni?: string;
   };
+  /** Set by scripts/generate-content.mjs */
+  recordDates?: RecordDates | null;
 }
 
 export interface AuthorityChange {

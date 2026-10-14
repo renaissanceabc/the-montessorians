@@ -46,6 +46,7 @@ const enrichDetails = (raw: RawProfile) => ({
   notableAchievements: raw.notableAchievements ?? [],
   pinned: raw.pinned ?? false,
   quotes: raw.quotes ?? [],
+  recordDates: raw.recordDates ?? null,
   related: raw.related ?? [],
   roles: raw.roles ?? [],
   schools: raw.schools ?? [],
