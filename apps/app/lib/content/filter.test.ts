@@ -98,10 +98,14 @@ describe("filterAndSortProfiles", () => {
     );
   });
 
-  test("sorts by date added in either direction, ignoring pinned, with ties A–Z", () => {
+  test("sorts by date added in either direction, pinned first when newest-first, ties A–Z", () => {
     assert.deepEqual(
       filterAndSortProfiles(all, { kind: "contributor" }).map((p) => p.slug),
-      ["lillard", "maria", "mario"]
+      ["maria", "mario", "lillard"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles(all, { kind: "contributor", limit: 1 }).map((p) => p.slug),
+      ["maria"]
     );
     assert.deepEqual(
       filterAndSortProfiles(all, { kind: "contributor", sortBy: "asc" }).map((p) => p.slug),
