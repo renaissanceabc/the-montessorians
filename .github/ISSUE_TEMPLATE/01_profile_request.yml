@@ -43,7 +43,7 @@ body:
     id: roles
     attributes:
       label: Roles (contributors only)
-      description: Comma separated. founder, trainer, practitioner, teacher-scholar, researcher, author, or philosopher
+      description: Comma separated. founder, trainer, practitioner-scholar, researcher, author, or philosopher
   - type: dropdown
     id: source_type
     attributes:

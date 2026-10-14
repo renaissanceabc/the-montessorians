@@ -17,8 +17,7 @@ export const PROFILE_KINDS = ["alum", "contributor"] as const;
 export const CONTRIBUTOR_ROLES = [
   "founder",
   "trainer",
-  "practitioner",
-  "teacher-scholar",
+  "practitioner-scholar",
   "researcher",
   "author",
   "philosopher",
@@ -27,9 +26,8 @@ export const CONTRIBUTOR_ROLE_LABELS: Record<(typeof CONTRIBUTOR_ROLES)[number],
   author: "Author",
   founder: "Founder",
   philosopher: "Philosopher",
-  practitioner: "Practitioner",
+  "practitioner-scholar": "Practitioner-scholar",
   researcher: "Researcher",
-  "teacher-scholar": "Teacher-scholar",
   trainer: "Trainer",
 };
 export const SOURCE_TYPES = [

@@ -12,7 +12,7 @@ export const generateMetadata = () =>
       canonical: `${siteUrl}/contributors`,
     },
     description:
-      "Trainers, teacher-scholars, researchers, authors, and philosophers with documented contributions to Montessori.",
+      "Trainers, practitioner-scholars, researchers, authors, and philosophers with documented contributions to Montessori.",
     title: "Contributors",
   });
 

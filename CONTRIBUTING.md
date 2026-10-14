@@ -76,7 +76,7 @@ A contributor adds `kind`, `roles`, `affiliations`, and `contributions` (and use
 ```yaml
 kind: contributor
 roles:
-  - researcher # founder | trainer | practitioner | teacher-scholar | researcher | author | philosopher
+  - researcher # founder | trainer | practitioner-scholar | researcher | author | philosopher
 affiliations:
   - organization: university-of-virginia
     role: Professor of Psychology
