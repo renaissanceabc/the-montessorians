@@ -35,4 +35,10 @@ identifiers:
   isni: "0000000120992893"
   snac: w6jm360m
 image_credit: Photo by Kevork Djansezian, AP
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/George_Clooney
+    note: >-
+      Says he began his education at Blessed Sacrament School in Fort Mitchell, Kentucky, then St. Michael's School,
+      Western Row Elementary and St. Susanna School in Ohio
 verification: unverified

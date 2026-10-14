@@ -40,4 +40,9 @@ identifiers:
   wikidata: Q119798
   isni: "0000000109201157"
   snac: w69p3wvm
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Michael_Douglas
+    note: >-
+      Says he attended the Allen-Stevenson School in New York City, then Eaglebrook and Choate
 verification: unverified
