@@ -58,8 +58,7 @@
         "enum": [
           "founder",
           "trainer",
-          "practitioner",
-          "teacher-scholar",
+          "practitioner-scholar",
           "researcher",
           "author",
           "philosopher"

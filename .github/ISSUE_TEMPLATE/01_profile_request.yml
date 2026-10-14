@@ -37,7 +37,7 @@ body:
     id: tags
     attributes:
       label: Tags
-      description: Comma separated, e.g. musician, cellist. Contributors — include roles (trainer, practitioner, teacher-scholar, researcher, author, philosopher).
+      description: Comma separated, e.g. musician, cellist. Contributors — include roles (trainer, practitioner-scholar, researcher, author, philosopher).
     validations:
       required: true
   - type: input

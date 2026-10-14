@@ -3,7 +3,7 @@
 The Montessorians is an open directory and name authority for two kinds of people:
 
 - **Alumni**: people who attended a Montessori school and went on to do great things, from famous figures to extraordinary everyday people.
-- **Contributors**: people whose research, scholarship, or published work shaped Montessori pedagogy or the field: researchers, philosophers, authors, founders of the method and its organizations, and trainers of teachers (and practitioners or teacher-scholars who publish), whether or not they attended Montessori themselves.
+- **Contributors**: people whose research, scholarship, or published work shaped Montessori pedagogy or the field: researchers, philosophers, authors, founders of the method and its organizations, and trainers of teachers (and practitioner-scholars: practitioners who publish), whether or not they attended Montessori themselves.
 
 This page explains who we include, what counts as evidence, and how records are corrected, merged, or removed.
 
