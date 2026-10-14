@@ -43,6 +43,7 @@ A record's `status` is `provisional` until a maintainer has reviewed it, then `r
 
 - Keep taglines and bios concise, factual, and neutral. No promotional language.
 - Use the person's own name and pronouns. Record other forms of the name in `name_variants`, and the inverted authorized form (following the Library of Congress where a record exists) in `name_authorized`.
+- Never record a name the person no longer uses and doesn't want shown, such as a trans person's former name. Birth and married names of public figures are fine. Profiles show up to four `name_variants` as "Also known as".
 - Record birth and death **years** only, never full dates, and only for public figures or when the person has shared them. Never record a birth year for a minor.
 - Link the same person in other authority files (`identifiers`) only when you have confirmed it is the same person.
 - Schools, universities, training centers, and associations are their own records in `data/organizations/`; link to them rather than writing their names as text.
