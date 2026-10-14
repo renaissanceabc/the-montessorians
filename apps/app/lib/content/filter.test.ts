@@ -27,6 +27,7 @@ const profile = (overrides: Partial<Profile>): Profile => ({
   notableAchievements: [],
   pinned: false,
   quotes: [],
+  recordDates: null,
   related: [],
   roles: [],
   schools: [],

@@ -3,6 +3,8 @@ id: tm0000014
 name: George Clooney
 slug: george-clooney
 name_authorized: Clooney, George
+name_variants:
+  - George Timothy Clooney
 birth_year: 1961
 tagline: Oscar-winning actor and humanitarian with global impact
 bio: >-
@@ -30,5 +32,13 @@ identifiers:
   lcnaf: no96040669
   viaf: "14928451"
   wikidata: Q23844
+  isni: "0000000120992893"
+  snac: w6jm360m
 image_credit: Photo by Kevork Djansezian, AP
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/George_Clooney
+    note: >-
+      Says he began his education at Blessed Sacrament School in Fort Mitchell, Kentucky, then St. Michael's School,
+      Western Row Elementary and St. Susanna School in Ohio
 verification: unverified

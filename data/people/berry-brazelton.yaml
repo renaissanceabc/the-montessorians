@@ -2,7 +2,9 @@
 id: tm0000005
 name: Berry Brazelton
 slug: berry-brazelton
-name_authorized: Brazelton, T. Berry
+name_authorized: Brazelton, T. Berry, 1918-2018
+name_variants:
+  - Thomas Berry Brazelton
 birth_year: 1918
 death_year: 2018
 tagline: Renowned pediatrician who revolutionized early childhood care
@@ -32,4 +34,6 @@ identifiers:
   lcnaf: n79148104
   viaf: "102065416"
   wikidata: Q3106664
+  isni: "0000000120187501"
+  snac: w67s9czf
 verification: unverified

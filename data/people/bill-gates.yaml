@@ -3,6 +3,9 @@ id: tm0000007
 name: Bill Gates
 slug: bill-gates
 name_authorized: Gates, Bill, 1955-
+name_variants:
+  - William Henry Gates III
+  - William H. Gates III
 birth_year: 1955
 tagline: Co-founder of Microsoft and philanthropist
 bio: >-
@@ -28,4 +31,6 @@ identifiers:
   lcnaf: n91008414
   viaf: "102370574"
   wikidata: Q5284
+  isni: "0000000109296053"
+  snac: w64q88mq
 verification: unverified

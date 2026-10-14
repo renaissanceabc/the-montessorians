@@ -2,6 +2,8 @@ id: tm0000056
 name: John McWhorter
 slug: john-mcwhorter
 name_authorized: McWhorter, John H.
+name_variants:
+  - John Hamilton McWhorter V
 birth_year: 1965
 tagline: American linguist, professor at Columbia University, author, and social commentator
 bio: >-

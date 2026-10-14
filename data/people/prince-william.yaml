@@ -3,6 +3,10 @@ id: tm0000041
 name: Prince William
 slug: prince-william
 name_authorized: William, Prince of Wales, 1982-
+name_variants:
+  - William, Prince of Wales
+  - Prince William, Duke of Cambridge
+  - William Arthur Philip Louis Mountbatten-Windsor
 birth_year: 1982
 tagline: Heir apparent to the British throne and advocate for conservation and mental health
 bio: >-

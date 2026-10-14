@@ -2,7 +2,9 @@
 id: tm0000024
 name: John Bradshaw
 slug: john-bradshaw
-name_authorized: Bradshaw, John
+name_authorized: Bradshaw, John, 1933-2016
+name_variants:
+  - John E. Bradshaw
 birth_year: 1933
 death_year: 2016
 tagline: Pioneer of inner child healing and bestselling author on emotional recovery
@@ -36,4 +38,5 @@ identifiers:
   lcnaf: n87873062
   viaf: "86595748"
   wikidata: Q1699390
+  isni: "0000000081614186"
 verification: unverified

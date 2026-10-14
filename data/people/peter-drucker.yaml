@@ -2,7 +2,10 @@
 id: tm0000038
 name: Peter Drucker
 slug: peter-drucker
-name_authorized: Drucker, Peter F. (Peter Ferdinand)
+name_authorized: Drucker, Peter F. (Peter Ferdinand), 1909-2005
+name_variants:
+  - Peter F. Drucker
+  - Peter Ferdinand Drucker
 birth_year: 1909
 death_year: 2005
 tagline: Visionary thinker who laid the foundation for modern management
@@ -32,4 +35,12 @@ identifiers:
   lcnaf: n79149070
   viaf: "2469565"
   wikidata: Q84238
+  isni: "000000012117813X"
+  snac: w6fn1x56
+sources:
+  - type: article
+    url: https://web.archive.org/web/20220706131115/https://www.drucker.institute/thedx/was-drucker-a-montessori-mafioso/
+    note: >-
+      Drucker Institute (2011) says it doesn't believe he attended a Montessori school; he went to Vienna's Schwarzwald
+      School as a boy
 verification: unverified

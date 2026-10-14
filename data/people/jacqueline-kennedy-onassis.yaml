@@ -2,7 +2,13 @@
 id: tm0000019
 name: Jacqueline Kennedy Onassis
 slug: jacqueline-kennedy-onassis
-name_authorized: Onassis, Jacqueline Kennedy
+name_authorized: Onassis, Jacqueline Kennedy, 1929-1994
+name_variants:
+  - Jacqueline Bouvier
+  - Jacqueline Bouvier Kennedy
+  - Jacqueline Kennedy
+  - Jackie Kennedy
+  - Jackie O
 birth_year: 1929
 death_year: 1994
 tagline: Former First Lady and literary editor
@@ -28,4 +34,5 @@ identifiers:
   lcnaf: n50002974
   viaf: "117604909"
   wikidata: Q165421
+  isni: "000000012148740X"
 verification: unverified

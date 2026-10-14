@@ -2,7 +2,10 @@
 id: tm0000012
 name: Friedensreich Hundertwasser
 slug: friedensreich-hundertwasser
-name_authorized: Hundertwasser, Friedensreich
+name_authorized: Hundertwasser, Friedensreich, 1928-2000
+name_variants:
+  - Friedrich Stowasser
+  - Fritz Hundertwasser
 birth_year: 1928
 death_year: 2000
 tagline: Visionary artist and architect who rejected straight lines and embraced nature

@@ -18,7 +18,7 @@ import { Container } from "@/components/container";
 import { OrgLogo } from "@/components/org-logo";
 import ProfileListItem from "@/components/profile-list-item";
 import { RecordLayout } from "@/components/record-layout";
-import { CorrectionButton, RecordDetails } from "@/components/record-rail";
+import { CorrectionButton, otherNames, RecordDetails } from "@/components/record-rail";
 import { ShareButton } from "@/components/share-button";
 import { identifierEntries, idUrl, organizationJsonLd } from "@/lib/content/authority";
 import { formatLocation } from "@/lib/content/location";
@@ -29,6 +29,7 @@ import {
   ORGANIZATION_TYPE_LABELS,
 } from "@/lib/content/organizations";
 import type { OrganizationRef, OrganizationType } from "@/lib/content/types";
+import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
 import { githubIssueUrl } from "@/lib/url";
 import { prettyUrl, siteUrl, toTitleCase } from "@/lib/utils";
@@ -68,6 +69,14 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
     },
     description: org.description ?? `${org.name} on The Montessorians.`,
     image: `${siteUrl}/api/og/organizations/${slug}.png`,
+    // Spread into a plain object: Next types `other` with an index signature.
+    other: {
+      ...dublinCoreMeta({
+        dates: org.recordDates,
+        permanentUrl: idUrl(org.id),
+        title: org.name,
+      }),
+    },
     title: org.name,
   });
 };
@@ -266,7 +275,13 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
       )}
 
       <div className="flex flex-col gap-3">
-        <RecordDetails id={org.id} identifiers={identifiers} permanentUrl={permanentUrl} />
+        <RecordDetails
+          alsoKnownAs={otherNames(org.nameVariants, [org.name, org.shortName])}
+          heading={org.name}
+          id={org.id}
+          identifiers={identifiers}
+          permanentUrl={permanentUrl}
+        />
         <CorrectionButton href={correction} />
       </div>
     </aside>

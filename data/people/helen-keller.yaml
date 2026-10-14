@@ -2,7 +2,9 @@
 id: tm0000017
 name: Helen Keller
 slug: helen-keller
-name_authorized: Keller, Helen
+name_authorized: Keller, Helen, 1880-1968
+name_variants:
+  - Helen Adams Keller
 birth_year: 1880
 death_year: 1968
 tagline: Advocate and author who overcame deaf-blindness
@@ -29,5 +31,12 @@ identifiers:
   lcnaf: n83158974
   viaf: "36920292"
   wikidata: Q38203
+  isni: "000000012278350X"
 image_credit: Photographer unknown, Library of Congress, via Wikimedia Commons (public domain)
+sources:
+  - type: wikipedia
+    url: https://en.wikipedia.org/wiki/Helen_Keller
+    note: >-
+      Born in 1880; attended the Perkins Institute (1888), the Wright-Humason School for the Deaf (1894), the Cambridge
+      School for Young Ladies (1896) and Radcliffe (1900), all before Montessori's first school opened in 1907
 verification: unverified
