@@ -95,7 +95,9 @@ describe("JSON-LD", () => {
     assert.equal(record.url, node.url);
     assert.deepEqual(record.isPartOf, { "@id": DATASET_ID });
     assert.equal(record.creativeWorkStatus, "Verified");
-    assert.ok(record.citation?.some((c) => c.url?.includes("id.loc.gov")));
+    assert.ok(
+      record.citation?.some((c) => c.url === "https://id.loc.gov/authorities/names/n79064558.html")
+    );
   });
 
   test("the bulk graph starts with the dataset it belongs to", () => {
