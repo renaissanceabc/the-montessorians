@@ -1,5 +1,5 @@
 name: Correction or removal
-description: Something on a profile is wrong, out of date, or should be removed
+description: Something on a profile or organization is wrong, missing, or should be removed
 title: "Correction: "
 labels: ["correction"]
 assignees: ["karelvuong"]
@@ -8,7 +8,7 @@ body:
     id: record
     attributes:
       label: Record id or page
-      description: The id (e.g. tm0000050) or the profile's address
+      description: The id (tm0000050 for a person, tmo000022 for an organization) or the page's address
     validations:
       required: true
   - type: dropdown
@@ -19,7 +19,7 @@ body:
         - Fix something that's wrong
         - Add missing information
         - Merge a duplicate
-        - Credit or remove a photo
+        - Credit or remove a photo or logo
         - Remove this record
     validations:
       required: true
@@ -27,6 +27,6 @@ body:
     id: details
     attributes:
       label: Details
-      description: What should change, and a source if you have one. If this is your own profile, say so.
+      description: What should change, with a source if you have one. If this is about you, say so.
     validations:
       required: true
