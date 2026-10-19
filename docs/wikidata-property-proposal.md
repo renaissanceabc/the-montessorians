@@ -1,5 +1,7 @@
 # Wikidata property proposal: The Montessorians ID
 
+Submitted 2026-10-19 as [Wikidata:Property proposal/The Montessorians ID](https://www.wikidata.org/wiki/Wikidata:Property_proposal/The_Montessorians_ID). The wikitext below is what was posted, kept here for reference.
+
 Paste-ready wikitext for a new proposal page. Create it at [Wikidata:Property proposal/The Montessorians ID](https://www.wikidata.org/w/index.php?title=Wikidata:Property_proposal/The_Montessorians_ID&action=edit), then add `{{Wikidata:Property proposal/The Montessorians ID}}` at the end of the "Authority control" section of [Wikidata:Property proposal/Authority control](https://www.wikidata.org/w/index.php?title=Wikidata:Property_proposal/Authority_control&action=edit). `~~~~` signs it.
 
 Numbers checked against `data/` on 2026-10-15. Update them if the dataset has grown.
@@ -40,7 +42,7 @@ Numbers checked against `data/` on 2026-10-15. Update them if the dataset has gr
 }}
 
 === {{Int Motivation}} ===
-There's no name authority for the Montessori field. LCNAF and VIAF cover people who published books, SNAC has only Maria and Mario Montessori, and most trainers, practitioners and school founders aren't anywhere. The Montessorians gives Montessori alumni and contributors permanent ids that are never reused (merges and withdrawals are logged at https://www.themontessorians.xyz/data/changes.json) and links each record to LCNAF, VIAF, ISNI, ORCID, SNAC and Wikidata. Every record cites its sources and is marked verified or unverified. The data is CC0 and also available as JSON, CSV and schema.org JSON-LD; /id/$1 returns JSON-LD (303 to /data/$1) when asked for application/ld+json. It's the agent authority for the Montessori Glossary Community Project, an open SKOS thesaurus of Montessori terms at the Center for Montessori Studies, University of Hartford. ~~~~
+There's no name authority for the Montessori field. LCNAF and VIAF cover people who published books, SNAC has only Maria and Mario Montessori, and most trainers, practitioners and school founders aren't anywhere. The Montessorians gives Montessori alumni and contributors permanent ids that are never reused (merges and withdrawals are logged at https://www.themontessorians.xyz/data/changes.json) and links each record to LCNAF, VIAF, ISNI, ORCID, SNAC and Wikidata. Every record cites its sources and is marked verified or unverified. The data is CC0 and also available as JSON, CSV and schema.org JSON-LD; /id/$1 returns JSON-LD (303 to /data/$1) when asked for application/ld+json. It's being built as the agent authority for the Montessori Glossary Community Project, an open SKOS thesaurus of Montessori terms at the Center for Montessori Studies, University of Hartford. ~~~~
 
 === {{int:Talk}} ===
 ```
@@ -48,6 +50,5 @@ There's no name authority for the Montessori field. LCNAF and VIAF cover people 
 ## Before posting
 
 - **Unverified records.** 23 of 72 people are unverified, and sources contradict a few of the famous-alumni claims. "Planned use" only adds the ID to verified records, which is the answer if reviewers ask whether the ID implies someone attended a Montessori school.
-- **Glossary claim.** No record has `glossary_citations` yet. If the Glossary isn't publicly citing `/id/` URIs yet, soften that sentence to "is being built as the agent authority for...". Reviewers will check.
 - **Subject item.** There's no Wikidata item for The Montessorians. It can be created once the property exists (it's then used as the "stated in" value), so `subject item` is left out.
 - **Size.** Expect "too small" comments at 95 records. Point to the open contribution flow and the verified-only import.
