@@ -54,9 +54,14 @@
 :root {
   color-scheme: light;
   --radius: 0.625rem;
-  /* Page gutter: 20px on phones, 32px from sm, 56px from lg */
-  --gutter: 1.25rem;
+  /* Page gutter: 20px on phones, 32px from sm, 56px from lg.
+     Landscape notches widen it so text stays inside the safe area. */
+  --gutter: max(1.25rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   --background: oklch(0.9345 0.016 73.68);
+  /* Safari extends these behind the status bar (top) and the bottom toolbar.
+     JS overwrites them with the color actually at each edge. */
+  --edge-top-background: var(--background);
+  --edge-bottom-background: var(--background);
   --foreground: oklch(0.147 0.004 49.25);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.147 0.004 49.25);
@@ -94,14 +99,25 @@
 
 @media (width >= 40rem) {
   :root {
-    --gutter: 2rem;
+    --gutter: max(2rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   }
 }
 
 @media (width >= 64rem) {
   :root {
-    --gutter: 3.5rem;
+    --gutter: max(3.5rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   }
+}
+
+/* Top overscroll and the status bar use the top edge; bottom overscroll uses
+   the bottom edge. The page surface paints the beige over the body so a green
+   footer only recolors the rubber-band below it. */
+html {
+  background-color: var(--edge-top-background);
+}
+
+body {
+  background-color: var(--edge-bottom-background);
 }
 
 @layer base {
@@ -110,14 +126,14 @@
   }
   /* Keep anchors and keyboard focus clear of the sticky header. */
   html {
-    scroll-padding-top: 6rem;
+    scroll-padding-top: calc(6rem + env(safe-area-inset-top, 0px));
 
     @media (width >= 64rem) {
-      scroll-padding-top: 9rem;
+      scroll-padding-top: calc(9rem + env(safe-area-inset-top, 0px));
     }
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
   a,
   button,
@@ -133,6 +149,71 @@
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+}
+
+/* ---- Mobile Safari chrome ------------------------------------------------
+   Thin fixed strips. Safari samples them and paints that color behind the
+   status bar and the bottom toolbar. iOS only: on desktop a 12px strip would
+   cover text, and env(safe-area-inset-*) is 0 there anyway.
+   ---------------------------------------------------------------------- */
+
+.edge-top,
+.edge-bottom {
+  pointer-events: none;
+}
+
+.edge-top::after,
+.edge-bottom::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+@supports (-webkit-touch-callout: none) {
+  [data-page-surface] {
+    padding-top: max(12px, env(safe-area-inset-top, 0px));
+  }
+
+  /* Sit the sticky header just below the strip. `top` offsets the margin edge,
+     and the header's own margin keeps the designed gap under that. */
+  header[data-site-header] {
+    top: max(0.5rem, 12px, env(safe-area-inset-top, 0px));
+  }
+
+  footer[data-site-footer] {
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .edge-top::after {
+    top: 0;
+    height: max(12px, env(safe-area-inset-top, 0px));
+    background: var(--edge-top-background);
+  }
+
+  .edge-bottom::after {
+    bottom: 0;
+    height: max(12px, env(safe-area-inset-bottom, 0px));
+    background: var(--edge-bottom-background);
+  }
+}
+
+@media (width >= 40rem) {
+  @supports (-webkit-touch-callout: none) {
+    header[data-site-header] {
+      top: max(1rem, 12px, env(safe-area-inset-top, 0px));
+    }
+  }
+}
+
+@media (width >= 64rem) {
+  @supports (-webkit-touch-callout: none) {
+    header[data-site-header] {
+      top: max(2rem, 12px, env(safe-area-inset-top, 0px));
+    }
   }
 }
 
@@ -236,8 +317,9 @@
     --card: #fff;
   }
 
+  html,
   body {
-    background: #fff;
+    background: #fff !important;
     color: #000;
   }
 

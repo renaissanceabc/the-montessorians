@@ -45,6 +45,7 @@ const Footer = () => (
   <footer
     className="bg-primary flex w-full flex-col overflow-hidden text-white [&_a:focus-visible]:outline-white"
     data-print-hidden
+    data-site-footer
   >
     <Container className="flex flex-col gap-12 pt-14">
       <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">

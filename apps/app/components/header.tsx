@@ -26,6 +26,7 @@ const Header = () => {
     <header
       className="sticky top-2 z-100 my-2 w-full sm:top-4 sm:my-4 lg:top-8 lg:my-8"
       data-print-hidden
+      data-site-header
     >
       <Container>
         {/* The pill reaches past the content edge by its own padding, so the logo
