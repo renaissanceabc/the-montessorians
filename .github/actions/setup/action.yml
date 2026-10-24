@@ -3,13 +3,13 @@ description: Install Bun and the workspace dependencies.
 
 inputs:
   bun-version:
-    description: Bun version to install.
+    description: Bun version to install. 1.4.4 is the first release patched for CVE-2026-111497.
     required: false
-    default: "1.3.11"
+    default: "1.4.4"
   node-version:
-    description: Node version to install.
+    description: Node version to install. Floor is the CVE-2026-111497 brotli fix (24.22.1).
     required: false
-    default: "22"
+    default: ">=24.22.1"
 
 runs:
   using: composite
