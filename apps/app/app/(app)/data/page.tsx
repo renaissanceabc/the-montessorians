@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { Container } from "@/components/container";
+import { formatCitation } from "@/lib/citation";
+import { datasetJsonLd, DOWNLOADS } from "@/lib/content/exports";
 import { getAllOrganizations } from "@/lib/content/organizations";
 import { getAllProfiles } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
@@ -17,40 +19,19 @@ export const generateMetadata = () =>
     title: "Data & API",
   });
 
-const DOWNLOADS = [
-  {
-    href: "/data/people.json",
-    label: "People (JSON)",
-    note: "Every field, plus each record's permanent URI",
-  },
-  {
-    href: "/data/people.jsonld",
-    label: "People and organizations (JSON-LD)",
-    note: "schema.org, with sameAs links to other authorities",
-  },
-  {
-    href: "/data/people.csv",
-    label: "People (CSV)",
-    note: "One row per person, for spreadsheets and OpenRefine",
-  },
-  {
-    href: "/data/organizations.json",
-    label: "Organizations (JSON)",
-    note: "Schools, training centers, universities, associations",
-  },
-  {
-    href: "/data/changes.json",
-    label: "Changes (JSON)",
-    note: "Merged, withdrawn, and renamed records",
-  },
-];
-
 const Data = () => {
   const people = getAllProfiles();
   const example = people.find((p) => p.kind === "contributor") ?? people[0];
 
   return (
     <Container className="flex flex-col gap-8 pt-6 pb-16 lg:pt-8" size="reading">
+      <script
+        // oxlint-disable-next-line react/no-danger -- JSON-LD must be inline; "<" is escaped.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(datasetJsonLd()).replaceAll("<", "\\u003c"),
+        }}
+        type="application/ld+json"
+      />
       <h1 className="type-title">Data &amp; API</h1>
 
       <div className="prose prose-stone prose-code:font-medium prose-code:before:content-none prose-code:after:content-none prose-pre:whitespace-pre-wrap prose-pre:break-all max-w-none">
@@ -80,6 +61,30 @@ const Data = () => {
           URI redirects to the surviving record; if it is withdrawn, the URI explains why. Person
           ids look like <code>tm0000001</code>; organization ids look like <code>tmo000001</code>.
         </p>
+        <p>
+          Linked-data clients that ask for <code>application/ld+json</code> get the record&apos;s
+          JSON-LD from the same URI instead of its page.
+        </p>
+        {example && (
+          <>
+            <h3 className="scroll-mt-28" id="citing">
+              Citing a record
+            </h3>
+            <p>
+              Give the authorized form of the name, the identifier, and the permanent URI. The Cite
+              button on every profile copies this for you:
+            </p>
+            <pre>
+              <code>
+                {formatCitation({
+                  heading: example.nameAuthorized ?? example.name,
+                  id: example.id,
+                  permanentUrl: `${siteUrl}/id/${example.id}`,
+                })}
+              </code>
+            </pre>
+          </>
+        )}
 
         <h3>Downloads</h3>
         <ul>

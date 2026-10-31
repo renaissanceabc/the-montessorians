@@ -2,7 +2,10 @@
 id: tm0000047
 name: Steve Case
 slug: steve-case
-name_authorized: Case, Steve
+name_authorized: Case, Steve, 1958-
+name_variants:
+  - Stephen McConnell Case
+  - Stephen M. Case
 birth_year: 1958
 tagline: Co-founder of AOL and internet pioneer
 bio: >-
@@ -31,4 +34,10 @@ identifiers:
   lcnaf: n97118467
   viaf: "67302836"
   wikidata: Q562917
+sources:
+  - type: article
+    url: https://washingtonian.com/2007/02/01/second-coming/
+    note: >-
+      Washingtonian (2007) says he attended Punahou, a private school across the street from his house, from
+      kindergarten through 12th grade
 verification: unverified

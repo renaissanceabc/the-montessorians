@@ -23,7 +23,7 @@ import type { ReactNode } from "react";
 
 import { OrgLogo } from "@/components/org-logo";
 import { ProfilePhoto } from "@/components/profile-photo";
-import { CorrectionButton, RecordDetails } from "@/components/record-rail";
+import { CorrectionButton, otherNames, RecordDetails } from "@/components/record-rail";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { HowWeVerify } from "@/components/verification";
@@ -593,6 +593,8 @@ export const ProfileRail = ({
 
     <div className="flex flex-col gap-3">
       <RecordDetails
+        alsoKnownAs={otherNames(profile.nameVariants, [profile.name])}
+        heading={profile.nameAuthorized ?? profile.name}
         id={permanentId.value}
         identifiers={identifiers}
         permanentUrl={permanentId.url}

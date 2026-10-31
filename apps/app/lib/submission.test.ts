@@ -4,6 +4,7 @@ import { describe, test } from "node:test";
 import { load } from "js-yaml";
 
 import {
+  githubSubmissionUrl,
   newOrganizations,
   submissionSchema,
   submissionToYaml,
@@ -78,5 +79,22 @@ describe("submission", () => {
     const again = submissionSchema.parse(yamlToSubmission(submissionToYaml(parsed), known));
     assert.deepEqual(newOrganizations(again), ["Example Training Center"]);
     assert.equal(again.affiliations?.[1].organization, "association-montessori-internationale");
+  });
+});
+
+describe("githubSubmissionUrl", () => {
+  test("prefills the issue form's fields", () => {
+    const url = new URL(
+      githubSubmissionUrl({
+        kinds: ["alum", "contributor"],
+        name: "Jane Doe",
+        roles: ["researcher", "author"],
+        sources: [{ note: undefined, type: "article", url: "https://example.com/jane" }],
+      })
+    );
+    assert.equal(url.searchParams.get("template"), "01_profile_request.yml");
+    assert.equal(url.searchParams.get("kind"), "Both");
+    assert.equal(url.searchParams.get("roles"), "researcher, author");
+    assert.equal(url.searchParams.get("source_type"), "article");
   });
 });

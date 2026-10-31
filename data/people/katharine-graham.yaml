@@ -2,7 +2,10 @@
 id: tm0000029
 name: Katharine Graham
 slug: katharine-graham
-name_authorized: Graham, Katharine
+name_authorized: Graham, Katharine, 1917-2001
+name_variants:
+  - Katharine Meyer
+  - Kay Graham
 birth_year: 1917
 death_year: 2001
 tagline: Pioneering journalist and Pulitzer-winning publisher of The Washington Post
@@ -32,6 +35,7 @@ identifiers:
   viaf: "115577779"
   wikidata: Q435203
   isni: "0000000114555435"
+  snac: w65h7qtn
 image_credit: Photographer unknown, Anefo, Nationaal Archief, via Wikimedia Commons (CC0)
 sources:
   - type: wikipedia

@@ -21,7 +21,11 @@ const sortProfiles = (
       const diff = a.contributions.length - b.contributions.length;
       return diff === 0 ? a.name.localeCompare(b.name) : diff * dir;
     }
-    // "latest" / "trending" → by when the profile was added, ties A–Z either way
+    // "latest" / "trending" → by when the profile was added, ties A–Z either way.
+    // The default "Recently added" order puts pinned people first.
+    if (sortBy === "desc" && a.pinned !== b.pinned) {
+      return a.pinned ? -1 : 1;
+    }
     if (a.addedAt === b.addedAt) {
       return a.name.localeCompare(b.name);
     }

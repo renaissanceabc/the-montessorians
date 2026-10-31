@@ -1,7 +1,7 @@
 {
   "title": "The Montessorians",
   "upload_type": "dataset",
-  "description": "An open directory and name authority for Montessori alumni and for the trainers, teacher-scholars, researchers, authors, and philosophers who shaped the Montessori field. Every record has a permanent identifier and links to other authority files (LCNAF, VIAF, Wikidata, ORCID, ISNI, SNAC). Dataset: CC0. Code: MIT.",
+  "description": "An open directory and name authority for Montessori alumni and for the trainers, practitioner-scholars, researchers, authors, and philosophers who shaped the Montessori field. Every record has a permanent identifier and links to other authority files (LCNAF, VIAF, Wikidata, ORCID, ISNI, SNAC). Dataset: CC0. Code: MIT.",
   "creators": [{ "name": "Renaissance" }, { "name": "Vuong, Karel" }, { "name": "Vuong, Sam" }],
   "license": "cc-zero",
   "keywords": ["montessori", "education", "name authority", "linked open data"],

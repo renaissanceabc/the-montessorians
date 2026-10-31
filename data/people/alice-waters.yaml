@@ -3,6 +3,8 @@ id: tm0000001
 name: Alice Waters
 slug: alice-waters
 name_authorized: Waters, Alice
+name_variants:
+  - Alice Louise Waters
 birth_year: 1944
 tagline: Chef and food activist; founder of Chez Panisse and the Edible Schoolyard Project
 bio: >-
@@ -26,6 +28,8 @@ identifiers:
   lcnaf: n81136337
   viaf: "72571344"
   wikidata: Q434513
+  isni: "0000000082626226"
+  snac: w62b8wxs
 image_credit: Photo courtesy of Alice Waters
 education_notes: >-
   After graduating from UC Berkeley, Alice Waters trained at the International Montessori School in London and taught at

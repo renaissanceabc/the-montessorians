@@ -3,6 +3,8 @@ id: tm0000011
 name: Devi Sridhar
 slug: devi-sridhar
 name_authorized: Sridhar, Devi Lalita
+name_variants:
+  - Devi Lalita Sridhar
 birth_year: 1984
 tagline: Global health expert and youngest American Rhodes Scholar
 bio: >-
@@ -27,4 +29,6 @@ identifiers:
   lcnaf: nr2007013524
   viaf: "31963888"
   wikidata: Q64498584
+  orcid: 0000-0002-5058-9023
+  isni: "0000000077791497"
 verification: unverified

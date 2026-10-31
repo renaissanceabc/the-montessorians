@@ -143,6 +143,7 @@ const OUT_PATH = path.join(CONTENT_DIR, "profiles.generated.json");
 const ORGS_OUT_PATH = path.join(CONTENT_DIR, "organizations.generated.json");
 const CHANGES_OUT_PATH = path.join(CONTENT_DIR, "changes.generated.json");
 const REDIRECTS_OUT_PATH = path.join(CONTENT_DIR, "redirects.generated.json");
+const HEADERS_OUT_PATH = path.join(CONTENT_DIR, "headers.generated.json");
 // The CC0 image dataset lives at the repo root; copy it into the app's public
 // dir at build time so Next.js can serve it at /images/*. (A symlink here breaks
 // `vercel build`'s output collection — it resolves to a copy onto itself.)
@@ -204,6 +205,44 @@ const gitAddedDates = (filePath) =>
   })
     .split("\n")
     .filter(Boolean);
+
+/** Whether git has the full history (Vercel and CI clones can be shallow). */
+const hasFullHistory = (() => {
+  try {
+    return (
+      execFileSync("git", ["rev-parse", "--is-shallow-repository"], {
+        cwd: REPO_ROOT,
+        encoding: "utf-8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim() === "false"
+    );
+  } catch {
+    return false;
+  }
+})();
+
+/**
+ * When a record file was first committed and last changed, for the record's
+ * JSON-LD. Null without full git history: a shallow clone would date every
+ * record to its oldest fetched commit.
+ */
+const recordDatesFor = (relativePaths) => {
+  if (!hasFullHistory) {
+    return null;
+  }
+  try {
+    const [created] = relativePaths.flatMap(gitAddedDates).toSorted();
+    const modified = execFileSync("git", ["log", "-1", "--format=%cI", "--", relativePaths[0]], {
+      cwd: REPO_ROOT,
+      encoding: "utf-8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    // Uncommitted records (local edits) have no history yet.
+    return created && modified ? { created, modified } : null;
+  } catch {
+    return null;
+  }
+};
 
 /**
  * When a profile was first added, used for the "recently added" sort and
@@ -290,7 +329,10 @@ const loadOrganizations = () => {
       );
       continue;
     }
-    orgs.push(snakeToCamel(raw));
+    orgs.push({
+      ...snakeToCamel(raw),
+      recordDates: recordDatesFor([`data/organizations/${file}`]),
+    });
   }
   if (errors.length > 0) {
     console.error(`\n✖ Organization validation failed:\n\n${errors.join("\n\n")}\n`);
@@ -308,13 +350,15 @@ const authorityRedirects = (profiles, organizations, changes) => {
     ...profiles.map((p) => [p.id, `/${p.slug}`]),
     ...organizations.map((o) => [o.id, `/organizations/${o.slug}`]),
   ]);
-  const resolve = (id, depth = 0) => {
+  // The live id a merged id now points to.
+  const liveId = (id, depth = 0) => {
     if (pathById.has(id)) {
-      return pathById.get(id);
+      return id;
     }
     const merged = changes.find((c) => c.id === id && c.action === "merged");
-    return merged && depth < 5 ? resolve(merged.replacedBy, depth + 1) : null;
+    return merged && depth < 5 ? liveId(merged.replacedBy, depth + 1) : null;
   };
+  const resolve = (id) => pathById.get(liveId(id)) ?? null;
   // Permanent URIs: /id/<id> → current page, as real 308s (a statically
   // rendered redirect would only be a meta refresh). Withdrawn ids fall through
   // to the /id/[id] page, which explains the withdrawal.
@@ -324,13 +368,30 @@ const authorityRedirects = (profiles, organizations, changes) => {
       .filter((c) => c.action === "merged")
       .map((c) => ({ destination: resolve(c.id), source: `/id/${c.id}` })),
   ];
+  // A merged id's JSON-LD → the surviving record's JSON-LD.
+  const dataRedirects = changes
+    .filter((c) => c.action === "merged" && liveId(c.id))
+    .map((c) => ({ destination: `/data/${liveId(c.id)}`, source: `/data/${c.id}` }));
   const slugChanges = changes
     .filter((c) => c.action === "renamed" || c.action === "merged")
     .map((c) => ({ destination: resolve(c.id), source: `/${c.slug}` }));
-  return [...idRedirects, ...slugChanges].filter(
+  return [...idRedirects, ...dataRedirects, ...slugChanges].filter(
     (r) => r.destination && r.destination !== r.source
   );
 };
+
+/**
+ * Headers for next.config: each record page advertises its JSON-LD in an HTTP
+ * `Link` header, so linked-data clients find it without parsing the HTML.
+ */
+const authorityHeaders = (profiles, organizations) =>
+  [
+    ...profiles.map((p) => [p.id, `/${p.slug}`]),
+    ...organizations.map((o) => [o.id, `/organizations/${o.slug}`]),
+  ].map(([id, source]) => ({
+    headers: [{ key: "Link", value: `</data/${id}>; rel="alternate"; type="application/ld+json"` }],
+    source,
+  }));
 
 /** Slugs each id had before a rename, so its "added" date survives the rename. */
 const loadPreviousSlugs = () => {
@@ -382,6 +443,13 @@ const loadProfiles = () => {
     const profile = snakeToCamel(raw);
     profile.imageUrl = hasImage ? `/images/${slug}.jpg` : null;
     profile.addedAt = addedAtFor(file, previousSlugs.get(raw.id) ?? []);
+    profile.recordDates = recordDatesFor([
+      `data/people/${file}`,
+      ...(previousSlugs.get(raw.id) ?? []).flatMap((old) => [
+        `data/people/${old}.yaml`,
+        `data/${old}.yaml`,
+      ]),
+    ]);
     profiles.push(profile);
   }
 
@@ -450,6 +518,7 @@ const main = () => {
   writeIfChanged(ORGS_OUT_PATH, organizations);
   writeIfChanged(CHANGES_OUT_PATH, changes);
   writeIfChanged(SCHEMA_REFERENCE_OUT_PATH, schemaReference(organizations));
+  writeIfChanged(HEADERS_OUT_PATH, authorityHeaders(profiles, organizations));
   writeIfChanged(REDIRECTS_OUT_PATH, [
     ...authorityRedirects(profiles, organizations, changes),
     ...tagRedirects(),

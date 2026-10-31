@@ -2,7 +2,10 @@
 id: tm0000050
 name: Yo-Yo Ma
 slug: yo-yo-ma
-name_authorized: Ma, Yo-Yo
+name_authorized: Ma, Yo-Yo, 1955-
+name_variants:
+  - 馬友友
+  - 马友友
 birth_year: 1955
 tagline: World-renowned cellist, United Nations Peace Ambassador, and winner of 19 Grammy Awards
 bio: >-
@@ -27,4 +30,6 @@ identifiers:
   lcnaf: n80016911
   viaf: "27047399"
   wikidata: Q234891
+  isni: "0000000109615907"
+  snac: w6cz38t3
 verification: unverified

@@ -2,7 +2,9 @@
 id: tm0000049
 name: Will Wright
 slug: will-wright
-name_authorized: Wright, Will
+name_authorized: Wright, Will (William Ralph), 1960-
+name_variants:
+  - William Ralph Wright
 birth_year: 1960
 tagline: Visionary game designer and creator of The Sims
 bio: >-

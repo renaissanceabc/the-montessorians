@@ -274,12 +274,21 @@ export const issueBody = (s: Submission): string =>
     "- [ ] Add a photo to `images/` with an `image_credit`, if available",
   ].join("\n");
 
+/** The issue form's "They…" dropdown option for the chosen kinds. */
+const kindOption = (kinds: Submission["kinds"]): string => {
+  if (kinds.length > 1) {
+    return "Both";
+  }
+  return kinds[0] === "contributor" ? "Contributed to the field" : "Attended Montessori";
+};
+
 /** Prefilled GitHub issue (issue form 01_profile_request.yml), for the GitHub route. */
 export const githubSubmissionUrl = (s: Partial<Submission> & { kinds: Submission["kinds"] }) => {
   const firstSource = s.sources?.[0];
   return githubIssueUrl("01_profile_request.yml", {
-    kind: s.kinds.includes("contributor") ? "Contributed to the field" : "Attended Montessori",
+    kind: kindOption(s.kinds),
     name: s.name,
+    roles: s.roles?.join(", "),
     source: firstSource?.url ?? firstSource?.note,
     source_type: firstSource?.type,
     tagline: s.tagline,

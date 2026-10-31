@@ -2,7 +2,7 @@
 id: tm0000028
 name: Kami Cotler
 slug: kami-cotler
-name_authorized: Cotler, Kami
+name_authorized: Cotler, Kami, 1965-
 birth_year: 1965
 tagline: Actress and educator best known as Elizabeth Walton on "The Waltons"
 bio: >-
@@ -26,4 +26,5 @@ identifiers:
   lcnaf: no2010127737
   viaf: "135286283"
   wikidata: Q525401
+  isni: "0000000092315093"
 verification: unverified

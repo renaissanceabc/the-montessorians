@@ -1,6 +1,6 @@
 # The Montessorians
 
-[The Montessorians](https://themontessorians.xyz) is the world's largest open source dataset of Montessori alumni who've gone on to do great things, and an open name authority for the trainers, teacher-scholars, researchers, authors, and philosophers who shaped the Montessori field.
+[The Montessorians](https://themontessorians.xyz) is the world's largest open source dataset of Montessori alumni who've gone on to do great things, and an open name authority for the trainers, practitioner-scholars, researchers, authors, and philosophers who shaped the Montessori field.
 
 This is the public, open source home of both the **dataset** and the **website** that renders it. The dataset is fully community-driven and dedicated to the public domain under [CC0](./LICENSE.md), and the website's source code is open source under the [MIT license](./LICENSE-CODE.md). Contributions to both are welcome.
 
@@ -104,7 +104,7 @@ links:
 
 ---
 
-A contributor record adds `kind: contributor`, `roles` (`founder`, `trainer`, `practitioner`, `teacher-scholar`, `researcher`, `author`, `philosopher`), `affiliations`, and `contributions`. See [`data/people/angeline-stoll-lillard.yaml`](./data/people/angeline-stoll-lillard.yaml) and [`profile.schema.json`](./profile.schema.json) for every field.
+A contributor record adds `kind: contributor`, `roles` (`founder`, `trainer`, `practitioner-scholar`, `researcher`, `author`, `philosopher`), `affiliations`, and `contributions`. See [`data/people/angeline-stoll-lillard.yaml`](./data/people/angeline-stoll-lillard.yaml) and [`profile.schema.json`](./profile.schema.json) for every field.
 
 ---
 

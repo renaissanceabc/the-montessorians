@@ -6,6 +6,7 @@ import { RecordLayout } from "@/components/record-layout";
 import { Separator } from "@/components/ui/separator";
 import { contributionUrl, identifierEntries, idUrl, personJsonLd } from "@/lib/content/authority";
 import { getAllSlugs, getProfileWithAdjacent, getRelatedPeople } from "@/lib/content/profiles";
+import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
 import { correctionUrl } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
@@ -35,9 +36,13 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
     },
     description: data.profile.tagline || "",
     image: `${siteUrl}/api/og/${slug}.png`,
+    // Spread into a plain object: Next types `other` with an index signature.
     other: {
-      // The permanent identifier, for citation managers and crawlers.
-      "dc.identifier": idUrl(data.profile.id),
+      ...dublinCoreMeta({
+        dates: data.profile.recordDates,
+        permanentUrl: idUrl(data.profile.id),
+        title: data.profile.nameAuthorized ?? data.profile.name,
+      }),
     },
     title: data.profile.name,
   });
