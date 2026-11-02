@@ -13,5 +13,11 @@ export default defineConfig({
     // Vendored agent skills (bunx skills add), tracked by skills-lock.json.
     ".agents/**",
     ".claude/skills/**",
+
+    // devkit:begin
+    ".cursor/skills/**",
+    ".claude/skills/**",
+    ".agents/skills/**",
+    // devkit:end
   ],
 });

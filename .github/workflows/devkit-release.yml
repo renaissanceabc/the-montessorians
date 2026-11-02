@@ -1,0 +1,59 @@
+# devkit@v1 managed. Edit in renaissanceabc/devkit.
+name: Release
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  release:
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 15
+    env:
+      HAS_APP: ${{ secrets.RELEASE_APP_ID != '' && secrets.RELEASE_APP_PRIVATE_KEY != '' }}
+    steps:
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        if: env.HAS_APP == 'true'
+        id: app
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        id: release
+        with:
+          token: ${{ steps.app.outputs.token || github.token }}
+          target-branch: main
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Sync main
+        if: steps.release.outputs.releases_created == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.release.outputs.tag_name }}
+          SYNC_BRANCH: develop
+        run: |
+          # Open or refresh the main -> sync-branch PR after a release. Does not merge it.
+          set -euo pipefail
+
+          : "${GH_TOKEN:?GH_TOKEN is required}"
+          : "${GH_REPO:?GH_REPO is required}"
+          : "${TAG:?TAG is required}"
+          : "${SYNC_BRANCH:?SYNC_BRANCH is required}"
+
+          title="chore: sync release $TAG"
+          body="Carries $TAG from \`main\` into \`$SYNC_BRANCH\`. The devkit gate keeps auto-merge off when the diff is guarded."
+
+          existing="$(gh pr list --repo "$GH_REPO" --base "$SYNC_BRANCH" --head main --state open \
+            --json number --jq '.[0].number // empty')"
+
+          if [ -n "$existing" ]; then
+            gh pr edit "$existing" --repo "$GH_REPO" --title "$title" --body "$body"
+            echo "Refreshed #$existing"
+          else
+            gh pr create --repo "$GH_REPO" --base "$SYNC_BRANCH" --head main --title "$title" --body "$body"
+          fi

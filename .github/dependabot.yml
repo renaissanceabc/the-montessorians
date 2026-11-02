@@ -1,6 +1,31 @@
+# devkit@v1 managed. Edit in renaissanceabc/devkit.
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: bun
+    directory: /
     schedule:
-      interval: "weekly"
+      interval: weekly
+      day: monday
+    target-branch: develop
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    commit-message:
+      prefix: build(deps)
+    groups:
+      runtime:
+        dependency-type: production
+        update-types: ["minor", "patch"]
+      tooling:
+        dependency-type: development
+        update-types: ["minor", "patch"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    target-branch: develop
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ["*"]

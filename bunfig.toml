@@ -1,0 +1,9 @@
+# devkit@v1 managed. Edit in renaissanceabc/devkit.
+
+[install]
+# Block package versions younger than 3 days.
+minimumReleaseAge = 259200
+minimumReleaseAgeExcludes = []
+
+[install.security]
+scanner = "@socketsecurity/bun-security-scanner"

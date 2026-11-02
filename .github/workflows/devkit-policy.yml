@@ -1,0 +1,57 @@
+# devkit@v1 managed. Edit in renaissanceabc/devkit.
+name: Policy
+on:
+  pull_request:
+    branches: [develop]
+    types:
+      [
+        opened,
+        edited,
+        reopened,
+        ready_for_review,
+        synchronize,
+        labeled,
+        unlabeled,
+        converted_to_draft,
+      ]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency:
+  group: devkit-policy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  policy:
+    if: github.event.pull_request.base.ref == 'develop'
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 5
+    env:
+      HAS_APP: ${{ secrets.RELEASE_APP_ID != '' && secrets.RELEASE_APP_PRIVATE_KEY != '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        if: env.HAS_APP == 'true'
+        id: app
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - name: Policy
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          TITLE: ${{ github.event.pull_request.title }}
+          BASE: develop
+          ACTUAL_BASE: ${{ github.event.pull_request.base.ref }}
+          DRAFT: ${{ github.event.pull_request.draft }}
+          FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+          TITLE_MAX: "0"
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          EXTRA_PATHS: ""
+        run: bash .github/scripts/devkit/policy.sh

@@ -1,0 +1,5 @@
+# devkit:begin
+.cursor/skills/
+.claude/skills/
+.agents/skills/
+# devkit:end
