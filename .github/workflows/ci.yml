@@ -22,6 +22,9 @@ env:
   # cache. PRs read the remote cache; only pushes to develop/main write to it, so
   # a PR can't poison what later runs replay.
   TURBO_CACHE: ${{ github.event_name == 'push' && 'local:rw,remote:rw' || 'local:rw,remote:r' }}
+  # PRs skip next build: Vercel builds every PR preview. Pushes to develop and
+  # main still build.
+  TURBO_TASKS: ${{ github.event_name == 'push' && 'typecheck test build' || 'typecheck test' }}
   TURBO_TELEMETRY_DISABLED: 1
   NEXT_TELEMETRY_DISABLED: 1
 
@@ -51,6 +54,7 @@ jobs:
       # Restores the newest one for this lockfile, so a build recompiles only
       # what changed.
       - name: Restore Next.js cache
+        if: github.event_name == 'push'
         uses: actions/cache/restore@v4
         with:
           path: apps/app/.next/cache
@@ -65,11 +69,13 @@ jobs:
         run: |
           mkdir -p apps/app/.next/cache
           touch "$RUNNER_TEMP/before-build"
-          bunx turbo run typecheck test build --output-logs=errors-only
+          # shellcheck disable=SC2086 # TURBO_TASKS is a list of task names.
+          bunx turbo run $TURBO_TASKS --output-logs=errors-only
 
       # Saved only when next build wrote to the cache. When turbo replays the
       # build, the folder is unchanged and saving it again would only cost time.
       - name: Check for a fresh Next.js cache
+        if: github.event_name == 'push'
         id: next-cache
         run: |
           if [ -n "$(find apps/app/.next/cache -type f -newer "$RUNNER_TEMP/before-build" -print -quit)" ]; then
