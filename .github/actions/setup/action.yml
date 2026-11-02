@@ -22,13 +22,14 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
-    # Bun's global package cache, keyed on the lockfile, so installs are mostly copies.
+    # Bun's global package cache, keyed on the lockfile, so installs are mostly
+    # copies. No restore-keys: a lockfile change starts from a clean cache rather
+    # than carrying every old package forward.
     - name: Cache Bun packages
       uses: actions/cache@v4
       with:
         path: ~/.bun/install/cache
         key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
-        restore-keys: bun-${{ runner.os }}-
 
     - name: Install dependencies
       shell: bash
