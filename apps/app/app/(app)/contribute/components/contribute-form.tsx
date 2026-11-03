@@ -60,6 +60,8 @@ import { OrganizationPicker } from "./organization-picker";
 import type { OrganizationOption, PickedOrganization } from "./organization-picker";
 import { TagInput } from "./tag-input";
 
+const DIGITS_REGEX = /^\d+$/u;
+
 type Kind = Submission["kinds"][number];
 type Mode = "form" | "yaml";
 type LinkType = (typeof LINK_TYPES)[number];
@@ -259,7 +261,7 @@ const setError = (errors: ErrorTree, name: string, message: string) => {
       node[part] ??= { message, type: "validation" };
     } else {
       // react-hook-form keeps array fields (numeric segments) as arrays.
-      node[part] ??= /^\d+$/u.test(parts[i + 1]) ? [] : {};
+      node[part] ??= DIGITS_REGEX.test(parts[i + 1]) ? [] : {};
       // SAFETY: only the last segment holds a leaf, so this is a tree or an array set
       // above; an array indexed by string keys behaves like the tree it stands in for.
       node = node[part] as ErrorTree;

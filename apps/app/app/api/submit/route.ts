@@ -45,7 +45,7 @@ const parseSubmission = (text: string) => {
  * Guarded by, in order: a per-IP rate limit (20 an hour, in memory per
  * instance, backed by a Vercel Firewall rate-limit rule on this path; see
  * docs/operations.md), a 32 KB body cap enforced while reading (before any
- * parsing), and Vercel BotID.
+ * parsing), and Vercel BotID, which runs alongside the body read.
  */
 export const POST = async (request: Request) => {
   const rate = limiter.check(clientIp(request));
@@ -53,23 +53,26 @@ export const POST = async (request: Request) => {
     return tooManyRequests(rate);
   }
 
-  let text: string;
-  try {
-    text = await readBodyWithLimit(request, MAX_BODY_BYTES);
-  } catch (error) {
-    if (error instanceof BodyTooLargeError) {
+  // BotID reads only the request headers, so it runs while the body streams in.
+  const [body, verification] = await Promise.allSettled([
+    readBodyWithLimit(request, MAX_BODY_BYTES),
+    checkBotId(),
+  ]);
+  if (body.status === "rejected") {
+    if (body.reason instanceof BodyTooLargeError) {
       return NextResponse.json({ error: "Submission is too large" }, { status: 413 });
     }
     return NextResponse.json({ error: "Could not read the submission" }, { status: 400 });
   }
+  if (verification.status === "rejected") {
+    throw verification.reason;
+  }
 
-  // BotID reads only the request headers, so the body can be read first.
-  const verification = await checkBotId();
-  if (verification.isBot) {
+  if (verification.value.isBot) {
     return NextResponse.json({ error: "Request blocked" }, { status: 403 });
   }
 
-  const parsed = parseSubmission(text);
+  const parsed = parseSubmission(body.value);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid submission", issues: parsed.error.issues },

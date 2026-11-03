@@ -1,4 +1,4 @@
-import { getAllProfiles } from "./profiles";
+import { getAllProfiles, toProfileSummary } from "./profiles";
 import type { PastProfile, Profile } from "./types";
 
 const MS_PER_DAY = 86_400_000;
@@ -71,7 +71,7 @@ export const getPastFeatures = (todayStr: string = getEasternDate(), count = 30)
   for (let i = 0; i < count; i += 1) {
     const dayNum = base - i;
     const profile = ROTATION[mod(dayNum, ROTATION.length)];
-    result.push({ ...profile, featuredDate: dateStringFromDayNumber(dayNum) });
+    result.push({ ...toProfileSummary(profile), featuredDate: dateStringFromDayNumber(dayNum) });
   }
   return result;
 };

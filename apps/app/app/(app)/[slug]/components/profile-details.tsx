@@ -31,7 +31,7 @@ import { LINK_LABELS } from "@/lib/content/types";
 import type {
   Contribution,
   OrganizationRef,
-  Profile,
+  ProfileDetails,
   RelatedPerson,
   Source,
 } from "@/lib/content/types";
@@ -297,7 +297,7 @@ const ContributionsSection = ({
 };
 
 /** Which main-column sections a profile has, and whether it has none of them. */
-const profileSections = (profile: Profile, contributionCount: number) => {
+const profileSections = (profile: ProfileDetails, contributionCount: number) => {
   const isAlum = profile.kinds.includes("alum");
   const isContributor = profile.kinds.includes("contributor");
   const hasEducation = isAlum && (profile.schools.length > 0 || Boolean(profile.educationNotes));
@@ -310,7 +310,7 @@ const profileSections = (profile: Profile, contributionCount: number) => {
   return { hasAffiliations, hasEducation, isContributor, isSparse };
 };
 
-const BioAndTags = ({ profile }: { profile: Profile }) => {
+const BioAndTags = ({ profile }: { profile: ProfileDetails }) => {
   if (!profile.bio && profile.tags.length === 0) {
     return null;
   }
@@ -344,7 +344,7 @@ export const ProfileMain = ({
   contributions,
   correctionUrl,
 }: {
-  profile: Profile;
+  profile: ProfileDetails;
   contributions: ContributionLink[];
   correctionUrl: string;
 }) => {
@@ -486,7 +486,7 @@ export const ProfileRail = ({
   permanentId,
   correctionUrl,
 }: {
-  profile: Profile;
+  profile: ProfileDetails;
   identifiers: IdentifierLink[];
   related: RelatedPerson[];
   permanentId: { value: string; url: string };

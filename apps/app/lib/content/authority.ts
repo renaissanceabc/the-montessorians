@@ -166,12 +166,14 @@ export const contributionUrl = (c: Profile["contributions"][number]): string | n
 };
 
 /** The host shown beside a contribution link; only a free-form `url` needs parsing. */
+const WWW_REGEX = /^www\./u;
+
 export const contributionHost = (c: Profile["contributions"][number]): string | null => {
   if (c.doi) {
     return "doi.org";
   }
   if (c.url) {
-    return URL.parse(c.url)?.hostname.replace(/^www\./u, "") || null;
+    return URL.parse(c.url)?.hostname.replace(WWW_REGEX, "") || null;
   }
   if (c.isbn) {
     return "openlibrary.org";

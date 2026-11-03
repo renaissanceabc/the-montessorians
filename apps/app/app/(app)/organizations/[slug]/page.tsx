@@ -28,11 +28,14 @@ import {
   getOrganizationMembers,
   ORGANIZATION_TYPE_LABELS,
 } from "@/lib/content/organizations";
+import { toProfileSummary } from "@/lib/content/profiles";
 import type { OrganizationRef, OrganizationType } from "@/lib/content/types";
 import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
 import { githubIssueUrl } from "@/lib/url";
 import { prettyUrl, siteUrl, toTitleCase } from "@/lib/utils";
+
+const WWW_REGEX = /^www\./u;
 
 export const generateStaticParams = () => getAllOrganizations().map((org) => ({ slug: org.slug }));
 
@@ -108,7 +111,7 @@ const Dot = () => (
 
 /** The source's host for its link text, or undefined when it isn't a URL with a host. */
 const linkHost = (source: string | undefined) =>
-  (source && URL.parse(source)?.hostname.replace(/^www\./u, "")) || undefined;
+  (source && URL.parse(source)?.hostname.replace(WWW_REGEX, "")) || undefined;
 
 const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
@@ -227,7 +230,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                   detail={[ref.level && toTitleCase(ref.level), yearRange(ref)]
                     .filter(Boolean)
                     .join(" · ")}
-                  profile={profile}
+                  profile={toProfileSummary(profile)}
                 />
               </li>
             ))}
@@ -243,7 +246,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                 <ProfileListItem
                   hideOrganization={org.slug}
                   detail={[ref.role, yearRange(ref)].filter(Boolean).join(" · ")}
-                  profile={profile}
+                  profile={toProfileSummary(profile)}
                 />
               </li>
             ))}

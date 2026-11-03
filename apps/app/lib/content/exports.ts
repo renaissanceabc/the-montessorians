@@ -12,6 +12,8 @@ import { getAllOrganizations } from "./organizations";
 import { getAllProfiles } from "./profiles";
 import type { Profile } from "./types";
 
+const CSV_SPECIAL_CHARS_REGEX = /[",\n]/u;
+
 // Bulk exports of the dataset, served from /data/*.
 
 const LICENSE = LICENSE_URL;
@@ -128,7 +130,7 @@ type CsvValue = string | number | boolean | null | undefined;
 
 const csvCell = (value: CsvValue) => {
   const text = value === null || value === undefined ? "" : String(value);
-  return /[",\n]/u.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+  return CSV_SPECIAL_CHARS_REGEX.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 };
 
 export const peopleCsv = (siteUrl: string): string => {

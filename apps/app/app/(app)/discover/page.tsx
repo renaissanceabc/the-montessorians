@@ -1,5 +1,5 @@
 import { getDirectoryCounts } from "@/lib/content/directory";
-import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
+import { getAllTags, getProfileSummaries } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { DEFAULT_TAGS_FILTERS } from "@/lib/types";
 import { siteUrl } from "@/lib/utils";
@@ -22,7 +22,7 @@ const Discover = () => (
   // this page stays fully static.
   <ProfilesPageWrapper
     counts={getDirectoryCounts()}
-    profiles={getAllProfiles()}
+    profiles={getProfileSummaries()}
     tags={getAllTags(DEFAULT_TAGS_FILTERS).data}
   />
 );

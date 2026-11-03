@@ -1,6 +1,8 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
+const TRAILING_SLASH_REGEX = /\/$/u;
+
 const hostnameFromUrl = (url: string | undefined) => (url ? URL.parse(url)?.hostname : undefined);
 
 /**
@@ -14,7 +16,8 @@ export const resolveSiteUrl = () => {
     return `https://${host}`;
   }
   return (
-    process.env.PORTLESS_URL?.replace(/\/$/u, "") ?? `http://localhost:${process.env.PORT ?? 3000}`
+    process.env.PORTLESS_URL?.replace(TRAILING_SLASH_REGEX, "") ??
+    `http://localhost:${process.env.PORT ?? 3000}`
   );
 };
 

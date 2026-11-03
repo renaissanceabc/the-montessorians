@@ -237,6 +237,58 @@ export interface Profile {
   recordDates: RecordDates | null;
 }
 
+/** The parts of an organization reference a directory card shows and search matches. */
+export type OrganizationRefSummary = Pick<
+  OrganizationRef,
+  "organization" | "organizationName" | "organizationShortName" | "organizationNameVariants"
+>;
+
+/**
+ * Just what a directory card and the client-side filter read. Directory pages
+ * ship every person to the browser, so they send this instead of a whole Profile.
+ */
+export type ProfileSummary = Pick<
+  Profile,
+  | "addedAt"
+  | "birthYear"
+  | "deathYear"
+  | "imageUrl"
+  | "kinds"
+  | "name"
+  | "nameAuthorized"
+  | "nameVariants"
+  | "pinned"
+  | "roles"
+  | "slug"
+  | "tagline"
+  | "tags"
+  | "verification"
+> & {
+  affiliations: OrganizationRefSummary[];
+  contributionCount: number;
+  schools: OrganizationRefSummary[];
+};
+
+/** The fields the profile page's client sections render. */
+export type ProfileDetails = Pick<
+  Profile,
+  | "affiliations"
+  | "bio"
+  | "educationNotes"
+  | "glossaryCitations"
+  | "kinds"
+  | "links"
+  | "montessoriNotes"
+  | "name"
+  | "nameAuthorized"
+  | "nameVariants"
+  | "notableAchievements"
+  | "quotes"
+  | "schools"
+  | "sources"
+  | "tags"
+>;
+
 export interface Organization {
   id: string;
   slug: string;
@@ -273,7 +325,7 @@ export interface AuthorityChange {
   reason?: string;
 }
 
-export type PastProfile = Profile & { featuredDate: string };
+export type PastProfile = ProfileSummary & { featuredDate: string };
 
 export type AdjacentRef =
   | { slug: string; name: string; imageUrl: string | null }

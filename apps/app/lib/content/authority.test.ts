@@ -14,6 +14,7 @@ import { datasetJsonLd, peopleJsonLd } from "./exports";
 import { getAllOrganizations } from "./organizations";
 import { getAllProfiles, getProfileBySlug } from "./profiles";
 
+const WWW_REGEX = /^www\./u;
 const URL_KEYS = new Set(["@id", "url", "sameAs", "image", "logo", "license", "contentUrl"]);
 const httpUrl = z.url({ protocol: /^https?$/u });
 const urlOrUrls = z.union([httpUrl, z.array(httpUrl).min(1)]);
@@ -121,7 +122,7 @@ describe("contributionHost", () => {
     for (const profile of getAllProfiles()) {
       for (const c of profile.contributions) {
         const href = contributionUrl(c);
-        const expected = href ? new URL(href).hostname.replace(/^www\./u, "") : null;
+        const expected = href ? new URL(href).hostname.replace(WWW_REGEX, "") : null;
         assert.equal(contributionHost(c), expected, href ?? c.title);
       }
     }
