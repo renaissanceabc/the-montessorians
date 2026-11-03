@@ -106,6 +106,10 @@ const Dot = () => (
   </span>
 );
 
+/** The source's host for its link text, or undefined when it isn't a URL with a host. */
+const linkHost = (source: string | undefined) =>
+  (source && URL.parse(source)?.hostname.replace(/^www\./u, "")) || undefined;
+
 const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
   const org = getOrganizationBySlug(slug);
@@ -287,6 +291,8 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
     </aside>
   );
 
+  const logoSourceHost = linkHost(org.logoSource);
+
   return (
     <>
       <Container className="flex flex-col gap-6 pt-2 pb-16 max-sm:pb-24 lg:pt-4">
@@ -298,9 +304,9 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
         {org.logoUrl && org.logoSource && (
           <p className="text-muted-foreground text-xs [overflow-wrap:anywhere]">
             Logo from{" "}
-            {URL.canParse(org.logoSource) ? (
+            {logoSourceHost ? (
               <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
-                {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
+                {logoSourceHost}
               </Link>
             ) : (
               org.logoSource

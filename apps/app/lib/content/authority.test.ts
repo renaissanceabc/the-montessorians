@@ -3,7 +3,13 @@ import { describe, test } from "node:test";
 
 import { z } from "zod";
 
-import { DATASET_ID, organizationJsonLd, personJsonLd } from "./authority";
+import {
+  contributionHost,
+  contributionUrl,
+  DATASET_ID,
+  organizationJsonLd,
+  personJsonLd,
+} from "./authority";
 import { datasetJsonLd, peopleJsonLd } from "./exports";
 import { getAllOrganizations } from "./organizations";
 import { getAllProfiles, getProfileBySlug } from "./profiles";
@@ -107,5 +113,17 @@ describe("JSON-LD", () => {
     const [first] = peopleJsonLd()["@graph"];
     assert.equal(first?.["@type"], "Dataset");
     assert.ok(!("@context" in (first ?? {})));
+  });
+});
+
+describe("contributionHost", () => {
+  test("matches the host of contributionUrl for every contribution", () => {
+    for (const profile of getAllProfiles()) {
+      for (const c of profile.contributions) {
+        const href = contributionUrl(c);
+        const expected = href ? new URL(href).hostname.replace(/^www\./u, "") : null;
+        assert.equal(contributionHost(c), expected, href ?? c.title);
+      }
+    }
   });
 });

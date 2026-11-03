@@ -165,6 +165,20 @@ export const contributionUrl = (c: Profile["contributions"][number]): string | n
   return null;
 };
 
+/** The host shown beside a contribution link; only a free-form `url` needs parsing. */
+export const contributionHost = (c: Profile["contributions"][number]): string | null => {
+  if (c.doi) {
+    return "doi.org";
+  }
+  if (c.url) {
+    return URL.parse(c.url)?.hostname.replace(/^www\./u, "") || null;
+  }
+  if (c.isbn) {
+    return "openlibrary.org";
+  }
+  return null;
+};
+
 /** `undefined` for an empty list, so JSON-LD omits the property instead of emitting `[]`. */
 const nonEmpty = <T>(list: T[]): T[] | undefined => (list.length > 0 ? list : undefined);
 

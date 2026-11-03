@@ -1,12 +1,7 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
-const hostnameFromUrl = (url: string | undefined) => {
-  if (!(url && URL.canParse(url))) {
-    return;
-  }
-  return new URL(url).hostname;
-};
+const hostnameFromUrl = (url: string | undefined) => (url ? URL.parse(url)?.hostname : undefined);
 
 /**
  * The site's public origin: the Vercel production domain when set, then the

@@ -4,7 +4,13 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Container } from "@/components/container";
 import { RecordLayout } from "@/components/record-layout";
 import { Separator } from "@/components/ui/separator";
-import { contributionUrl, identifierEntries, idUrl, personJsonLd } from "@/lib/content/authority";
+import {
+  contributionHost,
+  contributionUrl,
+  identifierEntries,
+  idUrl,
+  personJsonLd,
+} from "@/lib/content/authority";
 import { getAllSlugs, getProfileWithAdjacent, getRelatedPeople } from "@/lib/content/profiles";
 import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
@@ -59,16 +65,11 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
   const { profile, previous, next } = data;
   const isContributor = profile.kind === "contributor";
 
-  const contributions = profile.contributions.map((c) => {
-    const href = contributionUrl(c);
-    let host: string | null = null;
-    try {
-      host = href ? new URL(href).hostname.replace(/^www\./u, "") : null;
-    } catch {
-      host = null;
-    }
-    return { ...c, host, href };
-  });
+  const contributions = profile.contributions.map((c) => ({
+    ...c,
+    host: contributionHost(c),
+    href: contributionUrl(c),
+  }));
 
   const permanentUrl = idUrl(profile.id);
   const jsonLd = personJsonLd(profile);
