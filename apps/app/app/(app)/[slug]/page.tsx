@@ -5,7 +5,12 @@ import { Container } from "@/components/container";
 import { RecordLayout } from "@/components/record-layout";
 import { Separator } from "@/components/ui/separator";
 import { contributionUrl, identifierEntries, idUrl, personJsonLd } from "@/lib/content/authority";
-import { getAllSlugs, getProfileWithAdjacent, getRelatedPeople } from "@/lib/content/profiles";
+import {
+  getAllSlugs,
+  getProfileWithAdjacent,
+  getRelatedPeople,
+  toProfileDetails,
+} from "@/lib/content/profiles";
 import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
 import { correctionUrl } from "@/lib/url";
@@ -74,6 +79,7 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
   const jsonLd = personJsonLd(profile);
 
   const correction = correctionUrl(profile);
+  const details = toProfileDetails(profile);
 
   return (
     <>
@@ -96,7 +102,7 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
               <ProfileMain
                 contributions={contributions}
                 correctionUrl={correction}
-                profile={profile}
+                profile={details}
               />
             </>
           }
@@ -110,7 +116,7 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
                 value,
               }))}
               permanentId={{ url: permanentUrl, value: profile.id }}
-              profile={profile}
+              profile={details}
               related={getRelatedPeople(profile)}
             />
           }

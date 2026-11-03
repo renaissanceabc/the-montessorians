@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { filterAndSortProfiles } from "@/lib/content/filter";
-import type { Profile, Tag } from "@/lib/content/types";
+import type { ProfileSummary, Tag } from "@/lib/content/types";
 import { DEFAULT_PROFILES_FILTERS } from "@/lib/types";
 
 import ProfilesList from "../../../discover/components/profiles-list";
@@ -36,7 +36,13 @@ const SORT_OPTIONS = [
 
 type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
-export const TagProfilesPageWrapper = ({ tag, profiles }: { tag: Tag; profiles: Profile[] }) => {
+export const TagProfilesPageWrapper = ({
+  tag,
+  profiles,
+}: {
+  tag: Tag;
+  profiles: ProfileSummary[];
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 

@@ -28,6 +28,7 @@ import {
   getOrganizationMembers,
   ORGANIZATION_TYPE_LABELS,
 } from "@/lib/content/organizations";
+import { toProfileSummary } from "@/lib/content/profiles";
 import type { OrganizationRef, OrganizationType } from "@/lib/content/types";
 import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
@@ -223,7 +224,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                   detail={[ref.level && toTitleCase(ref.level), yearRange(ref)]
                     .filter(Boolean)
                     .join(" · ")}
-                  profile={profile}
+                  profile={toProfileSummary(profile)}
                 />
               </li>
             ))}
@@ -239,7 +240,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                 <ProfileListItem
                   hideOrganization={org.slug}
                   detail={[ref.role, yearRange(ref)].filter(Boolean).join(" · ")}
-                  profile={profile}
+                  profile={toProfileSummary(profile)}
                 />
               </li>
             ))}

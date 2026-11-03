@@ -2,7 +2,7 @@ import { BadgeCheckIcon, Building2Icon, GraduationCapIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import type { OrganizationRef, Profile } from "@/lib/content/types";
+import type { OrganizationRefSummary, ProfileSummary } from "@/lib/content/types";
 import { cn } from "@/lib/utils";
 
 import { ProfilePhoto } from "./profile-photo";
@@ -11,7 +11,7 @@ import { ProfilePhoto } from "./profile-photo";
 const TAGS_SHOWN = 3;
 const TAGS_SHOWN_PHONE = 2;
 
-const years = (profile: Profile) => {
+const years = (profile: ProfileSummary) => {
   if (profile.birthYear && profile.deathYear) {
     return `${profile.birthYear}–${profile.deathYear}`;
   }
@@ -21,7 +21,7 @@ const years = (profile: Profile) => {
   return profile.deathYear ? `d. ${profile.deathYear}` : "";
 };
 
-const orgLabel = (ref: OrganizationRef) =>
+const orgLabel = (ref: OrganizationRefSummary) =>
   ref.organizationShortName ?? ref.organizationName ?? ref.organization;
 
 const Dot = () => (
@@ -41,7 +41,7 @@ const ProfileListItem = ({
   className,
   hideOrganization,
 }: {
-  profile: Profile;
+  profile: ProfileSummary;
   /** Context for where it's listed, e.g. their level or role at an organization */
   detail?: ReactNode;
   className?: string;
@@ -54,7 +54,7 @@ const ProfileListItem = ({
   );
   const OrgIcon = isContributor ? Building2Icon : GraduationCapIcon;
   const lifespan = years(profile);
-  const works = profile.contributions.length;
+  const works = profile.contributionCount;
   const tags = profile.tags.slice(0, TAGS_SHOWN).map((tag) => tag.label);
   const moreOnPhone = profile.tags.length - TAGS_SHOWN_PHONE;
   const moreFromMd = profile.tags.length - TAGS_SHOWN;
