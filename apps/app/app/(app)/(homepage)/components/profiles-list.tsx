@@ -1,10 +1,10 @@
 import ProfileListItem from "@/components/profile-list-item";
-import type { Profile } from "@/lib/content/types";
+import type { ProfileSummary } from "@/lib/content/types";
 
 /** Recently added cards on the homepage. */
 const RECENT_SHOWN = 6;
 
-const ProfilesHomepageList = ({ profiles }: { profiles: Profile[] }) => {
+const ProfilesHomepageList = ({ profiles }: { profiles: ProfileSummary[] }) => {
   if (!profiles.length) {
     return (
       <div className="text-muted-foreground text-sm italic">

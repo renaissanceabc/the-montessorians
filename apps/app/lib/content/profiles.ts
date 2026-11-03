@@ -5,8 +5,12 @@ import { filterAndSortProfiles } from "./filter";
 import rawProfiles from "./profiles.generated.json";
 import type {
   Profile,
+  OrganizationRef,
+  OrganizationRefSummary,
+  ProfileDetails,
   ProfileKind,
   ProfilePage,
+  ProfileSummary,
   RawProfile,
   RawRelated,
   RelatedPerson,
@@ -66,10 +70,63 @@ const enrich = (raw: RawProfile): Profile => ({ ...enrichIdentity(raw), ...enric
 // data/people, which scripts/validate.js checks against the RawProfile shape.
 const ALL: Profile[] = (rawProfiles as RawProfile[]).map(enrich);
 const BY_SLUG = new Map(ALL.map((p) => [p.slug, p]));
+
+const toOrganizationRefSummary = (ref: OrganizationRef): OrganizationRefSummary => ({
+  organization: ref.organization,
+  organizationName: ref.organizationName,
+  organizationNameVariants: ref.organizationNameVariants,
+  organizationShortName: ref.organizationShortName,
+});
+
+/** Narrow a profile to what a directory card and the client-side filter read. */
+export const toProfileSummary = (p: Profile): ProfileSummary => ({
+  addedAt: p.addedAt,
+  affiliations: p.affiliations.map(toOrganizationRefSummary),
+  birthYear: p.birthYear,
+  contributionCount: p.contributions.length,
+  deathYear: p.deathYear,
+  imageUrl: p.imageUrl,
+  kinds: p.kinds,
+  name: p.name,
+  nameAuthorized: p.nameAuthorized,
+  nameVariants: p.nameVariants,
+  pinned: p.pinned,
+  roles: p.roles,
+  schools: p.schools.map(toOrganizationRefSummary),
+  slug: p.slug,
+  tagline: p.tagline,
+  tags: p.tags,
+  verification: p.verification,
+});
+
+/** Narrow a profile to what the profile page's client sections render. */
+export const toProfileDetails = (p: Profile): ProfileDetails => ({
+  affiliations: p.affiliations,
+  bio: p.bio,
+  educationNotes: p.educationNotes,
+  glossaryCitations: p.glossaryCitations,
+  kinds: p.kinds,
+  links: p.links,
+  montessoriNotes: p.montessoriNotes,
+  name: p.name,
+  nameAuthorized: p.nameAuthorized,
+  nameVariants: p.nameVariants,
+  notableAchievements: p.notableAchievements,
+  quotes: p.quotes,
+  schools: p.schools,
+  sources: p.sources,
+  tags: p.tags,
+});
+
+const SUMMARIES: ProfileSummary[] = ALL.map(toProfileSummary);
 const BY_ID = new Map(ALL.map((p) => [p.id, p]));
 
 export const getAllProfiles = (kind?: ProfileKind): Profile[] =>
   kind ? ALL.filter((p) => p.kinds.includes(kind)) : ALL;
+
+/** Every profile as a card summary, for directory pages that ship the list to the browser. */
+export const getProfileSummaries = (kind?: ProfileKind): ProfileSummary[] =>
+  kind ? SUMMARIES.filter((p) => p.kinds.includes(kind)) : SUMMARIES;
 
 const INVERSE: Record<RawRelated["relation"], RawRelated["relation"]> = {
   advisee: "advisor",
@@ -144,8 +201,8 @@ export const getAllSlugs = (): string[] => ALL.map((p) => p.slug);
  * surface (search by name, filter by comma-separated tag slugs, sort), minus
  * pagination — the full set is tiny and rendered at once.
  */
-export const getProfiles = (options: getProfilesOptions = {}): Profile[] =>
-  filterAndSortProfiles(ALL, options);
+export const getProfiles = (options: getProfilesOptions = {}): ProfileSummary[] =>
+  filterAndSortProfiles(SUMMARIES, options);
 
 export const getProfileWithAdjacent = (slug: string): ProfilePage | null => {
   const profile = BY_SLUG.get(slug);
@@ -171,8 +228,8 @@ export const getProfileWithAdjacent = (slug: string): ProfilePage | null => {
   };
 };
 
-export const getProfilesByTag = (tagSlug: string): Profile[] =>
-  ALL.filter((p) => p.tags.some((t) => t.slug === tagSlug));
+export const getProfilesByTag = (tagSlug: string): ProfileSummary[] =>
+  SUMMARIES.filter((p) => p.tags.some((t) => t.slug === tagSlug));
 
 /** A sorted tag listing, as returned by the tag helpers below. */
 export interface TagList<T> {

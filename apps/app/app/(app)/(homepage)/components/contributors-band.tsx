@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ProfilePhoto } from "@/components/profile-photo";
 import { CONTRIBUTOR_ROLE_LABELS } from "@/lib/content/types";
-import type { Profile } from "@/lib/content/types";
+import type { ProfileSummary } from "@/lib/content/types";
 
 import SectionHeader from "./section-header";
 
@@ -11,7 +11,7 @@ import SectionHeader from "./section-header";
  * stay smaller than the alumni cards' so alumni remain the focus. On phones
  * the row scrolls sideways inside its own box, bleeding to the screen edges.
  */
-const ContributorsBand = ({ contributors }: { contributors: Profile[] }) => {
+const ContributorsBand = ({ contributors }: { contributors: ProfileSummary[] }) => {
   if (contributors.length === 0) {
     return null;
   }

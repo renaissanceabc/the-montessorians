@@ -1,6 +1,6 @@
 import { getDirectoryCounts } from "@/lib/content/directory";
 import { getAffiliationOptions } from "@/lib/content/organizations";
-import { getAllProfiles } from "@/lib/content/profiles";
+import { getProfileSummaries } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/utils";
 
@@ -21,7 +21,7 @@ const Contributors = () => (
     affiliationOptions={getAffiliationOptions()}
     counts={getDirectoryCounts()}
     kind="contributor"
-    profiles={getAllProfiles("contributor")}
+    profiles={getProfileSummaries("contributor")}
     tags={[]}
   />
 );
