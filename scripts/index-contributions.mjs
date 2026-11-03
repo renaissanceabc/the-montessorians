@@ -524,15 +524,19 @@ const dedupe = (profile, merged) => {
 const candidatesFor = async (slug) => {
   const profile = loadProfile(slug);
   const anyTopic = flags.has("--any-topic") || slug === "maria-montessori";
-  const authors = await openAlexAuthors(profile);
-  const found = [...(await openAlexWorks(authors, anyTopic))];
-  if (profile.identifiers?.orcid) {
-    found.push(...(await crossrefByOrcid(profile.identifiers.orcid, anyTopic)));
-  }
-  found.push(
-    ...(await openLibraryBooks(profile, anyTopic)),
-    ...(await ericRecords(profile, anyTopic))
-  );
+  const orcid = profile.identifiers?.orcid;
+  // Each source is a different API, so they run side by side; requests to any
+  // one API still go one at a time. Results keep the same order as before.
+  const [{ authors, works }, crossref, books, eric] = await Promise.all([
+    openAlexAuthors(profile).then(async (found) => ({
+      authors: found,
+      works: await openAlexWorks(found, anyTopic),
+    })),
+    orcid ? crossrefByOrcid(orcid, anyTopic) : [],
+    openLibraryBooks(profile, anyTopic),
+    ericRecords(profile, anyTopic),
+  ]);
+  const found = [...works, ...crossref, ...books, ...eric];
   foldOupParts(found);
   const merged = await mergeByDoi(found);
   return { authors, candidates: dedupe(profile, merged), profile };

@@ -6,7 +6,7 @@ import {
   getOrganizationBySlug,
   ORGANIZATION_TYPE_LABELS,
 } from "@/lib/content/organizations";
-import { imageFileToDataUrl, textCardResponse } from "@/lib/og";
+import { textCardResponse } from "@/lib/og";
 import { normalizeOgSlug } from "@/lib/og-slug";
 
 // Built for every organization, with `.png` variants like the profile images.
@@ -35,8 +35,7 @@ export const GET = async (_request: Request, { params }: { params: Promise<{ slu
     title: org.shortName ? `${org.name} (${org.shortName})` : org.name,
   };
   try {
-    const logoDataUrl = org.logoUrl ? await imageFileToDataUrl(org.logoUrl) : null;
-    return await textCardResponse({ ...card, logoDataUrl });
+    return await textCardResponse({ ...card, logoPath: org.logoUrl });
   } catch (error) {
     // A logo Satori can't draw shouldn't cost the organization its card.
     log.error("OG image: organization logo failed", { error: parseError(error), slug });
