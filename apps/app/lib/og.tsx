@@ -53,8 +53,8 @@ export interface TextCardOptions {
   eyebrow: string;
   title: string;
   subtitle?: string | null;
-  /** A logo shown on the right, as a data URL */
-  logoDataUrl?: string | null;
+  /** A logo shown on the right, as a path under public/ */
+  logoPath?: string | null;
 }
 
 /**
@@ -66,9 +66,12 @@ export const textCardResponse = async ({
   eyebrow,
   title,
   subtitle,
-  logoDataUrl,
+  logoPath,
 }: TextCardOptions): Promise<ImageResponse> => {
-  const background = await imageFileToDataUrl("og-dynamic.jpg");
+  const [background, logoDataUrl] = await Promise.all([
+    imageFileToDataUrl("og-dynamic.jpg"),
+    logoPath ? imageFileToDataUrl(logoPath) : null,
+  ]);
   const textRight = logoDataUrl ? 480 : 80;
   const response = new ImageResponse(
     <div
