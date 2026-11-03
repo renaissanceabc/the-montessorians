@@ -39,6 +39,21 @@ import { setTimeout as sleep } from "node:timers/promises";
 
 import { dump, load } from "js-yaml";
 
+const COMBINING_MARKS_REGEX = /[̀-ͯ]/gu;
+const NON_ALPHANUMERIC_RUN_REGEX = /[^a-z0-9]+/gu;
+const SUBTITLE_SEPARATOR_REGEX = /[:.?]/u;
+const YAML_EXTENSION_REGEX = /\.yaml$/u;
+const DOI_URL_PREFIX_REGEX = /^https?:\/\/doi\.org\//iu;
+const OPEN_LIBRARY_EDITION_REGEX = /^\/works\/(?<edition>OL\d+M)$/u;
+const APOSTROPHE_ENTITY_REGEX = /&#39;|&apos;/gu;
+const WHITESPACE_REGEX = /\s+/gu;
+const COMMA_SEPARATOR_REGEX = /,\s*/u;
+const ISBN_PREFIX_REGEX = /^ISBN-/u;
+const ISBN_REGEX = /^(?:97[89])?\d{9}[\dX]$/u;
+// oxlint-disable-next-line eslint/no-control-regex -- stripping control characters is the point
+const CONTROL_CHARS_REGEX = /[\u0000-\u001F\u007F-\u009F]/gu;
+const LINE_START_REGEX = /^/gmu;
+
 const __dirname = import.meta.dirname;
 const ROOT = path.join(__dirname, "..");
 const peopleDir = path.join(ROOT, "data", "people");
@@ -107,16 +122,16 @@ const withMailto = (url) =>
 const normalize = (s) =>
   String(s ?? "")
     .normalize("NFKD")
-    .replaceAll(/[̀-ͯ]/gu, "")
+    .replaceAll(COMBINING_MARKS_REGEX, "")
     .toLowerCase()
     .replaceAll("&", "and")
-    .replaceAll(/[^a-z0-9]+/gu, " ")
+    .replaceAll(NON_ALPHANUMERIC_RUN_REGEX, " ")
     .trim();
 
 // Title without subtitle, for catching "Foo Bar Baz" vs "Foo Bar Baz: A Subtitle".
 // Too short a main title ("Montessori: ...") would match unrelated works.
 const shortTitle = (s) => {
-  const mainTitle = normalize(String(s ?? "").split(/[:.?]/u)[0]);
+  const mainTitle = normalize(String(s ?? "").split(SUBTITLE_SEPARATOR_REGEX)[0]);
   return mainTitle.split(" ").length >= 3 ? mainTitle : normalize(s);
 };
 
@@ -138,7 +153,7 @@ const contributorSlugs = () =>
   fs
     .readdirSync(peopleDir)
     .filter((f) => f.endsWith(".yaml"))
-    .map((f) => f.replace(/\.yaml$/u, ""))
+    .map((f) => f.replace(YAML_EXTENSION_REGEX, ""))
     .filter((slug) => [loadProfile(slug).kind].flat().includes("contributor"))
     .toSorted();
 
@@ -202,7 +217,7 @@ const openAlexCandidate = (w, author, shortId, anyTopic) => {
   const source = w.primary_location?.source;
   return {
     authors: w.authorships?.map((a) => a.author?.display_name).filter(Boolean),
-    doi: w.doi ? w.doi.replace(/^https?:\/\/doi\.org\//iu, "") : undefined,
+    doi: w.doi ? w.doi.replace(DOI_URL_PREFIX_REGEX, "") : undefined,
     from: `openalex ${w.id.split("/").pop()} (author ${shortId}, ${author.match})`,
     title: w.title,
     type: TYPE_MAP[w.type] ?? "other",
@@ -328,7 +343,7 @@ const openLibraryBooks = async (profile, anyTopic) => {
         title: [d.title, d.subtitle].filter(Boolean).join(": "),
         type: "book",
         // Orphaned editions come back with a /works/…M key; they live under /books/.
-        url: `https://openlibrary.org${d.key.replace(/^\/works\/(?<edition>OL\d+M)$/u, "/books/$<edition>")}`,
+        url: `https://openlibrary.org${d.key.replace(OPEN_LIBRARY_EDITION_REGEX, "/books/$<edition>")}`,
         venue: d.publisher?.[0] ?? undefined,
         year: d.first_publish_year ?? undefined,
       });
@@ -342,14 +357,14 @@ const openLibraryBooks = async (profile, anyTopic) => {
 const decodeEntities = (s) =>
   String(s ?? "")
     .replaceAll("&quot;", '"')
-    .replaceAll(/&#39;|&apos;/gu, "'")
+    .replaceAll(APOSTROPHE_ENTITY_REGEX, "'")
     .replaceAll("&lt;", "<")
     .replaceAll("&gt;", ">")
     .replaceAll("&amp;", "&");
 
 // "Angeline Stoll Lillard" -> "Lillard, Angeline", the form ERIC indexes.
 const invertName = (s) => {
-  const parts = String(s).trim().split(/\s+/u);
+  const parts = String(s).trim().split(WHITESPACE_REGEX);
   return parts.length < 2 ? s : `${parts.at(-1)}, ${parts[0]}`;
 };
 
@@ -366,7 +381,9 @@ const ericType = (kinds) => {
 /** An ERIC record as a candidate, or null when the author or topic doesn't match. */
 const ericCandidate = (d, keys, anyTopic) => {
   // ERIC lists authors as "Last, First"; turn them around before matching.
-  const authors = (d.author ?? []).map((a) => a.split(/,\s*/u).toReversed().join(" "));
+  const authors = (d.author ?? []).map((a) =>
+    a.split(COMMA_SEPARATOR_REGEX).toReversed().join(" ")
+  );
   if (!authors.some((a) => keys.has(nameKey(a)))) {
     return null;
   }
@@ -376,12 +393,12 @@ const ericCandidate = (d, keys, anyTopic) => {
   }
   const kinds = d.publicationtype ?? [];
   const isbn = (d.isbn ?? [])
-    .map((i) => i.replace(/^ISBN-/u, "").replaceAll("-", ""))
+    .map((i) => i.replace(ISBN_PREFIX_REGEX, "").replaceAll("-", ""))
     .find(Boolean);
   return {
     authors,
     from: `eric ${d.id} (${kinds.join(", ")})`,
-    isbn: isbn && /^(?:97[89])?\d{9}[\dX]$/u.test(isbn) ? isbn : undefined,
+    isbn: isbn && ISBN_REGEX.test(isbn) ? isbn : undefined,
     title: decodeEntities(d.title),
     type: ericType(kinds),
     url: `https://eric.ed.gov/?id=${d.id}`,
@@ -543,11 +560,7 @@ const candidatesFor = async (slug) => {
 const clean = (s) =>
   // oxlint-disable-next-line anti-slop/no-runtime-typeof -- raw API field: strings get cleaned, numbers (years) pass through unchanged
   typeof s === "string"
-    ? s
-        // oxlint-disable-next-line eslint/no-control-regex -- stripping control characters is the point
-        .replaceAll(/[\u0000-\u001F\u007F-\u009F]/gu, "")
-        .replaceAll(/\s+/gu, " ")
-        .trim()
+    ? s.replaceAll(CONTROL_CHARS_REGEX, "").replaceAll(WHITESPACE_REGEX, " ").trim()
     : s;
 
 const toYaml = (c) => {
@@ -561,7 +574,7 @@ const toYaml = (c) => {
     entry.authors = c.authors.map(clean);
   }
   const body = dump([entry], { lineWidth: 120, quotingType: '"' }).trimEnd();
-  return `  # from ${c.from}\n${body.replaceAll(/^/gmu, "  ")}`;
+  return `  # from ${c.from}\n${body.replaceAll(LINE_START_REGEX, "  ")}`;
 };
 
 const main = async () => {

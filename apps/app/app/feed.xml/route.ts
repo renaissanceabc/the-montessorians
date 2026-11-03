@@ -2,6 +2,8 @@ import { idUrl } from "@/lib/content/authority";
 import { getAllProfiles } from "@/lib/content/profiles";
 import { siteUrl } from "@/lib/utils";
 
+const XML_SPECIAL_CHARS_REGEX = /[&<>"']/gu;
+
 export const dynamic = "force-static";
 
 /** Profiles in the feed, newest first. */
@@ -15,7 +17,8 @@ const XML_ESCAPES = new Map([
   [">", "&gt;"],
 ]);
 
-const escapeXml = (s: string) => s.replaceAll(/[&<>"']/gu, (c) => XML_ESCAPES.get(c) ?? c);
+const escapeXml = (s: string) =>
+  s.replaceAll(XML_SPECIAL_CHARS_REGEX, (c) => XML_ESCAPES.get(c) ?? c);
 
 /**
  * GET /feed.xml

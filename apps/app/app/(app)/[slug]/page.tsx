@@ -15,6 +15,8 @@ import ProfileActions from "./components/profile-actions";
 import { ProfileMain, ProfileRail } from "./components/profile-details";
 import { ProfileHeader } from "./components/profile-header";
 
+const WWW_REGEX = /^www\./u;
+
 export const generateStaticParams = () => getAllSlugs().map((slug) => ({ slug }));
 
 export const dynamicParams = false;
@@ -63,7 +65,7 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
     const href = contributionUrl(c);
     let host: string | null = null;
     try {
-      host = href ? new URL(href).hostname.replace(/^www\./u, "") : null;
+      host = href ? new URL(href).hostname.replace(WWW_REGEX, "") : null;
     } catch {
       host = null;
     }

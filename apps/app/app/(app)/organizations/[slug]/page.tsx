@@ -34,6 +34,8 @@ import { createMetadata } from "@/lib/metadata";
 import { githubIssueUrl } from "@/lib/url";
 import { prettyUrl, siteUrl, toTitleCase } from "@/lib/utils";
 
+const WWW_REGEX = /^www\./u;
+
 export const generateStaticParams = () => getAllOrganizations().map((org) => ({ slug: org.slug }));
 
 export const dynamicParams = false;
@@ -300,7 +302,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
             Logo from{" "}
             {URL.canParse(org.logoSource) ? (
               <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
-                {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
+                {new URL(org.logoSource).hostname.replace(WWW_REGEX, "")}
               </Link>
             ) : (
               org.logoSource

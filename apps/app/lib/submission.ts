@@ -5,6 +5,11 @@ import { CONTRIBUTOR_ROLES, LINK_TYPES, SOURCE_TYPES } from "@/lib/content/types
 import { githubIssueUrl } from "@/lib/url";
 import { toTitleCase } from "@/lib/utils";
 
+const COMBINING_MARKS_REGEX = /[̀-ͯ]/gu;
+const NON_ALPHANUMERIC_RUN_REGEX = /[^a-z0-9]+/gu;
+const EDGE_HYPHENS_REGEX = /^-|-$/gu;
+const EMPTY_STRING_KEY_REGEX = /^(?<key>\w+): ''$/gmu;
+
 // A "suggest a Montessorian" submission. Shared by the contribute form (client)
 // and /api/submit (server), and mirrors profile.schema.json — minus `id`, which
 // maintainers assign when they accept the submission.
@@ -98,10 +103,10 @@ export type Submission = z.infer<typeof submissionSchema>;
 export const slugify = (name: string) =>
   name
     .normalize("NFKD")
-    .replaceAll(/[̀-ͯ]/gu, "")
+    .replaceAll(COMBINING_MARKS_REGEX, "")
     .toLowerCase()
-    .replaceAll(/[^a-z0-9]+/gu, "-")
-    .replaceAll(/^-|-$/gu, "");
+    .replaceAll(NON_ALPHANUMERIC_RUN_REGEX, "-")
+    .replaceAll(EDGE_HYPHENS_REGEX, "");
 
 const tagSlug = (tag: string) => slugify(tag);
 
@@ -199,7 +204,7 @@ export const submissionToYaml = (s: Submission, { draft = false } = {}): string 
     ? `# New organizations for maintainers to add: ${added.join(", ")}\n`
     : "";
   // Blank strings read better as empty keys (`name:`) than as `name: ''`.
-  const body = dump(clean, { lineWidth: 120 }).replaceAll(/^(?<key>\w+): ''$/gmu, "$<key>:");
+  const body = dump(clean, { lineWidth: 120 }).replaceAll(EMPTY_STRING_KEY_REGEX, "$<key>:");
   return `id: # assigned by maintainers (bun run id:next)\n${body}${note}`;
 };
 
