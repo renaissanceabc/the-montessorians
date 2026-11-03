@@ -2,21 +2,12 @@ import { siteUrl } from "./utils";
 
 export const X_HANDLE = "montessoriansx";
 
-const resolveAbsoluteUrl = (input: string): string => {
-  if (input.startsWith("http")) {
-    return input;
-  }
-  if (typeof window !== "undefined") {
-    return new URL(input, window.location.origin).toString();
-  }
-  return `${siteUrl}${input.startsWith("/") ? input : `/${input}`}`;
-};
-
 export const addUtmParamsToUrl = (
   rawUrl: string,
   params: { source: string; medium: string; campaign: string }
 ): string => {
-  const url = new URL(resolveAbsoluteUrl(rawUrl));
+  // Relative paths resolve against the current page's origin, or the site URL on the server.
+  const url = new URL(rawUrl, typeof window === "undefined" ? siteUrl : window.location.origin);
   url.searchParams.set("utm_source", params.source);
   url.searchParams.set("utm_medium", params.medium);
   url.searchParams.set("utm_campaign", params.campaign);

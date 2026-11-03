@@ -3,12 +3,7 @@ import type { NextConfig } from "next";
 
 const TRAILING_SLASH_REGEX = /\/$/u;
 
-const hostnameFromUrl = (url: string | undefined) => {
-  if (!(url && URL.canParse(url))) {
-    return;
-  }
-  return new URL(url).hostname;
-};
+const hostnameFromUrl = (url: string | undefined) => (url ? URL.parse(url)?.hostname : undefined);
 
 /**
  * The site's public origin: the Vercel production domain when set, then the
