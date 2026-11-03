@@ -5,6 +5,8 @@ import { ImageResponse } from "next/og";
 
 import { instrumentSerif } from "./og-font";
 
+const LEADING_SLASH_REGEX = /^\//u;
+
 // Shared pieces of the Open Graph images in app/api/og: every card is 1200×630
 // on the green landscape background.
 
@@ -22,7 +24,7 @@ const CONTENT_TYPES = new Map([
 
 /** Read an image from the app's public/ dir and inline it as a data URL. */
 export const imageFileToDataUrl = async (publicRelPath: string): Promise<string> => {
-  const filePath = path.join(PUBLIC_DIR, publicRelPath.replace(/^\//u, ""));
+  const filePath = path.join(PUBLIC_DIR, publicRelPath.replace(LEADING_SLASH_REGEX, ""));
   const buffer = await readFile(filePath);
   const contentType = CONTENT_TYPES.get(path.extname(filePath).toLowerCase()) ?? "image/jpeg";
   return `data:${contentType};base64,${buffer.toString("base64")}`;

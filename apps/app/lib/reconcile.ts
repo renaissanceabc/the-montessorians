@@ -5,6 +5,12 @@ import { getAllOrganizations } from "@/lib/content/organizations";
 import { getAllProfiles } from "@/lib/content/profiles";
 import { siteUrl } from "@/lib/utils";
 
+const COMBINING_MARKS_REGEX = /[̀-ͯ]/gu;
+const NON_ALPHANUMERIC_REGEX = /[^a-z0-9 ]/gu;
+const WHITESPACE_REGEX = /\s+/gu;
+const FIRST_COMMA_REGEX = /,(?<rest>.+)/u;
+const FROM_COMMA_REGEX = /,.*$/u;
+
 // The W3C Reconciliation Service API (v0.2) logic behind /api/reconcile, kept
 // free of request handling so it can be tested directly. See docs/authority.md.
 
@@ -68,16 +74,16 @@ export const manifest = () => ({
 const normalize = (s: string) =>
   s
     .normalize("NFKD")
-    .replaceAll(/[̀-ͯ]/gu, "")
+    .replaceAll(COMBINING_MARKS_REGEX, "")
     .toLowerCase()
-    .replaceAll(/[^a-z0-9 ]/gu, " ")
-    .replaceAll(/\s+/gu, " ")
+    .replaceAll(NON_ALPHANUMERIC_REGEX, " ")
+    .replaceAll(WHITESPACE_REGEX, " ")
     .trim();
 
 /** "Lillard, Angeline Stoll" → "Angeline Stoll Lillard" */
 const uninvert = (s: string) => {
-  const [last, rest] = s.split(/,(?<rest>.+)/u);
-  return rest ? `${rest.replace(/,.*$/u, "")} ${last}` : s;
+  const [last, rest] = s.split(FIRST_COMMA_REGEX);
+  return rest ? `${rest.replace(FROM_COMMA_REGEX, "")} ${last}` : s;
 };
 
 const levenshteinRatio = (a: string, b: string): number => {

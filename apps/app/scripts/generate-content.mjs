@@ -24,6 +24,8 @@ import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import { load } from "js-yaml";
 
+const SNAKE_CASE_LETTER_REGEX = /_(?<letter>[a-z])/gu;
+
 const APP_DIR = path.resolve(import.meta.dirname, "..");
 const REPO_ROOT = path.resolve(APP_DIR, "..", "..");
 const DATA_DIR = path.join(REPO_ROOT, "data", "people");
@@ -286,7 +288,7 @@ const snakeToCamel = (value) => {
   if (value instanceof Object) {
     return Object.fromEntries(
       Object.entries(value).map(([key, v]) => [
-        key.replaceAll(/_(?<letter>[a-z])/gu, (_, letter) => letter.toUpperCase()),
+        key.replaceAll(SNAKE_CASE_LETTER_REGEX, (_, letter) => letter.toUpperCase()),
         snakeToCamel(v),
       ])
     );

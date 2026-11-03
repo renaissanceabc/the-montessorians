@@ -15,6 +15,8 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
+const NOT_FOUND_TITLE_REGEX = /404|not found/iu;
+
 const DEFAULT_ROUTES = [
   "/",
   "/discover",
@@ -75,7 +77,7 @@ const checkRoute = (route, viewport) => {
   run("wait", "--load", "networkidle");
   const problems = [];
   const state = pageState();
-  if (!state.title || /404|not found/iu.test(state.title)) {
+  if (!state.title || NOT_FOUND_TITLE_REGEX.test(state.title)) {
     problems.push(`bad title: "${state.title}"`);
   }
   if (state.overflow > 0) {

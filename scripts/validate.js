@@ -19,6 +19,11 @@ import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import { load } from "js-yaml";
 
+const IMAGE_EXTENSION_REGEX = /\.(?:svg|png)$/u;
+const COMBINING_MARKS_REGEX = /[̀-ͯ]/gu;
+const NON_ALPHANUMERIC_REGEX = /[^a-z0-9 ]/gu;
+const WHITESPACE_REGEX = /\s+/gu;
+
 const __dirname = import.meta.dirname;
 const ROOT = path.join(__dirname, "..");
 const dataDir = path.join(ROOT, "data", "people");
@@ -86,7 +91,7 @@ const logoErrors = (slug) => {
   const files = fs.readdirSync(logoDir).filter((name) => name.split(".")[0] === slug);
   const errors = [];
   for (const name of files) {
-    if (!/\.(?:svg|png)$/u.test(name)) {
+    if (!IMAGE_EXTENSION_REGEX.test(name)) {
       errors.push(`Logo must be .svg or .png: images/organizations/${name}`);
     } else if (name.endsWith(".svg")) {
       const svg = fs.readFileSync(path.join(logoDir, name), "utf-8");
@@ -333,10 +338,10 @@ if (process.env.BASE_REF) {
 const normalize = (s) =>
   s
     .normalize("NFKD")
-    .replaceAll(/[̀-ͯ]/gu, "")
+    .replaceAll(COMBINING_MARKS_REGEX, "")
     .toLowerCase()
-    .replaceAll(/[^a-z0-9 ]/gu, "")
-    .replaceAll(/\s+/gu, " ")
+    .replaceAll(NON_ALPHANUMERIC_REGEX, "")
+    .replaceAll(WHITESPACE_REGEX, " ")
     .trim();
 // Levenshtein similarity in [0, 1].
 const similarity = (a, b) => {

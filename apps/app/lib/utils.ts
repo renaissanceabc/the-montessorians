@@ -2,6 +2,8 @@ const WWW_REGEX = /^www\./u;
 const TRAILING_SLASH_REGEX = /\/$/u;
 const URL_CLEANUP_REGEX = /^(?:https?:\/\/)?/u;
 const URL_SPLIT_REGEX = /[/?#]/u;
+const SEPARATOR_REGEX = /[_-]/gu;
+const WORD_START_REGEX = /\b\w/gu;
 
 export { cn } from "cn";
 
@@ -13,12 +15,19 @@ export const baseUrl = "";
 
 const ACRONYMS = ["TV", "AI", "NASA", "NBA", "NHL", "NCAA", "NFL", "MLB", "MIT", "STEM"];
 
-export const toTitleCase = (str: string) => {
-  let result = str.replaceAll(/[_-]/gu, " ").replaceAll(/\b\w/gu, (char) => char.toUpperCase());
+// "Nasa" -> "NASA", matched on the title-cased form toTitleCase produces.
+const ACRONYM_PATTERNS = ACRONYMS.map(
+  (acronym) =>
+    [new RegExp(`\\b${acronym[0]}${acronym.slice(1).toLowerCase()}\\b`, "gu"), acronym] as const
+);
 
-  for (const acronym of ACRONYMS) {
-    const regex = new RegExp(`\\b${acronym[0]}${acronym.slice(1).toLowerCase()}\\b`, "gu");
-    result = result.replaceAll(regex, acronym);
+export const toTitleCase = (str: string) => {
+  let result = str
+    .replaceAll(SEPARATOR_REGEX, " ")
+    .replaceAll(WORD_START_REGEX, (char) => char.toUpperCase());
+
+  for (const [pattern, acronym] of ACRONYM_PATTERNS) {
+    result = result.replaceAll(pattern, acronym);
   }
   return result;
 };

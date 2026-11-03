@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
 import { CopyButton } from "@/components/copy-button";
 import { formatCitation } from "@/lib/citation";
 
+const PROTOCOL_REGEX = /^https?:\/\//u;
+
 export interface RecordIdentifier {
   label: string;
   value: string;
@@ -54,7 +56,7 @@ const RecordContent = ({
   children,
 }: RecordProps) => {
   const citation = formatCitation({ heading, id, permanentUrl });
-  const display = permanentUrl.replace(/^https?:\/\//u, "");
+  const display = permanentUrl.replace(PROTOCOL_REGEX, "");
   const tail = `/id/${id}`;
   const host = display.endsWith(tail) ? display.slice(0, -tail.length) : display;
   return (
