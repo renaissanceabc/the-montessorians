@@ -122,6 +122,12 @@ export const config: NextConfig = {
     SITE_URL: resolveSiteUrl(),
   },
 
+  experimental: {
+    // Persist Turbopack's compile cache in .next/cache so CI (which restores
+    // that folder) and local rebuilds skip recompiling unchanged modules.
+    turbopackFileSystemCacheForBuild: true,
+  },
+
   headers: () =>
     Promise.resolve([
       {
