@@ -1,0 +1,33 @@
+name: Release PR
+
+# Keeps a release PR open on develop, built from the conventional commit
+# titles of the PRs merged since the last release. Merging it bumps every
+# package.json, writes apps/app/CHANGELOG.md, and tags vX.Y.Z with a draft
+# GitHub release. release.yml publishes that draft once the version reaches
+# main, which is what Zenodo archives.
+
+on:
+  push:
+    branches: [develop]
+  # Manual run, for when a push event is dropped.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: Open release PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        with:
+          target-branch: develop
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

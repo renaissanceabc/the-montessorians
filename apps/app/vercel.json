@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "git": {
     "deploymentEnabled": {
-      "changeset-release/develop": false
+      "release-please--branches--develop--components--the-montessorians": false
     }
   }
 }
