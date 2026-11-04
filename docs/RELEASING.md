@@ -55,7 +55,6 @@ Write the title for someone skimming what changed in the dataset or on the site.
 
 - **Never squash a promotion PR.** It exists to keep two long-lived branches identical.
 - **`promote.yml` does not merge.** Merging stays a human click so production deploys stay intentional.
-- **The release PR's branch name is load-bearing.** `apps/app/vercel.json` skips deployments for it; keep them in step.
 - **Tags live on `develop`.** release-please finds the last release by walking `develop` back to its tag, so the tag has to be on a `develop` commit, which is why `release.yml` publishes a draft rather than tagging `main`. `v0.4.0` and earlier were tagged on `main`; `last-release-sha` in `release-please-config.json` marks the last `develop` commit before the switch (everything up to it ships in v0.4.0) so the first release-please changelog starts there. It does nothing once v0.5.0 is tagged and can be removed then.
 - **A new package under `packages/` needs adding** to `extra-files` in `release-please-config.json`, or its version stops moving with the rest.
 - **Git hooks are [lefthook](https://lefthook.dev)** (`lefthook.yml`), installed by `bun install`: Ultracite on staged files, oxfmt and validation for `data/`, and commitlint on commit messages.
@@ -73,6 +72,6 @@ Rebase merging is disabled for the repository, and merged branches are deleted a
 
 The required check names match the workflow **job** names. Renaming a job in `validate.yml`, `pr-title.yml`, or `ci.yml` without updating the rulesets leaves every PR waiting on a check that never reports.
 
-The release PR is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its required checks never report. Merge it with the admin bypass; it only touches versions and the changelog. It never gets a `Vercel` check either, because `apps/app/vercel.json` skips deployments for its branch.
+The release PR is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its CI checks may not report until the PR is closed and reopened. Vercel builds a preview for it like any other PR, so its `Vercel` check reports on its own. If the CI checks still don't report, merge it with the admin bypass; it only touches versions and the changelog.
 
 PRs no longer run `next build` in CI (Vercel builds every PR preview), so the required `Vercel` check is what stops a PR that breaks the build from merging.
