@@ -1,4 +1,4 @@
-name: Release
+name: Publish
 
 # Publishes the release for every version that reaches main. release-please
 # tags vX.Y.Z on develop with a draft release when its release PR merges; this
@@ -17,12 +17,12 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Tag and release
+  publish:
+    name: Publish
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Publish the release
         env:
