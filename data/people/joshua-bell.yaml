@@ -2,7 +2,9 @@
 id: tm0000026
 name: Joshua Bell
 slug: joshua-bell
-name_authorized: Bell, Joshua
+name_authorized: Bell, Joshua, 1967-
+name_variants:
+  - Joshua David Bell
 birth_year: 1967
 tagline: World-renowned violinist with a career spanning concert halls and film scores
 bio: >-
@@ -28,4 +30,6 @@ identifiers:
   lcnaf: nr88012889
   viaf: "115769026"
   wikidata: Q312792
+  isni: "0000000114555689"
+  snac: w6fx8gm2
 verification: unverified

@@ -2,7 +2,9 @@
 id: tm0000008
 name: Chelsea Clinton
 slug: chelsea-clinton
-name_authorized: Clinton, Chelsea, 1980-
+name_authorized: Clinton, Chelsea
+name_variants:
+  - Chelsea Victoria Clinton
 birth_year: 1980
 tagline: Advocate for public health and education
 bio: >-

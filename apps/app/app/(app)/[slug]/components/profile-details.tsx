@@ -23,7 +23,7 @@ import type { ReactNode } from "react";
 
 import { OrgLogo } from "@/components/org-logo";
 import { ProfilePhoto } from "@/components/profile-photo";
-import { CorrectionButton, RecordDetails } from "@/components/record-rail";
+import { CorrectionButton, otherNames, RecordDetails } from "@/components/record-rail";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { HowWeVerify } from "@/components/verification";
@@ -31,7 +31,7 @@ import { LINK_LABELS } from "@/lib/content/types";
 import type {
   Contribution,
   OrganizationRef,
-  Profile,
+  ProfileDetails,
   RelatedPerson,
   Source,
 } from "@/lib/content/types";
@@ -297,7 +297,7 @@ const ContributionsSection = ({
 };
 
 /** Which main-column sections a profile has, and whether it has none of them. */
-const profileSections = (profile: Profile, contributionCount: number) => {
+const profileSections = (profile: ProfileDetails, contributionCount: number) => {
   const isAlum = profile.kinds.includes("alum");
   const isContributor = profile.kinds.includes("contributor");
   const hasEducation = isAlum && (profile.schools.length > 0 || Boolean(profile.educationNotes));
@@ -310,7 +310,7 @@ const profileSections = (profile: Profile, contributionCount: number) => {
   return { hasAffiliations, hasEducation, isContributor, isSparse };
 };
 
-const BioAndTags = ({ profile }: { profile: Profile }) => {
+const BioAndTags = ({ profile }: { profile: ProfileDetails }) => {
   if (!profile.bio && profile.tags.length === 0) {
     return null;
   }
@@ -344,7 +344,7 @@ export const ProfileMain = ({
   contributions,
   correctionUrl,
 }: {
-  profile: Profile;
+  profile: ProfileDetails;
   contributions: ContributionLink[];
   correctionUrl: string;
 }) => {
@@ -486,7 +486,7 @@ export const ProfileRail = ({
   permanentId,
   correctionUrl,
 }: {
-  profile: Profile;
+  profile: ProfileDetails;
   identifiers: IdentifierLink[];
   related: RelatedPerson[];
   permanentId: { value: string; url: string };
@@ -593,6 +593,8 @@ export const ProfileRail = ({
 
     <div className="flex flex-col gap-3">
       <RecordDetails
+        alsoKnownAs={otherNames(profile.nameVariants, [profile.name])}
+        heading={profile.nameAuthorized ?? profile.name}
         id={permanentId.value}
         identifiers={identifiers}
         permanentUrl={permanentId.url}

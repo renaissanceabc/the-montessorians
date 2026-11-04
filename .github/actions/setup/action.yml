@@ -3,13 +3,13 @@ description: Install Bun and the workspace dependencies.
 
 inputs:
   bun-version:
-    description: Bun version to install.
+    description: Bun version to install. 1.4.4 is the first release patched for CVE-2026-111497.
     required: false
-    default: "1.3.11"
+    default: "1.4.4"
   node-version:
-    description: Node version to install.
+    description: Node version to install. Floor is the CVE-2026-111497 brotli fix (24.22.1).
     required: false
-    default: "22"
+    default: ">=24.22.1"
 
 runs:
   using: composite
@@ -22,13 +22,14 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
-    # Bun's global package cache, keyed on the lockfile, so installs are mostly copies.
+    # Bun's global package cache, keyed on the lockfile, so installs are mostly
+    # copies. No restore-keys: a lockfile change starts from a clean cache rather
+    # than carrying every old package forward.
     - name: Cache Bun packages
       uses: actions/cache@v4
       with:
         path: ~/.bun/install/cache
         key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
-        restore-keys: bun-${{ runner.os }}-
 
     - name: Install dependencies
       shell: bash

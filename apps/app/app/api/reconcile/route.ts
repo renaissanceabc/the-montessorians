@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { clientIp, createRateLimiter, tooManyRequests } from "@/lib/rate-limit";
 import { manifest, MAX_QUERIES_PAYLOAD, reconcileBatch } from "@/lib/reconcile";
@@ -57,8 +58,8 @@ const handle = (request: Request, queries: string | null, jsonpCallback: string 
   return respond(outcome.results, jsonpCallback);
 };
 
-export const GET = (request: Request) => {
-  const { searchParams } = new URL(request.url);
+export const GET = (request: NextRequest) => {
+  const { searchParams } = request.nextUrl;
   return handle(request, searchParams.get("queries"), searchParams.get("callback"));
 };
 

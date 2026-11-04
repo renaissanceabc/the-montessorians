@@ -2,43 +2,31 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import { filterAndSortProfiles } from "./filter";
-import type { Profile } from "./types";
+import type { ProfileKind, ProfileSummary } from "./types";
 
-const profile = (overrides: Partial<Profile>): Profile => ({
-  addedAt: "2025-01-01T00:00:00Z",
-  affiliations: [],
-  bio: null,
-  birthYear: null,
-  contributions: [],
-  deathYear: null,
-  education: [],
-  educationNotes: null,
-  glossaryCitations: [],
-  id: "tm0000000",
-  identifiers: {},
-  imageCredit: null,
-  imageUrl: null,
-  kind: "alum",
-  links: [],
-  montessoriNotes: null,
-  name: "X",
-  nameAuthorized: null,
-  nameVariants: [],
-  notableAchievements: [],
-  pinned: false,
-  quotes: [],
-  related: [],
-  roles: [],
-  schools: [],
-  slug: "x",
-  sources: [],
-  status: "provisional",
-  tagline: null,
-  tags: [],
-  verification: null,
-  ...overrides,
-  kinds: overrides.kinds ?? [overrides.kind ?? "alum"],
-});
+const profile = (overrides: Partial<ProfileSummary> & { kind?: ProfileKind }): ProfileSummary => {
+  const { kind = "alum", ...rest } = overrides;
+  return {
+    addedAt: "2025-01-01T00:00:00Z",
+    affiliations: [],
+    birthYear: null,
+    contributionCount: 0,
+    deathYear: null,
+    imageUrl: null,
+    kinds: [kind],
+    name: "X",
+    nameAuthorized: null,
+    nameVariants: [],
+    pinned: false,
+    roles: [],
+    schools: [],
+    slug: "x",
+    tagline: null,
+    tags: [],
+    verification: null,
+    ...rest,
+  };
+};
 
 const maria = profile({
   addedAt: "2026-01-01T00:00:00Z",
@@ -59,10 +47,7 @@ const mario = profile({
 const lillard = profile({
   addedAt: "2026-06-01T00:00:00Z",
   affiliations: [{ organization: "university-of-virginia" }],
-  contributions: [
-    { title: "A", type: "book" },
-    { title: "B", type: "article" },
-  ],
+  contributionCount: 2,
   kind: "contributor",
   name: "Angeline Stoll Lillard",
   nameAuthorized: "Lillard, Angeline Stoll",
@@ -98,10 +83,14 @@ describe("filterAndSortProfiles", () => {
     );
   });
 
-  test("sorts by date added in either direction, ignoring pinned, with ties A–Z", () => {
+  test("sorts by date added in either direction, pinned first when newest-first, ties A–Z", () => {
     assert.deepEqual(
       filterAndSortProfiles(all, { kind: "contributor" }).map((p) => p.slug),
-      ["lillard", "maria", "mario"]
+      ["maria", "mario", "lillard"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles(all, { kind: "contributor", limit: 1 }).map((p) => p.slug),
+      ["maria"]
     );
     assert.deepEqual(
       filterAndSortProfiles(all, { kind: "contributor", sortBy: "asc" }).map((p) => p.slug),

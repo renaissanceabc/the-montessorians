@@ -2,7 +2,10 @@
 id: tm0000003
 name: Anne Frank
 slug: anne-frank
-name_authorized: Frank, Anne
+name_authorized: Frank, Anne, 1929-1945
+name_variants:
+  - Annelies Marie Frank
+  - Anna Frank
 birth_year: 1929
 death_year: 1945
 tagline: Teenage diarist of the Holocaust whose words outlived war

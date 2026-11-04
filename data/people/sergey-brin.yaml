@@ -2,7 +2,9 @@
 id: tm0000044
 name: Sergey Brin
 slug: sergey-brin
-name_authorized: Brin, Sergey
+name_authorized: Brin, Sergey, 1973-
+name_variants:
+  - Sergey Mikhailovich Brin
 birth_year: 1973
 tagline: Co-founder of Google and pioneer of internet search
 bio: >-

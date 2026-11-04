@@ -1,10 +1,16 @@
 import { SearchXIcon } from "lucide-react";
 
 import ProfileListItem from "@/components/profile-list-item";
-import type { Profile } from "@/lib/content/types";
+import type { ProfileSummary } from "@/lib/content/types";
 
 /** People as cards: two columns from md, one on phones. */
-const ProfilesList = ({ profiles, hasSearch }: { profiles: Profile[]; hasSearch: boolean }) => {
+const ProfilesList = ({
+  profiles,
+  hasSearch,
+}: {
+  profiles: ProfileSummary[];
+  hasSearch: boolean;
+}) => {
   if (profiles.length === 0) {
     return (
       <div className="text-muted-foreground flex min-h-64 flex-col items-center justify-center gap-4 py-12 text-sm italic">

@@ -2,7 +2,9 @@
 id: tm0000023
 name: Joan Cusack
 slug: joan-cusack
-name_authorized: Cusack, Joan
+name_authorized: Cusack, Joan, 1962-
+name_variants:
+  - Joan Mary Cusack
 birth_year: 1962
 tagline: Academy Award-nominated actress known for wit and range
 bio: >-
@@ -27,4 +29,6 @@ identifiers:
   lcnaf: n92054235
   viaf: "19877967"
   wikidata: Q272946
+  isni: "0000000089048780"
+  snac: w6c28kzj
 verification: unverified

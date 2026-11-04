@@ -29,7 +29,7 @@
     },
     "apps/app": {
       "name": "app",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "dependencies": {
         "@base-ui/react": "^1.9.0",
         "@hookform/resolvers": "^5.9.1",
@@ -69,7 +69,7 @@
     },
     "packages/analytics": {
       "name": "@montessorians/analytics",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "dependencies": {
         "@next/third-parties": "catalog:",
         "@t3-oss/env-nextjs": "catalog:",
@@ -87,7 +87,7 @@
     },
     "packages/next-config": {
       "name": "@montessorians/next-config",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "dependencies": {
         "@next/bundle-analyzer": "catalog:",
         "@t3-oss/env-core": "catalog:",
@@ -101,7 +101,7 @@
     },
     "packages/observability": {
       "name": "@montessorians/observability",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "dependencies": {
         "@logtail/next": "catalog:",
         "@sentry/nextjs": "catalog:",
@@ -118,7 +118,7 @@
     },
     "packages/typescript-config": {
       "name": "@montessorians/typescript-config",
-      "version": "0.2.0",
+      "version": "0.3.0",
     },
   },
   "overrides": {

@@ -12,6 +12,7 @@ The Montessorians gives every person and organization a permanent identifier, li
 - The `id` is assigned once, when a record is accepted (`bun run id:next`, or `bun run id:next -- org`), and never changes, even if the person's name or the record's `slug` changes.
 - An id is never deleted or reused. `bun run validate` fails if an id that exists on the base branch disappears without an entry in [`data/authority/changes.yaml`](../data/authority/changes.yaml) (CI sets `BASE_REF` to check this on every pull request).
 - `/id/<id>` redirects permanently to the record's current page. Cite the `/id/` URI, not the page address.
+- A client that asks `/id/<id>` for `application/ld+json` (or `application/json`) gets a 303 to the record's JSON-LD at `/data/<id>` instead. Record pages also send `Link: </data/<id>>; rel="alternate"; type="application/ld+json"`.
 
 ### Merges, withdrawals, and renames
 
@@ -51,7 +52,13 @@ The schemas are the source of truth: [`profile.schema.json`](../profile.schema.j
 | `/data/organizations.json` | Every organization                                 |
 | `/data/changes.json`       | Merges, withdrawals, and renames                   |
 
-Every profile page also embeds its JSON-LD. Person records use `@id` = the permanent URI and `sameAs` links to the same person in LCNAF (`http://id.loc.gov/authorities/names/…`), VIAF, Wikidata, ORCID, ISNI, and SNAC.
+Every profile page also embeds its JSON-LD. Person records use `@id` = the permanent URI and `sameAs` links to the same person in LCNAF (`http://id.loc.gov/authorities/names/…`), VIAF, Wikidata, ORCID, ISNI, and SNAC. Each record also has:
+
+- `identifier`: its own id and every external id as a `PropertyValue` whose `propertyID` names the scheme (`The Montessorians ID`, `LCNAF`, `VIAF`, …)
+- `skos:prefLabel` (the authorized heading) and `skos:altLabel` (variant names), for library systems; `alternateName` holds the variants only
+- `mainEntityOfPage`: the authority record itself, a `ProfilePage` with `dateCreated` and `dateModified` (from the record file's git history; omitted when the build has a shallow clone), `license`, the record's `sources` as `citation`, its verification level as `creativeWorkStatus`, and `isPartOf` the dataset
+
+The dataset is described as a schema.org `Dataset` on `/data` and as the first node of `/data/people.jsonld`. Merged ids redirect from `/data/<old id>` to the surviving record's JSON-LD; withdrawn ids answer `410 Gone` with a short tombstone.
 
 ### Using it from a SKOS vocabulary
 
@@ -78,5 +85,13 @@ Matches link to the `/id/` URI. A candidate is auto-matched only when it scores 
 The goal is a Wikidata external-identifier property, "The Montessorians ID", so that Wikidata items link here and the link flows on to VIAF and library catalogs. The proposal text is in [`docs/wikidata-property-proposal.md`](./wikidata-property-proposal.md). Until the property exists, records link to Wikidata through `identifiers.wikidata`.
 
 ## Releases and citation
+
+Each profile and organization page shows a citation and a button that copies it with today's access date, for example:
+
+```text
+Montessori, Maria, 1870-1952. The Montessorians, tm0000067. https://www.themontessorians.xyz/id/tm0000067. Accessed 14 October 2026.
+```
+
+Pages also carry Dublin Core meta tags (`dc.title`, `dc.identifier`, `dc.publisher`, `dc.rights`, and record dates) for citation managers.
 
 Tagged GitHub releases are archived by Zenodo (configured in [`.zenodo.json`](../.zenodo.json)), which gives every release of the dataset a DOI. [`CITATION.cff`](../CITATION.cff) tells GitHub how to cite the repository.

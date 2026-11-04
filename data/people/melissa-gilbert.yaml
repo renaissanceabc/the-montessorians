@@ -2,7 +2,10 @@
 id: tm0000033
 name: Melissa Gilbert
 slug: melissa-gilbert
-name_authorized: Gilbert, Melissa
+name_authorized: Gilbert, Melissa, 1964-
+name_variants:
+  - Melissa Ellen Gilbert
+  - Melissa Gilbert-Brinkman
 birth_year: 1964
 tagline: Actress best known as Laura Ingalls Wilder on "Little House on the Prairie"
 bio: >-
@@ -26,6 +29,8 @@ identifiers:
   lcnaf: no96013709
   viaf: "34047906"
   wikidata: Q230929
+  isni: "0000000078392236"
+  snac: w6pq3j4t
 verification: unverified
 sources:
   - type: other

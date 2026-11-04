@@ -2,7 +2,10 @@
 id: tm0000030
 name: Larry Page
 slug: larry-page
-name_authorized: Page, Larry
+name_authorized: Page, Larry, 1973-
+name_variants:
+  - Lawrence Edward Page
+  - Lawrence Page
 birth_year: 1973
 tagline: Co-founder of Google and pioneer of the modern web
 bio: >-
@@ -43,3 +46,4 @@ identifiers:
   viaf: "35624513"
   wikidata: Q4934
   isni: "0000000430764124"
+  snac: w6r50mkf

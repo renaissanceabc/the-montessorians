@@ -2,7 +2,10 @@
 id: tm0000046
 name: Stephen Curry
 slug: stephen-curry
-name_authorized: Curry, Stephen
+name_authorized: Curry, Stephen, 1988-
+name_variants:
+  - Steph Curry
+  - Wardell Stephen Curry II
 birth_year: 1988
 tagline: NBA superstar known for transforming the modern game
 bio: >-

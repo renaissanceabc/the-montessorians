@@ -1,0 +1,35 @@
+name: Bug report
+description: Something on the site is broken
+labels: ["bug"]
+assignees: ["karelvuong"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: The address where it happened
+      placeholder: https://themontessorians.xyz/...
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you saw instead. Screenshots help.
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - Phone
+        - Tablet
+        - Computer
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: e.g. Safari on iOS 26, Chrome 141

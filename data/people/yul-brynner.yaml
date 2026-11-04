@@ -3,6 +3,9 @@ id: tm0000051
 name: Yul Brynner
 slug: yul-brynner
 name_authorized: Brynner, Yul
+name_variants:
+  - Yuliy Borisovich Briner
+  - Youl Bryner
 birth_year: 1920
 death_year: 1985
 tagline: Iconic actor best known for his Tony and Oscar-winning role in The King and I
@@ -28,6 +31,7 @@ identifiers:
   lcnaf: n82115477
   viaf: "6283699"
   wikidata: Q102813
+  snac: w6111qz3
 image_credit:
   Publicity photo for The Magnificent Seven (1960), photographer unknown, via Wikimedia Commons (public domain)
 verification: unverified

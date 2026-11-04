@@ -15,9 +15,9 @@ tags:
 education:
   - montessori
 education_notes: >-
-  Jimmy Wales attended a Montessori preschool and has spoken positively about the method's influence. He credited
-  Montessori's child-led learning philosophy as a foundation for his intellectual curiosity and love of self-directed
-  study. As a child, he spent hours poring over encyclopedias—a habit he links to his later creation of Wikipedia.
+  Jimmy Wales was educated at the House of Learning, a small Montessori-based private school in Huntsville run by his
+  mother and grandmother. He has described its philosophy as Montessori-influenced and credits its less structured
+  teaching, and the hours he spent with encyclopedias there, for his later curiosity and self-directed study.
 notable_achievements:
   - Founder of Wikipedia
   - Co-founder of Wikimedia Foundation
@@ -34,6 +34,7 @@ identifiers:
   lcnaf: no2009117557
   viaf: "96800423"
   wikidata: Q181
+  isni: "0000000070564830"
 sources:
   - type: article
     url: https://encyclopediaofalabama.org/article/jimmy-wales/
@@ -44,4 +45,4 @@ sources:
   - type: social
     url: https://x.com/jimmy_wales/status/440849974067081217
     note: Wales says his school was influenced by Montessori, not a Montessori school
-verification: unverified
+verification: verified

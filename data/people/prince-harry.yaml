@@ -3,6 +3,10 @@ id: tm0000040
 name: Prince Harry
 slug: prince-harry
 name_authorized: Harry, Prince, Duke of Sussex, 1984-
+name_variants:
+  - Prince Harry, Duke of Sussex
+  - Prince Henry of Wales
+  - Henry Charles Albert David
 birth_year: 1984
 tagline: British royal, veteran, and advocate for mental health and veterans' issues
 bio: >-

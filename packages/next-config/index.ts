@@ -1,12 +1,9 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
-const hostnameFromUrl = (url: string | undefined) => {
-  if (!(url && URL.canParse(url))) {
-    return;
-  }
-  return new URL(url).hostname;
-};
+const TRAILING_SLASH_REGEX = /\/$/u;
+
+const hostnameFromUrl = (url: string | undefined) => (url ? URL.parse(url)?.hostname : undefined);
 
 /**
  * The site's public origin: the Vercel production domain when set, then the
@@ -19,7 +16,8 @@ export const resolveSiteUrl = () => {
     return `https://${host}`;
   }
   return (
-    process.env.PORTLESS_URL?.replace(/\/$/u, "") ?? `http://localhost:${process.env.PORT ?? 3000}`
+    process.env.PORTLESS_URL?.replace(TRAILING_SLASH_REGEX, "") ??
+    `http://localhost:${process.env.PORT ?? 3000}`
   );
 };
 
@@ -120,6 +118,12 @@ export const config: NextConfig = {
   // Inlined for server and client code alike (read via `siteUrl` in the app).
   env: {
     SITE_URL: resolveSiteUrl(),
+  },
+
+  experimental: {
+    // Persist Turbopack's compile cache in .next/cache so CI (which restores
+    // that folder) and local rebuilds skip recompiling unchanged modules.
+    turbopackFileSystemCacheForBuild: true,
   },
 
   headers: () =>

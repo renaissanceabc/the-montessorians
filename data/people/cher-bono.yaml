@@ -3,6 +3,11 @@ id: tm0000009
 name: Cher Bono
 slug: cher-bono
 name_authorized: Cher, 1946-
+name_variants:
+  - Cher
+  - Cherilyn Sarkisian
+  - Cherilyn Sarkisian LaPiere
+  - Cher Allman
 birth_year: 1946
 tagline: Groundbreaking pop icon and Academy Award-winning performer
 bio: >-
@@ -38,4 +43,6 @@ identifiers:
   lcnaf: n50038010
   viaf: "101870495"
   wikidata: Q12003
+  isni: "0000000081707438"
+  snac: w6kh3jsb
 verification: unverified

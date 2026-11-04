@@ -2,7 +2,9 @@
 id: tm0000043
 name: Sara Gilbert
 slug: sara-gilbert
-name_authorized: Gilbert, Sara
+name_authorized: Gilbert, Sara, 1975-
+name_variants:
+  - Sara Rebecca Abeles
 birth_year: 1975
 tagline: Actress and producer known for "Roseanne" and "The Talk"
 bio: >-
@@ -27,6 +29,7 @@ identifiers:
   lcnaf: no97013060
   viaf: "21744622"
   wikidata: Q231405
+  isni: "0000000043111609"
 verification: unverified
 image_credit: Photo by watchwithkristin, via Wikimedia Commons (CC BY-SA 2.0)
 sources:

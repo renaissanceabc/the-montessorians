@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { filterAndSortProfiles } from "@/lib/content/filter";
 import { CONTRIBUTOR_ROLE_LABELS } from "@/lib/content/types";
-import type { Profile, ProfileKind, Tag } from "@/lib/content/types";
+import type { ProfileKind, ProfileSummary, Tag } from "@/lib/content/types";
 import { DEFAULT_PROFILES_FILTERS } from "@/lib/types";
 import type { getProfilesOptions } from "@/lib/types";
 
@@ -71,7 +71,7 @@ export const ProfilesPageWrapper = ({
   counts,
   affiliationOptions = NO_AFFILIATIONS,
 }: {
-  profiles: Profile[];
+  profiles: ProfileSummary[];
   tags: Tag[];
   /** Omit for the "All" view */
   kind?: ProfileKind;

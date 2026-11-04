@@ -48,11 +48,13 @@ Two repository rulesets enforce the model (Settings → Rules → Rulesets):
 
 | Ruleset | Merge method | Required checks | Other rules |
 | --- | --- | --- | --- |
-| `develop` | squash only | `Run yamllint` (oxfmt on `data/`), `Validate schema + image rules`, `Require changeset` | No deletion, no force push, linear history, resolved threads |
-| `main` | merge commit only | `Run yamllint` (oxfmt on `data/`), `Validate schema + image rules`, `Vercel` (up to date) | No deletion, no force push |
+| `develop` | squash only | `Run yamllint` (oxfmt on `data/`), `Validate schema + image rules`, `Require changeset`, `Lint, typecheck, test, build`, `Vercel` | No deletion, no force push, linear history, resolved threads |
+| `main` | merge commit only | `Run yamllint` (oxfmt on `data/`), `Validate schema + image rules`, `Lint, typecheck, test, build`, `Vercel` (up to date) | No deletion, no force push |
 
 Rebase merging is disabled for the repository, and merged branches are deleted automatically. Admins can bypass a ruleset only through a pull request, never by pushing directly.
 
-The required check names match the workflow **job** names. Renaming a job in `validate.yml` or `changeset-check.yml` without updating the rulesets leaves every PR waiting on a check that never reports.
+The required check names match the workflow **job** names. Renaming a job in `validate.yml`, `changeset-check.yml`, or `ci.yml` without updating the rulesets leaves every PR waiting on a check that never reports.
 
-The Version Packages PR is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its required checks never report. Merge it with the admin bypass; it only touches versions and changelogs.
+The Version Packages PR is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its required checks never report. Merge it with the admin bypass; it only touches versions and changelogs. It never gets a `Vercel` check either, because `apps/app/vercel.json` skips deployments for its branch.
+
+PRs no longer run `next build` in CI (Vercel builds every PR preview), so the required `Vercel` check is what stops a PR that breaks the build from merging.

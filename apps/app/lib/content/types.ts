@@ -17,8 +17,7 @@ export const PROFILE_KINDS = ["alum", "contributor"] as const;
 export const CONTRIBUTOR_ROLES = [
   "founder",
   "trainer",
-  "practitioner",
-  "teacher-scholar",
+  "practitioner-scholar",
   "researcher",
   "author",
   "philosopher",
@@ -27,9 +26,8 @@ export const CONTRIBUTOR_ROLE_LABELS: Record<(typeof CONTRIBUTOR_ROLES)[number],
   author: "Author",
   founder: "Founder",
   philosopher: "Philosopher",
-  practitioner: "Practitioner",
+  "practitioner-scholar": "Practitioner-scholar",
   researcher: "Researcher",
-  "teacher-scholar": "Teacher-scholar",
   trainer: "Trainer",
 };
 export const SOURCE_TYPES = [
@@ -69,6 +67,12 @@ export type ContributionType = (typeof CONTRIBUTION_TYPES)[number];
 export type OrganizationType = (typeof ORGANIZATION_TYPES)[number];
 export type Verification = "verified" | "reported" | "confirmed" | "unverified";
 export type RecordStatus = "provisional" | "reviewed";
+
+/** ISO timestamps of the commits that created and last changed a record file. */
+export interface RecordDates {
+  created: string;
+  modified: string;
+}
 
 export interface ProfileLink {
   url: string;
@@ -190,6 +194,7 @@ export interface RawProfile {
   links?: ProfileLink[];
   imageUrl: string | null;
   addedAt: string;
+  recordDates: RecordDates | null;
 }
 
 /** Enriched profile used throughout the UI (tags resolved to {slug,label}). */
@@ -228,7 +233,61 @@ export interface Profile {
   tags: ProfileTag[];
   links: ProfileLink[];
   addedAt: string;
+  /** When the record was first committed and last changed (null without full git history) */
+  recordDates: RecordDates | null;
 }
+
+/** The parts of an organization reference a directory card shows and search matches. */
+export type OrganizationRefSummary = Pick<
+  OrganizationRef,
+  "organization" | "organizationName" | "organizationShortName" | "organizationNameVariants"
+>;
+
+/**
+ * Just what a directory card and the client-side filter read. Directory pages
+ * ship every person to the browser, so they send this instead of a whole Profile.
+ */
+export type ProfileSummary = Pick<
+  Profile,
+  | "addedAt"
+  | "birthYear"
+  | "deathYear"
+  | "imageUrl"
+  | "kinds"
+  | "name"
+  | "nameAuthorized"
+  | "nameVariants"
+  | "pinned"
+  | "roles"
+  | "slug"
+  | "tagline"
+  | "tags"
+  | "verification"
+> & {
+  affiliations: OrganizationRefSummary[];
+  contributionCount: number;
+  schools: OrganizationRefSummary[];
+};
+
+/** The fields the profile page's client sections render. */
+export type ProfileDetails = Pick<
+  Profile,
+  | "affiliations"
+  | "bio"
+  | "educationNotes"
+  | "glossaryCitations"
+  | "kinds"
+  | "links"
+  | "montessoriNotes"
+  | "name"
+  | "nameAuthorized"
+  | "nameVariants"
+  | "notableAchievements"
+  | "quotes"
+  | "schools"
+  | "sources"
+  | "tags"
+>;
 
 export interface Organization {
   id: string;
@@ -252,6 +311,8 @@ export interface Organization {
     ror?: string;
     isni?: string;
   };
+  /** Set by scripts/generate-content.mjs */
+  recordDates?: RecordDates | null;
 }
 
 export interface AuthorityChange {
@@ -264,7 +325,7 @@ export interface AuthorityChange {
   reason?: string;
 }
 
-export type PastProfile = Profile & { featuredDate: string };
+export type PastProfile = ProfileSummary & { featuredDate: string };
 
 export type AdjacentRef =
   | { slug: string; name: string; imageUrl: string | null }

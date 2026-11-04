@@ -1,27 +1,31 @@
 import type { getProfilesOptions } from "@/lib/types";
 
-import type { Profile } from "./types";
+import type { ProfileSummary } from "./types";
 
 // Pure, isomorphic filtering/sorting over an in-memory profile list. Shared by
 // the server content layer (getProfiles) and the client discover page.
 
 const splitList = (value: string | undefined) => (value ?? "").split(",").filter(Boolean);
 
-const sortProfiles = (
-  list: Profile[],
+const sortProfiles = <T extends ProfileSummary>(
+  list: T[],
   orderBy: NonNullable<getProfilesOptions["orderBy"]>,
   sortBy: NonNullable<getProfilesOptions["sortBy"]>
-): Profile[] => {
+): T[] => {
   const dir = sortBy === "asc" ? 1 : -1;
   return list.toSorted((a, b) => {
     if (orderBy === "alphabetical") {
       return a.name.localeCompare(b.name) * dir;
     }
     if (orderBy === "contributions") {
-      const diff = a.contributions.length - b.contributions.length;
+      const diff = a.contributionCount - b.contributionCount;
       return diff === 0 ? a.name.localeCompare(b.name) : diff * dir;
     }
-    // "latest" / "trending" → by when the profile was added, ties A–Z either way
+    // "latest" / "trending" → by when the profile was added, ties A–Z either way.
+    // The default "Recently added" order puts pinned people first.
+    if (sortBy === "desc" && a.pinned !== b.pinned) {
+      return a.pinned ? -1 : 1;
+    }
     if (a.addedAt === b.addedAt) {
       return a.name.localeCompare(b.name);
     }
@@ -38,9 +42,13 @@ export const normalizeSearch = (s: string): string =>
 /** How well a profile matches a search: by name first, then by anything else. */
 type SearchRank = "name" | "other" | null;
 
-const nameFields = (p: Profile): (string | null)[] => [p.name, p.nameAuthorized, ...p.nameVariants];
+const nameFields = (p: ProfileSummary): (string | null)[] => [
+  p.name,
+  p.nameAuthorized,
+  ...p.nameVariants,
+];
 
-const otherFields = (p: Profile): (string | null | undefined)[] => [
+const otherFields = (p: ProfileSummary): (string | null | undefined)[] => [
   p.tagline,
   ...p.tags.map((t) => t.label),
   ...[...p.schools, ...p.affiliations].flatMap((ref) => [
@@ -53,7 +61,7 @@ const otherFields = (p: Profile): (string | null | undefined)[] => [
 const includesQuery = (q: string) => (field: string | null | undefined) =>
   Boolean(field && normalizeSearch(field).includes(q));
 
-export const searchRank = (profile: Profile, query: string): SearchRank => {
+export const searchRank = (profile: ProfileSummary, query: string): SearchRank => {
   const q = normalizeSearch(query);
   if (!q) {
     return "name";
@@ -67,10 +75,10 @@ export const searchRank = (profile: Profile, query: string): SearchRank => {
   return null;
 };
 
-export const filterAndSortProfiles = (
-  list: Profile[],
+export const filterAndSortProfiles = <T extends ProfileSummary>(
+  list: T[],
   options: getProfilesOptions = {}
-): Profile[] => {
+): T[] => {
   const {
     orderBy = "latest",
     sortBy = "desc",
@@ -117,7 +125,7 @@ export const filterAndSortProfiles = (
   }
 
   if (minContributions && minContributions > 0) {
-    out = out.filter((p) => p.contributions.length >= minContributions);
+    out = out.filter((p) => p.contributionCount >= minContributions);
   }
 
   out = sortProfiles(out, orderBy, sortBy);

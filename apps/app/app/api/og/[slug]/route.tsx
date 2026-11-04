@@ -9,6 +9,9 @@ import { imageFileToDataUrl, OG_CACHE_CONTROL, OG_SIZE, textCardResponse } from 
 import { instrumentSerif } from "@/lib/og-font";
 import { normalizeOgSlug } from "@/lib/og-slug";
 
+const WHITESPACE_REGEX = /\s+/u;
+const LEADING_SLASH_REGEX = /^\//u;
+
 // Pre-render every profile's OG image at build time (no runtime function).
 // Include `.png` variants — metadata/sitemap use `/api/og/{slug}.png`, and the
 // [slug] route matches that before the `/api/og/:slug.png` rewrite can run.
@@ -20,7 +23,7 @@ export const dynamicParams = false;
 
 // Helper function to split name into first and last name
 const splitName = (name: string): [string, string] => {
-  const parts = name.trim().split(/\s+/u);
+  const parts = name.trim().split(WHITESPACE_REGEX);
   if (parts.length === 1) {
     return [parts[0], ""];
   }
@@ -296,7 +299,7 @@ export const GET = async (_request: Request, { params }: { params: Promise<{ slu
 
     const [backgroundImageUrl, profileImageUrl] = await Promise.all([
       imageFileToDataUrl("og-dynamic.jpg"),
-      imageFileToDataUrl(profile.imageUrl.replace(/^\//u, "")),
+      imageFileToDataUrl(profile.imageUrl.replace(LEADING_SLASH_REGEX, "")),
     ]);
 
     return generateProfileImageResponse({

@@ -2,7 +2,11 @@
 id: tm0000039
 name: Prince George
 slug: prince-george
-name_authorized: George, Prince, 2013-
+name_authorized: George, of Wales, Prince, 2013-
+name_variants:
+  - Prince George of Wales
+  - Prince George of Cambridge
+  - George Alexander Louis Mountbatten-Windsor
 birth_year: 2013
 tagline: Heir to the British throne and son of Prince William and Princess Catherine
 bio: >-

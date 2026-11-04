@@ -1,5 +1,5 @@
 import { getDirectoryCounts } from "@/lib/content/directory";
-import { getAllProfiles, getAllTags } from "@/lib/content/profiles";
+import { getAllTags, getProfileSummaries } from "@/lib/content/profiles";
 import { createMetadata } from "@/lib/metadata";
 import { DEFAULT_TAGS_FILTERS } from "@/lib/types";
 import { siteUrl } from "@/lib/utils";
@@ -19,7 +19,7 @@ const Alumni = () => (
   <ProfilesPageWrapper
     counts={getDirectoryCounts()}
     kind="alum"
-    profiles={getAllProfiles("alum")}
+    profiles={getProfileSummaries("alum")}
     tags={getAllTags(DEFAULT_TAGS_FILTERS, "alum").data}
   />
 );

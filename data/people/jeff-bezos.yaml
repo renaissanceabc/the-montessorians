@@ -2,7 +2,10 @@
 id: tm0000021
 name: Jeff Bezos
 slug: jeff-bezos
-name_authorized: Bezos, Jeff
+name_authorized: Bezos, Jeffrey
+name_variants:
+  - Jeffrey Bezos
+  - Jeffrey Preston Jorgensen
 birth_year: 1964
 tagline: Tech visionary and founder of Amazon
 bio: >-

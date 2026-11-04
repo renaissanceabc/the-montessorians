@@ -6,6 +6,8 @@ import { useId, useMemo, useState } from "react";
 import type { Tag } from "@/lib/content/types";
 import { cn, toTitleCase } from "@/lib/utils";
 
+const TRAILING_COMMA_REGEX = /,$/u;
+
 const MAX_SUGGESTIONS = 6;
 
 /** Tags as chips. Existing tags are suggested first so the list stays short. */
@@ -43,7 +45,7 @@ export const TagInput = ({
   const open = matches.length > 0 && !dismissed;
 
   const add = (label: string) => {
-    const clean = toTitleCase(label.trim().replace(/,$/u, ""));
+    const clean = toTitleCase(label.trim().replace(TRAILING_COMMA_REGEX, ""));
     if (clean && !value.includes(clean)) {
       onChange([...value, clean]);
     }

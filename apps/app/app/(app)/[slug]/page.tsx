@@ -4,8 +4,20 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Container } from "@/components/container";
 import { RecordLayout } from "@/components/record-layout";
 import { Separator } from "@/components/ui/separator";
-import { contributionUrl, identifierEntries, idUrl, personJsonLd } from "@/lib/content/authority";
-import { getAllSlugs, getProfileWithAdjacent, getRelatedPeople } from "@/lib/content/profiles";
+import {
+  contributionHost,
+  contributionUrl,
+  identifierEntries,
+  idUrl,
+  personJsonLd,
+} from "@/lib/content/authority";
+import {
+  getAllSlugs,
+  getProfileWithAdjacent,
+  getRelatedPeople,
+  toProfileDetails,
+} from "@/lib/content/profiles";
+import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
 import { correctionUrl } from "@/lib/url";
 import { siteUrl } from "@/lib/utils";
@@ -35,9 +47,13 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
     },
     description: data.profile.tagline || "",
     image: `${siteUrl}/api/og/${slug}.png`,
+    // Spread into a plain object: Next types `other` with an index signature.
     other: {
-      // The permanent identifier, for citation managers and crawlers.
-      "dc.identifier": idUrl(data.profile.id),
+      ...dublinCoreMeta({
+        dates: data.profile.recordDates,
+        permanentUrl: idUrl(data.profile.id),
+        title: data.profile.nameAuthorized ?? data.profile.name,
+      }),
     },
     title: data.profile.name,
   });
@@ -54,21 +70,17 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
   const { profile, previous, next } = data;
   const isContributor = profile.kind === "contributor";
 
-  const contributions = profile.contributions.map((c) => {
-    const href = contributionUrl(c);
-    let host: string | null = null;
-    try {
-      host = href ? new URL(href).hostname.replace(/^www\./u, "") : null;
-    } catch {
-      host = null;
-    }
-    return { ...c, host, href };
-  });
+  const contributions = profile.contributions.map((c) => ({
+    ...c,
+    host: contributionHost(c),
+    href: contributionUrl(c),
+  }));
 
   const permanentUrl = idUrl(profile.id);
   const jsonLd = personJsonLd(profile);
 
   const correction = correctionUrl(profile);
+  const details = toProfileDetails(profile);
 
   return (
     <>
@@ -91,7 +103,7 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
               <ProfileMain
                 contributions={contributions}
                 correctionUrl={correction}
-                profile={profile}
+                profile={details}
               />
             </>
           }
@@ -105,7 +117,7 @@ const ProfilePage = async (props: { params: Promise<{ slug: string }> }) => {
                 value,
               }))}
               permanentId={{ url: permanentUrl, value: profile.id }}
-              profile={profile}
+              profile={details}
               related={getRelatedPeople(profile)}
             />
           }

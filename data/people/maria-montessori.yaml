@@ -8,6 +8,8 @@ roles:
   - author
 pinned: true
 name_authorized: Montessori, Maria, 1870-1952
+name_variants:
+  - Maria Tecla Artemisia Montessori
 birth_year: 1870
 death_year: 1952
 tagline: Physician and educator who created the Montessori method

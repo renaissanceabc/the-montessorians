@@ -18,7 +18,7 @@ import { Container } from "@/components/container";
 import { OrgLogo } from "@/components/org-logo";
 import ProfileListItem from "@/components/profile-list-item";
 import { RecordLayout } from "@/components/record-layout";
-import { CorrectionButton, RecordDetails } from "@/components/record-rail";
+import { CorrectionButton, otherNames, RecordDetails } from "@/components/record-rail";
 import { ShareButton } from "@/components/share-button";
 import { identifierEntries, idUrl, organizationJsonLd } from "@/lib/content/authority";
 import { formatLocation } from "@/lib/content/location";
@@ -28,10 +28,14 @@ import {
   getOrganizationMembers,
   ORGANIZATION_TYPE_LABELS,
 } from "@/lib/content/organizations";
+import { toProfileSummary } from "@/lib/content/profiles";
 import type { OrganizationRef, OrganizationType } from "@/lib/content/types";
+import { dublinCoreMeta } from "@/lib/dublin-core";
 import { createMetadata } from "@/lib/metadata";
 import { githubIssueUrl } from "@/lib/url";
 import { prettyUrl, siteUrl, toTitleCase } from "@/lib/utils";
+
+const WWW_REGEX = /^www\./u;
 
 export const generateStaticParams = () => getAllOrganizations().map((org) => ({ slug: org.slug }));
 
@@ -68,6 +72,14 @@ export const generateMetadata = async ({ params }: { params: Promise<{ slug: str
     },
     description: org.description ?? `${org.name} on The Montessorians.`,
     image: `${siteUrl}/api/og/organizations/${slug}.png`,
+    // Spread into a plain object: Next types `other` with an index signature.
+    other: {
+      ...dublinCoreMeta({
+        dates: org.recordDates,
+        permanentUrl: idUrl(org.id),
+        title: org.name,
+      }),
+    },
     title: org.name,
   });
 };
@@ -96,6 +108,10 @@ const Dot = () => (
     ·
   </span>
 );
+
+/** The source's host for its link text, or undefined when it isn't a URL with a host. */
+const linkHost = (source: string | undefined) =>
+  (source && URL.parse(source)?.hostname.replace(WWW_REGEX, "")) || undefined;
 
 const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
@@ -214,7 +230,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                   detail={[ref.level && toTitleCase(ref.level), yearRange(ref)]
                     .filter(Boolean)
                     .join(" · ")}
-                  profile={profile}
+                  profile={toProfileSummary(profile)}
                 />
               </li>
             ))}
@@ -230,7 +246,7 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
                 <ProfileListItem
                   hideOrganization={org.slug}
                   detail={[ref.role, yearRange(ref)].filter(Boolean).join(" · ")}
-                  profile={profile}
+                  profile={toProfileSummary(profile)}
                 />
               </li>
             ))}
@@ -266,11 +282,19 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
       )}
 
       <div className="flex flex-col gap-3">
-        <RecordDetails id={org.id} identifiers={identifiers} permanentUrl={permanentUrl} />
+        <RecordDetails
+          alsoKnownAs={otherNames(org.nameVariants, [org.name, org.shortName])}
+          heading={org.name}
+          id={org.id}
+          identifiers={identifiers}
+          permanentUrl={permanentUrl}
+        />
         <CorrectionButton href={correction} />
       </div>
     </aside>
   );
+
+  const logoSourceHost = linkHost(org.logoSource);
 
   return (
     <>
@@ -283,9 +307,9 @@ const OrganizationPage = async ({ params }: { params: Promise<{ slug: string }> 
         {org.logoUrl && org.logoSource && (
           <p className="text-muted-foreground text-xs [overflow-wrap:anywhere]">
             Logo from{" "}
-            {URL.canParse(org.logoSource) ? (
+            {logoSourceHost ? (
               <Link className="underline" href={org.logoSource} rel="noopener" target="_blank">
-                {new URL(org.logoSource).hostname.replace(/^www\./u, "")}
+                {logoSourceHost}
               </Link>
             ) : (
               org.logoSource

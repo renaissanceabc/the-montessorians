@@ -1,5 +1,38 @@
 # app
 
+## 0.4.0
+
+### Minor Changes
+
+- [#47](https://github.com/renaissanceabc/the-montessorians/pull/47) [`cbfb7f8`](https://github.com/renaissanceabc/the-montessorians/commit/cbfb7f8b5d46045a156958025c02ee45c8ae666f) Thanks [@karelvuong](https://github.com/karelvuong)! - Records work better as linked data and are easier to cite.
+
+  - **Permanent ids**: `/id/<id>` returns the record's JSON-LD to clients that ask for it, and record pages advertise their JSON-LD in a `Link` header.
+  - **JSON-LD**: each record now carries typed identifiers, SKOS labels for its authorized and variant names, and a record node with its created and modified dates, licence, sources, and verification level. The dataset itself is described on `/data` and in the bulk download.
+  - **Citations**: profiles and organizations show a citation with a copy button, and pages carry Dublin Core tags for citation managers.
+  - **Wikidata proposal**: tighter id format, current counts, and AMI's Wikidata item.
+
+- [#46](https://github.com/renaissanceabc/the-montessorians/pull/46) [`6540b34`](https://github.com/renaissanceabc/the-montessorians/commit/6540b348bd1d180e82818ea31fce023509da2990) Thanks [@karelvuong](https://github.com/karelvuong)! - Replace the Practitioner and Teacher-scholar contributor roles with a single Practitioner-scholar role.
+
+### Patch Changes
+
+- [#47](https://github.com/renaissanceabc/the-montessorians/pull/47) [`cbfb7f8`](https://github.com/renaissanceabc/the-montessorians/commit/cbfb7f8b5d46045a156958025c02ee45c8ae666f) Thanks [@karelvuong](https://github.com/karelvuong)! - Records match other authority files more closely.
+
+  - **Name variants**: 42 people and 1 organization gain other forms of their name (full, birth and married names, and other scripts), taken from their Library of Congress and Wikidata records.
+  - **Authorized headings**: 36 headings now match the Library of Congress form, mostly by adding life dates.
+  - **Identifiers**: 39 new ISNI, SNAC and ORCID links on people already matched in Wikidata, an ORCID for David O'Hara, a birth year for Shazi Visram, ISNI for AMI, and a Wikidata item for Ruffing Montessori School.
+
+- [#47](https://github.com/renaissanceabc/the-montessorians/pull/47) [`cbfb7f8`](https://github.com/renaissanceabc/the-montessorians/commit/cbfb7f8b5d46045a156958025c02ee45c8ae666f) Thanks [@karelvuong](https://github.com/karelvuong)! - Jimmy Wales's Montessori schooling is now verified, from the Encyclopedia of Alabama, and Peter Drucker's record cites the Drucker Institute's doubt that he attended a Montessori school.
+
+  Helen Keller, George Clooney, Steve Case and Michael Douglas now cite sources that name the non-Montessori schools they attended. They stay unverified.
+
+  Profiles and organization pages list up to four other forms of the name as "Also known as" in the record box. The editorial policy now says never to record a name the person no longer uses and doesn't want shown.
+
+- [#44](https://github.com/renaissanceabc/the-montessorians/pull/44) [`1be8927`](https://github.com/renaissanceabc/the-montessorians/commit/1be892789baf07adb0467689fecb982253170d20) Thanks [@karelvuong](https://github.com/karelvuong)! - Maria and Mario Montessori now lead the contributor list on the homepage and the default "Recently added" order in the directory.
+
+- Updated dependencies []:
+  - @montessorians/next-config@0.4.0
+  - @montessorians/observability@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes
