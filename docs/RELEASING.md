@@ -55,7 +55,7 @@ Write the title for someone skimming what changed in the dataset or on the site.
 
 - **Never squash a promotion PR.** It exists to keep two long-lived branches identical.
 - **`promote.yml` does not merge.** Merging stays a human click so production deploys stay intentional.
-- **Tags live on `develop`.** release-please finds the last release by walking `develop` back to its tag, so the tag has to be on a `develop` commit, which is why `release.yml` publishes a draft rather than tagging `main`. `v0.4.0` and earlier were tagged on `main`; `last-release-sha` in `release-please-config.json` marks the last `develop` commit before the switch (everything up to it ships in v0.4.0) so the first release-please changelog starts there. It does nothing once v0.5.0 is tagged and can be removed then.
+- **Tags live on `develop`.** release-please finds the last release by walking `develop` back to its tag, so the tag has to be on a `develop` commit, which is why `release.yml` publishes a draft rather than tagging `main`. `v0.4.1` and earlier were tagged on `main`; `last-release-sha` in `release-please-config.json` marks the last Changesets release commit on `develop` (v0.4.1) so the first release-please changelog starts after it. It does nothing once the first release-please version is tagged and can be removed then.
 - **A new package under `packages/` needs adding** to `extra-files` in `release-please-config.json`, or its version stops moving with the rest.
 - **Git hooks are [lefthook](https://lefthook.dev)** (`lefthook.yml`), installed by `bun install`: Ultracite on staged files, oxfmt and validation for `data/`, and commitlint on commit messages.
 

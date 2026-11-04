@@ -5,7 +5,7 @@
   "bump-minor-pre-major": true,
   "draft": true,
   "force-tag-creation": true,
-  "last-release-sha": "2dcb943dd4265234bf2dd37736cd3f92a98bfdbc",
+  "last-release-sha": "a30eb4281991c12ec858af64a66a45caa38a333d",
   "packages": {
     ".": {
       "changelog-path": "apps/app/CHANGELOG.md",
