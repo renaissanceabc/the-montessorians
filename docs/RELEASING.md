@@ -39,7 +39,6 @@ Cut every feature branch from `develop` and open every PR against it. Never comm
 
 - **Never squash a promotion PR.** It exists to keep two long-lived branches identical.
 - **`promote.yml` does not merge.** Merging stays a human click so production deploys stay intentional.
-- **`changeset-release/develop` is load-bearing.** `apps/app/vercel.json` skips deployments for it; keep the name if you touch either.
 - **`.changeset/config.json` `baseBranch` is `develop`**, matching where `version.yml` runs.
 
 ## Branch protection
@@ -55,6 +54,6 @@ Rebase merging is disabled for the repository, and merged branches are deleted a
 
 The required check names match the workflow **job** names. Renaming a job in `validate.yml`, `changeset-check.yml`, or `ci.yml` without updating the rulesets leaves every PR waiting on a check that never reports.
 
-The Version Packages PR is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its required checks never report. Merge it with the admin bypass; it only touches versions and changelogs. It never gets a `Vercel` check either, because `apps/app/vercel.json` skips deployments for its branch.
+The Version Packages PR is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its CI checks may not report until the PR is closed and reopened. Vercel builds a preview for it like any other PR, so its `Vercel` check reports on its own. If the CI checks still don't report, merge it with the admin bypass; it only touches versions and changelogs.
 
 PRs no longer run `next build` in CI (Vercel builds every PR preview), so the required `Vercel` check is what stops a PR that breaks the build from merging.
