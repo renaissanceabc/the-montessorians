@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   release-please:
-    name: Open release PR
+    name: Release Please
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

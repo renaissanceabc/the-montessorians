@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   promote:
-    name: Open promotion PR
+    name: Promote
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
