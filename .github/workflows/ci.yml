@@ -29,8 +29,8 @@ env:
   NEXT_TELEMETRY_DISABLED: 1
 
 jobs:
-  checks:
-    name: Lint, typecheck, test, build
+  check:
+    name: Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
 

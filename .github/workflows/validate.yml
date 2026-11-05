@@ -12,9 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    # Keeps the required check's name; oxfmt now owns YAML formatting.
-    name: Run yamllint
+  format-data:
+    name: Format Data
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -28,7 +27,7 @@ jobs:
         run: bunx oxfmt --check "data/**/*.yaml"
 
   validate:
-    name: Validate schema + image rules
+    name: Validate
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
