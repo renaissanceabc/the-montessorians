@@ -65,12 +65,12 @@ Two repository rulesets enforce the model (Settings → Rules → Rulesets):
 
 | Ruleset | Merge method | Required checks | Other rules |
 | --- | --- | --- | --- |
-| `develop` | squash only | `Check` | No deletion, no force push, linear history, resolved threads |
+| `develop` | squash only | `Check`, `Format Data` (oxfmt on `data/`), `Validate`, `PR Title`, `Vercel` | No deletion, no force push, linear history, resolved threads |
 | `main` | merge commit only | `Check`, `Format Data` (oxfmt on `data/`), `Validate`, `Vercel` (up to date) | No deletion, no force push |
 
 Rebase merging is disabled for the repository, and merged branches are deleted automatically. Admins can bypass a ruleset only through a pull request, never by pushing directly.
 
-The required check names match the workflow job `name:`. Job ids are kebab-case and names are Title Case (`check` named `Check`). Renaming a job in `validate.yml` or `ci.yml` without updating the rulesets leaves every PR waiting on a check that never reports.
+The required check names match the workflow job `name:`. Job ids are kebab-case and names are Title Case (`check` named `Check`). Renaming a job in `validate.yml`, `pr-title.yml`, or `ci.yml` without updating the rulesets leaves every PR waiting on a check that never reports.
 
 The release PR is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its CI checks may not report until the PR is closed and reopened. Vercel builds a preview for it like any other PR, so its `Vercel` check reports on its own. If the CI checks still don't report, merge it with the admin bypass; it only touches versions and the changelog.
 
