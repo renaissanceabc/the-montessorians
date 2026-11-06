@@ -29,7 +29,6 @@ env:
   NEXT_TELEMETRY_DISABLED: 1
 
 jobs:
-  # The pull request gate: one required check, named Check.
   check:
     name: Check
     runs-on: ubuntu-latest
@@ -64,22 +63,6 @@ jobs:
 
       - name: Lint
         run: bun run check
-
-      # The validator compares permanent ids against the PR's base branch, so
-      # fetch just that branch's tip.
-      - name: Fetch base branch
-        if: github.event_name == 'pull_request'
-        env:
-          BASE: ${{ github.base_ref }}
-        run: git fetch --no-tags --depth=1 origin "+refs/heads/$BASE:refs/remotes/origin/$BASE"
-
-      - name: Data formatting
-        run: bunx oxfmt --check "data/**/*.yaml"
-
-      - name: Validate data
-        run: bun run validate
-        env:
-          BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
 
       # Marks the start, so the save below can tell whether next build ran.
       - name: Typecheck, test, and build

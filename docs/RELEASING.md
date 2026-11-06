@@ -44,7 +44,8 @@ Write the title for someone skimming what changed in the dataset or on the site.
 
 | Workflow | Trigger | Notes |
 | --- | --- | --- |
-| `ci.yml` (`Check`) | every PR, push to `develop` and `main` | Lint, typecheck, tests (build on pushes), data formatting, and data validation: schemas, permanent ids against the PR's base branch, references |
+| `ci.yml` (`Check`) | every PR, push to `develop` and `main` | Lint, typecheck, tests (build on pushes) |
+| `validate.yml` (`Format Data`, `Validate`) | every PR | oxfmt on `data/`; schemas, permanent ids against the PR's base branch, references |
 | `pr-title.yml` | PRs into `develop` | Conventional commit title, checked with commitlint |
 | `release-please.yml` | push to `develop` | Opens/updates the release PR and requests Karel's review; tags and drafts the release when it merges |
 | `promote.yml` | push to `develop` that changes `apps/app/package.json` | Opens/refreshes the `develop` → `main` promotion PR |
@@ -65,14 +66,14 @@ Two repository rulesets enforce the model (Settings → Rules → Rulesets):
 
 | Ruleset | Merge method | Required checks | Other rules |
 | --- | --- | --- | --- |
-| `develop` | squash only | `Check`, `PR Title`, `Vercel` | No deletion, no force push, linear history, resolved threads |
-| `main` | merge commit only | `Check`, `Vercel` (up to date) | No deletion, no force push |
+| `develop` | squash only | `Check`, `Format Data` (oxfmt on `data/`), `Validate`, `PR Title`, `Vercel` | No deletion, no force push, linear history, resolved threads |
+| `main` | merge commit only | `Check`, `Format Data` (oxfmt on `data/`), `Validate`, `Vercel` (up to date) | No deletion, no force push |
 
 Rebase merging is disabled for the repository, and merged branches are deleted automatically. Admins can bypass a ruleset only through a pull request, never by pushing directly.
 
-The required check names match the workflow **job** names. Renaming a job in `ci.yml` or `pr-title.yml` without updating the rulesets leaves every PR waiting on a check that never reports. Pin required checks to the GitHub Actions source.
+The required check names match the workflow job `name:`. Job ids are kebab-case and names are Title Case (`check` named `Check`). Renaming a job in `validate.yml`, `pr-title.yml`, or `ci.yml` without updating the rulesets leaves every PR waiting on a check that never reports.
 
-Names follow one convention: a workflow's `name:` is a short noun in sentence case (`CI`, `PR title`, `Release`, `Promote`, `Publish`, `Links`) and its file is the kebab-case form. A job id is kebab-case and its `name:` is the id in Title Case (`check` → `Check`, `pr-title` → `PR Title`, `release-please` → `Release Please`). The pull request gate is the one `Check` job.
+Names follow one convention: a workflow's `name:` is a short noun in sentence case (`CI`, `Validate`, `PR title`, `Release`, `Promote`, `Publish`, `Links`) and its file is the kebab-case form. A job id is kebab-case and its `name:` is the id in Title Case (`check` → `Check`, `pr-title` → `PR Title`, `release-please` → `Release Please`).
 
 When the `RELEASE_APP_ID` and `RELEASE_APP_PRIVATE_KEY` secrets are set, the release PR is opened by the Release App and its checks run like any PR's. Without them it is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its CI checks may not report until the PR is closed and reopened. Vercel builds a preview for it like any other PR, so its `Vercel` check reports on its own. If the CI checks still don't report, merge it with the admin bypass; it only touches versions and the changelog.
 

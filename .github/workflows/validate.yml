@@ -1,0 +1,46 @@
+name: Validate
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the run still in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format-data:
+    name: Format Data
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: ./.github/actions/setup
+
+      - name: Check data formatting
+        run: bunx oxfmt --check "data/**/*.yaml"
+
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          # Full history so the validator can compare ids against the base branch.
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup
+
+      - name: Validate YAML against JSON Schema, ids, references, and image rules
+        run: bun run validate
+        env:
+          BASE_REF: origin/${{ github.base_ref }}

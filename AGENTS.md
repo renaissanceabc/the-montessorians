@@ -28,7 +28,7 @@ Every change that affects what the site renders gets checked in a real browser w
 - Branch from `develop` and target it. PR titles are Conventional Commits with a lowercase subject; they become the changelog (see `docs/RELEASING.md`). Use the PR template: What changed, Why, How checked, Visual evidence, Risk, How to revert.
 - Don't merge, and don't push tags. Karel merges; the release PR and the promotion PR are his gate.
 - Review rounds: at most 3 per pull request. After the first, review only the new diff, never re-raise a finding already reported, and fix the whole bug class. After round 3, stop and flag Karel. `REVIEW.md` is the reviewer's brief.
-- CI names: a workflow `name:` is a short noun in sentence case and its file is the kebab-case form; a job id is kebab-case and its `name:` is the id in Title Case. The pull request gate is the one `Check` job in `CI`. Required checks are `Check`, `PR Title`, and `Vercel`, so tell Karel before renaming one: the ruleset has to change in the same step, and only Karel changes rulesets.
+- CI names: a workflow `name:` is a short noun in sentence case and its file is the kebab-case form; a job id is kebab-case and its `name:` is the id in Title Case. Required checks are `Check`, `Format Data`, `Validate`, `PR Title`, and `Vercel`, so tell Karel before renaming one: the ruleset has to change in the same step, and only Karel changes rulesets.
 - Pin third-party actions to a commit SHA with the version in a comment. Dependabot keeps them current.
 - Skills here: `git-flow`, `open-pr`, `verify-before-pr`, and `tune-up` (performance habits while writing handlers, regexes, URL handling, or CI). Vendored skills come from `bunx skills add` and are tracked in `skills-lock.json`; don't edit them in place.
 
