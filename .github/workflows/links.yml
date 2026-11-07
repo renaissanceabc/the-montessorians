@@ -1,4 +1,4 @@
-name: Check dataset links
+name: Links
 
 # Link rot quietly erodes sources. Check every URL in the dataset (sources,
 # links, contributions, organization websites), every contribution DOI, and
@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       # Contributions record DOIs as bare identifiers; check them through the
       # resolver, which is the link the site shows.
@@ -40,7 +40,7 @@ jobs:
           echo "$(wc -l < lychee/doi-links.txt) DOIs"
 
       - name: Restore lychee cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: .lycheecache
           key: lychee-${{ github.sha }}
@@ -50,7 +50,7 @@ jobs:
       # excluded or accepted, so the issue lists real rot, not bot walls.
       - name: Check links
         id: lychee
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
           args: >-
             --no-progress --cache --max-cache-age 3d --max-concurrency 4 --max-retries 2 --retry-wait-time 5 --timeout 30 --accept 200..=299,403,429 --exclude-all-private --exclude "^mailto:" --exclude "linkedin\\.com" --exclude "[/.]x\\.com(/|$)" --exclude "twitter\\.com" --exclude "instagram\\.com" --exclude "tiktok\\.com" --exclude "facebook\\.com" --exclude "imdb\\.com" --exclude "loc\\.gov" --exclude "hathitrust\\.org" --exclude "gallica\\.bnf\\.fr" --exclude "worldcat\\.org" --exclude "jstor\\.org" --exclude "researchgate\\.net" --exclude "pressreader\\.com" --exclude "example\\.(com|org)" "data/**/*.yaml" "lychee/doi-links.txt" "README.md" "CONTRIBUTING.md" "docs/**/*.md"

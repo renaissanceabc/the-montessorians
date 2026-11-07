@@ -1,4 +1,4 @@
-name: PR Title
+name: PR title
 
 # Squash merges make the PR title the commit on develop, and release-please
 # builds the version bump and changelog from those commits. Same rules as the
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
 
