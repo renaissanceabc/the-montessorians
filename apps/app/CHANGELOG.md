@@ -1,5 +1,23 @@
 # app
 
+## 0.4.1
+
+### Patch Changes
+
+- [#54](https://github.com/renaissanceabc/the-montessorians/pull/54) [`c8e6b51`](https://github.com/renaissanceabc/the-montessorians/commit/c8e6b51340a790a00b1891a28c0c79a166d0b5c3) Thanks [@karelvuong](https://github.com/karelvuong)! - Turn on Turbopack's build cache so rebuilds skip recompiling unchanged code.
+
+- [#56](https://github.com/renaissanceabc/the-montessorians/pull/56) [`2dcb943`](https://github.com/renaissanceabc/the-montessorians/commit/2dcb943dd4265234bf2dd37736cd3f92a98bfdbc) Thanks [@karelvuong](https://github.com/karelvuong)! - Parse URLs once instead of twice, and skip parsing where the host is already known.
+
+- [#58](https://github.com/renaissanceabc/the-montessorians/pull/58) [`145a7c2`](https://github.com/renaissanceabc/the-montessorians/commit/145a7c216c3c3911ac7e9626ae9b1ef41f86dd19) Thanks [@karelvuong](https://github.com/karelvuong)! - Compile regular expressions once at module load instead of on every call.
+
+- [#57](https://github.com/renaissanceabc/the-montessorians/pull/57) [`0adda50`](https://github.com/renaissanceabc/the-montessorians/commit/0adda502676b8bda234fc6360e116e841b075561) Thanks [@karelvuong](https://github.com/karelvuong)! - Run independent async work side by side: BotID now checks a submission while its body is read, organization OG cards read the logo and background together, and `contributions:index` queries its four sources at once.
+
+- [#59](https://github.com/renaissanceabc/the-montessorians/pull/59) [`a252c9b`](https://github.com/renaissanceabc/the-montessorians/commit/a252c9b21687247557590b42200d96a2117c18ce) Thanks [@karelvuong](https://github.com/karelvuong)! - Send directory and profile pages only the fields they render, cutting the people data shipped to /discover from 168 KB to 43 KB.
+
+- Updated dependencies []:
+  - @montessorians/next-config@0.4.1
+  - @montessorians/observability@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

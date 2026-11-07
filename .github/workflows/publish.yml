@@ -1,0 +1,72 @@
+name: Publish
+
+# Publishes the release for every version that reaches main. release-please
+# tags vX.Y.Z on develop with a draft release when its release PR merges; this
+# publishes that draft. Each published GitHub release is archived by Zenodo
+# (see .zenodo.json), which mints a DOI for that version of the dataset.
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          version=$(git show "$GITHUB_SHA:apps/app/package.json" | jq -r '.version')
+          tag="v$version"
+
+          draft=$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null || echo missing)
+
+          case "$draft" in
+            false)
+              echo "$tag is already released."
+              ;;
+            true)
+              gh release edit "$tag" --draft=false --latest
+              echo "Published $tag."
+              ;;
+            *)
+              # No draft from release-please: tag main and write the notes
+              # from the changelog, like before release-please.
+              git show "$GITHUB_SHA:apps/app/CHANGELOG.md" > changelog.md 2>/dev/null || : > changelog.md
+              awk -v version="$version" '
+                /^## / {
+                  if (found) exit
+                  heading = $2
+                  sub(/^\[/, "", heading)
+                  sub(/\].*/, "", heading)
+                  if (heading == version) { found = 1; next }
+                }
+                found
+              ' changelog.md > release-notes.md
+
+              if ! git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+                git tag "$tag" "$GITHUB_SHA"
+                git push origin "refs/tags/$tag"
+              fi
+
+              if [ -s release-notes.md ]; then
+                gh release create "$tag" --title "$tag" --notes-file release-notes.md --verify-tag
+              else
+                gh release create "$tag" --generate-notes --verify-tag
+              fi
+              ;;
+          esac

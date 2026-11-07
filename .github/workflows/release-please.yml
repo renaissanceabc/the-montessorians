@@ -1,0 +1,61 @@
+name: Release
+
+# Keeps a release PR open on develop, built from the conventional commit
+# titles of the PRs merged since the last release. Merging it bumps every
+# package.json, writes apps/app/CHANGELOG.md, and tags vX.Y.Z with a draft
+# GitHub release. publish.yml publishes that draft once the version reaches
+# main, which is what Zenodo archives.
+
+on:
+  push:
+    branches: [develop]
+  # Manual run, for when a push event is dropped.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HAS_APP: ${{ secrets.RELEASE_APP_ID != '' && secrets.RELEASE_APP_PRIVATE_KEY != '' }}
+    steps:
+      # With the Release App, the release PR is opened by the App rather than
+      # GITHUB_TOKEN, so its checks run. Without it, GITHUB_TOKEN still works
+      # and the PR needs the admin bypass.
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        if: env.HAS_APP == 'true'
+        id: app
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        id: release
+        with:
+          token: ${{ steps.app.outputs.token || github.token }}
+          target-branch: develop
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # The release PR is Karel's gate. Only warns: GitHub won't request a PR's
+      # own author.
+      - name: Request Karel on the release PR
+        if: steps.release.outputs.prs_created == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ fromJSON(steps.release.outputs.pr).number }}
+        run: |
+          gh api --method POST "repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" -f 'reviewers[]=karelvuong' --silent \
+            || echo "::warning::Could not request karelvuong's review on #$NUMBER."

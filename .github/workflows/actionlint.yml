@@ -1,4 +1,4 @@
-name: Lint workflows
+name: Actionlint
 
 # Catches broken expressions, bad action inputs, and shell bugs in run:
 # steps (through shellcheck) before they fail on a real run.
@@ -18,13 +18,13 @@ concurrency:
 
 jobs:
   actionlint:
-    name: Run actionlint
+    name: Actionlint
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       # Pinned release; the matcher turns errors into inline PR annotations.
       - name: Run actionlint

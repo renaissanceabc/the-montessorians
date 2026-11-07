@@ -25,8 +25,7 @@ Something wrong on an existing profile? Use the [correction form](https://github
 5. Optionally add a profile image (`.jpg`) to `/images`, using the same `slug` as the filename, and credit it in `image_credit`
 6. If the person attended or is affiliated with a school, university, training center, or association that isn't in `data/organizations` yet, add it there (`bun run id:next -- org`)
 7. Run `bun run data:lint` and confirm that it succeeds before opening a pull request. If you changed the site's code, also run `bun run check`, then start `bun dev` and run `bun run verify:ui` to smoke-test the key pages at desktop and phone widths
-8. Add a changeset (`bunx changeset`) describing who you added or what you changed ([how to write one](./docs/CHANGESETS.md))
-9. Submit a pull request against the `develop` branch
+8. Submit a pull request against the `develop` branch, titled like `feat: add Jane Doe` or `fix: correct Jane Doe's training center`. The title becomes the changelog entry ([how to title it](./docs/RELEASING.md#pr-titles-are-the-changelog))
 
 **Never change or reuse an `id`.** To merge, withdraw, or rename a record, add an entry to [`data/authority/changes.yaml`](./data/authority/changes.yaml) in the same pull request (see [`docs/authority.md`](./docs/authority.md)).
 
