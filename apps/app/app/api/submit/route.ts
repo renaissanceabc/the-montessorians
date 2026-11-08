@@ -2,7 +2,6 @@ import { log } from "@montessorians/observability/log";
 import { checkBotId } from "botid/server";
 import { NextResponse } from "next/server";
 
-import { env } from "@/env";
 import {
   BodyTooLargeError,
   clientIp,
@@ -80,7 +79,7 @@ export const POST = async (request: Request) => {
     );
   }
 
-  if (!env.GITHUB_SUBMISSIONS_TOKEN) {
+  if (!process.env.GITHUB_SUBMISSIONS_TOKEN) {
     // The client falls back to the prefilled GitHub issue.
     return NextResponse.json({ error: "Submissions are not configured" }, { status: 503 });
   }
@@ -94,7 +93,7 @@ export const POST = async (request: Request) => {
     }),
     headers: {
       Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${env.GITHUB_SUBMISSIONS_TOKEN}`,
+      Authorization: `Bearer ${process.env.GITHUB_SUBMISSIONS_TOKEN}`,
       "X-GitHub-Api-Version": "2022-11-28",
     },
     method: "POST",

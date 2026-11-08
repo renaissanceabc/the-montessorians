@@ -8,10 +8,7 @@
   },
   "dependencies": {
     "@next/bundle-analyzer": "catalog:",
-    "@t3-oss/env-core": "catalog:",
-    "@t3-oss/env-nextjs": "catalog:",
-    "next": "catalog:",
-    "zod": "catalog:"
+    "next": "catalog:"
   },
   "devDependencies": {
     "@montessorians/typescript-config": "workspace:*"
