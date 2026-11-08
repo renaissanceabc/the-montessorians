@@ -48,14 +48,23 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # The release PR is Karel's gate. Only warns: GitHub won't request a PR's
-      # own author.
-      - name: Request Karel on the release PR
+      # The release PR is Karel's gate. It carries needs-human and auto-merge
+      # stays off, so Karel merges it by hand. Nobody is requested. Only warns.
+      - name: Hold the release PR for a manual merge
         if: steps.release.outputs.prs_created == 'true'
         env:
           GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
           GH_REPO: ${{ github.repository }}
-          NUMBER: ${{ fromJSON(steps.release.outputs.pr).number }}
+          PR: ${{ steps.release.outputs.pr }}
         run: |
-          gh api --method POST "repos/$GH_REPO/pulls/$NUMBER/requested_reviewers" -f 'reviewers[]=karelvuong' --silent \
-            || echo "::warning::Could not request karelvuong's review on #$NUMBER."
+          # Parse here, not with fromJSON in env: an empty output fails the template.
+          NUMBER=$(jq -r '.number // empty' <<<"$PR")
+          [ -n "$NUMBER" ] || { echo "::warning::release-please reported a PR but no number."; exit 0; }
+          if ! gh label list --repo "$GH_REPO" --json name --jq '.[].name' | grep -Fxq 'needs-human'; then
+            gh label create needs-human --repo "$GH_REPO" \
+              --description "A human merges this. Auto-merge stays off." --color B60205 >/dev/null \
+              || echo "::warning::Could not create the needs-human label."
+          fi
+          gh api --method POST "repos/$GH_REPO/issues/$NUMBER/labels" -f 'labels[]=needs-human' --silent \
+            || echo "::warning::Could not label #$NUMBER needs-human."
+          gh pr merge "$NUMBER" --repo "$GH_REPO" --disable-auto >/dev/null 2>&1 || true
