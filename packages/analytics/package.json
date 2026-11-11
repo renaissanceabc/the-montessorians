@@ -8,13 +8,11 @@
   },
   "dependencies": {
     "@next/third-parties": "catalog:",
-    "@t3-oss/env-nextjs": "catalog:",
     "@vercel/analytics": "catalog:",
     "posthog-js": "catalog:",
     "posthog-node": "catalog:",
     "react": "catalog:",
-    "server-only": "catalog:",
-    "zod": "catalog:"
+    "server-only": "catalog:"
   },
   "devDependencies": {
     "@montessorians/typescript-config": "workspace:*",

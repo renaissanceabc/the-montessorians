@@ -8,3 +8,6 @@
 /lib/content/*.generated.json
 /public/images
 /public/logos
+
+# Varlock's generated env types (varlock codegen, from .env.schema)
+/env.d.ts

@@ -9,10 +9,8 @@
   "dependencies": {
     "@logtail/next": "catalog:",
     "@sentry/nextjs": "catalog:",
-    "@t3-oss/env-nextjs": "catalog:",
     "react": "catalog:",
-    "server-only": "catalog:",
-    "zod": "catalog:"
+    "server-only": "catalog:"
   },
   "devDependencies": {
     "@montessorians/typescript-config": "workspace:*",

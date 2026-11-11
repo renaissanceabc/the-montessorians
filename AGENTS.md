@@ -37,6 +37,7 @@ Every change that affects what the site renders gets checked in a real browser w
 - Never put a personal email address (the user's or anyone's) in requests to external services, in User-Agent strings or `mailto` parameters, or in scripts.
 - Data changes follow `docs/editorial-policy.md`: real, verifiable sources only; never guess identifiers, dates, DOIs, or ISBNs.
 - Tags come from `data/authority/tags.yaml`; add a tag there before using it.
+- Env vars live in `apps/app/.env.schema` (Varlock): add a new one there first, with its type and `@public` only if it may reach the browser. Read it as `process.env.NAME`. Never put a value in the schema, and never print or read `.env.local`.
 
 # Ultracite Code Standards
 
