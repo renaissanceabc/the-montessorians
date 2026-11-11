@@ -27,16 +27,19 @@ env:
   TURBO_TASKS: ${{ github.event_name == 'push' && 'typecheck test build' || 'typecheck test' }}
   TURBO_TELEMETRY_DISABLED: 1
   NEXT_TELEMETRY_DISABLED: 1
+  # Varlock reads a run on main as production unless APP_ENV is set. CI needs
+  # no real values: every item in apps/app/.env.schema is optional in test.
+  APP_ENV: test
 
 jobs:
-  checks:
-    name: Lint, typecheck, test, build
+  check:
+    name: Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: ./.github/actions/setup
 
@@ -55,7 +58,7 @@ jobs:
       # what changed.
       - name: Restore Next.js cache
         if: github.event_name == 'push'
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: apps/app/.next/cache
           key: next-${{ runner.os }}-${{ hashFiles('bun.lock') }}-${{ github.sha }}
@@ -63,6 +66,13 @@ jobs:
 
       - name: Lint
         run: bun run check
+
+      # Fails when the code reads an env var apps/app/.env.schema lacks, or the
+      # schema lists one nothing reads. Packages are listed one by one: audit
+      # does not descend into them from a parent folder.
+      - name: Env schema drift
+        working-directory: apps/app
+        run: bunx varlock audit -p .env.schema . ../../packages/analytics ../../packages/next-config ../../packages/observability
 
       # Marks the start, so the save below can tell whether next build ran.
       - name: Typecheck, test, and build
@@ -84,7 +94,7 @@ jobs:
 
       - name: Save Next.js cache
         if: steps.next-cache.outputs.changed == 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: apps/app/.next/cache
           key: next-${{ runner.os }}-${{ hashFiles('bun.lock') }}-${{ github.sha }}

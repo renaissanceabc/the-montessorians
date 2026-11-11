@@ -1,6 +1,6 @@
 {
   "name": "@montessorians/observability",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -9,10 +9,8 @@
   "dependencies": {
     "@logtail/next": "catalog:",
     "@sentry/nextjs": "catalog:",
-    "@t3-oss/env-nextjs": "catalog:",
     "react": "catalog:",
-    "server-only": "catalog:",
-    "zod": "catalog:"
+    "server-only": "catalog:"
   },
   "devDependencies": {
     "@montessorians/typescript-config": "workspace:*",

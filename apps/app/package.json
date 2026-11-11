@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "scripts": {
     "content": "node scripts/generate-content.mjs",
@@ -10,7 +10,7 @@
     "start": "next start",
     "analyze": "ANALYZE=true bun build",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "typecheck": "node scripts/generate-content.mjs && tsc --noEmit --emitDeclarationOnly false",
+    "typecheck": "node scripts/generate-content.mjs && varlock codegen && tsc --noEmit --emitDeclarationOnly false",
     "test": "node scripts/generate-content.mjs && bun test lib"
   },
   "dependencies": {
@@ -18,7 +18,7 @@
     "@hookform/resolvers": "^5.9.1",
     "@montessorians/next-config": "workspace:*",
     "@montessorians/observability": "workspace:*",
-    "@t3-oss/env-nextjs": "catalog:",
+    "@varlock/nextjs-integration": "2.0.0",
     "botid": "^1.5.11",
     "class-variance-authority": "catalog:",
     "cn": "^0.4.0",
@@ -34,6 +34,7 @@
     "require-in-the-middle": "catalog:",
     "sonner": "catalog:",
     "use-debounce": "catalog:",
+    "varlock": "1.24.0",
     "zod": "catalog:"
   },
   "devDependencies": {

@@ -1,3 +1,0 @@
-#!/bin/sh
-# Ultracite (oxlint + oxfmt) on staged files; YAML data is formatted and validated.
-bunx lint-staged

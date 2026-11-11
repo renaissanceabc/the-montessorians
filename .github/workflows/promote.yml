@@ -17,11 +17,11 @@ permissions:
 
 jobs:
   promote:
-    name: Open promotion PR
+    name: Promote
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -44,14 +44,21 @@ jobs:
           title="chore: promote develop to main (v${develop_version})"
 
           git show HEAD:apps/app/CHANGELOG.md > changelog.md 2>/dev/null || : > changelog.md
-          awk -v heading="## ${develop_version}" '
-            $0 == heading { found = 1; next }
-            found && /^## / { exit }
+          # Matches "## 0.4.0" (Changesets) and "## [0.5.0](...) (date)"
+          # (release-please).
+          awk -v version="${develop_version}" '
+            /^## / {
+              if (found) exit
+              heading = $2
+              sub(/^\[/, "", heading)
+              sub(/\].*/, "", heading)
+              if (heading == version) { found = 1; next }
+            }
             found
           ' changelog.md > release-notes.md
 
           {
-            echo "Promotes \`develop\` to \`main\` for **v${develop_version}**. Version Packages was merged into \`develop\` first, so \`apps/app/package.json\` is already at ${develop_version} and the pending changesets are consumed — \`release.yml\` will tag \`v${develop_version}\` and cut the release from \`apps/app/CHANGELOG.md\`."
+            echo "Promotes \`develop\` to \`main\` for **v${develop_version}**. The release PR was merged into \`develop\` first, so \`apps/app/package.json\` is already at ${develop_version} and \`v${develop_version}\` is tagged with a draft release. Merging this lets \`release.yml\` publish that release."
             echo
             echo "Opened automatically by \`promote.yml\` when the version bump landed on \`develop\`."
             echo
