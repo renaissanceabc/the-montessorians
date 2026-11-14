@@ -11,10 +11,10 @@ export const initializeAnalytics = () => {
   try {
     posthog.init(NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: "/relay-r9etm",
-      // Overrides the `capture_pageview` setting
       capture_pageleave: true,
-      // Disable automatic pageview capture, as we capture manually
-      capture_pageview: false,
+      // Client-side navigations change the URL through the history API, not a
+      // page load, so the first view alone would miss every page after it.
+      capture_pageview: "history_change",
       loaded: (ph) => {
         let env = "production";
 
