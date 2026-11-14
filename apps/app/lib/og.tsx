@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 
 import { instrumentSerif } from "./og-font";
 
@@ -32,6 +33,22 @@ export const imageFileToDataUrl = async (publicRelPath: string): Promise<string>
 
 /** Generated images never change for a build. */
 export const OG_CACHE_CONTROL = "public, max-age=31536000, s-maxage=31536000, immutable";
+
+/**
+ * Re-encode a rendered card as a 256-color PNG. The cards are photos over a
+ * painted background, which ImageResponse writes as a truecolor PNG of about
+ * 550 to 700 KB; quantized they are a third of that and look the same. They
+ * stay PNGs, so the `.png` URLs and their content type don't change.
+ */
+export const compressOgImage = async (response: Response): Promise<Response> => {
+  const rendered = Buffer.from(await response.arrayBuffer());
+  const png = await sharp(rendered)
+    .png({ compressionLevel: 9, effort: 10, palette: true, quality: 90 })
+    .toBuffer();
+  const headers = new Headers(response.headers);
+  headers.delete("Content-Length");
+  return new Response(new Uint8Array(png), { headers, status: response.status });
+};
 
 /** Shrink a title so long names still fit on two lines. */
 const titleSize = (title: string): number => {
@@ -69,7 +86,7 @@ export const textCardResponse = async ({
   title,
   subtitle,
   logoPath,
-}: TextCardOptions): Promise<ImageResponse> => {
+}: TextCardOptions): Promise<Response> => {
   const [background, logoDataUrl] = await Promise.all([
     imageFileToDataUrl("og-dynamic.jpg"),
     logoPath ? imageFileToDataUrl(logoPath) : null,
@@ -148,5 +165,5 @@ export const textCardResponse = async ({
   );
   response.headers.set("Cache-Control", OG_CACHE_CONTROL);
   response.headers.set("Content-Type", "image/png");
-  return response;
+  return compressOgImage(response);
 };

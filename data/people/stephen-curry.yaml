@@ -35,8 +35,10 @@ identifiers:
   isni: "0000000434305881"
 sources:
   - type: article
-    url: https://www.gospelherald.com/news/nba-mvp-stephen-curry-shining-example-success-christian-montessori-school-system
-    note: Reports Curry attended the Christian Montessori school his mother founded and credited it in a 2013 AMS video
+    url: https://www.prnewswire.com/news-releases/nba-sensation-stephen-curry-says-montessori-education-a-key-to-his-success-229710251.html
+    note: >-
+      American Montessori Society release (Oct 29, 2013) on its video with Curry: he attended the Christian Montessori
+      School at Lake Norman, founded by his mother, through grade 6
   - type: other
     url: https://www.mslf.org/famous-montessori-students
     note: Montessori school page quotes Curry saying Montessori gave him confidence at a young age

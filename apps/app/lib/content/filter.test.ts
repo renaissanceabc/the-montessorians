@@ -125,6 +125,26 @@ describe("filterAndSortProfiles", () => {
     );
   });
 
+  test("search matches every word, each in any field and in any order", () => {
+    const cellist = profile({
+      name: "Yo-Yo Ma",
+      slug: "cellist",
+      tagline: "Cellist and composer",
+    });
+    assert.deepEqual(
+      filterAndSortProfiles([cellist, maria], { search: "ma cellist" }).map((p) => p.slug),
+      ["cellist"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles(all, { search: "montessori maria" }).map((p) => p.slug),
+      ["maria"]
+    );
+    assert.deepEqual(
+      filterAndSortProfiles([cellist, maria], { search: "ma pianist" }).map((p) => p.slug),
+      []
+    );
+  });
+
   test("search ignores case and accents", () => {
     const jose = profile({ name: "José Ortega", slug: "jose" });
     assert.deepEqual(
