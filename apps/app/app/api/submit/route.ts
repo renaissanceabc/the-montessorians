@@ -2,6 +2,7 @@ import { log } from "@montessorians/observability/log";
 import { checkBotId } from "botid/server";
 import { NextResponse } from "next/server";
 
+import { getInstallationToken, gitHubAppConfig } from "@/lib/github-app";
 import {
   BodyTooLargeError,
   clientIp,
@@ -79,9 +80,18 @@ export const POST = async (request: Request) => {
     );
   }
 
-  if (!process.env.GITHUB_SUBMISSIONS_TOKEN) {
+  const app = gitHubAppConfig();
+  if (!app) {
     // The client falls back to the prefilled GitHub issue.
     return NextResponse.json({ error: "Submissions are not configured" }, { status: 503 });
+  }
+
+  let token: string;
+  try {
+    token = await getInstallationToken(app);
+  } catch (error) {
+    log.error("Submit: GitHub App token request failed", { error: String(error) });
+    return NextResponse.json({ error: "Could not create the request" }, { status: 502 });
   }
 
   const submission = parsed.data;
@@ -93,7 +103,7 @@ export const POST = async (request: Request) => {
     }),
     headers: {
       Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${process.env.GITHUB_SUBMISSIONS_TOKEN}`,
+      Authorization: `Bearer ${token}`,
       "X-GitHub-Api-Version": "2022-11-28",
     },
     method: "POST",
