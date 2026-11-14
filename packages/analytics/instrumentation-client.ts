@@ -15,6 +15,8 @@ export const initializeAnalytics = () => {
       // Client-side navigations change the URL through the history API, not a
       // page load, so the first view alone would miss every page after it.
       capture_pageview: "history_change",
+      // The site runs no surveys, and the surveys script is 145 KB per visit.
+      disable_surveys: true,
       loaded: (ph) => {
         let env = "production";
 
