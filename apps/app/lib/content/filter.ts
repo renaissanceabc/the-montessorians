@@ -61,15 +61,31 @@ const otherFields = (p: ProfileSummary): (string | null | undefined)[] => [
 const includesQuery = (q: string) => (field: string | null | undefined) =>
   Boolean(field && normalizeSearch(field).includes(q));
 
+const WHITESPACE = /\s+/u;
+
 export const searchRank = (profile: ProfileSummary, query: string): SearchRank => {
   const q = normalizeSearch(query);
   if (!q) {
     return "name";
   }
-  if (nameFields(profile).some(includesQuery(q))) {
+  const names = nameFields(profile);
+  const others = otherFields(profile);
+  if (names.some(includesQuery(q))) {
     return "name";
   }
-  if (otherFields(profile).some(includesQuery(q))) {
+  if (others.some(includesQuery(q))) {
+    return "other";
+  }
+  // "montessori physician" or "ma cellist": every word has to match, but each
+  // may match a different field.
+  const words = q.split(WHITESPACE);
+  if (words.length < 2) {
+    return null;
+  }
+  if (words.every((word) => names.some(includesQuery(word)))) {
+    return "name";
+  }
+  if (words.every((word) => [...names, ...others].some(includesQuery(word)))) {
     return "other";
   }
   return null;

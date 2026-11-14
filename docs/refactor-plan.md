@@ -36,11 +36,11 @@ Data flow: `data/*.yaml` → build-time loader (`js-yaml`, already a dep) → in
 
 Create `apps/app/lib/content/profiles.ts` exposing the same shape today's `lib/db/profiles.ts` returns, so page/component changes stay minimal:
 
-- `getAllProfiles()` — read every `data/*.yaml` (via `node:fs` + `js-yaml`), validate against the existing `ProfileSyncSchema` ([lib/schema.ts](apps/app/lib/schema.ts)), normalize keys with the existing `convertKeysToCamelCase` ([lib/utils.ts](apps/app/lib/utils.ts)). Cache the parsed array in a module-level constant (build-time, read once).
+- `getAllProfiles()` — read every `data/*.yaml` (via `node:fs` + `js-yaml`), validate against the existing `ProfileSyncSchema` (`lib/schema.ts`), normalize keys with the existing `convertKeysToCamelCase` ([lib/utils.ts](../apps/app/lib/utils.ts)). Cache the parsed array in a module-level constant (build-time, read once).
 - `getProfileBySlug(slug)` + adjacent prev/next — replaces `getProfileWithAdjacentFromDB` (in-memory array index lookup instead of the `get_adjacent_profiles` SQL function).
 - `getProfilesFiltered({ search, tags, orderBy, sortBy })` — in-memory `filter`/`sort` replacing the SQL in `getProfilesFromDB`. Drop pagination/cursor entirely (66 items render at once).
-- Tags: derive `{ slug, label }` from each profile's `tags[]` using the existing `toTitleCase` ([lib/utils.ts](apps/app/lib/utils.ts)); compute counts in-memory. Replaces `lib/db/tags.ts`.
-- **Image paths:** profiles reference `imageUrl`. Replace the Vercel-Blob URL with the static path `/images/<slug>.jpg` (served from the co-located `images/` dir, symlinked or copied into `apps/app/public/images` — see step 7). Update the two `proxyImage(...)` call sites ([profile-details.tsx:42](<apps/app/app/(app)/[slug]/components/profile-details.tsx>), [profile-list-item.tsx:15](apps/app/components/profile-list-item.tsx)) to use the path directly via `next/image`; delete `proxyImage` + the `/api/proxy-image` route.
+- Tags: derive `{ slug, label }` from each profile's `tags[]` using the existing `toTitleCase` ([lib/utils.ts](../apps/app/lib/utils.ts)); compute counts in-memory. Replaces `lib/db/tags.ts`.
+- **Image paths:** profiles reference `imageUrl`. Replace the Vercel-Blob URL with the static path `/images/<slug>.jpg` (served from the co-located `images/` dir, symlinked or copied into `apps/app/public/images` — see step 7). Update the two `proxyImage(...)` call sites ([profile-details.tsx:42](<../apps/app/app/(app)/[slug]/components/profile-details.tsx>), [profile-list-item.tsx:15](../apps/app/components/profile-list-item.tsx)) to use the path directly via `next/image`; delete `proxyImage` + the `/api/proxy-image` route.
 - **`createdAt` / "recently added" sort:** no longer in a DB. Derive a stable date at build from git (last commit touching the file) or drop the `latest`/`trending` sort options, keeping `alphabetical`. Default: keep alphabetical + a git-derived "recently added"; confirm during impl.
 
 ### 2. Deterministic daily feature (replaces cron + `daily_feature` table)
@@ -56,11 +56,11 @@ Add `lib/content/daily.ts`:
 
 Remove tRPC from the content path; call the `lib/content` functions straight from Server Components.
 
-- [homepage/page.tsx](<apps/app/app/(app)/(homepage)/page.tsx>): `getProfilesFiltered()` + `getDailyProfile(today)`.
-- [[slug]/page.tsx](<apps/app/app/(app)/[slug]/page.tsx>) + `generateMetadata`: `getProfileBySlug`; add `generateStaticParams()` over all slugs so every profile is prerendered.
-- [discover/page.tsx](<apps/app/app/(app)/discover/page.tsx>) + [profiles-page-wrapper.tsx](<apps/app/app/(app)/discover/components/profiles-page-wrapper.tsx>): pass the full profile array to the client wrapper and make filtering/search/sort **client-side, in-memory** (the wrapper already manages filter state). Remove the infinite-query/prefetch machinery and `ProfilesPaginatedList` cursor logic; render all matches.
+- [homepage/page.tsx](<../apps/app/app/(app)/(homepage)/page.tsx>): `getProfilesFiltered()` + `getDailyProfile(today)`.
+- [[slug]/page.tsx](<../apps/app/app/(app)/[slug]/page.tsx>) + `generateMetadata`: `getProfileBySlug`; add `generateStaticParams()` over all slugs so every profile is prerendered.
+- [discover/page.tsx](<../apps/app/app/(app)/discover/page.tsx>) + [profiles-page-wrapper.tsx](<../apps/app/app/(app)/discover/components/profiles-page-wrapper.tsx>): pass the full profile array to the client wrapper and make filtering/search/sort **client-side, in-memory** (the wrapper already manages filter state). Remove the infinite-query/prefetch machinery and `ProfilesPaginatedList` cursor logic; render all matches.
 - `tags`, `tags/[slug]` (+ `generateStaticParams`), `archive`: read from the content layer / `getPastFeatures`.
-- Update [sitemap.ts](apps/app/app/sitemap.ts), `robots.ts`, `llms.txt` / `llms-full.txt` routes to enumerate from `getAllProfiles()` instead of the DB.
+- Update [sitemap.ts](../apps/app/app/sitemap.ts), `robots.ts`, `llms.txt` / `llms-full.txt` routes to enumerate from `getAllProfiles()` instead of the DB.
 
 ### 4. OG images without a backend
 
@@ -77,7 +77,7 @@ Today `/api/og/[slug]` reads the DB and renders at request time. Make it **stati
 
 ### 6. Schema reuse
 
-Reuse the existing JSON Schema ([profile.schema.json](../the-montessorians/profile.schema.json)) and `ProfileSyncSchema` ([lib/schema.ts](apps/app/lib/schema.ts)) for build-time validation so a malformed YAML fails the build loudly rather than silently.
+Reuse the existing JSON Schema ([profile.schema.json](../profile.schema.json)) and `ProfileSyncSchema` (`lib/schema.ts`) for build-time validation so a malformed YAML fails the build loudly rather than silently.
 
 ### 0. Branch + PR workflow
 
