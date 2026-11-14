@@ -28,20 +28,9 @@ const devOrigins = [hostnameFromUrl(process.env.PORTLESS_URL), "**.ts.net"].filt
 
 const isDev = process.env.NODE_ENV === "development";
 const isPreview = process.env.VERCEL_ENV === "preview";
-const hasGoogleAnalytics = Boolean(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID);
 
 /** Vercel BotID serves its challenge scripts from this same-origin path (botid/next/config). */
 const BOTID_PATH = "149e9513-01fa-4fb0-aad4-566afd725d1b";
-
-const GOOGLE_ANALYTICS = {
-  connect: [
-    "https://*.google-analytics.com",
-    "https://*.analytics.google.com",
-    "https://*.googletagmanager.com",
-  ],
-  img: ["https://*.google-analytics.com", "https://*.googletagmanager.com"],
-  script: ["https://*.googletagmanager.com"],
-};
 
 /** The Vercel toolbar (comments, feedback) on preview deployments. */
 const VERCEL_TOOLBAR = {
@@ -74,20 +63,14 @@ const contentSecurityPolicy = [
   `script-src ${sources(
     ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'wasm-unsafe-eval'"],
     isDev && ["https://va.vercel-scripts.com"],
-    hasGoogleAnalytics && GOOGLE_ANALYTICS.script,
     isPreview && VERCEL_TOOLBAR.script
   )}`,
   `style-src ${sources(["'self'", "'unsafe-inline'"], isPreview && VERCEL_TOOLBAR.style)}`,
-  `img-src ${sources(
-    ["'self'", "data:", "blob:"],
-    hasGoogleAnalytics && GOOGLE_ANALYTICS.img,
-    isPreview && VERCEL_TOOLBAR.img
-  )}`,
+  `img-src ${sources(["'self'", "data:", "blob:"], isPreview && VERCEL_TOOLBAR.img)}`,
   `font-src ${sources(["'self'", "data:"], isPreview && VERCEL_TOOLBAR.font)}`,
   `connect-src ${sources(
     ["'self'"],
     isDev && ["ws:", "https://va.vercel-scripts.com"],
-    hasGoogleAnalytics && GOOGLE_ANALYTICS.connect,
     isPreview && VERCEL_TOOLBAR.connect
   )}`,
   `frame-src ${sources(["'self'"], isPreview && VERCEL_TOOLBAR.frame)}`,
