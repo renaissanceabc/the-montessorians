@@ -5,7 +5,13 @@ import { log } from "@montessorians/observability/log";
 import { ImageResponse } from "next/og";
 
 import { getAllSlugs, getProfileBySlug } from "@/lib/content/profiles";
-import { imageFileToDataUrl, OG_CACHE_CONTROL, OG_SIZE, textCardResponse } from "@/lib/og";
+import {
+  compressOgImage,
+  imageFileToDataUrl,
+  OG_CACHE_CONTROL,
+  OG_SIZE,
+  textCardResponse,
+} from "@/lib/og";
 import { instrumentSerif } from "@/lib/og-font";
 import { normalizeOgSlug } from "@/lib/og-slug";
 
@@ -302,12 +308,14 @@ export const GET = async (_request: Request, { params }: { params: Promise<{ slu
       imageFileToDataUrl(profile.imageUrl.replace(LEADING_SLASH_REGEX, "")),
     ]);
 
-    return generateProfileImageResponse({
-      backgroundImageUrl,
-      profile: { imageUrl: profile.imageUrl, name: profile.name },
-      profileImageUrl,
-      slug,
-    });
+    return await compressOgImage(
+      generateProfileImageResponse({
+        backgroundImageUrl,
+        profile: { imageUrl: profile.imageUrl, name: profile.name },
+        profileImageUrl,
+        slug,
+      })
+    );
   } catch (error) {
     log.error("OG image: Error generating image", {
       error: parseError(error),
