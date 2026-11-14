@@ -47,6 +47,7 @@
         "react-dom": "catalog:",
         "react-hook-form": "^7.90.0",
         "require-in-the-middle": "catalog:",
+        "sharp": "0.34.5",
         "sonner": "catalog:",
         "use-debounce": "catalog:",
         "varlock": "1.24.0",
