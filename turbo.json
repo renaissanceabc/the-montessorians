@@ -22,6 +22,7 @@
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
       // Values inlined into the build; listed so they're part of the cache key.
       "env": [
+        "APP_ENV",
         "NEXT_PUBLIC_*",
         "VERCEL",
         "VERCEL_ENV",

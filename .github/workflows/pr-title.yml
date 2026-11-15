@@ -1,0 +1,34 @@
+name: PR title
+
+# Squash merges make the PR title the commit on develop, and release-please
+# builds the version bump and changelog from those commits. Same rules as the
+# commit-msg hook (commitlint.config.js).
+
+on:
+  pull_request:
+    branches: [develop]
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-title:
+    name: PR Title
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup
+
+      - name: Check the title against commitlint
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$TITLE" | bunx commitlint --verbose

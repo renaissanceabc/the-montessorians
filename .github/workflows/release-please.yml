@@ -1,0 +1,70 @@
+name: Release
+
+# Keeps a release PR open on develop, built from the conventional commit
+# titles of the PRs merged since the last release. Merging it bumps every
+# package.json, writes apps/app/CHANGELOG.md, and tags vX.Y.Z with a draft
+# GitHub release. publish.yml publishes that draft once the version reaches
+# main, which is what Zenodo archives.
+
+on:
+  push:
+    branches: [develop]
+  # Manual run, for when a push event is dropped.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HAS_APP: ${{ secrets.RELEASE_APP_ID != '' && secrets.RELEASE_APP_PRIVATE_KEY != '' }}
+    steps:
+      # With the Release App, the release PR is opened by the App rather than
+      # GITHUB_TOKEN, so its checks run. Without it, GITHUB_TOKEN still works
+      # and the PR needs the admin bypass.
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        if: env.HAS_APP == 'true'
+        id: app
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        id: release
+        with:
+          token: ${{ steps.app.outputs.token || github.token }}
+          target-branch: develop
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # The release PR is Karel's gate. It carries needs-human and auto-merge
+      # stays off, so Karel merges it by hand. Nobody is requested. Only warns.
+      - name: Hold the release PR for a manual merge
+        if: steps.release.outputs.prs_created == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ steps.release.outputs.pr }}
+        run: |
+          # Parse here, not with fromJSON in env: an empty output fails the template.
+          NUMBER=$(jq -r '.number // empty' <<<"$PR")
+          [ -n "$NUMBER" ] || { echo "::warning::release-please reported a PR but no number."; exit 0; }
+          if ! gh label list --repo "$GH_REPO" --json name --jq '.[].name' | grep -Fxq 'needs-human'; then
+            gh label create needs-human --repo "$GH_REPO" \
+              --description "A human merges this. Auto-merge stays off." --color B60205 >/dev/null \
+              || echo "::warning::Could not create the needs-human label."
+          fi
+          gh api --method POST "repos/$GH_REPO/issues/$NUMBER/labels" -f 'labels[]=needs-human' --silent \
+            || echo "::warning::Could not label #$NUMBER needs-human."
+          gh pr merge "$NUMBER" --repo "$GH_REPO" --disable-auto >/dev/null 2>&1 || true

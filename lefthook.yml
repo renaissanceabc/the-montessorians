@@ -1,0 +1,25 @@
+# Git hooks, installed by `bun install` (the prepare script).
+
+pre-commit:
+  parallel: true
+  jobs:
+    # Ultracite (oxlint + oxfmt) on staged files. Vendored agent skills stay as
+    # published, so they're never linted or formatted.
+    - name: ultracite
+      glob: "*.{ts,tsx,js,jsx,mjs,mts,json,jsonc,css,md}"
+      exclude:
+        - ".agents/**"
+        - ".claude/skills/**"
+      run: bunx ultracite fix {staged_files}
+      stage_fixed: true
+
+    # YAML data is formatted, then the whole dataset is validated.
+    - name: data
+      glob: "data/**/*.yaml"
+      run: bunx oxfmt {staged_files} && node scripts/validate.js
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: bunx commitlint --edit {1}

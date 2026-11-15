@@ -1,0 +1,7 @@
+[install]
+# Block package versions younger than 3 days.
+minimumReleaseAge = 259200
+minimumReleaseAgeExcludes = []
+
+[install.security]
+scanner = "@socketsecurity/bun-security-scanner"

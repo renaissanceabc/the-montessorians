@@ -49,7 +49,7 @@ bun run verify:ui # smoke-test key pages at desktop and phone widths (needs a ru
 bun run id:next  # print the next unused person id (add `-- org` for organizations)
 ```
 
-Branches follow git flow: open PRs against `develop` (the default branch), each with a changeset (`bunx changeset`) or the `skip-changeset` label. `main` is production and only receives promotion PRs. See [`docs/RELEASING.md`](./docs/RELEASING.md) and [`docs/CHANGESETS.md`](./docs/CHANGESETS.md).
+Branches follow git flow: open PRs against `develop` (the default branch) with a [conventional commit](https://www.conventionalcommits.org/) title, which becomes the changelog entry. `main` is production and only receives promotion PRs. See [`docs/RELEASING.md`](./docs/RELEASING.md).
 
 See [`docs/authority.md`](./docs/authority.md) for permanent ids, linked data, and the reconciliation API, and [`docs/editorial-policy.md`](./docs/editorial-policy.md) for who we include and what counts as evidence.
 

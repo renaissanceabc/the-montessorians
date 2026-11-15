@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "node",
+  "include-component-in-tag": false,
+  "bump-minor-pre-major": true,
+  "draft": true,
+  "force-tag-creation": true,
+  "last-release-sha": "a30eb4281991c12ec858af64a66a45caa38a333d",
+  "packages": {
+    ".": {
+      "changelog-path": "apps/app/CHANGELOG.md",
+      "extra-files": [
+        { "type": "json", "path": "apps/app/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/analytics/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/next-config/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/observability/package.json", "jsonpath": "$.version" },
+        {
+          "type": "json",
+          "path": "packages/typescript-config/package.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  }
+}

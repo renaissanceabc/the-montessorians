@@ -1,12 +1,15 @@
 import { config, withAnalyzer } from "@montessorians/next-config";
 import { sentryEnabled, withLogging, withSentry } from "@montessorians/observability/next-config";
+import { varlockNextConfigPlugin } from "@varlock/nextjs-integration/plugin";
 import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
 
-import { env } from "@/env";
-
 import authorityHeaders from "./lib/content/headers.generated.json";
 import authorityRedirects from "./lib/content/redirects.generated.json";
+
+// Varlock validates apps/app/.env.schema, redacts sensitive values from logs,
+// and blocks them from the client bundle.
+const withVarlock = varlockNextConfigPlugin();
 
 // A copy: the shared base config must not be mutated (its redirects are wrapped below).
 let nextConfig: NextConfig = { ...withLogging(config) };
@@ -46,8 +49,8 @@ if (sentryEnabled) {
   nextConfig = withSentry(nextConfig);
 }
 
-if (env.ANALYZE === "true") {
+if (process.env.ANALYZE === "true") {
   nextConfig = withAnalyzer(nextConfig);
 }
 
-export default withBotId(nextConfig);
+export default withVarlock(withBotId(nextConfig));

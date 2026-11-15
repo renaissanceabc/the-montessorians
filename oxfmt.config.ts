@@ -11,6 +11,8 @@ export default defineConfig({
     // Vendored agent skills (bunx skills add), tracked by skills-lock.json.
     ".agents/**",
     ".claude/skills/**",
+    // Written by release-please, which uses * bullets.
+    "**/CHANGELOG.md",
   ],
   overrides: [
     {
