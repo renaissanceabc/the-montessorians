@@ -1,5 +1,17 @@
 # app
 
+## [0.5.0](https://github.com/renaissanceabc/the-montessorians/compare/v0.4.1...v0.5.0) (2026-11-15)
+
+
+### Features
+
+* **contribute:** open submissions as a GitHub App, not a stored token ([#73](https://github.com/renaissanceabc/the-montessorians/issues/73)) ([a3643b4](https://github.com/renaissanceabc/the-montessorians/commit/a3643b423b686a6a8e3f1c70882d32ec2832d7ae))
+
+
+### Bug Fixes
+
+* count page views, lighter analytics and og images, a real 404, dead links ([#74](https://github.com/renaissanceabc/the-montessorians/issues/74)) ([9b8e74e](https://github.com/renaissanceabc/the-montessorians/commit/9b8e74e66541ad59a3cadb8338711671f71dbdc6))
+
 ## 0.4.1
 
 ### Patch Changes
