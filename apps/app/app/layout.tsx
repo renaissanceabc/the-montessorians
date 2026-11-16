@@ -1,5 +1,4 @@
 import "./globals.css";
-import { AnalyticsProvider } from "@montessorians/analytics/provider";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
@@ -34,15 +33,13 @@ const RootLayout = ({
       </a>
       <NuqsAdapter>
         <Suspense fallback={null}>
-          <AnalyticsProvider>
-            <Header />
-            <main className="scroll-mt-24 focus:outline-none" id="main" tabIndex={-1}>
-              {children}
-            </main>
-            <Footer />
-            <Toaster richColors />
-            <DevTools />
-          </AnalyticsProvider>
+          <Header />
+          <main className="scroll-mt-24 focus:outline-none" id="main" tabIndex={-1}>
+            {children}
+          </main>
+          <Footer />
+          <Toaster richColors />
+          <DevTools />
         </Suspense>
       </NuqsAdapter>
     </body>

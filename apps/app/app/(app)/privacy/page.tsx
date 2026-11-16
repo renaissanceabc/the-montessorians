@@ -93,15 +93,11 @@ const Privacy = () => (
           We count visits to see which pages are useful. There are no accounts and no advertising,
           and we don&apos;t sell or share this data.
         </p>
-        <ul className="list-disc space-y-1.5 pl-5 text-sm">
-          <li>
-            <b>Vercel Web Analytics</b> counts page views without cookies.
-          </li>
-          <li>
-            <b>PostHog</b> records page views, page exits, and clicks, routed through this
-            site&apos;s own domain. Visitors are anonymous; we never identify you by name or email.
-          </li>
-        </ul>
+        <p className="text-sm">
+          We use <b>PostHog</b>, which records page views, page exits, and clicks, routed through
+          this site&apos;s own domain. Visitors are anonymous; we never identify you by name or
+          email.
+        </p>
       </section>
 
       <section className="flex scroll-mt-24 flex-col gap-3" id="errors">

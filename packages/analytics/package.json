@@ -7,7 +7,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@vercel/analytics": "catalog:",
     "posthog-js": "catalog:",
     "posthog-node": "catalog:",
     "react": "catalog:",

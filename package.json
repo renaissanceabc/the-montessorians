@@ -29,7 +29,6 @@
       "@types/node": "^25.0.6",
       "@types/react": "^19.2.14",
       "@types/react-dom": "^19.2.3",
-      "@vercel/analytics": "^1.6.1",
       "ajv": "^8.17.1",
       "ajv-formats": "^3.0.1",
       "all-contributors-cli": "^6.26.1",
