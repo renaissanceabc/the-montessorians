@@ -46,9 +46,8 @@ const sources = (...lists: (string[] | false)[]) => lists.flatMap((list) => list
 
 /**
  * Everything the site loads comes from its own origin: PostHog through the
- * /relay-r9etm rewrite, Sentry through the /monitoring tunnel, Vercel
- * Analytics from /_vercel, BotID from its own rewrite, and fonts self-hosted
- * by next/font.
+ * /relay-r9etm rewrite, Sentry through the /monitoring tunnel, BotID from its
+ * own rewrite, and fonts self-hosted by next/font.
  *
  * - `'unsafe-inline'` scripts: statically rendered pages carry Next's inline
  *   bootstrap scripts and can't use per-request nonces without becoming dynamic.
@@ -62,17 +61,12 @@ const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src ${sources(
     ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'wasm-unsafe-eval'"],
-    isDev && ["https://va.vercel-scripts.com"],
     isPreview && VERCEL_TOOLBAR.script
   )}`,
   `style-src ${sources(["'self'", "'unsafe-inline'"], isPreview && VERCEL_TOOLBAR.style)}`,
   `img-src ${sources(["'self'", "data:", "blob:"], isPreview && VERCEL_TOOLBAR.img)}`,
   `font-src ${sources(["'self'", "data:"], isPreview && VERCEL_TOOLBAR.font)}`,
-  `connect-src ${sources(
-    ["'self'"],
-    isDev && ["ws:", "https://va.vercel-scripts.com"],
-    isPreview && VERCEL_TOOLBAR.connect
-  )}`,
+  `connect-src ${sources(["'self'"], isDev && ["ws:"], isPreview && VERCEL_TOOLBAR.connect)}`,
   `frame-src ${sources(["'self'"], isPreview && VERCEL_TOOLBAR.frame)}`,
   "worker-src 'self' blob:",
   "media-src 'self'",

@@ -27,7 +27,7 @@
     },
     "apps/app": {
       "name": "app",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "dependencies": {
         "@base-ui/react": "^1.9.0",
         "@hookform/resolvers": "^5.9.1",
@@ -70,9 +70,8 @@
     },
     "packages/analytics": {
       "name": "@montessorians/analytics",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "dependencies": {
-        "@vercel/analytics": "catalog:",
         "posthog-js": "catalog:",
         "posthog-node": "catalog:",
         "react": "catalog:",
@@ -85,7 +84,7 @@
     },
     "packages/next-config": {
       "name": "@montessorians/next-config",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "dependencies": {
         "@next/bundle-analyzer": "catalog:",
         "next": "catalog:",
@@ -96,7 +95,7 @@
     },
     "packages/observability": {
       "name": "@montessorians/observability",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "dependencies": {
         "@logtail/next": "catalog:",
         "@sentry/nextjs": "catalog:",
@@ -111,7 +110,7 @@
     },
     "packages/typescript-config": {
       "name": "@montessorians/typescript-config",
-      "version": "0.4.1",
+      "version": "0.5.0",
     },
   },
   "overrides": {
@@ -132,7 +131,6 @@
     "@types/node": "^25.0.6",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vercel/analytics": "^1.6.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "all-contributors-cli": "^6.26.1",
@@ -961,8 +959,6 @@
     "@varlock/native-helper-win32-x64": ["@varlock/native-helper-win32-x64@1.24.0", "", { "os": [ "linux", "win32", ] }, "sha512-qudkH54KfX8dBmsQyAlC8BYlPwrxF0Drg6q4MHHVC7l7taTClYNqf6M6xRdIoNynyPDKTTPNjpOvoHwvRanEpg=="],
 
     "@varlock/nextjs-integration": ["@varlock/nextjs-integration@2.0.0", "", { "peerDependencies": { "next": ">=14", "varlock": "^1.24.0" } }, "sha512-l9Qt29e0Fygvd/ZW0PUOkpc3riOX+q/gdnKQKEdY4LkhC9kvyAIJ5d9yTRI7RpScb3IQL4OHNvb6rp0JZMBw+A=="],
-
-    "@vercel/analytics": ["@vercel/analytics@1.6.1", "", { "peerDependencies": { "@remix-run/react": "^2", "@sveltejs/kit": "^1 || ^2", "next": ">= 13", "react": "^18 || ^19 || ^19.0.0-rc", "svelte": ">= 4", "vue": "^3", "vue-router": "^4" }, "optionalPeers": ["@remix-run/react", "@sveltejs/kit", "next", "react", "svelte", "vue", "vue-router"] }, "sha512-oH9He/bEM+6oKlv3chWuOOcp8Y6fo6/PSro8hEkgCW3pu9/OiCXiUpRUogDh3Fs3LH2sosDrx8CxeOLBEE+afg=="],
 
     "@vercel/backends": ["@vercel/backends@18.0.1", "", { "dependencies": { "@vercel/nft": "1.10.0", "@vercel/static-config": "3.4.4", "execa": "3.2.0", "fs-extra": "11.1.0", "get-port": "5.1.1", "oxc-transform": "0.111.0", "path-to-regexp": "8.3.0", "resolve.exports": "2.0.3", "rolldown": "1.0.0-rc.1", "srvx": "0.11.16", "ts-morph": "12.0.0", "tsx": "4.21.0", "zod": "3.22.4" }, "peerDependencies": { "@vercel/build-utils": "14.20.1" } }, "sha512-GfJRE1DM14cc4oy3r1NAXatOGjwGaE/09q5JgxHVUvM5XpBmdmcKA4jsgC3nuVprXOJENbbJJ8jy1GPsQVB5nQ=="],
 
