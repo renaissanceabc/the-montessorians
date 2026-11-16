@@ -3,6 +3,11 @@ name: PR title
 # Squash merges make the PR title the commit on develop, and release-please
 # builds the version bump and changelog from those commits. Same rules as the
 # commit-msg hook (commitlint.config.js).
+#
+# Dependabot PRs skip the check: their prefixes are set in dependabot.yml, but
+# group titles can run past commitlint's 100-character header limit. A skipped
+# job still reports, and GitHub counts skipped as passing for a required check.
+# Shorten the title when squash merging if it reads badly in the changelog.
 
 on:
   pull_request:
@@ -21,6 +26,7 @@ jobs:
     name: PR Title
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
