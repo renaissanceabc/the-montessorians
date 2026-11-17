@@ -77,4 +77,4 @@ Names follow one convention: a workflow's `name:` is a short noun in sentence ca
 
 When the `RELEASE_APP_ID` and `RELEASE_APP_PRIVATE_KEY` secrets are set, the release PR is opened by the Release App and its checks run like any PR's. Without them it is opened with `GITHUB_TOKEN`, and GitHub does not run workflows for PRs opened that way, so its CI checks may not report until the PR is closed and reopened. Vercel builds a preview for it like any other PR, so its `Vercel` check reports on its own. If the CI checks still don't report, merge it with the admin bypass; it only touches versions and the changelog.
 
-PRs no longer run `next build` in CI (Vercel builds every PR preview), so the required `Vercel` check is what stops a PR that breaks the build from merging.
+PRs no longer run `next build` in CI (Vercel builds the PR preview), so the required `Vercel` check is what stops a PR that breaks the build from merging. Vercel skips the build when nothing the app builds from changed (see [Skipped builds](operations.md#skipped-builds)); a skipped build still reports a passing `Vercel` check.

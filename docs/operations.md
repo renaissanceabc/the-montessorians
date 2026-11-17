@@ -2,6 +2,12 @@
 
 Settings that live in the Vercel dashboard rather than in the repo, and why they exist.
 
+## Skipped builds
+
+`apps/app/vercel.json` sets Vercel's ignore step to `apps/app/scripts/vercel-ignore.sh`. It asks `turbo query affected` whether the app's `build` task changed since the branch's last good deployment, so the inputs in `turbo.json` decide: the app, the workspace packages it uses, the lockfile, `data/`, `images/`, and the schemas. It also builds when `bunfig.toml` or the root `package.json` (other than dev dependencies and the catalog, which the lockfile covers) changes. Docs, CI, and repo tooling skip.
+
+A skipped deployment shows as canceled in Vercel and reports a passing `Vercel` check on GitHub, so it doesn't block a merge. The first deployment of a branch compares against where it left `develop`. A redeploy of the same commit always builds, so redeploying to pick up new env values still works. When it can't tell, it builds.
+
 ## Rate limits (Vercel Firewall)
 
 The site has two public endpoints that do work per request:
