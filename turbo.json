@@ -8,7 +8,8 @@
       "dependsOn": ["^build"],
       // The app generates its content from the dataset at the repo root, so the
       // dataset must be part of the cache key or data-only changes would replay a
-      // stale build.
+      // stale build. Vercel's ignore step (apps/app/scripts/vercel-ignore.sh)
+      // reads these inputs too: a change outside them skips the preview build.
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/data/**",
